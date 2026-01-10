@@ -1,0 +1,7 @@
+{
+  "name": "SageSuite",
+  "description": "SageSuite is your central hub for managing Flightsage (flights), Travelsage (stays), and Campsage (sites/fees). Use the AI engine to handle reviews and talk to your personal guide for trip planning. A professional command center to grow your adventure empire effortlessly. ✈️🏨🏕️",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
