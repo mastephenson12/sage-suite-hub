@@ -1,112 +1,95 @@
 
-// Always use import {GoogleGenAI} from "@google/genai";
-import { GoogleGenAI, Type } from "@google/genai";
-import { Review, ReplyTone, LeadCategory } from '../types';
+import { GoogleGenAI } from "@google/genai";
+import { Message, Source } from "../types";
+import { SAGESUITE_URL, SAGESUITE_DIRECTORY, SAGESUITE_APPLY, GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants";
 
-// Initialize with a named parameter as required.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const SYSTEM_INSTRUCTION = `You are the Arizona Trail & Wellness Expert and Technical Architect for healthandtravels.com.
 
-// Using 'gemini-3-flash-preview' for basic text tasks.
-const MODEL_ID = 'gemini-3-flash-preview';
+IDENTITY & ECOSYSTEM:
+- You live at chat.healthandtravels.com.
+- The professional portal and community hub is sage.healthandtravels.com (Powered by GoHighLevel/GHL).
 
-/**
- * Generates a response to a customer review.
- */
-export const generateReviewReply = async (review: Review, tone: ReplyTone = 'Professional'): Promise<string> => {
-  try {
-    const prompt = `
-      You are a customer service manager. Write a response to the following Google My Business review.
-      
-      Reviewer: ${review.author}
-      Rating: ${review.rating}/5
-      Content: "${review.content}"
-      
-      Tone: ${tone}
-      Length: Under 60 words.
-      
-      If the review is negative, be apologetic and helpful. If positive, be appreciative.
-    `;
+COMMUNITY PLATFORM:
+- The community is hosted specifically on GoHighLevel (GHL) Communities.
+- It is the primary space for member discussions, trail meetups, and practitioner networking.
+- If users ask about the "Community," direct them to the internal landing page or the GHL portal at ${SAGESUITE_URL}.
 
-    const response = await ai.models.generateContent({
-      model: MODEL_ID,
-      contents: prompt,
-    });
+TECHNICAL SUBDOMAIN SETUP (FOR THE OWNER):
+If asked "How do I connect sage.healthandtravels.com?" or about GHL setup:
+1. Access DNS Settings: Tell them to log into their domain registrar (GoDaddy, Cloudflare, etc.).
+2. Create CNAME: 
+   - Type: CNAME
+   - Name/Host: sage
+   - Value: ${GHL_CNAME_TARGET}
+3. Alternative (A-Record): If they prefer an A-Record, the IP is ${GHL_A_RECORD_IP}.
+4. GHL Dashboard: Once DNS is saved, go to GHL > Settings > Domains > Add New Domain.
+5. Verification: GHL will verify the link and provide the SSL automatically.
 
-    // Directly access the .text property (not a method).
-    return response.text?.trim() || "Thank you for your feedback.";
-  } catch (error) {
-    console.error("Error generating reply:", error);
-    return "Thank you for your feedback. We appreciate your business.";
+SAGESUITE MEMBER SERVICES:
+- Direct practitioners to the Directory: ${SAGESUITE_DIRECTORY}
+- Direct new applicants to the Application: ${SAGESUITE_APPLY}
+- Member login is always at ${SAGESUITE_URL}.
+
+GIT WORKFLOW REMINDER:
+- You are working in a live development environment. Remind the user to commit and push to GitHub regularly to keep the repository in sync.
+
+Tone: Professional, Technically Accurate, and Community-Oriented.`;
+
+export class GeminiService {
+  public ai: GoogleGenAI;
+
+  constructor() {
+    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   }
-};
 
-/**
- * Classifies a lead message into one of the predefined categories.
- */
-export const qualifyLeadMessage = async (message: string): Promise<LeadCategory> => {
+  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean }> {
     try {
-        const prompt = `
-            Analyze the following message from a lead. Classify it into exactly one of these categories: 'Hot Lead', 'Inquiry', 'Support', 'Spam'.
-            
-            Message: "${message}"
-            
-            Return ONLY the category name.
-        `;
+      const contents = history.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }]
+      }));
 
-        const response = await ai.models.generateContent({
-            model: MODEL_ID,
-            contents: prompt,
-        });
+      contents.push({
+        role: 'user',
+        parts: [{ text: userInput }]
+      });
 
-        const text = response.text?.trim();
-        if (text && ['Hot Lead', 'Inquiry', 'Support', 'Spam'].includes(text)) {
-            return text as LeadCategory;
+      const response = await this.ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: contents as any,
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          temperature: 0.7,
+          tools: [{ googleSearch: {} }],
         }
-        return 'Inquiry'; // Default
+      });
+
+      const text = response.text || "I'm having trouble connecting to the portal right now.";
+      
+      const triggerLead = text.toLowerCase().includes("provide your email") || 
+                          text.toLowerCase().includes("send that over") ||
+                          text.toLowerCase().includes("email address");
+
+      const sources: Source[] = [];
+      const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+      if (chunks) {
+        chunks.forEach((chunk: any) => {
+          if (chunk.web?.uri && chunk.web?.title) {
+            sources.push({ uri: chunk.web.uri, title: chunk.web.title });
+          }
+        });
+      }
+
+      return { 
+        text, 
+        sources: sources.length > 0 ? sources : undefined,
+        triggerLead
+      };
     } catch (error) {
-        console.error("Error qualifying lead:", error);
-        return 'Unclassified';
+      console.error("Gemini API Error:", error);
+      throw new Error("Failed to communicate with the Scout portal.");
     }
+  }
 }
 
-/**
- * Analyzes sentiment for a batch of reviews using responseSchema for reliable JSON output.
- */
-export const analyzeSentimentBatch = async (reviews: string[]): Promise<string[]> => {
-  try {
-    const prompt = `
-      Analyze the sentiment of the following reviews. Return a list of sentiments: "Positive", "Neutral", or "Negative".
-      
-      Reviews:
-      ${JSON.stringify(reviews)}
-    `;
-
-    const response = await ai.models.generateContent({
-      model: MODEL_ID,
-      contents: prompt,
-      config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.STRING,
-              description: "The sentiment of the review (Positive, Neutral, or Negative)",
-            },
-          },
-      }
-    });
-
-    const text = response.text;
-    if (!text) return reviews.map(() => "Neutral");
-    
-    try {
-      return JSON.parse(text) as string[];
-    } catch (parseError) {
-      console.error("Error parsing sentiment JSON:", parseError);
-      return reviews.map(() => "Neutral");
-    }
-  } catch (error) {
-    console.error("Error analyzing sentiment batch:", error);
-    return reviews.map(() => "Neutral");
-  }
-};
+export const geminiService = new GeminiService();
