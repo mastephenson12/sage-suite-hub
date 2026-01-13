@@ -50,3 +50,7 @@ const Archive: React.FC = () => {
 };
 
 export default Archive;
+  );
+};
+
+export default Archive;
