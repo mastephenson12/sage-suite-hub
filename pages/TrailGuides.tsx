@@ -58,6 +58,3 @@ const TrailGuides: React.FC = () => {
 };
 
 export default TrailGuides;
-};
-
-export default TrailGuides;
