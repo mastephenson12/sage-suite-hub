@@ -1,0 +1,29 @@
+import React from 'react';
+import ChatInterface from '../components/ChatInterface';
+
+const ChatPage: React.FC = () => {
+  return (
+    <div className="flex-grow bg-[#fafafa] flex flex-col">
+      <div className="max-w-5xl mx-auto w-full px-6 py-12 flex-grow flex flex-col">
+        <div className="mb-10">
+          <h1 className="text-5xl font-black tracking-tighter uppercase mb-4">Portal Scout</h1>
+          <p className="text-zinc-500 serif-text italic text-lg max-w-2xl">
+            Arizona's intelligent companion for trail discovery, medical tourism planning, and wellness networking.
+          </p>
+        </div>
+        
+        <div className="flex-grow shadow-2xl shadow-blue-900/5 rounded-3xl overflow-hidden bg-white border border-zinc-200">
+           <ChatInterface className="h-full border-none shadow-none" />
+        </div>
+        
+        <div className="mt-8 text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
+            Secure Connection via SageSuite Cloud • HealthandTravels.com 2024
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatPage;
