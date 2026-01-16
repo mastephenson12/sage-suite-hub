@@ -10,7 +10,7 @@ const ChatWidget: React.FC = () => {
         <div className="mb-6 w-[350px] sm:w-[450px] h-[650px] max-h-[80vh] animate-in slide-in-from-bottom-8 fade-in duration-300">
           <ChatInterface 
             className="h-full border-zinc-200 shadow-[0_32px_80px_-16px_rgba(13,71,161,0.25)] rounded-2xl" 
-            initialMessage="Scout Portal Active. Searching AllTrails and SageSuite Directory... What can I help you find today?" 
+            initialMessage="Portal Scout Active. I'm searching local trail reports and the SageSuite directory for you. What's on your mind?" 
           />
         </div>
       )}
@@ -19,7 +19,9 @@ const ChatWidget: React.FC = () => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`group flex items-center justify-center w-16 h-16 rounded-2xl shadow-2xl transition-all active:scale-95 border-2 ${
-            isOpen ? 'bg-white text-[#0d47a1] border-zinc-200' : 'bg-[#0d47a1] text-white border-[#0d47a1] hover:bg-[#0a3a85] hover:scale-105'
+            isOpen 
+              ? 'bg-white text-[#0d47a1] border-zinc-200 hover:bg-zinc-50' 
+              : 'bg-[#0d47a1] text-white border-[#0d47a1] hover:bg-[#0a3a85] hover:scale-105'
           }`}
           aria-label="Toggle Scout Portal"
         >
@@ -39,7 +41,6 @@ const ChatWidget: React.FC = () => {
             </div>
           )}
           
-          {/* Label Tooltip */}
           {!isOpen && (
             <div className="absolute right-20 bg-zinc-950 text-white px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl border border-white/10 whitespace-nowrap">
               Portal Scout
@@ -49,6 +50,9 @@ const ChatWidget: React.FC = () => {
       </div>
     </div>
   );
+};
+
+export default ChatWidget;
 };
 
 export default ChatWidget;
