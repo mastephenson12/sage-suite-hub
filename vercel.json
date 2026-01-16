@@ -8,12 +8,22 @@
   ],
   "headers": [
     {
-      "source": "/(.*)\\.tsx",
+      "source": "/(.*).tsx",
       "headers": [
         {
           "key": "Content-Type",
-          "value": "application/javascript"
+          "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/index.tsx",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
         }
       ]
     }
   ]
+}
