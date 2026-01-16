@@ -1,8 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Message, Source } from '../types';
-import { geminiService } from '../services/gemini';
-import { SAGESUITE_URL } from '../constants';
+import { Message, Source } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
+import { SAGESUITE_URL } from '../constants.ts';
 
 interface ChatInterfaceProps {
   initialMessage?: string;
@@ -233,10 +232,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ initialMessage, className
         </div>
       </div>
     </div>
-  );
-};
-
-export default ChatInterface;
   );
 };
 
