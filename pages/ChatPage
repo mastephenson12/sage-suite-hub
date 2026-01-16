@@ -3,24 +3,55 @@ import ChatInterface from '../components/ChatInterface.tsx';
 
 const ChatPage: React.FC = () => {
   return (
-    <div className="flex-grow bg-[#fafafa] flex flex-col">
-      <div className="max-w-5xl mx-auto w-full px-6 py-12 flex-grow flex flex-col">
-        <div className="mb-10">
-          <h1 className="text-5xl font-black tracking-tighter uppercase mb-4">Portal Scout</h1>
-          <p className="text-zinc-500 serif-text italic text-lg max-w-2xl">
-            Arizona's intelligent companion for trail discovery, medical tourism planning, and wellness networking.
-          </p>
+    <div className="flex-grow bg-[#fafafa] flex flex-col min-h-[calc(100vh-73px)]">
+      <div className="max-w-6xl mx-auto w-full px-6 py-12 flex-grow flex flex-col lg:flex-row gap-12">
+        {/* Left Sidebar Info */}
+        <div className="lg:w-1/3 space-y-8">
+          <div className="p-8 bg-zinc-950 rounded-3xl text-white shadow-2xl shadow-blue-900/10">
+            <h1 className="text-4xl font-black tracking-tighter uppercase mb-4 leading-none text-blue-400">Portal <br/>Scout</h1>
+            <p className="text-zinc-400 serif-text italic text-lg leading-relaxed mb-8">
+              "Arizona's intelligent companion for trail discovery, medical tourism, and wellness networking."
+            </p>
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">AllTrails Data Synced</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">SageSuite Directory Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8 bg-white border border-zinc-200 rounded-3xl space-y-6">
+             <h4 className="text-[11px] font-black uppercase tracking-widest text-[#0d47a1]">Suggested Inquiries</h4>
+             <ul className="space-y-4">
+               {[
+                 "Step-by-step GHL CNAME setup",
+                 "Best sunrise hikes in Sedona",
+                 "Local AZ sports massage therapists",
+                 "Wellness retreats for families"
+               ].map((q, i) => (
+                 <li key={i} className="text-sm font-bold text-zinc-600 hover:text-black cursor-pointer flex items-center gap-2 group">
+                   <span className="w-1 h-1 bg-zinc-300 rounded-full group-hover:bg-blue-500"></span>
+                   {q}
+                 </li>
+               ))}
+             </ul>
+          </div>
         </div>
         
-        <div className="flex-grow shadow-2xl shadow-blue-900/5 rounded-3xl overflow-hidden bg-white border border-zinc-200">
+        {/* Main Chat Area */}
+        <div className="lg:w-2/3 flex-grow flex flex-col min-h-[600px] shadow-2xl shadow-blue-900/5 rounded-3xl overflow-hidden border border-zinc-200 bg-white">
            <ChatInterface className="h-full border-none shadow-none" />
         </div>
-        
-        <div className="mt-8 text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
-            Secure Connection via SageSuite Cloud • HealthandTravels.com 2024
-          </p>
-        </div>
+      </div>
+      
+      <div className="pb-8 text-center">
+        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-300">
+          Encrypted Connection • High-Desert Wellness Intelligence
+        </p>
       </div>
     </div>
   );
