@@ -1,7 +1,6 @@
-
 import { GoogleGenAI } from "@google/genai";
-import { Message, Source } from "../types";
-import { SAGESUITE_URL, SAGESUITE_DIRECTORY, SAGESUITE_APPLY, GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants";
+import { Message, Source } from "../types.ts";
+import { SAGESUITE_URL, SAGESUITE_DIRECTORY, SAGESUITE_APPLY, GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are the Arizona Trail & Wellness Expert and Technical Architect for healthandtravels.com.
 
@@ -29,9 +28,6 @@ SAGESUITE MEMBER SERVICES:
 - Direct practitioners to the Directory: ${SAGESUITE_DIRECTORY}
 - Direct new applicants to the Application: ${SAGESUITE_APPLY}
 - Member login is always at ${SAGESUITE_URL}.
-
-GIT WORKFLOW REMINDER:
-- You are working in a live development environment. Remind the user to commit and push to GitHub regularly to keep the repository in sync.
 
 Tone: Professional, Technically Accurate, and Community-Oriented.`;
 
