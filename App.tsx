@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import ChatInterface from './components/ChatInterface';
-import ChatWidget from './components/ChatWidget';
-import Archive from './pages/Archive';
-import TrailGuides from './pages/TrailGuides';
-import About from './pages/About';
-import Community from './pages/Community';
-import ChatPage from './pages/ChatPage';
-import { SAGESUITE_URL, BEEHIIV_URL, LOGO_DATA_URL, BRAND_NAME } from './constants';
+import Navbar from './components/Navbar.tsx';
+import ChatInterface from './components/ChatInterface.tsx';
+import ChatWidget from './components/ChatWidget.tsx';
+import Archive from './pages/Archive.tsx';
+import TrailGuides from './pages/TrailGuides.tsx';
+import About from './pages/About.tsx';
+import Community from './pages/Community.tsx';
+import ChatPage from './pages/ChatPage.tsx';
+import { SAGESUITE_URL, BEEHIIV_URL, LOGO_DATA_URL, BRAND_NAME } from './constants.ts';
 
 const Home: React.FC = () => {
   const [logoError, setLogoError] = useState(false);
@@ -263,6 +263,9 @@ const App: React.FC = () => {
       <AppContent />
     </Router>
   );
+};
+
+export default App;
 };
 
 export default App;
