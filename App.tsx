@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx';
 import ChatWidget from './components/ChatWidget.tsx';
-import Home from './components/Hero.tsx'; // Using Hero as the main landing content
+import Hero from './components/Hero.tsx';
 import Archive from './pages/Archive.tsx';
 import TrailGuides from './pages/TrailGuides.tsx';
 import About from './pages/About.tsx';
@@ -19,7 +19,7 @@ const AppContent: React.FC = () => {
       
       <main className="flex-grow">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Hero />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/trail-guides" element={<TrailGuides />} />
@@ -28,7 +28,7 @@ const AppContent: React.FC = () => {
         </Routes>
       </main>
 
-      <footer className="bg-white border-t border-zinc-100 py-16">
+      <footer className="bg-white border-t border-zinc-100 py-16 mt-auto">
         <div className="max-w-6xl mx-auto px-6 text-center md:text-left">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <p className="text-[10px] text-zinc-400 font-black uppercase tracking-[0.3em]">
