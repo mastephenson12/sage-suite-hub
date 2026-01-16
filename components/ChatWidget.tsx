@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ChatInterface from './ChatInterface';
+import ChatInterface from './ChatInterface.tsx';
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,10 +48,6 @@ const ChatWidget: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
-
-export default ChatWidget;
   );
 };
 
