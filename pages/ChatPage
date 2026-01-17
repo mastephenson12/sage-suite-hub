@@ -45,7 +45,7 @@ const ChatPage: React.FC = () => {
         
         {/* Main Chat Area */}
         <div className="lg:w-2/3 flex-grow flex flex-col min-h-[600px] shadow-2xl shadow-blue-900/5 rounded-3xl overflow-hidden border border-zinc-200 bg-white">
-           <ChatInterface className="h-full border-none shadow-none" />
+           <ChatInterface className="h-full border-none shadow-none" initialMessage="Scout Portal Active. I'm searching local trail reports and the SageSuite directory for you. What's on your mind?" />
         </div>
       </div>
       
@@ -55,6 +55,10 @@ const ChatPage: React.FC = () => {
         </p>
       </div>
     </div>
+  );
+};
+
+export default ChatPage;
   );
 };
 
