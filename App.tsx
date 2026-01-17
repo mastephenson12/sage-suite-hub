@@ -45,7 +45,6 @@ const AppContent: React.FC = () => {
         </div>
       </footer>
 
-      {/* Persistent Assistant Widget (Hidden on full-screen portal) */}
       {!isChatPage && <ChatWidget />}
     </div>
   );
@@ -57,10 +56,6 @@ const App: React.FC = () => {
       <AppContent />
     </Router>
   );
-};
-
-export default App;
-export default App;
 };
 
 export default App;
