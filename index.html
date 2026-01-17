@@ -52,11 +52,12 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Crucial: Use absolute path /index.tsx to avoid routing collisions -->
+    <!-- 
+      type="text/babel" tells Babel Standalone to transpile this block.
+      data-type="module" tells Babel to treat imports as ES modules.
+      data-presets="typescript,react" enables TSX support.
+    -->
     <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
 </body>
 </html>
-    <!-- Note: type="text/babel" and data-type="module" is required for Babel to handle TSX modules -->
-    <script type="text/babel" data-type="module" data-presets="typescript,react" src="./index.tsx"></script>
-</body>
-</html>
+
