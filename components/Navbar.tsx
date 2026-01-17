@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_DATA_URL, BRAND_NAME, SAGESUITE_URL } from '../constants';
+import { LOGO_DATA_URL, BRAND_NAME, SAGESUITE_URL } from '../constants.ts';
 
 const Navbar: React.FC = () => {
   const [imgError, setImgError] = useState(false);
@@ -36,6 +36,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-6">
+          <Link to="/chat" className="text-[12px] font-bold text-[#0d47a1] uppercase tracking-widest hover:text-black hidden sm:block">Ask Scout</Link>
           <a href={`${SAGESUITE_URL}/login`} className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest hover:text-black hidden sm:block">Sign In</a>
           <a 
             href="https://healthandtravels.com/subscribe" 
@@ -46,6 +47,10 @@ const Navbar: React.FC = () => {
         </div>
       </div>
     </nav>
+  );
+};
+
+export default Navbar;
   );
 };
 
