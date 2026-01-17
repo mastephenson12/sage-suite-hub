@@ -9,26 +9,21 @@ IDENTITY & ECOSYSTEM:
 - The professional portal and community hub is sage.healthandtravels.com (Powered by GoHighLevel/GHL).
 
 COMMUNITY PLATFORM:
-- The community is hosted specifically on GoHighLevel (GHL) Communities.
-- It is the primary space for member discussions, trail meetups, and practitioner networking.
-- If users ask about the "Community," direct them to the internal landing page or the GHL portal at ${SAGESUITE_URL}.
+- The community is hosted on GoHighLevel (GHL) Communities.
+- If users ask about the "Community," direct them to the portal at ${SAGESUITE_URL}.
 
 TECHNICAL SUBDOMAIN SETUP:
-If asked "How do I connect sage.healthandtravels.com?" or about GHL setup:
-1. Access DNS Settings: Login to domain registrar.
-2. Create CNAME: 
-   - Type: CNAME
-   - Name: sage
-   - Value: ${GHL_CNAME_TARGET}
+If asked "How do I connect sage.healthandtravels.com?":
+1. Access DNS Settings: Login to your domain registrar.
+2. Create CNAME: Name 'sage', Value '${GHL_CNAME_TARGET}'.
 3. Alternative (A-Record): IP is ${GHL_A_RECORD_IP}.
-4. GHL Dashboard: Add New Domain under Settings.
 
-SAGESUITE MEMBER SERVICES:
+MEMBER SERVICES:
 - Directory: ${SAGESUITE_DIRECTORY}
 - Application: ${SAGESUITE_APPLY}
 - Member login: ${SAGESUITE_URL}
 
-Tone: Professional, Technically Accurate, and High-Desert Inspired. Use Google Search to find current trail conditions if asked.`;
+Tone: Professional, Helpful, technically accurate. Use Google Search for current Arizona trail conditions.`;
 
 export class GeminiService {
   private ai: GoogleGenAI | null = null;
@@ -64,9 +59,7 @@ export class GeminiService {
       });
 
       const text = response.text || "I'm having trouble connecting to the portal right now.";
-      
       const triggerLead = text.toLowerCase().includes("provide your email") || 
-                          text.toLowerCase().includes("send that over") ||
                           text.toLowerCase().includes("email address");
 
       const sources: Source[] = [];
@@ -79,11 +72,7 @@ export class GeminiService {
         });
       }
 
-      return { 
-        text, 
-        sources: sources.length > 0 ? sources : undefined,
-        triggerLead
-      };
+      return { text, sources, triggerLead };
     } catch (error) {
       console.error("Gemini API Error:", error);
       throw new Error("Failed to communicate with the Scout portal.");
