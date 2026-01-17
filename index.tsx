@@ -35,7 +35,3 @@ if (document.readyState === 'loading') {
 } else {
   initializeApp();
 }
-  }
-} else {
-  console.error("Critical Error: Root container not found in index.html");
-}
