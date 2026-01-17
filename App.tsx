@@ -45,7 +45,7 @@ const AppContent: React.FC = () => {
         </div>
       </footer>
 
-      {/* Show floating widget on all pages EXCEPT the dedicated chat page */}
+      {/* Persistent Assistant Widget (Hidden on full-screen portal) */}
       {!isChatPage && <ChatWidget />}
     </div>
   );
