@@ -1,14 +1,14 @@
-
 import React, { useState } from 'react';
-import { LOGO_DATA_URL, BRAND_NAME } from '../constants';
+import { LOGO_DATA_URL, BRAND_NAME } from '../constants.ts';
 
 const Hero: React.FC = () => {
   const [imgError, setImgError] = useState(false);
   const logoSrc = LOGO_DATA_URL || 'logo.png';
 
   return (
-    <div className="bg-white pt-24 pb-24 border-b border-gray-100 overflow-hidden">
-      <div className="max-w-4xl mx-auto px-6 text-center">
+    <div className="bg-white pt-24 pb-24 border-b border-gray-100 overflow-hidden relative">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2 opacity-60"></div>
+      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <div className="flex justify-center mb-10">
           <div className="relative">
             <div className="absolute inset-0 bg-blue-400 blur-3xl opacity-10 rounded-full"></div>
@@ -21,7 +21,7 @@ const Hero: React.FC = () => {
               />
             ) : (
               <div className="w-32 h-32 md:w-40 md:h-40 bg-zinc-900 rounded-3xl flex items-center justify-center relative z-10">
-                <span className="text-zinc-700 font-black text-4xl">LOGO</span>
+                <span className="text-zinc-700 font-black text-4xl">H&T</span>
               </div>
             )}
           </div>
