@@ -2,7 +2,7 @@
 {
   "headers": [
     {
-      "source": "/(.*)\\.(ts|tsx)",
+      "source": "/(.*)\\.(ts|tsx|js|jsx)",
       "headers": [
         {
           "key": "Content-Type",
