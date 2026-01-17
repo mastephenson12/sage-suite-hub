@@ -1,15 +1,4 @@
 {
-  "headers": [
-    {
-      "source": "/(.*)\\.(ts|tsx|js|jsx)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        }
-      ]
-    }
-  ],
   "rewrites": [
     {
       "source": "/((?!.*\\.(?:ts|tsx|js|jsx|json|png|jpg|svg|css|ico|woff2|woff|ttf)).*)",
