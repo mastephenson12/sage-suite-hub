@@ -53,11 +53,9 @@
 <body>
     <div id="root"></div>
     <!-- 
-      type="text/babel" tells Babel Standalone to transpile this block.
-      data-type="module" tells Babel to treat imports as ES modules.
-      data-presets="typescript,react" enables TSX support.
+      Using absolute path /index.tsx ensures the script is found correctly regardless of route.
+      data-type="module" enables ESM support within the transpiled code.
     -->
     <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
 </body>
 </html>
-
