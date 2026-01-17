@@ -13,7 +13,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!.*\\.(?:ts|tsx|js|jsx|json|png|jpg|svg|css|ico)).*)",
+      "source": "/((?!.*\\.(?:ts|tsx|js|jsx|json|png|jpg|svg|css|ico|woff2|woff|ttf)).*)",
       "destination": "/index.html"
     }
   ]
