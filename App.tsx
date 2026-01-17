@@ -11,7 +11,8 @@ import ChatPage from './pages/ChatPage.tsx';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const isChatPage = location.pathname === '/chat';
+  const currentPath = location.pathname;
+  const isChatPage = currentPath === '/chat';
 
   return (
     <div className="min-h-screen flex flex-col selection:bg-[#0d47a1] selection:text-white bg-white">
@@ -45,6 +46,7 @@ const AppContent: React.FC = () => {
         </div>
       </footer>
 
+      {/* Persistent Widget (Hidden on the full-screen chat route) */}
       {!isChatPage && <ChatWidget />}
     </div>
   );
@@ -55,6 +57,10 @@ const App: React.FC = () => {
     <Router>
       <AppContent />
     </Router>
+  );
+};
+
+export default App;
   );
 };
 
