@@ -4,54 +4,54 @@ import ChatInterface from '../components/ChatInterface.tsx';
 const ChatPage: React.FC = () => {
   return (
     <div className="flex-grow bg-[#fafafa] flex flex-col min-h-[calc(100vh-73px)]">
-      <div className="max-w-6xl mx-auto w-full px-6 py-12 flex-grow flex flex-col lg:flex-row gap-12">
-        {/* Left Sidebar Command Center */}
-        <div className="lg:w-1/3 space-y-8 animate-in slide-in-from-left-4 fade-in duration-500">
-          <div className="p-8 bg-zinc-950 rounded-3xl text-white shadow-2xl shadow-blue-900/10 border border-white/5 relative overflow-hidden">
-            <div className="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
-            <h1 className="text-4xl font-black tracking-tighter uppercase mb-4 leading-none text-blue-400 relative z-10">Portal <br/>Scout</h1>
-            <p className="text-zinc-400 serif-text italic text-lg leading-relaxed mb-8 relative z-10">
-              "Arizona's intelligent companion for trail discovery, medical tourism, and wellness networking."
+      <div className="max-w-6xl mx-auto w-full px-6 py-12 flex-grow flex flex-col lg:flex-row gap-8">
+        {/* Sidebar */}
+        <div className="lg:w-1/3 space-y-6">
+          <div className="p-8 bg-zinc-950 rounded-3xl text-white shadow-2xl border border-white/5 relative overflow-hidden">
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-600/10 rounded-full blur-[80px]"></div>
+            <h2 className="text-3xl font-[900] tracking-tighter uppercase mb-2 text-blue-400">Portal Scout</h2>
+            <p className="text-zinc-400 serif-text italic text-lg leading-snug">
+              Arizona's premier intelligent companion for health, travels, and high-desert living.
             </p>
-            <div className="space-y-4 pt-6 border-t border-white/10 relative z-10">
+            <div className="mt-8 pt-6 border-t border-white/10 space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">AllTrails Data Synced</span>
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">GHL Directory Synced</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">SageSuite Directory Active</span>
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Live Trail Intel</span>
               </div>
             </div>
           </div>
-
-          <div className="p-8 bg-white border border-zinc-200 rounded-3xl space-y-6 shadow-sm">
-             <h4 className="text-[11px] font-black uppercase tracking-widest text-[#0d47a1]">Quick Inquiries</h4>
+          
+          <div className="p-8 bg-white border border-zinc-200 rounded-3xl shadow-sm">
+             <h4 className="text-[11px] font-black uppercase tracking-widest text-[#0d47a1] mb-6">Popular Inquiries</h4>
              <ul className="space-y-4">
                {[
-                 "Step-by-step GHL CNAME setup",
+                 "How to setup sage subdomain?",
                  "Best sunrise hikes in Sedona",
-                 "Local AZ sports massage therapists",
-                 "Wellness retreats for families"
+                 "Vetted AZ massage therapists",
+                 "Wellness retreats this weekend"
                ].map((q, i) => (
-                 <li key={i} className="text-sm font-bold text-zinc-600 hover:text-black cursor-pointer flex items-center gap-3 group transition-colors">
-                   <div className="w-1.5 h-1.5 bg-zinc-200 rounded-full group-hover:bg-blue-500 transition-colors"></div>
+                 <li key={i} className="text-sm font-bold text-zinc-500 hover:text-black cursor-pointer flex items-center gap-3 group transition-colors">
+                   <div className="w-1 h-1 bg-zinc-200 group-hover:bg-blue-600 rounded-full transition-colors"></div>
                    {q}
                  </li>
                ))}
              </ul>
           </div>
         </div>
-        
-        {/* Main Interface Portal */}
-        <div className="lg:w-2/3 flex-grow flex flex-col min-h-[650px] shadow-2xl shadow-blue-900/5 rounded-3xl overflow-hidden border border-zinc-200 bg-white animate-in slide-in-from-right-4 fade-in duration-500">
-           <ChatInterface className="h-full border-none shadow-none" initialMessage="Scout Portal Active. I'm searching local trail reports and the SageSuite directory for you. What's on your mind?" />
+
+        {/* Chat Interface */}
+        <div className="lg:w-2/3 flex-grow flex flex-col bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/5">
+           <ChatInterface className="h-full" />
         </div>
       </div>
       
       <div className="pb-8 text-center">
         <p className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-300">
-          Encrypted Connection • High-Desert Wellness Intelligence
+          Secure End-to-End Encryption • SageSuite Verified
         </p>
       </div>
     </div>
