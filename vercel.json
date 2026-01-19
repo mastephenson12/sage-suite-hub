@@ -1,8 +1,7 @@
-
 {
   "headers": [
     {
-      "source": "/(.*).tsx",
+      "source": "/:path*.tsx",
       "headers": [
         {
           "key": "Content-Type",
@@ -11,7 +10,7 @@
       ]
     },
     {
-      "source": "/(.*).ts",
+      "source": "/:path*.ts",
       "headers": [
         {
           "key": "Content-Type",
