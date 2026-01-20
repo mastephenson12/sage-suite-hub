@@ -26,7 +26,12 @@ export class GeminiService {
 
   private getClient() {
     if (!this.ai) {
-      this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Safe retrieval of API key to handle environment variation
+      const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) 
+        ? process.env.API_KEY 
+        : (window as any).process?.env?.API_KEY;
+      
+      this.ai = new GoogleGenAI({ apiKey: apiKey || '' });
     }
     return this.ai;
   }
@@ -73,6 +78,32 @@ export class GeminiService {
     } catch (error) {
       console.error("Gemini API Error:", error);
       throw new Error("Failed to communicate with Scout.");
+    }
+  }
+
+  async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
+    try {
+      const ai = this.getClient();
+      const prompt = `Professional photography, national geographic style, ultra-high resolution. A breathtaking landscape vista of the ${trailName} in Arizona. The terrain is ${difficulty} with ${description}. Cinematic natural lighting, high desert vegetation, 8k resolution, Arizona wellness journal aesthetic. No people, just the trail and nature.`;
+      
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash-image',
+        contents: { parts: [{ text: prompt }] },
+        config: {
+          imageConfig: {
+            aspectRatio: "16:9"
+          }
+        }
+      });
+
+      const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+      if (part?.inlineData?.data) {
+        return `data:image/png;base64,${part.inlineData.data}`;
+      }
+      throw new Error("No image data returned from model.");
+    } catch (error) {
+      console.error("Image Generation Error:", error);
+      throw error;
     }
   }
 }
