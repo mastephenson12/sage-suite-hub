@@ -15,7 +15,7 @@ const TrailGuides: React.FC = () => {
   const [loadingTrail, setLoadingTrail] = useState<string | null>(null);
 
   const trails: Trail[] = [
-    { name: "Devils Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi", tags: ["Photography", "Busy"], description: "Natural sandstone arch with sweeping red rock views." },
+    { name: "Devil's Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi", tags: ["Photography", "Busy"], description: "Natural sandstone arch with sweeping red rock views." },
     { name: "Flatiron via Siphon Draw", loc: "Apache Junction, AZ", diff: "Strenuous", length: "6.2 mi", tags: ["Scrambling", "Elevation"], description: "Steep granite rock scrambles leading to a massive cliff-top plateau." },
     { name: "West Fork Trail", loc: "Oak Creek Canyon", diff: "Easy", length: "7.2 mi", tags: ["Family", "Water"], description: "Lush riparian canyon with multiple stream crossings and towering cliffs." },
     { name: "Tom's Thumb", loc: "Scottsdale, AZ", diff: "Moderate", length: "4.0 mi", tags: ["Granite", "Views"], description: "Distinctive granite spire overlooking the McDowell Sonoran Preserve." },
@@ -47,7 +47,7 @@ const TrailGuides: React.FC = () => {
              Explore Arizona
           </div>
           <h1 className="text-6xl font-black tracking-tighter uppercase mb-6 leading-[0.9]">Find Your <br/>Next Path.</h1>
-          <p className="text-xl text-zinc-500 serif-text italic max-w-xl">
+          <p className="text-xl text-zinc-500 serif-text italic max-w-xl leading-relaxed">
             Vetted trail reports from the Health & Travels team. Use our AI Scout to visualize the terrain before you trek.
           </p>
         </header>
@@ -56,7 +56,7 @@ const TrailGuides: React.FC = () => {
           {trails.map((trail, idx) => (
             <div key={idx} className="flex flex-col border border-zinc-100 rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-blue-900/5 transition-all group bg-white">
               {/* AI Image Section */}
-              <div className="aspect-video bg-zinc-50 relative overflow-hidden">
+              <div className="aspect-video bg-zinc-50 relative overflow-hidden group/img">
                 {trailImages[trail.name] ? (
                   <img 
                     src={trailImages[trail.name]} 
@@ -65,51 +65,64 @@ const TrailGuides: React.FC = () => {
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center space-y-4">
-                    <div className="w-12 h-12 rounded-full border border-zinc-200 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 text-zinc-300 ${loadingTrail === trail.name ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="w-16 h-16 rounded-full bg-zinc-100 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className={`h-8 w-8 text-zinc-300 ${loadingTrail === trail.name ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">AI Scout Visualization Offline</p>
-                    <button 
-                      onClick={() => handleGenerateImage(trail)}
-                      disabled={loadingTrail !== null}
-                      className="px-6 py-2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-blue-700 transition-colors disabled:opacity-50"
-                    >
-                      {loadingTrail === trail.name ? "Scouting..." : "Generate Scout View"}
-                    </button>
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Visualization Data Locked</p>
+                      <button 
+                        onClick={() => handleGenerateImage(trail)}
+                        disabled={loadingTrail !== null}
+                        className="text-blue-600 font-bold text-xs uppercase tracking-widest hover:text-blue-700 transition-colors disabled:opacity-50"
+                      >
+                        {loadingTrail === trail.name ? "Scouting..." : "Reveal Scout View"}
+                      </button>
+                    </div>
                   </div>
                 )}
-                {/* Overlay Tags */}
-                <div className="absolute top-4 left-4 flex gap-2">
-                  <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${
-                    trail.diff === 'Strenuous' || trail.diff === 'Hard' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+                
+                {/* Overlay Difficulty */}
+                <div className="absolute top-6 left-6 flex gap-2">
+                  <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg backdrop-blur-md ${
+                    trail.diff === 'Strenuous' || trail.diff === 'Hard' ? 'bg-red-500/90 text-white' : 
+                    trail.diff === 'Moderate' ? 'bg-[#0d47a1]/90 text-white' : 'bg-green-500/90 text-white'
                   }`}>
                     {trail.diff}
                   </span>
                 </div>
+
+                {trailImages[trail.name] && (
+                   <button 
+                      onClick={() => handleGenerateImage(trail)}
+                      className="absolute bottom-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all opacity-0 group-hover/img:opacity-100"
+                   >
+                     Re-scout
+                   </button>
+                )}
               </div>
 
               {/* Content Section */}
-              <div className="p-8 flex-1 flex flex-col">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-3xl font-black tracking-tight text-black group-hover:text-blue-600 transition-colors">{trail.name}</h3>
-                  <span className="text-xs font-bold text-zinc-400 bg-zinc-50 px-2 py-1 rounded">{trail.length}</span>
+              <div className="p-10 flex-1 flex flex-col">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-3xl font-black tracking-tighter text-black group-hover:text-blue-600 transition-colors">{trail.name}</h3>
+                  <span className="text-xs font-bold text-zinc-400 bg-zinc-50 px-3 py-1 rounded-full border border-zinc-100">{trail.length}</span>
                 </div>
-                <p className="text-blue-600 uppercase text-[10px] font-black tracking-widest mb-4">{trail.loc}</p>
+                <p className="text-blue-600 uppercase text-[10px] font-black tracking-[0.2em] mb-6">{trail.loc}</p>
                 
-                <p className="text-zinc-500 serif-text italic text-base leading-relaxed mb-6">
+                <p className="text-zinc-600 serif-text italic text-lg leading-relaxed mb-8 flex-grow">
                   "{trail.description}"
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-8 mt-auto">
+                <div className="flex flex-wrap gap-2 mb-10">
                   {trail.tags.map(tag => (
-                    <span key={tag} className="text-[9px] font-bold text-zinc-400 border border-zinc-200 px-2 py-1 rounded-lg uppercase">{tag}</span>
+                    <span key={tag} className="text-[10px] font-bold text-zinc-400 border border-zinc-100 bg-zinc-50/50 px-3 py-1 rounded-lg uppercase tracking-wider">{tag}</span>
                   ))}
                 </div>
 
-                <button className="w-full py-4 bg-zinc-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all active:scale-95 shadow-xl shadow-zinc-900/10">
-                  Full Scout Report
+                <button className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-blue-600 transition-all active:scale-[0.98] shadow-2xl shadow-zinc-900/20">
+                  Access Full Intel
                 </button>
               </div>
             </div>
@@ -117,6 +130,10 @@ const TrailGuides: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export default TrailGuides;
   );
 };
 
