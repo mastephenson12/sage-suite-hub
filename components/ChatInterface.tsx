@@ -171,7 +171,3 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ initialMessage, className
 };
 
 export default ChatInterface;
-  );
-};
-
-export default ChatInterface;
