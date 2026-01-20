@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="antialiased">
 <head>
@@ -12,6 +11,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
     
+    <!-- Babel for runtime transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
         :root {
             --brand-primary: #0d47a1;
@@ -49,6 +51,11 @@
 </script>
 </head>
 <body>
+    <div id="root"></div>
+    <!-- Babel will transpile the TSX at runtime -->
+    <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
+</body>
+</html>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
