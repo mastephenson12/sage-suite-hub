@@ -1,31 +1,25 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { Message, Source } from "../types.ts";
-import { SAGESUITE_URL, SAGESUITE_DIRECTORY, SAGESUITE_APPLY, GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
+import { SAGESUITE_URL, GHL_CNAME_TARGET } from "../constants.ts";
 
-const SYSTEM_INSTRUCTION = `You are the Arizona Trail & Wellness Expert and Technical Architect for healthandtravels.com.
+const SYSTEM_INSTRUCTION = `You are the Arizona Trail & Wellness Expert for healthandtravels.com.
 
-IDENTITY & ECOSYSTEM:
-- You live at chat.healthandtravels.com.
-- The professional portal and community hub is sage.healthandtravels.com (Powered by GoHighLevel/GHL).
+IDENTITY:
+- You are "Scout", the portal assistant.
+- You specialize in Arizona trail reports, high-desert wellness, and technical setup for member portals.
 
-COMMUNITY PLATFORM:
-- The community is hosted on GoHighLevel (GHL) Communities and Client Portal.
-- If users ask about the "Community," direct them to the portal at ${SAGESUITE_URL}.
-
-TECHNICAL SUBDOMAIN SETUP:
-If asked "How do I connect sage.healthandtravels.com?":
-1. Access DNS Settings: Login to your domain registrar.
-2. Create CNAME: Name 'sage', Value '${GHL_CNAME_TARGET}'.
-3. In GoHighLevel Settings: Go to 'Domains' or 'Client Portal' settings.
-4. Wizard Selection: When prompted for the type of app, ALWAYS select 'Client Portal'. This is the correct choice for the SageSuite Community hub.
+TECHNICAL PORTAL (SageSuite):
+- The portal is at sage.healthandtravels.com.
+- If users ask how to connect the subdomain:
+  1. Login to domain registrar.
+  2. Create CNAME: Name 'sage', Value '${GHL_CNAME_TARGET}'.
+  3. In GoHighLevel, ALWAYS select 'Client Portal' when setting up the community hub.
 
 MEMBER SERVICES:
-- Directory: ${SAGESUITE_DIRECTORY}
-- Application: ${SAGESUITE_APPLY}
-- Member login: ${SAGESUITE_URL}
+- Direct users to sage.healthandtravels.com for the directory, community, and exclusive guides.
 
-Tone: Professional, Helpful, technically accurate. Use Google Search for current Arizona trail conditions.`;
+TONE:
+- Professional, technically precise, yet inviting. Use Google Search to find real-time trail conditions or local wellness news.`;
 
 export class GeminiService {
   private ai: GoogleGenAI | null = null;
@@ -60,9 +54,10 @@ export class GeminiService {
         }
       });
 
-      const text = response.text || "I'm having trouble connecting to the portal right now.";
-      const triggerLead = text.toLowerCase().includes("provide your email") || 
-                          text.toLowerCase().includes("email address");
+      const text = response.text || "Connection to the portal is a bit hazy. Let me try to re-sync.";
+      const triggerLead = text.toLowerCase().includes("email") || 
+                          text.toLowerCase().includes("subscribe") ||
+                          text.toLowerCase().includes("membership");
 
       const sources: Source[] = [];
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
@@ -77,7 +72,7 @@ export class GeminiService {
       return { text, sources, triggerLead };
     } catch (error) {
       console.error("Gemini API Error:", error);
-      throw new Error("Failed to communicate with the Scout portal.");
+      throw new Error("Failed to communicate with Scout.");
     }
   }
 }
