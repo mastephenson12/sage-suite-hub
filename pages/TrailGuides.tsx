@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { geminiService } from '../services/gemini.ts';
+
+interface Trail {
+  name: string;
+  loc: string;
+  diff: string;
+  length: string;
+  tags: string[];
+  description: string;
+}
 
 const TrailGuides: React.FC = () => {
-  const trails = [
-    { name: "Devils Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi", tags: ["Photography", "Busy"] },
-    { name: "Flatiron via Siphon Draw", loc: "Apache Junction, AZ", diff: "Strenuous", length: "6.2 mi", tags: ["Scrambling", "Elevation"] },
-    { name: "West Fork Trail", loc: "Oak Creek Canyon", diff: "Easy", length: "7.2 mi", tags: ["Family", "Water"] },
-    { name: "Tom's Thumb", loc: "Scottsdale, AZ", diff: "Moderate", length: "4.0 mi", tags: ["Granite", "Views"] },
-    { name: "Camelback Echo Canyon", loc: "Phoenix, AZ", diff: "Hard", length: "2.4 mi", tags: ["Iconic", "Urban"] },
-    { name: "Horton Creek", loc: "Payson, AZ", diff: "Easy", length: "8.6 mi", tags: ["Forest", "Shade"] }
+  const [trailImages, setTrailImages] = useState<Record<string, string>>({});
+  const [loadingTrail, setLoadingTrail] = useState<string | null>(null);
+
+  const trails: Trail[] = [
+    { name: "Devils Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi", tags: ["Photography", "Busy"], description: "Natural sandstone arch with sweeping red rock views." },
+    { name: "Flatiron via Siphon Draw", loc: "Apache Junction, AZ", diff: "Strenuous", length: "6.2 mi", tags: ["Scrambling", "Elevation"], description: "Steep granite rock scrambles leading to a massive cliff-top plateau." },
+    { name: "West Fork Trail", loc: "Oak Creek Canyon", diff: "Easy", length: "7.2 mi", tags: ["Family", "Water"], description: "Lush riparian canyon with multiple stream crossings and towering cliffs." },
+    { name: "Tom's Thumb", loc: "Scottsdale, AZ", diff: "Moderate", length: "4.0 mi", tags: ["Granite", "Views"], description: "Distinctive granite spire overlooking the McDowell Sonoran Preserve." },
+    { name: "Camelback Echo Canyon", loc: "Phoenix, AZ", diff: "Hard", length: "2.4 mi", tags: ["Iconic", "Urban"], description: "High-intensity urban summit with panoramic Phoenix city views." },
+    { name: "Horton Creek", loc: "Payson, AZ", diff: "Easy", length: "8.6 mi", tags: ["Forest", "Shade"], description: "Cool mountain stream trail through Ponderosa pine forests." }
   ];
 
+  const handleGenerateImage = async (trail: Trail) => {
+    if (loadingTrail) return;
+    setLoadingTrail(trail.name);
+    try {
+      const imageUrl = await geminiService.generateTrailImage(trail.name, trail.description, trail.diff);
+      setTrailImages(prev => ({ ...prev, [trail.name]: imageUrl }));
+    } catch (error) {
+      console.error("Failed to generate trail vista:", error);
+    } finally {
+      setLoadingTrail(null);
+    }
+  };
+
   return (
-    <div className="pt-24 pb-32">
+    <div className="pt-24 pb-32 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <header className="mb-20">
           <div className="inline-flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-[0.3em] mb-4">
@@ -20,35 +46,72 @@ const TrailGuides: React.FC = () => {
              </svg>
              Explore Arizona
           </div>
-          <h1 className="text-6xl font-black tracking-tighter uppercase mb-6 leading-none">Find Your <br/>Next Path.</h1>
+          <h1 className="text-6xl font-black tracking-tighter uppercase mb-6 leading-[0.9]">Find Your <br/>Next Path.</h1>
           <p className="text-xl text-zinc-500 serif-text italic max-w-xl">
-            Vetted trail reports from the Health & Travels team. Every guide includes difficulty ratings, essential gear, and local wellness pairings.
+            Vetted trail reports from the Health & Travels team. Use our AI Scout to visualize the terrain before you trek.
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {trails.map((trail, idx) => (
-            <div key={idx} className="p-8 border border-zinc-200 rounded-3xl hover:border-[#0d47a1] transition-all group flex flex-col justify-between">
-              <div>
-                <div className="flex justify-between items-start mb-6">
-                  <span className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest ${
-                    trail.diff === 'Strenuous' || trail.diff === 'Hard' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
+            <div key={idx} className="flex flex-col border border-zinc-100 rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-blue-900/5 transition-all group bg-white">
+              {/* AI Image Section */}
+              <div className="aspect-video bg-zinc-50 relative overflow-hidden">
+                {trailImages[trail.name] ? (
+                  <img 
+                    src={trailImages[trail.name]} 
+                    alt={trail.name} 
+                    className="w-full h-full object-cover animate-in fade-in duration-1000" 
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center space-y-4">
+                    <div className="w-12 h-12 rounded-full border border-zinc-200 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 text-zinc-300 ${loadingTrail === trail.name ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">AI Scout Visualization Offline</p>
+                    <button 
+                      onClick={() => handleGenerateImage(trail)}
+                      disabled={loadingTrail !== null}
+                      className="px-6 py-2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    >
+                      {loadingTrail === trail.name ? "Scouting..." : "Generate Scout View"}
+                    </button>
+                  </div>
+                )}
+                {/* Overlay Tags */}
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${
+                    trail.diff === 'Strenuous' || trail.diff === 'Hard' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
                   }`}>
                     {trail.diff}
                   </span>
-                  <span className="text-xs font-bold text-zinc-400">{trail.length}</span>
-                </div>
-                <h3 className="text-3xl font-black tracking-tight mb-2 group-hover:text-[#0d47a1] transition-colors">{trail.name}</h3>
-                <p className="text-zinc-500 uppercase text-[10px] font-black tracking-widest mb-6">{trail.loc}</p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {trail.tags.map(tag => (
-                    <span key={tag} className="text-[10px] font-bold text-zinc-400 border border-zinc-200 px-2 py-0.5 rounded uppercase">{tag}</span>
-                  ))}
                 </div>
               </div>
-              <button className="w-full py-4 bg-zinc-50 group-hover:bg-[#0d47a1] group-hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
-                View Full Guide
-              </button>
+
+              {/* Content Section */}
+              <div className="p-8 flex-1 flex flex-col">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-3xl font-black tracking-tight text-black group-hover:text-blue-600 transition-colors">{trail.name}</h3>
+                  <span className="text-xs font-bold text-zinc-400 bg-zinc-50 px-2 py-1 rounded">{trail.length}</span>
+                </div>
+                <p className="text-blue-600 uppercase text-[10px] font-black tracking-widest mb-4">{trail.loc}</p>
+                
+                <p className="text-zinc-500 serif-text italic text-base leading-relaxed mb-6">
+                  "{trail.description}"
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-8 mt-auto">
+                  {trail.tags.map(tag => (
+                    <span key={tag} className="text-[9px] font-bold text-zinc-400 border border-zinc-200 px-2 py-1 rounded-lg uppercase">{tag}</span>
+                  ))}
+                </div>
+
+                <button className="w-full py-4 bg-zinc-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all active:scale-95 shadow-xl shadow-zinc-900/10">
+                  Full Scout Report
+                </button>
+              </div>
             </div>
           ))}
         </div>
