@@ -2,30 +2,30 @@ import { GoogleGenAI } from "@google/genai";
 import { Message, Source } from "../types.ts";
 import { GHL_CNAME_TARGET } from "../constants.ts";
 
-const SYSTEM_INSTRUCTION = `You are the Arizona Trail & Wellness Expert for healthandtravels.com.
+const SYSTEM_INSTRUCTION = `You are "Scout", the intelligent portal assistant for healthandtravels.com.
 
-IDENTITY:
-- You are "Scout", the portal assistant.
-- You specialize in Arizona trail reports, high-desert wellness, and technical setup for member portals.
+PERSONALITY:
+- Professional, technically expert, inviting, and slightly adventurous.
+- You speak with the authority of a seasoned Arizona trail guide and a web systems engineer.
 
-TECHNICAL PORTAL (SageSuite):
-- The portal is at sage.healthandtravels.com.
-- If users ask how to connect the subdomain:
-  1. Login to domain registrar.
-  2. Create CNAME: Name 'sage', Value '${GHL_CNAME_TARGET}'.
-  3. In GoHighLevel, ALWAYS select 'Client Portal' when setting up the community hub.
+CORE KNOWLEDGE:
+1. ARIZONA TRAILS: Provide expert advice on hiking in Sedona, Phoenix, and the high desert. Mention specific trails like Flatiron or West Fork when relevant.
+2. SAGESUITE: This is the technical backbone. The portal is at sage.healthandtravels.com.
+3. TECHNICAL SETUP: To connect a domain: CNAME 'sage' to '${GHL_CNAME_TARGET}'. In GoHighLevel, always use 'Client Portal' for the hub.
 
-MEMBER SERVICES:
-- Direct users to sage.healthandtravels.com for the directory, community, and exclusive guides.
-
-TONE:
-- Professional, technically precise, yet inviting. Use Google Search to find real-time trail conditions or local wellness news.`;
+BEHAVIOR:
+- Use Google Search to find real-time trail conditions (heat advisories, closures).
+- If a user asks about joining or membership, explain the benefits of the SageSuite community.
+- Keep responses concise but information-dense.`;
 
 export class GeminiService {
   private getClient() {
-    // Safely access process.env.API_KEY
-    const apiKey = (typeof process !== 'undefined' ? process.env.API_KEY : (window as any).process?.env?.API_KEY) || "";
-    return new GoogleGenAI({ apiKey });
+    // Robust key retrieval for browser/node environments
+    const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) 
+      ? process.env.API_KEY 
+      : (window as any).process?.env?.API_KEY;
+    
+    return new GoogleGenAI({ apiKey: apiKey || '' });
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean }> {
@@ -51,17 +51,15 @@ export class GeminiService {
         }
       });
 
-      const text = response.text || "Connection to the portal is a bit hazy. Let me try to re-sync.";
-      const triggerLead = text.toLowerCase().includes("email") || 
-                          text.toLowerCase().includes("subscribe") ||
-                          text.toLowerCase().includes("membership");
+      const text = response.text || "Portal connection hazy. Let's re-sync.";
+      const triggerLead = /membership|join|access|subscribe|email/i.test(text);
 
       const sources: Source[] = [];
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
       if (chunks) {
         chunks.forEach((chunk: any) => {
-          if (chunk.web?.uri && chunk.web?.title) {
-            sources.push({ uri: chunk.web.uri, title: chunk.web.title });
+          if (chunk.web?.uri) {
+            sources.push({ uri: chunk.web.uri, title: chunk.web.title || "Reference" });
           }
         });
       }
@@ -76,7 +74,7 @@ export class GeminiService {
   async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
     try {
       const ai = this.getClient();
-      const prompt = `A breathtaking, cinematic photograph of the ${trailName} trail in Arizona. Landscape vista showing the unique terrain, including ${description}. The lighting should be golden hour, capturing the high-desert essence. National Geographic style. Trail difficulty: ${difficulty}. High resolution, 4k.`;
+      const prompt = `Cinematic National Geographic style photograph of ${trailName} in Arizona. ${description}. Trail difficulty: ${difficulty}. Captured at golden hour, high desert atmosphere, ultra-high resolution.`;
       
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
@@ -88,16 +86,15 @@ export class GeminiService {
         }
       });
 
-      // Find the image part in the response
       for (const part of response.candidates?.[0]?.content?.parts || []) {
         if (part.inlineData) {
           return `data:image/png;base64,${part.inlineData.data}`;
         }
       }
-      throw new Error("No image data generated.");
+      return "";
     } catch (error) {
-      console.error("Image Generation Error:", error);
-      throw error;
+      console.error("Image Gen Error:", error);
+      return "";
     }
   }
 }
