@@ -20,10 +20,11 @@ BEHAVIOR:
 
 export class GeminiService {
   private getClient() {
-    // Robust key retrieval for browser/node environments
-    const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) 
-      ? process.env.API_KEY 
-      : (window as any).process?.env?.API_KEY;
+    const apiKey = (window as any).process?.env?.API_KEY;
+    
+    if (!apiKey) {
+      console.warn("Gemini API Key is missing. Scout is in offline mode.");
+    }
     
     return new GoogleGenAI({ apiKey: apiKey || '' });
   }
@@ -31,7 +32,11 @@ export class GeminiService {
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean }> {
     try {
       const ai = this.getClient();
-      const contents = history.map(msg => ({
+      
+      // Filter out meta messages like success/lead capture for context
+      const filteredHistory = history.filter(m => m.type !== 'success');
+      
+      const contents = filteredHistory.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }]
       }));
@@ -59,15 +64,19 @@ export class GeminiService {
       if (chunks) {
         chunks.forEach((chunk: any) => {
           if (chunk.web?.uri) {
-            sources.push({ uri: chunk.web.uri, title: chunk.web.title || "Reference" });
+            sources.push({ uri: chunk.web.uri, title: chunk.web.title || "Vetted Resource" });
           }
         });
       }
 
       return { text, sources, triggerLead };
-    } catch (error) {
-      console.error("Gemini API Error:", error);
-      throw new Error("Failed to communicate with Scout.");
+    } catch (error: any) {
+      console.error("Gemini API Error Detail:", error);
+      // More descriptive internal error logging
+      if (error.message?.includes("API_KEY_INVALID")) {
+        throw new Error("Authentication failed. Please verify the API connection.");
+      }
+      throw new Error("Signal lost in the canyon. Please try again in a moment.");
     }
   }
 
@@ -96,6 +105,10 @@ export class GeminiService {
       console.error("Image Gen Error:", error);
       return "";
     }
+  }
+}
+
+export const geminiService = new GeminiService();
   }
 }
 
