@@ -1,7 +1,15 @@
-import React from 'react';
-import ChatInterface from '../components/ChatInterface.tsx';
+import React, { useRef } from 'react';
+import ChatInterface, { ChatInterfaceHandle } from '../components/ChatInterface.tsx';
 
 const ChatPage: React.FC = () => {
+  const chatRef = useRef<ChatInterfaceHandle>(null);
+
+  const handleQueryClick = (query: string) => {
+    if (chatRef.current) {
+      chatRef.current.sendMessage(query);
+    }
+  };
+
   return (
     <div className="flex-grow bg-[#fafafa] flex flex-col min-h-[calc(100vh-73px)] animate-in fade-in duration-700">
       <div className="max-w-7xl mx-auto w-full px-6 py-10 flex-grow flex flex-col lg:flex-row gap-10">
@@ -26,12 +34,16 @@ const ChatPage: React.FC = () => {
              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d47a1] mb-6">Vetted Intel Queries</h4>
              <ul className="space-y-5">
                {[
-                 { q: "Setup Sage subdomain", icon: "🌐" },
-                 { q: "Sedona recovery retreats", icon: "🧘" },
-                 { q: "Hidden trail pools", icon: "💧" },
-                 { q: "GHL Community sync", icon: "🔗" }
+                 { q: "How do I setup my Sage subdomain?", icon: "🌐" },
+                 { q: "Find Sedona recovery retreats", icon: "🧘" },
+                 { q: "Are there hidden trail pools nearby?", icon: "💧" },
+                 { q: "Explain the GHL Community sync", icon: "🔗" }
                ].map((item, i) => (
-                 <li key={i} className="group cursor-pointer flex items-center gap-4">
+                 <li 
+                   key={i} 
+                   onClick={() => handleQueryClick(item.q)}
+                   className="group cursor-pointer flex items-center gap-4 hover:translate-x-1 transition-all"
+                 >
                    <span className="text-lg grayscale group-hover:grayscale-0 transition-all">{item.icon}</span>
                    <span className="text-[13px] font-bold text-zinc-500 group-hover:text-[#0d47a1] transition-colors">{item.q}</span>
                  </li>
@@ -49,16 +61,13 @@ const ChatPage: React.FC = () => {
         {/* Main Interface */}
         <div className="lg:w-3/4 flex-grow flex flex-col bg-white border border-zinc-200 rounded-[40px] overflow-hidden shadow-2xl shadow-blue-900/5 transition-all">
            <ChatInterface 
+             ref={chatRef}
              className="h-full border-none" 
              initialMessage="Identity Verified. Scout Online. I am monitoring SageSuite directory nodes and Arizona trail alerts. What intelligence can I provide?" 
            />
         </div>
       </div>
     </div>
-  );
-};
-
-export default ChatPage;
   );
 };
 
