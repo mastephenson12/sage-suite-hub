@@ -1,20 +1,16 @@
+
 {
   "headers": [
     {
-      "source": "/:path*.tsx",
+      "source": "/(.*).(ts|tsx)",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/javascript; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "source": "/:path*.ts",
-      "headers": [
+        },
         {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         }
       ]
     }
