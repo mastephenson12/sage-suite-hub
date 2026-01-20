@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { Message, Source } from "../types.ts";
-import { SAGESUITE_URL, GHL_CNAME_TARGET } from "../constants.ts";
+import { GHL_CNAME_TARGET } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are the Arizona Trail & Wellness Expert for healthandtravels.com.
 
@@ -22,18 +22,10 @@ TONE:
 - Professional, technically precise, yet inviting. Use Google Search to find real-time trail conditions or local wellness news.`;
 
 export class GeminiService {
-  private ai: GoogleGenAI | null = null;
-
   private getClient() {
-    if (!this.ai) {
-      // Safe retrieval of API key to handle environment variation
-      const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) 
-        ? process.env.API_KEY 
-        : (window as any).process?.env?.API_KEY;
-      
-      this.ai = new GoogleGenAI({ apiKey: apiKey || '' });
-    }
-    return this.ai;
+    // Safely access process.env.API_KEY
+    const apiKey = (typeof process !== 'undefined' ? process.env.API_KEY : (window as any).process?.env?.API_KEY) || "";
+    return new GoogleGenAI({ apiKey });
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean }> {
@@ -84,7 +76,7 @@ export class GeminiService {
   async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
     try {
       const ai = this.getClient();
-      const prompt = `Professional photography, national geographic style, ultra-high resolution. A breathtaking landscape vista of the ${trailName} in Arizona. The terrain is ${difficulty} with ${description}. Cinematic natural lighting, high desert vegetation, 8k resolution, Arizona wellness journal aesthetic. No people, just the trail and nature.`;
+      const prompt = `A breathtaking, cinematic photograph of the ${trailName} trail in Arizona. Landscape vista showing the unique terrain, including ${description}. The lighting should be golden hour, capturing the high-desert essence. National Geographic style. Trail difficulty: ${difficulty}. High resolution, 4k.`;
       
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
@@ -96,11 +88,13 @@ export class GeminiService {
         }
       });
 
-      const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
-      if (part?.inlineData?.data) {
-        return `data:image/png;base64,${part.inlineData.data}`;
+      // Find the image part in the response
+      for (const part of response.candidates?.[0]?.content?.parts || []) {
+        if (part.inlineData) {
+          return `data:image/png;base64,${part.inlineData.data}`;
+        }
       }
-      throw new Error("No image data returned from model.");
+      throw new Error("No image data generated.");
     } catch (error) {
       console.error("Image Generation Error:", error);
       throw error;
