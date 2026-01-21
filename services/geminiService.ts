@@ -2,97 +2,89 @@ import { GoogleGenAI } from "@google/genai";
 import { Message, Source } from "../types.ts";
 import { GHL_CNAME_TARGET } from "../constants.ts";
 
-const SYSTEM_INSTRUCTION = `You are "Scout", the intelligent portal assistant for healthandtravels.com.
+const SYSTEM_INSTRUCTION = `You are "Scout", the high-desert intelligence portal for healthandtravels.com.
 
 PERSONALITY:
-- Professional, technically expert, inviting, and slightly adventurous.
-- You are a specialist in Arizona trails and SageSuite portal technology.
+- Expert, technical, professional, yet inviting.
+- You know every trail in Sedona and Phoenix.
+- You are an expert in SageSuite and GoHighLevel portal configuration.
 
-CORE KNOWLEDGE:
-1. ARIZONA TRAILS: Provide expert advice on hiking in Sedona, Phoenix, and the high desert. Mention specific trails like Flatiron or West Fork when relevant.
-2. SAGESUITE: The technical backbone. Portal is at sage.healthandtravels.com.
-3. TECHNICAL SETUP: CNAME 'sage' to '${GHL_CNAME_TARGET}'. Always use 'Client Portal' in GoHighLevel settings.
+KNOWLEDGE BASE:
+- Portal: sage.healthandtravels.com
+- Technical: CNAME 'sage' to '${GHL_CNAME_TARGET}'.
+- Community: Hosted on GoHighLevel 'Client Portal' mode.
 
-BEHAVIOR:
-- Use Google Search for current weather and trail alerts.
-- If a user mentions a vacation or journey, act as a high-end concierge.
-- Be concise. Use professional but warm language.`;
+GOAL: Provide meaningful, vetted responses about health, Arizona trails, and portal setup.`;
 
 export class GeminiService {
   private getClient() {
     const apiKey = (window as any).process?.env?.API_KEY;
-    if (!apiKey) {
-      console.warn("API_KEY not found. Scout is in restricted mode.");
-    }
-    return new GoogleGenAI({ apiKey: apiKey || '' });
+    if (!apiKey) return null;
+    return new GoogleGenAI({ apiKey });
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean }> {
-    try {
-      const ai = this.getClient();
-      const contents = history
-        .filter(m => m.type !== 'success')
-        .map(msg => ({
-          role: msg.role === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.content }]
-        }));
+    const ai = this.getClient();
+    
+    if (!ai) {
+      // Meaningful Simulation Fallback if API key is missing
+      return { 
+        text: `Scout is currently in simulation mode. To fully assist your journey with real-time Arizona trail data and SageSuite sync, please ensure the Portal API Key is active. 
+        
+        However, I can tell you that the West Fork Trail is best in the morning, and your CNAME should point to ${GHL_CNAME_TARGET}.`,
+        sources: [{ title: "Setup Guide", uri: "https://sage.healthandtravels.com" }]
+      };
+    }
 
-      contents.push({
-        role: 'user',
-        parts: [{ text: userInput }]
-      });
+    try {
+      const contents = history.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }]
+      }));
+      contents.push({ role: 'user', parts: [{ text: userInput }] });
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: contents as any,
         config: {
           systemInstruction: SYSTEM_INSTRUCTION,
-          temperature: 0.7,
-          tools: [{ googleSearch: {} }],
+          tools: [{ googleSearch: {} }]
         }
       });
 
-      const text = response.text || "Portal connection hazy. Let's re-sync.";
-      const triggerLead = /membership|join|access|subscribe|email/i.test(userInput + " " + text);
-
+      const text = response.text || "Portal sync hazy. Let's re-connect.";
+      const triggerLead = /membership|join|access|email/i.test(text);
       const sources: Source[] = [];
+      
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
       if (chunks) {
-        chunks.forEach((chunk: any) => {
-          if (chunk.web?.uri) {
-            sources.push({ uri: chunk.web.uri, title: chunk.web.title || "Vetted Intel" });
-          }
+        chunks.forEach((c: any) => {
+          if (c.web?.uri) sources.push({ uri: c.web.uri, title: c.web.title || "Vetted Intel" });
         });
       }
 
       return { text, sources, triggerLead };
-    } catch (error: any) {
-      console.error("Scout Engine Error:", error);
-      throw new Error("Scout connection interrupted. Recalibrating satellite uplink...");
+    } catch (error) {
+      console.error("Scout Engine Failure:", error);
+      throw new Error("Scout connection interrupted. Recalibrating sensors...");
     }
   }
 
   async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
+    const ai = this.getClient();
+    if (!ai) return "";
+    
     try {
-      const ai = this.getClient();
-      const prompt = `Hyper-realistic 4k aerial photograph of ${trailName} trail in Arizona. ${description}. Difficulty: ${difficulty}. Cinematic lighting, golden hour, high desert colors.`;
-      
+      const prompt = `Aerial 4k cinematic shot of ${trailName} in Arizona. ${description}. Difficulty: ${difficulty}. High desert atmosphere.`;
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: { parts: [{ text: prompt }] },
-        config: {
-          imageConfig: { aspectRatio: "16:9" }
-        }
+        config: { imageConfig: { aspectRatio: "16:9" } }
       });
 
-      for (const part of response.candidates?.[0]?.content?.parts || []) {
-        if (part.inlineData) {
-          return `data:image/png;base64,${part.inlineData.data}`;
-        }
-      }
-      return "";
-    } catch (error) {
-      console.error("Scout Vision Error:", error);
+      const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+      return part?.inlineData ? `data:image/png;base64,${part.inlineData.data}` : "";
+    } catch {
       return "";
     }
   }
