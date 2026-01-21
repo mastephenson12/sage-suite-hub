@@ -10,47 +10,40 @@ const Navbar: React.FC = () => {
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 py-3">
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
         <div className="flex items-center gap-10">
-          <Link to="/" className="flex items-center gap-3 group text-decoration-none">
+          <Link to="/" className="flex items-center gap-3 group">
             {!imgError ? (
               <img 
                 src={logoSrc} 
                 alt={BRAND_NAME} 
-                className="w-10 h-10 object-contain group-hover:scale-105 transition-transform"
+                className="w-10 h-10 object-contain group-hover:scale-110 transition-transform"
                 onError={() => setImgError(true)}
               />
             ) : (
               <div className="w-10 h-10 bg-[#0d47a1] text-white rounded flex items-center justify-center text-[11px] font-black">HT</div>
             )}
-            <span className="text-xl font-[900] tracking-tighter uppercase text-black">
+            <span className="text-xl font-[900] tracking-tighter uppercase text-black hidden sm:block">
               {BRAND_NAME}
             </span>
           </Link>
           <div className="hidden lg:flex items-center gap-8 text-[12px] font-bold text-zinc-500 uppercase tracking-widest">
-            <Link to="/archive" className="hover:text-black transition-colors">Archive</Link>
-            <Link to="/trail-guides" className="hover:text-black transition-colors">Trail Guides</Link>
-            <Link to="/community" className="hover:text-[#0d47a1] transition-colors flex items-center gap-1.5">
-              Community
-              <span className="bg-[#0d47a1] text-white text-[8px] px-1.5 py-0.5 rounded animate-pulse font-black">LIVE</span>
-            </Link>
-            <Link to="/about" className="hover:text-black transition-colors">About</Link>
+            <Link to="/archive" className="hover:text-black">Archive</Link>
+            <Link to="/trail-guides" className="hover:text-black">Trail Guides</Link>
+            <Link to="/community" className="hover:text-[#0d47a1]">Community</Link>
           </div>
         </div>
-        <div className="flex items-center gap-6">
-          <Link to="/chat" className="text-[12px] font-bold text-[#0d47a1] uppercase tracking-widest hover:text-black hidden sm:block">Ask Scout</Link>
-          <a href={`${SAGESUITE_URL}/login`} className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest hover:text-black hidden sm:block">Sign In</a>
+        <div className="flex items-center gap-4">
+          <Link to="/chat" className="bg-zinc-50 text-zinc-800 px-4 py-2 rounded-lg text-[11px] font-black uppercase tracking-widest border border-zinc-200 hover:bg-zinc-100 transition-colors">Portal Scout</Link>
           <a 
             href="https://healthandtravels.com/subscribe" 
-            className="bg-[#0d47a1] hover:bg-[#0a3a85] text-white px-6 py-2.5 rounded-md text-[13px] font-black uppercase tracking-wider transition-all shadow-sm"
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-[#0d47a1] hover:bg-[#0a3a85] text-white px-6 py-2.5 rounded-lg text-[13px] font-black uppercase tracking-wider transition-all shadow-lg shadow-blue-900/10"
           >
             Subscribe
           </a>
         </div>
       </div>
     </nav>
-  );
-};
-
-export default Navbar;
   );
 };
 
