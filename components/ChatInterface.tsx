@@ -28,9 +28,8 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
       setMessages([{
         id: '1',
         role: 'assistant',
-        content: initialMessage || "Scout Online. How can I assist your journey through the High Desert?",
+        content: initialMessage || "Scout Online. How can I help your journey?",
         timestamp: new Date(),
-        type: 'text'
       }]);
     }
   }, [initialMessage]);
@@ -58,20 +57,19 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
 
     try {
       const { text, sources, triggerLead } = await geminiService.sendMessage([...messages, userMsg], textToSend);
-      const assistantMsg: Message = {
+      setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: text,
         timestamp: new Date(),
         sources: sources,
         type: triggerLead ? 'lead-capture' : 'text'
-      };
-      setMessages(prev => [...prev, assistantMsg]);
+      }]);
     } catch (err: any) {
       setMessages(prev => [...prev, {
         id: 'error-' + Date.now(),
         role: 'assistant',
-        content: "Scout connection interrupted. Recalibrating portal sensors... Please try your request again.",
+        content: "Scout connection interrupted. Recalibrating portal sensors... Please try again.",
         timestamp: new Date()
       }]);
     } finally {
@@ -81,17 +79,16 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
 
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>
-      {/* Status Bar */}
-      <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
+      {/* Header Info */}
+      <div className="px-6 py-4 bg-zinc-50 border-b border-zinc-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : 'bg-green-500'}`}></div>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Portal Scout Active</span>
+          <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : 'bg-green-500'}`}></div>
+          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">SageSuite Sync Active</span>
         </div>
-        <div className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">GHL-Sync v2.5</div>
+        <div className="text-[9px] font-bold text-zinc-300 uppercase tracking-widest">v2.5 Scout</div>
       </div>
 
-      {/* Message Feed */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-10 space-y-10 bg-white custom-scrollbar">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-10 space-y-10 bg-[#fafafa]/20 custom-scrollbar">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in`}>
             <div className={`max-w-[88%] ${msg.role === 'user' ? 'bg-zinc-100 p-5 rounded-2xl rounded-tr-none shadow-sm' : ''}`}>
@@ -108,21 +105,10 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
                 {msg.content}
               </div>
               
-              {msg.type === 'lead-capture' && (
-                <div className="mt-6 p-6 bg-[#0d47a1] rounded-2xl text-white shadow-2xl shadow-blue-900/20">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-blue-200 mb-4">Request Portal Entry</h4>
-                  <form onSubmit={(e) => { e.preventDefault(); handleSend("Sent credentials for access."); }} className="flex flex-col sm:flex-row gap-2">
-                    <input required type="email" placeholder="explorer@email.com" className="flex-1 bg-blue-900/40 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400" />
-                    <button className="bg-white text-[#0d47a1] px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-zinc-100 transition-colors">Join Portal</button>
-                  </form>
-                </div>
-              )}
-
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
                   {msg.sources.map((s, i) => (
-                    <a key={i} href={s.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-lg hover:bg-blue-100">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>
+                    <a key={i} href={s.uri} target="_blank" className="inline-flex items-center gap-2 text-[9px] font-bold text-blue-600 bg-blue-50/50 px-2 py-1 rounded border border-blue-100 hover:bg-blue-100 uppercase tracking-tighter">
                       {s.title}
                     </a>
                   ))}
@@ -132,39 +118,34 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
           </div>
         ))}
         {isLoading && (
-          <div className="flex items-center gap-3 px-2 text-[#0d47a1]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-            </span>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Recalibrating Satellite Intel...</span>
+          <div className="flex items-center gap-3 px-2 text-[#0d47a1] animate-pulse">
+            <div className="w-1.5 h-1.5 bg-current rounded-full"></div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Scout is thinking...</span>
           </div>
         )}
       </div>
 
-      {/* Input Console */}
       <div className="p-6 bg-white border-t border-zinc-100">
-        <div className="max-w-4xl mx-auto relative group">
+        <div className="max-w-4xl mx-auto flex items-center bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-2 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-50 transition-all">
           <input
             autoFocus
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Query Scout about Sedona or SageSuite..."
-            className="w-full bg-zinc-50 border border-zinc-200 rounded-[20px] px-6 py-5 pr-16 outline-none text-[15px] font-semibold text-zinc-800 placeholder:text-zinc-400 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all"
+            placeholder="Ask Scout about Sedona or SageSuite..."
+            className="flex-1 py-4 outline-none bg-transparent text-[15px] font-semibold text-zinc-800 placeholder:text-zinc-400"
           />
           <button 
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-[#0d47a1] text-white rounded-[14px] flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-blue-900/20 disabled:opacity-30"
+            className="ml-3 w-10 h-10 bg-[#0d47a1] text-white rounded-xl flex items-center justify-center hover:scale-105 transition-all disabled:opacity-30"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
             </svg>
           </button>
         </div>
-        <p className="text-center mt-4 text-[9px] font-black text-zinc-300 uppercase tracking-[0.4em]">Health & Travels Intelligence Division</p>
       </div>
     </div>
   );
