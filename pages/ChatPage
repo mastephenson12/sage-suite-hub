@@ -11,63 +11,54 @@ const ChatPage: React.FC = () => {
   };
 
   return (
-    <div className="flex-grow bg-[#fafafa] flex flex-col min-h-[calc(100vh-73px)] animate-in fade-in duration-700">
-      <div className="max-w-7xl mx-auto w-full px-6 py-10 flex-grow flex flex-col lg:flex-row gap-10">
+    <div className="flex-grow bg-[#fafafa] flex flex-col min-h-[calc(100vh-73px)] animate-in fade-in duration-500">
+      <div className="max-w-7xl mx-auto w-full px-6 py-8 flex-grow flex flex-col lg:flex-row gap-8">
         
-        {/* Sidebar: Portal Status & Quick Intel */}
+        {/* Sidebar */}
         <div className="lg:w-1/4 space-y-6">
-          <div className="p-8 bg-zinc-950 rounded-[32px] text-white shadow-2xl relative overflow-hidden border border-white/5">
-            <div className="absolute -right-12 -top-12 w-48 h-48 bg-blue-600/15 rounded-full blur-[80px]"></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
-                <h2 className="text-sm font-black tracking-[0.2em] uppercase text-blue-400">Portal Scout</h2>
-              </div>
-              <h3 className="text-3xl font-black tracking-tighter uppercase mb-3 leading-none">Intelligence Hub</h3>
-              <p className="text-zinc-400 serif-text italic text-lg leading-snug">
-                Your high-desert companion for trail discovery and recovery protocols.
-              </p>
-            </div>
+          <div className="p-8 bg-[#0d47a1] rounded-[32px] text-white shadow-xl">
+            <h2 className="text-sm font-black tracking-widest uppercase mb-4 opacity-70">Portal Scout</h2>
+            <h3 className="text-3xl font-black tracking-tighter uppercase mb-4 leading-none">Intelligence</h3>
+            <p className="text-blue-100 text-sm font-medium leading-relaxed">
+              Real-time Arizona trail alerts and SageSuite technical support.
+            </p>
           </div>
           
-          <div className="p-8 bg-white border border-zinc-200 rounded-[32px] shadow-sm">
-             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d47a1] mb-6">Vetted Intel Queries</h4>
-             <ul className="space-y-5">
+          <div className="p-6 bg-white border border-gray-100 rounded-[32px] shadow-sm">
+             <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-6">Quick Queries</h4>
+             <ul className="space-y-4">
                {[
-                 { q: "How do I setup my Sage subdomain?", icon: "🌐" },
-                 { q: "Find Sedona recovery retreats", icon: "🧘" },
-                 { q: "Are there hidden trail pools nearby?", icon: "💧" },
-                 { q: "Explain the GHL Community sync", icon: "🔗" }
-               ].map((item, i) => (
+                 "How do I setup my Sage subdomain?",
+                 "Find Sedona recovery retreats",
+                 "Are there hidden trail pools nearby?",
+                 "Explain the GHL Community sync"
+               ].map((q, i) => (
                  <li 
                    key={i} 
-                   onClick={() => handleQueryClick(item.q)}
-                   className="group cursor-pointer flex items-center gap-4 hover:translate-x-1 transition-all"
+                   onClick={() => handleQueryClick(q)}
+                   className="text-[13px] font-bold text-gray-600 hover:text-[#0d47a1] cursor-pointer transition-colors"
                  >
-                   <span className="text-lg grayscale group-hover:grayscale-0 transition-all">{item.icon}</span>
-                   <span className="text-[13px] font-bold text-zinc-500 group-hover:text-[#0d47a1] transition-colors">{item.q}</span>
+                   {q}
                  </li>
                ))}
              </ul>
           </div>
-
-          <div className="p-6 bg-blue-50/50 border border-blue-100/50 rounded-2xl">
-            <p className="text-[10px] font-bold text-[#0d47a1] uppercase tracking-widest leading-relaxed">
-              * Scout uses real-time search grounding to verify Arizona trail conditions.
-            </p>
-          </div>
         </div>
 
         {/* Main Interface */}
-        <div className="lg:w-3/4 flex-grow flex flex-col bg-white border border-zinc-200 rounded-[40px] overflow-hidden shadow-2xl shadow-blue-900/5 transition-all">
+        <div className="lg:w-3/4 flex-grow flex flex-col bg-white border border-gray-100 rounded-[32px] overflow-hidden shadow-2xl shadow-blue-900/5">
            <ChatInterface 
              ref={chatRef}
-             className="h-full border-none" 
-             initialMessage="Identity Verified. Scout Online. I am monitoring SageSuite directory nodes and Arizona trail alerts. What intelligence can I provide?" 
+             className="h-full" 
+             initialMessage="Scout Portal Active. How can I help your journey?" 
            />
         </div>
       </div>
     </div>
+  );
+};
+
+export default ChatPage;
   );
 };
 
