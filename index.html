@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health & Travels | Portal Scout</title>
     <script>
-      // Safe shim for environment variables
       window.process = window.process || {};
       window.process.env = window.process.env || {};
-      // Do not overwrite if already defined by the platform
-      if (!window.process.env.API_KEY) {
-        window.process.env.API_KEY = ""; 
+      if (typeof window.process.env.API_KEY === 'undefined') {
+        window.process.env.API_KEY = "";
       }
       window.process.cwd = () => "/";
     </script>
@@ -20,14 +18,8 @@
     <style>
         :root {
             --brand-primary: #0d47a1;
-            --brand-accent: #0a3a85;
         }
-        body { 
-          font-family: 'Inter', sans-serif; 
-          background-color: #ffffff; 
-          color: #000; 
-          -webkit-font-smoothing: antialiased; 
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #000; -webkit-font-smoothing: antialiased; }
         .serif-text { font-family: 'Source Serif 4', serif; }
         .animate-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn {
@@ -38,8 +30,8 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 10px; }
         
-        /* Smooth transitions for all interactive elements */
-        a, button, li { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        a, button { transition: all 0.2s ease-in-out; }
+        a:hover { opacity: 0.8; }
     </style>
     <script type="importmap">
 {
@@ -56,6 +48,10 @@
 </script>
 </head>
 <body>
+    <div id="root"></div>
+    <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
+</body>
+</html>
     <div id="root"></div>
     <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
 </body>
