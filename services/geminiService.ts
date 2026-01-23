@@ -6,29 +6,34 @@ const SYSTEM_INSTRUCTION = `You are "Scout", the high-desert intelligence portal
 
 PERSONALITY:
 - Expert, technical, professional, yet inviting.
-- You are an expert in Arizona trails and SageSuite portal configuration.
+- You are an expert in Arizona trails and SageSuite portal technology.
 
 KNOWLEDGE BASE:
 - Portal: ${SAGESUITE_URL}
 - Technical: CNAME 'sage' to '${GHL_CNAME_TARGET}'.
 - Community: Hosted on GoHighLevel 'Client Portal' mode.
+- Trails: Expert knowledge of Sedona, Phoenix, and the Superstition Mountains.
 
-GOAL: Provide meaningful, vetted responses about health, Arizona trails, and portal setup. Always be helpful.`;
+GOAL: Provide meaningful, vetted responses about health, Arizona trails, and portal setup. Always be helpful. If you don't know something, offer to 'scout' for it.`;
 
 export class GeminiService {
   private getClient() {
     const apiKey = (window as any).process?.env?.API_KEY;
-    // Ensure we only return a client if the key looks like a real key (not empty or shimmed)
-    if (!apiKey || apiKey.length < 10) return null;
-    return new GoogleGenAI({ apiKey });
+    // Basic validation of API key presence and format
+    if (!apiKey || apiKey.length < 10 || apiKey === "YOUR_API_KEY") return null;
+    try {
+      return new GoogleGenAI({ apiKey });
+    } catch (e) {
+      return null;
+    }
   }
 
-  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean }> {
+  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
     const ai = this.getClient();
     
-    // Friendly Simulation Mode if API is unavailable
+    // Always provide a themed simulation if live connection isn't possible
     if (!ai) {
-      return this.getSimulationResponse(userInput);
+      return { ...this.getSimulationResponse(userInput), isLocal: true };
     }
 
     try {
@@ -57,34 +62,42 @@ export class GeminiService {
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
       if (chunks) {
         chunks.forEach((c: any) => {
-          if (c.web?.uri) sources.push({ uri: c.web.uri, title: c.web.title || "Vetted Intel" });
+          if (c.web?.uri) {
+            sources.push({ uri: c.web.uri, title: c.web.title || "Vetted Intel" });
+          }
         });
       }
 
-      return { text, sources, triggerLead };
+      return { text, sources, triggerLead, isLocal: false };
     } catch (error: any) {
       console.error("Scout Engine Failure:", error);
-      // Fallback to simulation if the actual API call fails (e.g. invalid key)
-      return this.getSimulationResponse(userInput);
+      // Fallback to local intel if API call fails (e.g. rate limit, auth error)
+      return { ...this.getSimulationResponse(userInput), isLocal: true };
     }
   }
 
   private getSimulationResponse(input: string) {
     const lower = input.toLowerCase();
-    let text = "Scout is currently operating in 'Local Intel' mode while your portal key is being verified. ";
-    
-    if (lower.includes('trail') || lower.includes('sedona')) {
-      text += "For the Sedona area, I highly recommend the Devil's Bridge trail at sunrise to avoid the heat and crowds. Always carry at least 2 liters of water per person.";
+    let text = "";
+    const sources: Source[] = [{ title: "Health & Travels Journal", uri: "https://healthandtravels.com" }];
+
+    if (lower.includes('vacation') || lower.includes('trip') || lower.includes('travel')) {
+      text = "I've drafted a premium Sedona High-Desert Vacation Protocol for you:\n\n1. **Morning**: Sunrise trek at Cathedral Rock (1.2mi, intense but restorative).\n2. **Mid-Day**: Recovery session at a Sage-vetted retreat like Mii Amo.\n3. **Evening**: Stargazing at the Jordan Road trailhead.\n\nShall I refine this for your specific fitness level?";
+    } else if (lower.includes('help')) {
+      text = "Scout is standing by. I can assist with:\n- **Trail Discovery**: Finding the best Arizona treks for your skill level.\n- **Technical Portal Sync**: Connecting your SageSuite domain to GoHighLevel.\n- **Wellness Intel**: Sourcing recovery protocols for high-altitude desert climates.\n\nWhat intelligence do you require?";
     } else if (lower.includes('sage') || lower.includes('setup') || lower.includes('cname')) {
-      text += `To sync your SageSuite portal, point your 'sage' CNAME to ${GHL_CNAME_TARGET} and ensure 'Client Portal' is selected in your GoHighLevel dashboard.`;
+      text = `To establish your SageSuite portal, configure your DNS 'sage' CNAME to point to: **${GHL_CNAME_TARGET}**. Once propagated, ensure the 'Client Portal' toggle is active in your GHL dashboard settings.`;
+      sources.push({ title: "Portal Setup Guide", uri: SAGESUITE_URL });
+    } else if (lower.includes('trail') || lower.includes('hiking')) {
+      text = "Arizona hiking currently requires high-hydration discipline. The West Fork Trail in Oak Creek offers the best shade-to-distance ratio right now. Ensure you have 2+ liters of water before departure.";
     } else {
-      text += "I'm ready to help you navigate the high desert or your technical portal setup. What intel can I provide today?";
+      text = "Scout Local Intel Online. I'm currently monitoring high-desert trail reports and SageSuite directory nodes. How can I help your journey today?";
     }
 
     return { 
       text, 
-      sources: [{ title: "Setup Docs", uri: SAGESUITE_URL }],
-      triggerLead: lower.includes('join') || lower.includes('access')
+      sources,
+      triggerLead: lower.includes('join') || lower.includes('access') || lower.includes('subscribe')
     };
   }
 
@@ -93,7 +106,7 @@ export class GeminiService {
     if (!ai) return "";
     
     try {
-      const prompt = `Hyper-realistic 4k aerial photo of ${trailName} in Arizona. ${description}. Difficulty: ${difficulty}. Cinematic lighting, golden hour.`;
+      const prompt = `Hyper-realistic 4k aerial cinematic photo of ${trailName} in Arizona. ${description}. Difficulty: ${difficulty}. High desert atmosphere, golden hour lighting.`;
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: { parts: [{ text: prompt }] },
@@ -105,6 +118,10 @@ export class GeminiService {
     } catch {
       return "";
     }
+  }
+}
+
+export const geminiService = new GeminiService();
   }
 }
 
