@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { geminiService } from '../services/gemini.ts';
 
 interface Trail {
@@ -13,6 +14,7 @@ interface Trail {
 const TrailGuides: React.FC = () => {
   const [trailImages, setTrailImages] = useState<Record<string, string>>({});
   const [loadingTrail, setLoadingTrail] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const trails: Trail[] = [
     { name: "Devil's Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi", tags: ["Photography", "Busy"], description: "Natural sandstone arch with sweeping red rock views." },
@@ -36,11 +38,16 @@ const TrailGuides: React.FC = () => {
     }
   };
 
+  const handleAccessIntel = (trailName: string) => {
+    // Navigate to chat and pre-populate with the trail query
+    navigate(`/chat`, { state: { initialQuery: `Tell me more about the ${trailName} trail including current conditions and parking intel.` } });
+  };
+
   return (
     <div className="pt-24 pb-32 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <header className="mb-20">
-          <div className="inline-flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-[0.3em] mb-4">
+          <div className="inline-flex items-center gap-2 text-[#0d47a1] font-black text-[10px] uppercase tracking-[0.3em] mb-4">
              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m6 13l5.447-2.724A1 1 0 0021 17.618V6.818a1 1 0 00-1.447-.894L15 8m-6-1l6 2m0 0v10m-6-10V7" />
              </svg>
@@ -75,7 +82,7 @@ const TrailGuides: React.FC = () => {
                       <button 
                         onClick={() => handleGenerateImage(trail)}
                         disabled={loadingTrail !== null}
-                        className="text-blue-600 font-bold text-xs uppercase tracking-widest hover:text-blue-700 transition-colors disabled:opacity-50"
+                        className="text-[#0d47a1] font-bold text-xs uppercase tracking-widest hover:text-blue-700 transition-colors disabled:opacity-50"
                       >
                         {loadingTrail === trail.name ? "Scouting..." : "Reveal Scout View"}
                       </button>
@@ -106,10 +113,10 @@ const TrailGuides: React.FC = () => {
               {/* Content Section */}
               <div className="p-10 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-3xl font-black tracking-tighter text-black group-hover:text-blue-600 transition-colors">{trail.name}</h3>
+                  <h3 className="text-3xl font-black tracking-tighter text-black group-hover:text-[#0d47a1] transition-colors">{trail.name}</h3>
                   <span className="text-xs font-bold text-zinc-400 bg-zinc-50 px-3 py-1 rounded-full border border-zinc-100">{trail.length}</span>
                 </div>
-                <p className="text-blue-600 uppercase text-[10px] font-black tracking-[0.2em] mb-6">{trail.loc}</p>
+                <p className="text-[#0d47a1] uppercase text-[10px] font-black tracking-[0.2em] mb-6">{trail.loc}</p>
                 
                 <p className="text-zinc-600 serif-text italic text-lg leading-relaxed mb-8 flex-grow">
                   "{trail.description}"
@@ -121,7 +128,10 @@ const TrailGuides: React.FC = () => {
                   ))}
                 </div>
 
-                <button className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-blue-600 transition-all active:scale-[0.98] shadow-2xl shadow-zinc-900/20">
+                <button 
+                  onClick={() => handleAccessIntel(trail.name)}
+                  className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#0d47a1] transition-all active:scale-[0.98] shadow-2xl shadow-zinc-900/20"
+                >
                   Access Full Intel
                 </button>
               </div>
@@ -130,10 +140,6 @@ const TrailGuides: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default TrailGuides;
   );
 };
 
