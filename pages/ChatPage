@@ -1,8 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import ChatInterface, { ChatInterfaceHandle } from '../components/ChatInterface.tsx';
 
 const ChatPage: React.FC = () => {
   const chatRef = useRef<ChatInterfaceHandle>(null);
+  const location = useLocation();
+  const state = location.state as { initialQuery?: string };
+
+  useEffect(() => {
+    if (state?.initialQuery && chatRef.current) {
+      // Small delay to ensure the component is fully mounted
+      const timer = setTimeout(() => {
+        chatRef.current?.sendMessage(state.initialQuery!);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [state]);
 
   const handleQueryClick = (query: string) => {
     if (chatRef.current) {
@@ -36,6 +49,7 @@ const ChatPage: React.FC = () => {
                {[
                  { q: "How do I setup my Sage subdomain?", icon: "🌐" },
                  { q: "Find Sedona recovery retreats", icon: "🧘" },
+                 { q: "Help me build a 3-day vacation", icon: "✈️" },
                  { q: "Are there hidden trail pools nearby?", icon: "💧" },
                  { q: "Explain the GHL Community sync", icon: "🔗" }
                ].map((item, i) => (
@@ -70,10 +84,6 @@ const ChatPage: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default ChatPage;
   );
 };
 
