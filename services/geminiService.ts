@@ -12,9 +12,7 @@ export class GeminiService {
       const apiKey = process.env.API_KEY;
       if (!apiKey || apiKey.length < 10) return null;
       return new GoogleGenAI({ apiKey });
-    } catch { 
-      return null; 
-    }
+    } catch { return null; }
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
@@ -23,7 +21,6 @@ export class GeminiService {
       if (!ai) return { ...this.getSimulationResponse(userInput), isLocal: true };
 
       const contents = history
-        .filter(m => m.type !== 'success')
         .map(msg => ({
           role: msg.role === 'user' ? 'user' : 'model',
           parts: [{ text: msg.content }]
@@ -47,7 +44,7 @@ export class GeminiService {
       }
       return { text, sources, triggerLead, isLocal: false };
     } catch (err) {
-      console.error("Gemini Service Error:", err);
+      console.error("Gemini Error:", err);
       return { ...this.getSimulationResponse(userInput), isLocal: true };
     }
   }
@@ -55,18 +52,16 @@ export class GeminiService {
   private getSimulationResponse(input: string) {
     const lower = input.toLowerCase();
     const sources: Source[] = [{ title: "Health & Travels", uri: "https://healthandtravels.com" }];
-    let text = "";
+    let text = "Scout Local Mode Active. Monitoring Arizona trails and SageSuite directory nodes. How can I assist your journey?";
 
-    if (lower.includes('vacation') || lower.includes('build') || lower.includes('travel')) {
-      text = "I've drafted a premium Sedona High-Desert Vacation Protocol for you:\n\n1. **Morning**: Sunrise trek at Cathedral Rock (1.2mi, intense/restorative).\n2. **Mid-Day**: Recovery session at a Sage-vetted retreat like Mii Amo.\n3. **Evening**: Stargazing at the Jordan Road trailhead.\n\nShall I refine this based on your specific travel dates or group size?";
-    } else if (lower.includes('sage') || lower.includes('setup') || lower.includes('cname')) {
-      text = `To sync your SageSuite portal, point your 'sage' CNAME to ${GHL_CNAME_TARGET} and enable 'Client Portal' in GoHighLevel dashboard.`;
-      sources.push({ title: "Portal Docs", uri: SAGESUITE_URL });
-    } else {
-      text = "Scout Local Intel Online. I'm currently monitoring Arizona trail reports and SageSuite directory nodes. How can I assist your journey today?";
+    if (lower.includes('vacation')) {
+      // Fixed the octal escape sequence (\2 changed to \n2.)
+      text = "I've drafted a premium Sedona High-Desert Vacation Protocol:\n1. Sunrise at Cathedral Rock\n2. Recovery at a Sage retreat\n3. Evening Stargazing.";
+    } else if (lower.includes('sage')) {
+      text = `To sync your SageSuite portal, point your 'sage' CNAME to ${GHL_CNAME_TARGET}.`;
     }
 
-    return { text, sources, triggerLead: lower.includes('join'), isLocal: true };
+    return { text, sources, triggerLead: false, isLocal: true };
   }
 
   async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
@@ -75,18 +70,12 @@ export class GeminiService {
       if (!ai) return "";
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
-        contents: { parts: [{ text: `Aerial cinematic photo of ${trailName} Arizona. ${description}. Difficulty: ${difficulty}.` }] },
+        contents: { parts: [{ text: `Cinematic Arizona trail photo: ${trailName}. ${description}.` }] },
         config: { imageConfig: { aspectRatio: "16:9" } }
       });
       const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
       return part?.inlineData ? `data:image/png;base64,${part.inlineData.data}` : "";
-    } catch { 
-      return ""; 
-    }
-  }
-}
-
-export const geminiService = new GeminiService();
+    } catch { return ""; }
   }
 }
 
