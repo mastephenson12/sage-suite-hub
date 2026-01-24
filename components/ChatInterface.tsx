@@ -57,6 +57,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
     setIsLoading(true);
 
     try {
+      // The geminiService.sendMessage is now hardened and should not throw.
       const response = await geminiService.sendMessage([...messages, userMsg], textToSend);
       setIsLocalMode(!!response.isLocal);
       
@@ -69,20 +70,12 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         type: response.triggerLead ? 'lead-capture' : 'text'
       }]);
     } catch (err: any) {
+      console.error("Chat UI Error:", err);
       setMessages(prev => [...prev, {
         id: 'error-' + Date.now(),
         role: 'assistant',
-        content: "Scout connection interrupted. Switching to backup protocols...",
+        content: "Scout connection interrupted. Our backup protocols are currently providing local intel. How else can I help?",
         timestamp: new Date()
-      }]);
-      // Attempt to immediately provide a local fallback if a hard error occurs
-      const local = await geminiService.sendMessage([], textToSend);
-      setMessages(prev => [...prev, {
-        id: 'fallback-' + Date.now(),
-        role: 'assistant',
-        content: local.text,
-        timestamp: new Date(),
-        sources: local.sources
       }]);
     } finally {
       setIsLoading(false);
@@ -99,7 +92,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
             {isLocalMode ? 'Local Intel Active' : 'Satellite Sync Active'}
           </span>
           {isLocalMode && (
-             <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-widest rounded-full">Limited Uplink</span>
+             <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-widest rounded-full">Backup Uplink</span>
           )}
         </div>
         <div className="text-[9px] font-black text-zinc-300 uppercase tracking-widest">Portal Scout v2.5</div>
@@ -113,7 +106,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
               {msg.role === 'assistant' && (
                 <div className="flex items-center gap-2 mb-3">
                    <div className="w-4 h-4 rounded-md bg-[#0d47a1] flex items-center justify-center">
-                     <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                     <div className="relative w-1.5 h-1.5 rounded-full bg-white"></div>
                    </div>
                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d47a1]">Scout Intel</p>
                 </div>
@@ -182,10 +175,6 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         <p className="text-center mt-4 text-[9px] font-black text-zinc-300 uppercase tracking-[0.4em]">Health & Travels Intel Division</p>
       </div>
     </div>
-  );
-});
-
-export default ChatInterface;
   );
 });
 
