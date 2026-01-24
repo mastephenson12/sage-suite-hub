@@ -122,7 +122,3 @@ export class GeminiService {
 }
 
 export const geminiService = new GeminiService();
-  }
-}
-
-export const geminiService = new GeminiService();
