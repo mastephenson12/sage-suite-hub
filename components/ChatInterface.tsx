@@ -1,20 +1,18 @@
-
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Message, Source } from '../types.ts';
 import { geminiService } from '../services/gemini.ts';
 
-// Export ChatInterfaceHandle for use in pages/ChatPage.tsx
 export interface ChatInterfaceHandle {
   sendMessage: (text: string) => void;
 }
 
-// Define props for ChatInterface
 interface ChatInterfaceProps {
   initialMessage?: string;
   className?: string;
 }
 
-const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ initialMessage, className = "" }, ref) => {
+const ChatInterface = forwardRef((props: ChatInterfaceProps, ref) => {
+  const { initialMessage, className = "" } = props;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +20,9 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
-    sendMessage: (text) => handleSend(text)
+    sendMessage: (text: string) => {
+      handleSend(text);
+    }
   }));
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         timestamp: new Date(),
       }]);
     }
-  }, [initialMessage, messages.length]);
+  }, [initialMessage]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -42,8 +42,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
     }
   }, [messages, isLoading]);
 
-  // Make overrideInput optional to fix TS expected argument error
-  const handleSend = async (overrideInput?: string) => {
+  async function handleSend(overrideInput?: string) {
     const textToSend = overrideInput || input;
     if (!textToSend.trim() || isLoading) return;
 
@@ -71,6 +70,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         type: response.triggerLead ? 'lead-capture' : 'text'
       }]);
     } catch (err) {
+      console.error("Scout Session Error:", err);
       setMessages(prev => [...prev, {
         id: 'err-' + Date.now(),
         role: 'assistant',
@@ -80,7 +80,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>
@@ -151,10 +151,6 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         </div>
       </div>
     </div>
-  );
-});
-
-export default ChatInterface;
   );
 });
 
