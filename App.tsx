@@ -46,7 +46,6 @@ const AppContent: React.FC = () => {
         </div>
       </footer>
 
-      {/* Persistent Widget (Hidden on the full-screen chat route) */}
       {!isChatPage && <ChatWidget />}
     </div>
   );
