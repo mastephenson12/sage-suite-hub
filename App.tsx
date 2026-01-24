@@ -9,7 +9,7 @@ import About from './pages/About.tsx';
 import Community from './pages/Community.tsx';
 import ChatPage from './pages/ChatPage.tsx';
 
-const AppContent: React.FC = () => {
+function AppContent() {
   const location = useLocation();
   const currentPath = location.pathname;
   const isChatPage = currentPath === '/chat';
@@ -49,18 +49,14 @@ const AppContent: React.FC = () => {
       {!isChatPage && <ChatWidget />}
     </div>
   );
-};
+}
 
-const App: React.FC = () => {
+function App() {
   return (
     <Router>
       <AppContent />
     </Router>
   );
-};
-
-export default App;
-  );
-};
+}
 
 export default App;
