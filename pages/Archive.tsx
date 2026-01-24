@@ -1,5 +1,5 @@
 import React from 'react';
-import { BRAND_NAME } from '../constants';
+import { BRAND_NAME } from '../constants.ts';
 
 const Archive: React.FC = () => {
   const issues = [
@@ -46,10 +46,6 @@ const Archive: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default Archive;
   );
 };
 
