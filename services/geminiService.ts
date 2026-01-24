@@ -18,10 +18,9 @@ GOAL: Provide meaningful, vetted responses about health, Arizona trails, and por
 
 export class GeminiService {
   private getClient() {
-    const apiKey = (window as any).process?.env?.API_KEY;
-    // Basic validation of API key presence and format
-    if (!apiKey || apiKey.length < 10 || apiKey === "YOUR_API_KEY") return null;
     try {
+      const apiKey = (window as any).process?.env?.API_KEY;
+      if (!apiKey || apiKey.length < 10 || apiKey === "YOUR_API_KEY") return null;
       return new GoogleGenAI({ apiKey });
     } catch (e) {
       return null;
@@ -29,14 +28,13 @@ export class GeminiService {
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
-    const ai = this.getClient();
-    
-    // Always provide a themed simulation if live connection isn't possible
-    if (!ai) {
-      return { ...this.getSimulationResponse(userInput), isLocal: true };
-    }
-
     try {
+      const ai = this.getClient();
+      
+      if (!ai) {
+        return { ...this.getSimulationResponse(userInput), isLocal: true };
+      }
+
       const contents = history
         .filter(m => m.type !== 'success')
         .map(msg => ({
@@ -71,7 +69,6 @@ export class GeminiService {
       return { text, sources, triggerLead, isLocal: false };
     } catch (error: any) {
       console.error("Scout Engine Failure:", error);
-      // Fallback to local intel if API call fails (e.g. rate limit, auth error)
       return { ...this.getSimulationResponse(userInput), isLocal: true };
     }
   }
@@ -81,8 +78,8 @@ export class GeminiService {
     let text = "";
     const sources: Source[] = [{ title: "Health & Travels Journal", uri: "https://healthandtravels.com" }];
 
-    if (lower.includes('vacation') || lower.includes('trip') || lower.includes('travel')) {
-      text = "I've drafted a premium Sedona High-Desert Vacation Protocol for you:\n\n1. **Morning**: Sunrise trek at Cathedral Rock (1.2mi, intense but restorative).\n2. **Mid-Day**: Recovery session at a Sage-vetted retreat like Mii Amo.\n3. **Evening**: Stargazing at the Jordan Road trailhead.\n\nShall I refine this for your specific fitness level?";
+    if (lower.includes('vacation') || lower.includes('trip') || lower.includes('travel') || lower.includes('build')) {
+      text = "I've drafted a premium Sedona High-Desert Vacation Protocol for you:\n\n1. **Morning**: Sunrise trek at Cathedral Rock (1.2mi, intense but restorative).\n2. **Mid-Day**: Recovery session at a Sage-vetted retreat like Mii Amo.\n3. **Evening**: Stargazing at the Jordan Road trailhead.\n\nShall I refine this based on your specific travel dates or group size?";
     } else if (lower.includes('help')) {
       text = "Scout is standing by. I can assist with:\n- **Trail Discovery**: Finding the best Arizona treks for your skill level.\n- **Technical Portal Sync**: Connecting your SageSuite domain to GoHighLevel.\n- **Wellness Intel**: Sourcing recovery protocols for high-altitude desert climates.\n\nWhat intelligence do you require?";
     } else if (lower.includes('sage') || lower.includes('setup') || lower.includes('cname')) {
@@ -102,10 +99,10 @@ export class GeminiService {
   }
 
   async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
-    const ai = this.getClient();
-    if (!ai) return "";
-    
     try {
+      const ai = this.getClient();
+      if (!ai) return "";
+      
       const prompt = `Hyper-realistic 4k aerial cinematic photo of ${trailName} in Arizona. ${description}. Difficulty: ${difficulty}. High desert atmosphere, golden hour lighting.`;
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
@@ -118,6 +115,10 @@ export class GeminiService {
     } catch {
       return "";
     }
+  }
+}
+
+export const geminiService = new GeminiService();
   }
 }
 
