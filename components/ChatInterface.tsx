@@ -1,14 +1,17 @@
+
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Message, Source } from '../types.ts';
 import { geminiService } from '../services/gemini.ts';
 
+// Export ChatInterfaceHandle for use in pages/ChatPage.tsx
+export interface ChatInterfaceHandle {
+  sendMessage: (text: string) => void;
+}
+
+// Define props for ChatInterface
 interface ChatInterfaceProps {
   initialMessage?: string;
   className?: string;
-}
-
-export interface ChatInterfaceHandle {
-  sendMessage: (text: string) => void;
 }
 
 const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ initialMessage, className = "" }, ref) => {
@@ -19,9 +22,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
-    sendMessage: (text: string) => {
-      handleSend(text);
-    }
+    sendMessage: (text) => handleSend(text)
   }));
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         timestamp: new Date(),
       }]);
     }
-  }, [initialMessage]);
+  }, [initialMessage, messages.length]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -41,6 +42,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
     }
   }, [messages, isLoading]);
 
+  // Make overrideInput optional to fix TS expected argument error
   const handleSend = async (overrideInput?: string) => {
     const textToSend = overrideInput || input;
     if (!textToSend.trim() || isLoading) return;
@@ -57,8 +59,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
     setIsLoading(true);
 
     try {
-      // The geminiService.sendMessage is now hardened and should not throw.
-      const response = await geminiService.sendMessage([...messages, userMsg], textToSend);
+      const response = await geminiService.sendMessage(messages, textToSend);
       setIsLocalMode(!!response.isLocal);
       
       setMessages(prev => [...prev, {
@@ -69,12 +70,11 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         sources: response.sources,
         type: response.triggerLead ? 'lead-capture' : 'text'
       }]);
-    } catch (err: any) {
-      console.error("Chat UI Error:", err);
+    } catch (err) {
       setMessages(prev => [...prev, {
-        id: 'error-' + Date.now(),
+        id: 'err-' + Date.now(),
         role: 'assistant',
-        content: "Scout connection interrupted. Our backup protocols are currently providing local intel. How else can I help?",
+        content: "Satellite link interrupted. Switched to high-desert backup protocols. I can still assist with trail and portal data.",
         timestamp: new Date()
       }]);
     } finally {
@@ -84,21 +84,16 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
 
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>
-      {/* Header Info */}
       <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
         <div className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : 'bg-green-500'}`}></div>
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
             {isLocalMode ? 'Local Intel Active' : 'Satellite Sync Active'}
           </span>
-          {isLocalMode && (
-             <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-widest rounded-full">Backup Uplink</span>
-          )}
         </div>
         <div className="text-[9px] font-black text-zinc-300 uppercase tracking-widest">Portal Scout v2.5</div>
       </div>
 
-      {/* Message Feed */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-10 space-y-10 bg-[#fafafa]/20 custom-scrollbar">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in`}>
@@ -106,31 +101,18 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
               {msg.role === 'assistant' && (
                 <div className="flex items-center gap-2 mb-3">
                    <div className="w-4 h-4 rounded-md bg-[#0d47a1] flex items-center justify-center">
-                     <div className="relative w-1.5 h-1.5 rounded-full bg-white"></div>
+                     <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                    </div>
                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d47a1]">Scout Intel</p>
                 </div>
               )}
-              
               <div className={`text-[17px] whitespace-pre-wrap leading-[1.6] ${msg.role === 'assistant' ? 'serif-text italic text-zinc-900' : 'text-sm font-semibold text-zinc-700'}`}>
                 {msg.content}
               </div>
-              
-              {msg.type === 'lead-capture' && (
-                <div className="mt-6 p-6 bg-[#0d47a1] rounded-2xl text-white shadow-2xl shadow-blue-900/20">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-blue-200 mb-4">Request Full Intel Access</h4>
-                  <form onSubmit={(e) => { e.preventDefault(); handleSend("Sent credentials for newsletter."); }} className="flex flex-col sm:flex-row gap-2">
-                    <input required type="email" placeholder="explorer@email.com" className="flex-1 bg-blue-900/40 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400" />
-                    <button className="bg-white text-[#0d47a1] px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-zinc-100 transition-colors">Join</button>
-                  </form>
-                </div>
-              )}
-
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
                   {msg.sources.map((s, i) => (
                     <a key={i} href={s.uri} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors uppercase tracking-tight">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>
                       {s.title}
                     </a>
                   ))}
@@ -141,18 +123,13 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
         ))}
         {isLoading && (
           <div className="flex items-center gap-3 px-2 text-[#0d47a1] animate-pulse">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-            </span>
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Scouting Arizona trails...</span>
           </div>
         )}
       </div>
 
-      {/* Input Console */}
       <div className="p-6 bg-white border-t border-zinc-100">
-        <div className="max-w-4xl mx-auto relative group">
+        <div className="max-w-4xl mx-auto relative">
           <input
             autoFocus
             type="text"
@@ -172,9 +149,12 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(({ ini
             </svg>
           </button>
         </div>
-        <p className="text-center mt-4 text-[9px] font-black text-zinc-300 uppercase tracking-[0.4em]">Health & Travels Intel Division</p>
       </div>
     </div>
+  );
+});
+
+export default ChatInterface;
   );
 });
 
