@@ -1,13 +1,121 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { geminiService } from './services/gemini.ts';
-import { BRAND_NAME, BEEHIIV_URL } from './constants.ts';
-import { Message } from './types.ts';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { GoogleGenAI } from "@google/genai";
+
+// --- Constants ---
+
+const BRAND_NAME = 'Health & Travels';
+const LOGO_DATA_URL = 'data:image/png;base64,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_fX4/Y/NVuZrBnR3Nx11/pPEByIJDxN/xHfpjC4jI3kl+yCKaqK7vB6Wsxq7x3ArDuhS79qWsZISDSCCDInIBk4LZrUlpwRo1+CEn7xKyLjOA8GmRlfRe04wLzUCCjiEz64O6A1mMLATkbmU4igoVK3VtqTXlAhSktjqIpg0HnNHClypi0QssNTiiBlg/II/bGBmQyeBj76I+GXKJiqfNhN/kUt+TGElVmU7DoomLp9MJlCo5lC4YNYOpzyYQG1P3ORqlQOTtxHViWqeQihsUl24JSESnNA3OVZtvEQ38xEBQ/DK2Cx02JiGuz53rZRhp+zxp0012k0D69KelyRLxnh1Yz7PSIdMm0T3RQQ+CJ4gXqGINqlLGj6kBVFf3oKlUU7zBykNacn/W8Z4nX3muE4DSuRIOGjCNsgCJnzIZW7hg+8K1AE8rNpS3XZa00wLstKzDM4rUta9Nr2GTAxAHS/jALiA7mEXkKGYRXjB4gYLIRqV9gOraQS5CRRVj8EwdyQPoNFwKciCaYPeT2g825LD19vz4+fdvfgvq//MJ4GsdFX6uH33/vKdVo7PxS7p9MXpS7rFT97/N91XqKxXfXW/UvXUuPfc63S6XG2at9u6I5h6fX98E8Pnb7898YpYn/vL6j/7i8Y7/mF+mKInXfS0pBSDPHz978vRDR08SADAI/98uK6YAD9wU787f7yzPyy6v7e7f7C+N+X+vO8V/SInFfBv5fX78V6fH5+vT928/ePnixXv3H97/ycN7D8dP7V8TFSfAnuP79fKjM/97/P7p0/unYpLCHv8Yf3fS2G/pW1vX0OeePXz9i9evvP7K90v6/w9pBv7K+X9l8O38XyUAUh6VzP8v738Lp69fefzV67/+P3p/S0YvYF6UqYAfGf97Bf97f+2vP29m7C8T/9/75h8U+fN/XpIAG9f0X3pL+u27L7v43fPnF/9S/E/Vv0L/p0+evP/86e9eY38L70fG9986A/YfX5yYfvPd/66R9T96fvXF06v3HhL+U/9HAs6fPf3v+R9S+5v+T07A+7fX3/0E/7PfvfT7x99/O6b/V07vP3V699K9d77p8T6z8v0v//v8n//87P9vOn0X+fG7X6YAnDt97urK48uXFzYmJzYmX7f6m96/X/u7H//yU5fPv9B/9K6L129fWp3S77f726emUf8fX19f7E79/9/9H/v36O679w/6+7vX9/T09M6pE+uH9u7uT6en+pP7+7p6fX3XfP0AAtn9p8/f+vD6/99/AALZ/cfPv/XvR6++fOf6P7/+669fvrYxOfn66989fvvpX67f+O///Pr9918/f+MvX9fX9fXP9U6MTe7fOnHq9N6XJ06c27p29eDExH8B5p0P/+O+x6L6L/n66U/unfXQvXvunXun93707v0Hzv3fT394e+f0D09/eLp/7p3757/7408++eTjP/77v9/55Wc0UPr/AfrV8Y0/eOPfO/4DHzmF/7f+z5Xp2W7619X/XN7//fX9/0v605On7r/8lUf+U+OfvN7P4/W///Xm5tU/vOfx9e7K/9rU/38X/0W/VvL/9H9r7/f37v70H38j8A/Vf54S/0P/N396e9Y/2zN/+dO9O3fOXOzs7O7879rM/N3Xv3r8/m9uH2u933h46pGntn39yYevXj39f977p+f/+8+XN1f29/bX9zfPrVz9/7y/Xm8VpS6HnK9XU1fO9+9evvjO8vLly7///O/Xfv7o0X07vj6xvnf9ypXPv/LixXv37n197969p+8/eHjvP+/ce+fXf/u3f/761z995X77p77+z3/889f/9re/vPH/uHfv/v3379//j5v/C+/ff/H+/Vfvv7//5On96z9+p2Y7tVf/5S+vX7pUatYvLpU+p//S+t69+0dPXnx27P6f/f7q/X9fWvjNHz/+h+O/9y3s/9vG91+99vS//8ev/vCHX/3hP//560+88fOf/8m73vXe++57+n//78r04/2p7p7O7u7O7n9d6+p67pG59fX796fGxsfHxsfHr169enV8fOn7v3/xH9/v3/9/P3f9669fvfrq6lW9p6urvX1td986Ojo6vX9/rS0tLQ2377/p/NfVq/3O6v8d2vP/C+p97f9V6f/W7n/X9L878D8W96+XvH/7+S89/7Gnf6P6//P8+U9n5f99X//9z3/+446+f7WpA3/qgP/3/1WrfX3//29ra6vN/6urq80/N93W/3S9n0239V9v9z9t9T/9P31767Xv/P7vT8D9f19v9r/9f2tW/f///8Xq/9/fXy89///rS/v7f/L/Af997//fP0Yf/qf68H+q9/8UAAAAADs=';
+const SAGESUITE_URL = 'https://sage.healthandtravels.com';
+const SAGESUITE_DIRECTORY = 'https://sage.healthandtravels.com/directory';
+const SAGESUITE_APPLY = 'https://sage.healthandtravels.com/apply';
+const BEEHIIV_URL = 'https://healthandtravels.beehiiv.com';
+const GHL_CNAME_TARGET = 'flash.funnels.msgsndr.com';
+const GHL_A_RECORD_IP = '34.16.190.6';
+
+// --- Types ---
+
+type Role = 'user' | 'assistant' | 'system';
+type MessageType = 'text' | 'lead-capture' | 'success';
+
+interface Source {
+  uri: string;
+  title: string;
+}
+
+interface Message {
+  id: string;
+  role: Role;
+  content: string;
+  timestamp: Date;
+  type?: MessageType;
+  sources?: Source[];
+}
+
+// --- Gemini Service ---
+
+const SYSTEM_INSTRUCTION = `You are "Scout", the high-desert intelligence portal for healthandtravels.com.
+PERSONALITY: Expert, technical, professional, inviting. Arizona trail specialist.
+PORTAL: ${SAGESUITE_URL}. CNAME: 'sage' to '${GHL_CNAME_TARGET}'.`;
+
+class GeminiService {
+  private getClient() {
+    try {
+      const apiKey = process.env.API_KEY;
+      if (!apiKey || apiKey.length < 10) return null;
+      return new GoogleGenAI({ apiKey });
+    } catch { return null; }
+  }
+
+  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
+    try {
+      const ai = this.getClient();
+      if (!ai) return { ...this.getSimulationResponse(userInput), isLocal: true };
+
+      const contents = history
+        .map(msg => ({
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        }));
+      contents.push({ role: 'user', parts: [{ text: userInput }] });
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: contents as any,
+        config: { systemInstruction: SYSTEM_INSTRUCTION, tools: [{ googleSearch: {} }] }
+      });
+
+      const text = response.text || "Portal sync hazy. Recalibrating.";
+      const triggerLead = /membership|join|access|email/i.test(userInput + " " + text);
+      const sources: Source[] = [];
+      const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+      if (chunks) {
+        chunks.forEach((c: any) => {
+          if (c.web?.uri) sources.push({ uri: c.web.uri, title: c.web.title || "Vetted Intel" });
+        });
+      }
+      return { text, sources, triggerLead, isLocal: false };
+    } catch (err) {
+      console.error("Gemini Error:", err);
+      return { ...this.getSimulationResponse(userInput), isLocal: true };
+    }
+  }
+
+  private getSimulationResponse(input: string) {
+    const lower = input.toLowerCase();
+    const sources: Source[] = [{ title: "Health & Travels", uri: "https://healthandtravels.com" }];
+    let text = "Scout Local Mode Active. Monitoring Arizona trails and SageSuite directory nodes. How can I assist your journey?";
+
+    if (lower.includes('vacation')) {
+      text = "I've drafted a premium Sedona High-Desert Vacation Protocol:\n1. Sunrise at Cathedral Rock\n2. Recovery at a Sage retreat\n3. Evening Stargazing.";
+    } else if (lower.includes('sage')) {
+      text = `To sync your SageSuite portal, point your 'sage' CNAME to ${GHL_CNAME_TARGET}.`;
+    }
+
+    return { text, sources, triggerLead: false, isLocal: true };
+  }
+
+  async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
+    try {
+      const ai = this.getClient();
+      if (!ai) return "";
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash-image',
+        contents: { parts: [{ text: `Cinematic Arizona red rock trail photo: ${trailName}. ${description}.` }] },
+        config: { imageConfig: { aspectRatio: "16:9" } }
+      });
+      const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+      return part?.inlineData ? `data:image/png;base64,${part.inlineData.data}` : "";
+    } catch { return ""; }
+  }
+}
+
+const geminiService = new GeminiService();
 
 // --- Components ---
 
-function Navbar() {
+const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-100 py-3">
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
@@ -35,13 +143,14 @@ function Navbar() {
       </div>
     </nav>
   );
-}
+};
 
-const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?: string; className?: string }, ref) {
+const ChatInterface = forwardRef((props: { initialMessage?: string; className?: string }, ref) => {
   const { initialMessage, className = "" } = props;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLocalMode, setIsLocalMode] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
@@ -53,7 +162,7 @@ const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?
       setMessages([{
         id: '1',
         role: 'assistant',
-        content: initialMessage || "Scout Portal Online.",
+        content: initialMessage || "Scout Portal Online. How can I assist your journey?",
         timestamp: new Date(),
       }]);
     }
@@ -67,19 +176,14 @@ const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?
     const textToSend = overrideInput || input;
     if (!textToSend.trim() || isLoading) return;
 
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: textToSend,
-      timestamp: new Date(),
-    };
-
+    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: textToSend, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     if (!overrideInput) setInput("");
     setIsLoading(true);
 
     try {
       const response = await geminiService.sendMessage(messages, textToSend);
+      setIsLocalMode(!!response.isLocal);
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -105,14 +209,15 @@ const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?
       <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
         <div className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : 'bg-green-500'}`}></div>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Portal Link Active</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+            {isLocalMode ? 'Local Mode' : 'Portal Sync Active'}
+          </span>
         </div>
       </div>
-
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in`}>
-            <div className={`max-w-[90%] ${msg.role === 'user' ? 'bg-zinc-100 p-4 rounded-2xl rounded-tr-none' : ''}`}>
+            <div className={`max-w-[88%] ${msg.role === 'user' ? 'bg-zinc-100 p-4 rounded-2xl rounded-tr-none' : ''}`}>
               {msg.role === 'assistant' && (
                 <div className="flex items-center gap-2 mb-2">
                    <div className="w-4 h-4 rounded bg-[#0d47a1]"></div>
@@ -133,7 +238,6 @@ const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?
           </div>
         ))}
       </div>
-
       <div className="p-4 bg-white border-t border-zinc-100">
         <div className="relative">
           <input
@@ -141,9 +245,9 @@ const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask Scout..."
-            className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 pr-12 outline-none focus:bg-white transition-all"
+            className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 pr-12 outline-none focus:bg-white transition-all shadow-sm"
           />
-          <button onClick={() => handleSend()} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#0d47a1]">
+          <button onClick={() => handleSend()} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#0d47a1] p-2 hover:scale-110 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           </button>
         </div>
@@ -152,16 +256,32 @@ const ChatInterface = forwardRef(function ChatInterface(props: { initialMessage?
   );
 });
 
-function Hero() {
+const ChatWidget: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="fixed bottom-8 right-8 z-[9999]">
+      {isOpen && (
+        <div className="mb-6 w-[360px] h-[600px] shadow-2xl rounded-[32px] overflow-hidden border border-zinc-200 bg-white">
+          <ChatInterface initialMessage="Scout Portal Active. Searching trail reports... How can I assist?" />
+        </div>
+      )}
+      <button onClick={() => setIsOpen(!isOpen)} className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${isOpen ? 'bg-white text-[#0d47a1] border border-zinc-200' : 'bg-[#0d47a1] text-white shadow-xl hover:scale-105 active:scale-95'}`}>
+        {isOpen ? '✕' : <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>}
+      </button>
+    </div>
+  );
+};
+
+const Hero: React.FC = () => {
+  const logoSrc = LOGO_DATA_URL;
   return (
     <div className="bg-white pt-24 pb-24 border-b border-zinc-100 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 text-center">
-        <h1 className="text-6xl md:text-[88px] font-[900] text-black mb-12 leading-[0.85] tracking-tighter uppercase">
-          Health, Trails, and <br/>Arizona Skies.
-        </h1>
-        <p className="text-xl md:text-2xl text-zinc-500 serif-text italic mb-16">
-          Exploring the High Desert’s most breathtaking trails and hidden wellness retreats.
-        </p>
+        <div className="flex justify-center mb-12">
+          <img src={logoSrc} alt={BRAND_NAME} className="w-36 h-36 md:w-44 md:h-44 object-contain animate-in fade-in duration-1000" />
+        </div>
+        <h1 className="text-6xl md:text-[88px] font-[900] text-black mb-12 leading-[0.85] tracking-tighter uppercase">Health, Trails, and <br/>Arizona Skies.</h1>
+        <p className="text-xl md:text-2xl text-zinc-500 serif-text italic mb-16">Exploring the High Desert’s most breathtaking trails and hidden wellness retreats.</p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link to="/chat" className="bg-[#0d47a1] text-white px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl">Ask Portal Scout</Link>
           <Link to="/trail-guides" className="bg-zinc-100 text-black px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em]">Trail Guides</Link>
@@ -169,90 +289,116 @@ function Hero() {
       </div>
     </div>
   );
-}
+};
 
-function TrailGuidesPage() {
-  const trails = [
-    { name: "Devil's Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi" },
-    { name: "Flatiron", loc: "Apache Junction, AZ", diff: "Hard", length: "6.2 mi" },
-    { name: "Tom's Thumb", loc: "Scottsdale, AZ", diff: "Moderate", length: "4.0 mi" }
+const Archive: React.FC = () => {
+  const issues = [
+    { title: "The Vortexes of Sedona", date: "Oct 24, 2023", category: "Wellness" },
+    { title: "Family Hikes in Cave Creek", date: "Oct 17, 2023", category: "Guides" },
+    { title: "Hydration Science for Desert Runners", date: "Oct 10, 2023", category: "Health" }
   ];
-
   return (
     <div className="pt-24 pb-32 max-w-6xl mx-auto px-6">
-      <h1 className="text-5xl font-black uppercase tracking-tighter mb-12">Trail Intel</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {trails.map(t => (
-          <div key={t.name} className="p-8 border border-zinc-100 rounded-[32px] bg-white shadow-sm hover:shadow-xl transition-all">
-            <h3 className="text-2xl font-black mb-2">{t.name}</h3>
-            <p className="text-[#0d47a1] text-[10px] font-black uppercase mb-4">{t.loc}</p>
-            <div className="flex justify-between text-xs font-bold text-zinc-400">
-              <span>{t.diff}</span>
-              <span>{t.length}</span>
-            </div>
-            <Link to="/chat" state={{ initialQuery: `Tell me more about ${t.name} trail conditions.` }} className="mt-8 block w-full py-4 bg-zinc-950 text-white rounded-xl text-[10px] font-black uppercase text-center">Access Full Intel</Link>
+      <h1 className="text-6xl font-black uppercase tracking-tighter mb-12">The Archive</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        {issues.map((issue, idx) => (
+          <div key={idx} className="group cursor-pointer">
+            <div className="aspect-[4/3] bg-zinc-100 rounded-2xl mb-6 overflow-hidden border border-zinc-200"></div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">{issue.date} • {issue.category}</div>
+            <h3 className="text-2xl font-bold tracking-tight group-hover:text-[#0d47a1] transition-colors">{issue.title}</h3>
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
 
-function ChatPage() {
+const TrailGuides: React.FC = () => {
+  const [trailImages, setTrailImages] = useState<Record<string, string>>({});
+  const [loadingTrail, setLoadingTrail] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const trails = [
+    { name: "Devil's Bridge", loc: "Sedona, AZ", diff: "Moderate", length: "4.2 mi", description: "Natural sandstone arch." },
+    { name: "Flatiron", loc: "Apache Junction, AZ", diff: "Hard", length: "6.2 mi", description: "Steep granite plateau trek." }
+  ];
+  const handleReveal = async (trail: any) => {
+    if (loadingTrail) return;
+    setLoadingTrail(trail.name);
+    const url = await geminiService.generateTrailImage(trail.name, trail.description, trail.diff);
+    if (url) setTrailImages(prev => ({ ...prev, [trail.name]: url }));
+    setLoadingTrail(null);
+  };
+  return (
+    <div className="pt-24 pb-32 max-w-6xl mx-auto px-6">
+      <h1 className="text-6xl font-black uppercase tracking-tighter mb-12">Trail Intel</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {trails.map((t, idx) => (
+          <div key={idx} className="flex flex-col border border-zinc-100 rounded-[32px] overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all">
+            <div className="aspect-video bg-zinc-50 flex items-center justify-center overflow-hidden">
+              {trailImages[t.name] ? <img src={trailImages[t.name]} className="w-full h-full object-cover" /> : (
+                <button onClick={() => handleReveal(t)} className="text-[10px] font-black uppercase tracking-widest text-[#0d47a1]">
+                  {loadingTrail === t.name ? "Scouting..." : "Reveal Scout View"}
+                </button>
+              )}
+            </div>
+            <div className="p-8">
+              <h3 className="text-3xl font-black mb-2">{t.name}</h3>
+              <p className="text-[#0d47a1] text-[10px] font-black uppercase mb-6">{t.loc} • {t.length}</p>
+              <button onClick={() => navigate('/chat', { state: { initialQuery: `Intel on ${t.name}` } })} className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-[#0d47a1] transition-all">Access Intel</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Community: React.FC = () => {
+  return (
+    <div className="pt-24 pb-32 text-center max-w-4xl mx-auto px-6">
+      <h1 className="text-7xl font-black uppercase tracking-tighter mb-6">High Desert Network</h1>
+      <p className="text-xl text-zinc-500 serif-text italic mb-12">Connect with Arizona's wellness practitioners and trail scouts.</p>
+      <a href={SAGESUITE_URL} className="bg-[#0d47a1] text-white px-12 py-6 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl">Enter Portal</a>
+    </div>
+  );
+};
+
+const ChatPage: React.FC = () => {
   const chatRef = useRef<any>(null);
   const location = useLocation();
   const state = location.state as { initialQuery?: string };
-
   useEffect(() => {
     if (state?.initialQuery && chatRef.current) {
       setTimeout(() => chatRef.current.sendMessage(state.initialQuery), 500);
     }
   }, [state]);
-
   return (
     <div className="flex-grow bg-[#fafafa] flex flex-col min-h-[calc(100vh-73px)]">
-      <div className="max-w-7xl mx-auto w-full px-6 py-10 flex-grow flex flex-col lg:flex-row gap-8">
-        <div className="lg:w-1/4 space-y-6">
-          <div className="p-8 bg-zinc-950 rounded-[32px] text-white">
-            <h3 className="text-2xl font-black uppercase mb-4">Portal Scout</h3>
-            <p className="text-zinc-400 serif-text italic">Your definitive companion for trail discovery and recovery.</p>
+      <div className="max-w-7xl mx-auto w-full px-6 py-10 flex-grow flex flex-col lg:flex-row gap-10">
+        <div className="lg:w-1/4 space-y-8">
+          <div className="p-8 bg-zinc-950 rounded-[40px] text-white shadow-xl">
+            <h3 className="text-4xl font-black tracking-tighter uppercase mb-4 leading-none">Scout Intel</h3>
+            <p className="text-zinc-400 serif-text italic text-lg leading-snug">The definitive high-desert companion for discovery and recovery.</p>
           </div>
-          <div className="p-6 bg-white border border-zinc-200 rounded-[32px]">
-            <h4 className="text-[10px] font-black uppercase mb-6 text-[#0d47a1]">Quick Queries</h4>
-            <ul className="space-y-4 text-xs font-bold text-zinc-500">
-              <li onClick={() => chatRef.current.sendMessage("Sedona vacation plan")} className="cursor-pointer hover:text-black">3-day Sedona plan</li>
-              <li onClick={() => chatRef.current.sendMessage("GHL Community setup")} className="cursor-pointer hover:text-black">Setup Sage Portal</li>
-            </ul>
+          <div className="p-8 bg-white border border-zinc-200 rounded-[40px]">
+             <h4 className="text-[10px] font-black uppercase mb-8 text-[#0d47a1]">Quick Queries</h4>
+             <ul className="space-y-6 text-xs font-bold text-zinc-500">
+               <li onClick={() => chatRef.current.sendMessage("Sedona vacation protocol")} className="cursor-pointer hover:text-black">3-day Sedona plan</li>
+               <li onClick={() => chatRef.current.sendMessage("Sage portal setup")} className="cursor-pointer hover:text-black">Setup Sage Portal</li>
+             </ul>
           </div>
         </div>
-        <div className="lg:w-3/4 flex-grow bg-white border border-zinc-200 rounded-[40px] overflow-hidden shadow-2xl">
-          <ChatInterface ref={chatRef} initialMessage="Identity Verified. Scout Online. Monitoring Arizona trail alerts... How can I assist?" />
+        <div className="lg:w-3/4 flex-grow bg-white border border-zinc-200 rounded-[48px] overflow-hidden shadow-2xl">
+           <ChatInterface ref={chatRef} className="h-full" initialMessage="Identity Verified. Scout Online. Monitoring Arizona trail alerts. What intelligence do you require?" />
         </div>
       </div>
     </div>
   );
-}
+};
 
-function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className="fixed bottom-8 right-8 z-[9999]">
-      {isOpen && (
-        <div className="mb-6 w-[360px] h-[600px] shadow-2xl rounded-[32px] overflow-hidden border border-zinc-200">
-          <ChatInterface initialMessage="Scout Portal Active. Query trail intel below..." />
-        </div>
-      )}
-      <button onClick={() => setIsOpen(!isOpen)} className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${isOpen ? 'bg-white text-[#0d47a1] border border-zinc-200' : 'bg-[#0d47a1] text-white shadow-xl hover:scale-105'}`}>
-        {isOpen ? '✕' : 'AI'}
-      </button>
-    </div>
-  );
-}
-
-function App() {
+const App: React.FC = () => {
   const location = useLocation();
   const isChatPage = location.pathname === '/chat';
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -260,23 +406,23 @@ function App() {
         <Routes>
           <Route path="/" element={<Hero />} />
           <Route path="/chat" element={<ChatPage />} />
-          <Route path="/trail-guides" element={<TrailGuidesPage />} />
-          <Route path="/archive" element={<div className="p-24 text-center">Archive coming soon.</div>} />
-          <Route path="/community" element={<div className="p-24 text-center">Community portal opening soon.</div>} />
-          <Route path="/about" element={<div className="p-24 text-center italic serif-text">Wellness meeting the Wild.</div>} />
+          <Route path="/archive" element={<Archive />} />
+          <Route path="/trail-guides" element={<TrailGuides />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/about" element={<div className="p-24 text-center serif-text italic">Adventure meets Recovery.</div>} />
         </Routes>
       </main>
       {!isChatPage && <ChatWidget />}
       <footer className="p-8 text-center text-[10px] font-black uppercase text-zinc-400 border-t border-zinc-50">
-        © {new Date().getFullYear()} Health & Travels • SageSuite
+        © {new Date().getFullYear()} Health & Travels • Powered by SageSuite
       </footer>
     </div>
   );
-}
+};
 
-const container = document.getElementById('root');
-if (container) {
-  createRoot(container).render(
+const rootEl = document.getElementById('root');
+if (rootEl) {
+  createRoot(rootEl).render(
     <Router>
       <App />
     </Router>
