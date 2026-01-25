@@ -7,8 +7,6 @@ import { GoogleGenAI } from "@google/genai";
 
 const BRAND_NAME = 'Health & Travels';
 const SAGESUITE_URL = 'https://sage.healthandtravels.com';
-const SAGESUITE_DIRECTORY = 'https://sage.healthandtravels.com/directory';
-const SAGESUITE_APPLY = 'https://sage.healthandtravels.com/apply';
 const BEEHIIV_URL = 'https://healthandtravels.beehiiv.com';
 const GHL_CNAME_TARGET = 'flash.funnels.msgsndr.com';
 
@@ -38,13 +36,14 @@ interface Message {
 const SYSTEM_INSTRUCTION = `You are "Scout", the high-desert intelligence portal for healthandtravels.com.
 PERSONALITY: Expert, technical, professional, inviting. Arizona trail specialist.
 PORTAL: ${SAGESUITE_URL}. CNAME: 'sage' to '${GHL_CNAME_TARGET}'.
-When planning trips or hikes, be specific about Arizona red rock conditions, wellness retreats, and the SageSuite network.`;
+KNOWLEDGE: Vetted Arizona trails, wellness retreats, and the SageSuite community platform.
+MISSION: Help users discover trails, plan wellness vacations, and connect with the High Desert Network.`;
 
 class GeminiService {
   private getClient() {
     try {
-      const apiKey = process.env.API_KEY;
-      if (!apiKey || apiKey.length < 5) return null; // Use a more permissive length check
+      const apiKey = process.env.API_KEY || '';
+      if (!apiKey || apiKey.trim().length < 5) return null;
       return new GoogleGenAI({ apiKey });
     } catch { return null; }
   }
@@ -65,25 +64,23 @@ class GeminiService {
         model: 'gemini-3-flash-preview',
         contents: contents as any,
         config: { 
-          systemInstruction: SYSTEM_INSTRUCTION, 
+          systemInstruction: SYSTEM_INSTRUCTION,
           tools: [{ googleSearch: {} }] 
         }
       });
 
-      const text = response.text || "Portal sync hazy. Recalibrating Arizona trail sensors.";
-      const triggerLead = /membership|join|access|email|professional/i.test(userInput + " " + text);
+      const text = response.text || "Portal sync hazy. Recalibrating Arizona trail report sensors.";
+      const triggerLead = /membership|join|professional|list|directory/i.test(userInput + " " + text);
       const sources: Source[] = [];
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
       if (chunks) {
         chunks.forEach((c: any) => {
-          if (c.web?.uri) {
-            sources.push({ uri: c.web.uri, title: c.web.title || "Scout Vetted Intel" });
-          }
+          if (c.web?.uri) sources.push({ uri: c.web.uri, title: c.web.title || "Vetted Intel" });
         });
       }
       return { text, sources, triggerLead, isLocal: false };
     } catch (err) {
-      console.error("Scout Sync Error:", err);
+      console.error("Gemini Scout Error:", err);
       return { ...this.getSimulationResponse(userInput), isLocal: true };
     }
   }
@@ -91,17 +88,28 @@ class GeminiService {
   private getSimulationResponse(input: string) {
     const lower = input.toLowerCase();
     const sources: Source[] = [{ title: "Health & Travels", uri: "https://healthandtravels.com" }];
-    let text = "Scout Local Mode Active. Monitoring Arizona trails and SageSuite directory nodes. How can I assist your journey?";
-
+    
     if (lower.includes('sedona') || lower.includes('trip') || lower.includes('plan')) {
-      text = "I've drafted a premium Sedona High-Desert Vacation Protocol for you:\n\n1. **Sunrise**: Hike Cathedral Rock (arriving by 5:30 AM is recommended for parking).\n2. **Recovery**: Visit a Sage-vetted retreat like Mii Amo for a recovery session.\n3. **Stargazing**: Jordan Road trailhead offers the clearest evening skies.\n\nWould you like me to look up specific wellness practitioners in Sedona via the SageSuite directory?";
-    } else if (lower.includes('trail') || lower.includes('hike')) {
-      text = "Arizona hiking conditions are currently prime. For your next trek, consider:\n\n- **Devil's Bridge (Sedona)**: Iconic views, best on weekdays.\n- **Flatiron (Apache Junction)**: High intensity, granite scrambles.\n- **West Fork (Oak Creek)**: Riparian canopy, perfect for autumn.\n\nWhich of these terrains calls to your current recovery cycle?";
-    } else if (lower.includes('sage')) {
-      text = `To sync your SageSuite portal, point your 'sage' CNAME to ${GHL_CNAME_TARGET} in your domain DNS. For A-Records, use IP 34.16.190.6. Need a setup guide?`;
+      return {
+        text: "I've drafted a premium Sedona High-Desert Vacation Protocol for your journey:\n\n1. **Sunrise Intel**: Hike Cathedral Rock early (before 6 AM) for optimal light and parking.\n2. **Recovery Node**: Visit a Sage-vetted retreat like Mii Amo for high-desert recovery.\n3. **Stargazing**: Jordan Road trailhead offers the clearest visibility after 9 PM.\n\nShould I look for specific wellness practitioners in the SageSuite directory?",
+        sources: [...sources, { title: "Sedona Hikes", uri: "https://sedonahikingtrails.com" }],
+        triggerLead: false
+      };
+    }
+    
+    if (lower.includes('trail') || lower.includes('hike')) {
+      return {
+        text: "Arizona hiking conditions are currently prime. For your next trek, I recommend:\n\n- **Devil's Bridge (Sedona)**: Iconic views, sandstone arch.\n- **Flatiron (Lost Dutchman)**: High intensity, granite scrambles.\n- **West Fork (Oak Creek)**: Riparian canopy, multiple stream crossings.\n\nWhich of these environments matches your current recovery cycle?",
+        sources: [...sources, { title: "AZ Trail Reports", uri: "https://aztrail.org" }],
+        triggerLead: false
+      };
     }
 
-    return { text, sources, triggerLead: false, isLocal: true };
+    return { 
+      text: "Scout Local Mode Active. Monitoring Arizona trails and SageSuite directory nodes. How can I assist your journey?", 
+      sources, 
+      triggerLead: false 
+    };
   }
 
   async generateTrailImage(trailName: string, description: string, difficulty: string): Promise<string> {
@@ -110,7 +118,7 @@ class GeminiService {
       if (!ai) return "";
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
-        contents: { parts: [{ text: `Cinematic Arizona red rock trail photo: ${trailName}. ${description}. 4k, high desert aesthetic.` }] },
+        contents: { parts: [{ text: `Cinematic Arizona red rock vista: ${trailName}. ${description}. 4k, high desert aesthetic.` }] },
         config: { imageConfig: { aspectRatio: "16:9" } }
       });
       const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
@@ -123,7 +131,7 @@ const geminiService = new GeminiService();
 
 // --- Components ---
 
-const Navbar: React.FC = () => {
+function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-100 py-3">
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
@@ -151,10 +159,6 @@ const Navbar: React.FC = () => {
       </div>
     </nav>
   );
-};
-
-export interface ChatInterfaceHandle {
-  sendMessage: (text: string) => void;
 }
 
 const ChatInterface = forwardRef((props: { initialMessage?: string; className?: string }, ref) => {
@@ -222,7 +226,7 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
         <div className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : 'bg-green-500'}`}></div>
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
-            {isLocalMode ? 'Local Mode (Offline)' : 'Satellite Portal Active'}
+            {isLocalMode ? 'Local Mode Active' : 'Satellite Sync Active'}
           </span>
         </div>
       </div>
@@ -242,7 +246,7 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {msg.sources.map((s, i) => (
-                    <a key={i} href={s.uri} target="_blank" className="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded uppercase hover:bg-blue-100 transition-colors">{s.title}</a>
+                    <a key={i} href={s.uri} target="_blank" className="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded uppercase">{s.title}</a>
                   ))}
                 </div>
               )}
@@ -268,13 +272,13 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
   );
 });
 
-const ChatWidget: React.FC = () => {
+function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="fixed bottom-8 right-8 z-[9999]">
       {isOpen && (
         <div className="mb-6 w-[360px] h-[600px] shadow-2xl rounded-[32px] overflow-hidden border border-zinc-200 bg-white">
-          <ChatInterface initialMessage="Scout Mini Portal Active. Searching trail reports... How can I assist?" />
+          <ChatInterface initialMessage="Scout Mini Portal Active. Searching local trail reports... How can I assist?" />
         </div>
       )}
       <button onClick={() => setIsOpen(!isOpen)} className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${isOpen ? 'bg-white text-[#0d47a1] border border-zinc-200' : 'bg-[#0d47a1] text-white shadow-xl hover:scale-105 active:scale-95'}`}>
@@ -282,9 +286,9 @@ const ChatWidget: React.FC = () => {
       </button>
     </div>
   );
-};
+}
 
-const Hero: React.FC = () => {
+function Hero() {
   return (
     <div className="bg-white pt-24 pb-24 border-b border-zinc-100 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 text-center">
@@ -300,31 +304,9 @@ const Hero: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
-const Archive: React.FC = () => {
-  const issues = [
-    { title: "The Vortexes of Sedona", date: "Oct 24, 2023", category: "Wellness" },
-    { title: "Family Hikes in Cave Creek", date: "Oct 17, 2023", category: "Guides" },
-    { title: "Hydration Science for Desert Runners", date: "Oct 10, 2023", category: "Health" }
-  ];
-  return (
-    <div className="pt-24 pb-32 max-w-6xl mx-auto px-6">
-      <h1 className="text-6xl font-black uppercase tracking-tighter mb-12">The Archive</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {issues.map((issue, idx) => (
-          <div key={idx} className="group cursor-pointer">
-            <div className="aspect-[4/3] bg-zinc-100 rounded-2xl mb-6 overflow-hidden border border-zinc-200"></div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">{issue.date} • {issue.category}</div>
-            <h3 className="text-2xl font-bold tracking-tight group-hover:text-[#0d47a1] transition-colors">{issue.title}</h3>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const TrailGuidesPage: React.FC = () => {
+function TrailGuidesPage() {
   const [trailImages, setTrailImages] = useState<Record<string, string>>({});
   const [loadingTrail, setLoadingTrail] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -362,20 +344,10 @@ const TrailGuidesPage: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
-const CommunityPage: React.FC = () => {
-  return (
-    <div className="pt-24 pb-32 text-center max-w-4xl mx-auto px-6">
-      <h1 className="text-7xl font-black uppercase tracking-tighter mb-6">High Desert Network</h1>
-      <p className="text-xl text-zinc-500 serif-text italic mb-12">Connect with Arizona's wellness practitioners and trail scouts.</p>
-      <a href={SAGESUITE_URL} className="bg-[#0d47a1] text-white px-12 py-6 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl">Enter Portal</a>
-    </div>
-  );
-};
-
-const ChatPage: React.FC = () => {
-  const chatRef = useRef<ChatInterfaceHandle>(null);
+function ChatPage() {
+  const chatRef = useRef<{ sendMessage: (text: string) => void }>(null);
   const location = useLocation();
   const state = location.state as { initialQuery?: string };
   useEffect(() => {
@@ -406,9 +378,9 @@ const ChatPage: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
-const App: React.FC = () => {
+function App() {
   const location = useLocation();
   const isChatPage = location.pathname === '/chat';
   return (
@@ -418,10 +390,10 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Hero />} />
           <Route path="/chat" element={<ChatPage />} />
-          <Route path="/archive" element={<Archive />} />
+          <Route path="/archive" element={<div className="p-24 text-center serif-text italic text-zinc-400 font-bold uppercase tracking-widest">The Archive - Coming Tuesday</div>} />
           <Route path="/trail-guides" element={<TrailGuidesPage />} />
-          <Route path="/community" element={<CommunityPage />} />
-          <Route path="/about" element={<div className="p-24 text-center serif-text italic text-zinc-400">Adventure meets Recovery.</div>} />
+          <Route path="/community" element={<div className="p-24 text-center serif-text italic text-zinc-400">High Desert Network - Syncing...</div>} />
+          <Route path="/about" element={<div className="p-24 text-center serif-text italic">Adventure meets Recovery.</div>} />
         </Routes>
       </main>
       {!isChatPage && <ChatWidget />}
@@ -430,16 +402,12 @@ const App: React.FC = () => {
       </footer>
     </div>
   );
-};
-
-const rootEl = document.getElementById('root');
-if (rootEl) {
-  createRoot(rootEl).render(
-    <Router>
-      <App />
-    </Router>
-  );
 }
+
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  createRoot(rootElement).render(
+    <Router>
       <App />
     </Router>
   );
