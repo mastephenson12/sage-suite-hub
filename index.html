@@ -5,15 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health & Travels | Portal Scout</title>
     <script>
-      // Defensive shim: Only define process if it doesn't exist to avoid overwriting valid environment variables
-      if (typeof window.process === 'undefined') {
-        window.process = {
-          env: { API_KEY: "" },
-          cwd: () => "/"
-        };
-      } else {
-        window.process.env = window.process.env || {};
-      }
+      // Shim process.env for the @google/genai SDK
+      window.process = {
+        env: { API_KEY: "" },
+        cwd: () => "/"
+      };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
