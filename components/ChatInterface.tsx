@@ -155,3 +155,7 @@ const ChatInterface = forwardRef((props: ChatInterfaceProps, ref) => {
 });
 
 export default ChatInterface;
+  );
+});
+
+export default ChatInterface;
