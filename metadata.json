@@ -1,9 +1,6 @@
 {
-  "name": "Health & Travels Assistant",
-  "description": "A comprehensive AI-powered assistant for medical tourism, wellness retreats, and healthy travel planning.",
   "requestFramePermissions": [
     "geolocation",
-    "microphone",
-    "camera"
+    "microphone"
   ]
 }
