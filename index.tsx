@@ -32,22 +32,31 @@ class GeminiService {
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; isLocal?: boolean }> {
-    try {
-      const ai = this.getClient();
-      if (!ai) return { ...this.getSimulationResponse(userInput), isLocal: true };
+    const ai = this.getClient();
+    if (!ai) {
+      const local = this.getSimulationResponse(userInput);
+      return { 
+        ...local, 
+        isLocal: true, 
+        text: `[CONFIG ALERT: Satellite relay link not found.]\n\n${local.text}` 
+      };
+    }
 
-      // Ensure turn order: starts with 'user', then alternates.
-      // Filter out system messages or initial greetings not part of the core conversation logic for Gemini.
-      const conversation = history
-        .filter(m => m.id !== 'welcome-scout')
+    try {
+      // Ensure history strictly alternates and starts with a user turn
+      const firstUserIndex = history.findIndex(m => m.role === 'user');
+      const apiHistory = (firstUserIndex === -1 ? [] : history.slice(firstUserIndex))
         .map(m => ({
           role: m.role === 'assistant' ? 'model' : m.role,
           parts: [{ text: m.content }]
         }));
 
+      // Append current interaction
+      apiHistory.push({ role: 'user', parts: [{ text: userInput }] });
+
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: conversation as any,
+        contents: apiHistory as any,
         config: {
           systemInstruction: SYSTEM_INSTRUCTION,
           tools: [{ googleSearch: {} }]
@@ -63,21 +72,33 @@ class GeminiService {
         });
       }
       return { text, sources, isLocal: false };
-    } catch (err) {
+    } catch (err: any) {
       console.error("Gemini Error:", err);
-      return { ...this.getSimulationResponse(userInput), isLocal: true };
+      
+      let errorLabel = "Satellite link interrupted.";
+      if (err.message?.includes('429')) errorLabel = "Satellite relay saturated (Quota Limit). Scout cooling down.";
+      else if (err.message?.includes('403')) errorLabel = "Satellite access restricted (Auth Error).";
+      else if (!navigator.onLine) errorLabel = "Network Severed. High-desert relay offline.";
+
+      const sim = this.getSimulationResponse(userInput);
+      return { 
+        ...sim, 
+        isLocal: true, 
+        text: `[SYSTEM ALERT: ${errorLabel}]\n\n${sim.text}` 
+      };
     }
   }
 
   private getSimulationResponse(input: string) {
     const lower = input.toLowerCase();
+    const sources: Source[] = [{ title: "Health & Travels Journal", uri: BEEHIIV_URL }];
     if (lower.includes('sedona') || lower.includes('vortex')) {
       return {
-        text: "I've drafted a premium Sedona High-Desert Vacation Protocol:\n\n1. **Cathedral Rock**: Best at sunrise to avoid the heat and crowds.\n2. **Mii Amo**: Recovery retreat for post-hike restoration.\n3. **Stargazing**: Jordan Road trailhead offers exceptional high-desert visibility.\n\nShould I check the SageSuite directory for local practitioners to guide your journey?",
-        sources: [{ title: "Sedona Wellness Intel", uri: BEEHIIV_URL }]
+        text: "I've drafted a premium Sedona High-Desert Vacation Protocol:\n\n1. **Cathedral Rock**: Best at sunrise to avoid the heat.\n2. **Mii Amo**: Recovery retreat for post-hike restoration.\n3. **Stargazing**: Jordan Road trailhead.\n\nShould I check the SageSuite directory for local practitioners?",
+        sources: [...sources, { title: "Sedona Wellness Intel", uri: BEEHIIV_URL }]
       };
     }
-    return { text: "Scout Local Mode Active. Monitoring Arizona trail nodes and SageSuite directory nodes. How can I assist your discovery journey today?", sources: [{ title: BRAND_NAME, uri: BEEHIIV_URL }] };
+    return { text: "Scout Local Mode Active. Monitoring Arizona trail nodes and SageSuite directory nodes. How can I assist your discovery journey today?", sources };
   }
 
   async generateTrailImage(trailName: string): Promise<string> {
@@ -96,8 +117,7 @@ class GeminiService {
 }
 const geminiService = new GeminiService();
 
-// --- Reusable UI Components ---
-
+// ... [Rest of components (Navbar, Hero, etc.) follow as per original code structure] ...
 const Navbar = () => (
   <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-100 py-3">
     <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
@@ -126,6 +146,7 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLocalMode, setIsLocalMode] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({ sendMessage: (text: string) => handleSend(text) }));
@@ -150,6 +171,7 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
 
     try {
       const response = await geminiService.sendMessage(historyForState, textToSend);
+      setIsLocalMode(!!response.isLocal);
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -158,7 +180,7 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
         sources: response.sources
       }]);
     } catch (err) {
-      setMessages(prev => [...prev, { id: 'err-' + Date.now(), role: 'assistant', content: "Satellite sync interrupted. Switching to local high-desert backup...", timestamp: new Date() }]);
+      setMessages(prev => [...prev, { id: 'err-' + Date.now(), role: 'assistant', content: "Satellite sync interrupted. Scout transitioned to local high-desert buffer.", timestamp: new Date() }]);
     } finally {
       setIsLoading(false);
     }
@@ -168,8 +190,10 @@ const ChatInterface = forwardRef((props: { initialMessage?: string; className?: 
     <div className={`flex flex-col h-full bg-white ${className}`}>
       <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
         <div className="flex items-center gap-3">
-          <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : 'bg-green-500'}`}></div>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Scout Satellite Active</span>
+          <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-blue-600 animate-pulse' : (isLocalMode ? 'bg-amber-400' : 'bg-green-500')}`}></div>
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+            {isLocalMode ? 'Local Buffer Intel' : 'Satellite Sync Active'}
+          </span>
         </div>
       </div>
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar chat-container">
@@ -223,8 +247,6 @@ const ChatWidget = () => {
     </div>
   );
 };
-
-// --- Pages ---
 
 const Hero = () => (
   <div className="bg-white pt-24 pb-32 border-b border-zinc-100 text-center px-6 relative overflow-hidden">
@@ -314,8 +336,6 @@ const ChatPage = () => {
     </div>
   );
 };
-
-// --- App Shell ---
 
 const App = () => {
   const location = useLocation();
