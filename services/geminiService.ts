@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { Message, Source } from "../types.ts";
 import { GHL_CNAME_TARGET, SAGESUITE_URL } from "../constants.ts";
@@ -20,11 +21,17 @@ export class GeminiService {
       const ai = this.getClient();
       if (!ai) return { ...this.getSimulationResponse(userInput), isLocal: true };
 
-      const contents = history
+      // Ensure the history passed to Gemini starts with a 'user' turn.
+      const firstUserIndex = history.findIndex(m => m.role === 'user');
+      const filteredHistory = firstUserIndex === -1 ? [] : history.slice(firstUserIndex);
+
+      const contents = filteredHistory
         .map(msg => ({
           role: msg.role === 'user' ? 'user' : 'model',
           parts: [{ text: msg.content }]
         }));
+      
+      // Add the current user turn.
       contents.push({ role: 'user', parts: [{ text: userInput }] });
 
       const response = await ai.models.generateContent({
@@ -55,7 +62,6 @@ export class GeminiService {
     let text = "Scout Local Mode Active. Monitoring Arizona trails and SageSuite directory nodes. How can I assist your journey?";
 
     if (lower.includes('vacation')) {
-      // Fixed the octal escape sequence (\2 changed to \n2.)
       text = "I've drafted a premium Sedona High-Desert Vacation Protocol:\n1. Sunrise at Cathedral Rock\n2. Recovery at a Sage retreat\n3. Evening Stargazing.";
     } else if (lower.includes('sage')) {
       text = `To sync your SageSuite portal, point your 'sage' CNAME to ${GHL_CNAME_TARGET}.`;
@@ -70,7 +76,7 @@ export class GeminiService {
       if (!ai) return "";
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
-        contents: { parts: [{ text: `Cinematic Arizona trail photo: ${trailName}. ${description}.` }] },
+        contents: { parts: [{ text: `Cinematic Arizona trail photo: ${trailName}. ${description}. Difficulty: ${difficulty}.` }] },
         config: { imageConfig: { aspectRatio: "16:9" } }
       });
       const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
