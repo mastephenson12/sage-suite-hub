@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health & Travels | Portal Scout</title>
     <script>
-      // Shim process.env for the @google/genai SDK
+      // Shim process.env for SDK compatibility
       window.process = {
         env: { API_KEY: "" },
         cwd: () => "/"
@@ -42,10 +42,6 @@
 </script>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
-</body>
-</html>
     <div id="root"></div>
     <script type="text/babel" data-type="module" data-presets="typescript,react" src="/index.tsx"></script>
 </body>
