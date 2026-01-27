@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { Message, Source } from '../types.ts';
-import { geminiService } from '../services/gemini.ts';
+import { Message, Source } from '../types';
+import { geminiService } from '../services/gemini';
 
 export interface ChatInterfaceHandle {
   sendMessage: (text: string) => void;
@@ -11,7 +11,7 @@ interface ChatInterfaceProps {
   className?: string;
 }
 
-const ChatInterface = forwardRef((props: ChatInterfaceProps, ref) => {
+const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>((props, ref) => {
   const { initialMessage, className = "" } = props;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -74,7 +74,7 @@ const ChatInterface = forwardRef((props: ChatInterfaceProps, ref) => {
       setMessages(prev => [...prev, {
         id: 'err-' + Date.now(),
         role: 'assistant',
-        content: "Satellite link interrupted. Switched to high-desert backup protocols. I can still assist with trail and portal data.",
+        content: "Satellite link interrupted. Switched to high-desert backup protocols.",
         timestamp: new Date()
       }]);
     } finally {
@@ -106,7 +106,7 @@ const ChatInterface = forwardRef((props: ChatInterfaceProps, ref) => {
                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d47a1]">Scout Intel</p>
                 </div>
               )}
-              <div className={`text-[17px] whitespace-pre-wrap leading-[1.6] ${msg.role === 'assistant' ? 'serif-text italic text-zinc-900' : 'text-sm font-semibold text-zinc-700'}`}>
+              <div className={`text-[17px] whitespace-pre-wrap leading-[1.6] ${msg.role === 'assistant' ? 'italic text-zinc-900 font-serif' : 'text-sm font-semibold text-zinc-700'}`}>
                 {msg.content}
               </div>
               {msg.sources && msg.sources.length > 0 && (
@@ -151,10 +151,6 @@ const ChatInterface = forwardRef((props: ChatInterfaceProps, ref) => {
         </div>
       </div>
     </div>
-  );
-});
-
-export default ChatInterface;
   );
 });
 
