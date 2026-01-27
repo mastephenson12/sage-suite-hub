@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { geminiService } from '../services/gemini.ts';
+import { geminiService } from '../services/gemini';
 
 interface Trail {
   name: string;
@@ -39,7 +39,6 @@ const TrailGuides: React.FC = () => {
   };
 
   const handleAccessIntel = (trailName: string) => {
-    // Navigate to chat and pre-populate with the trail query
     navigate(`/chat`, { state: { initialQuery: `Tell me more about the ${trailName} trail including current conditions and parking intel.` } });
   };
 
@@ -62,7 +61,6 @@ const TrailGuides: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {trails.map((trail, idx) => (
             <div key={idx} className="flex flex-col border border-zinc-100 rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-blue-900/5 transition-all group bg-white">
-              {/* AI Image Section */}
               <div className="aspect-video bg-zinc-50 relative overflow-hidden group/img">
                 {trailImages[trail.name] ? (
                   <img 
@@ -90,7 +88,6 @@ const TrailGuides: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Overlay Difficulty */}
                 <div className="absolute top-6 left-6 flex gap-2">
                   <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg backdrop-blur-md ${
                     trail.diff === 'Strenuous' || trail.diff === 'Hard' ? 'bg-red-500/90 text-white' : 
@@ -110,7 +107,6 @@ const TrailGuides: React.FC = () => {
                 )}
               </div>
 
-              {/* Content Section */}
               <div className="p-10 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-3xl font-black tracking-tighter text-black group-hover:text-[#0d47a1] transition-colors">{trail.name}</h3>
@@ -140,10 +136,6 @@ const TrailGuides: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default TrailGuides;
   );
 };
 
