@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_DATA_URL, BRAND_NAME } from '../constants.ts';
+import { LOGO_DATA_URL, BRAND_NAME } from '../constants';
 
 const Hero: React.FC = () => {
   const [imgError, setImgError] = useState(false);
@@ -38,7 +38,7 @@ const Hero: React.FC = () => {
           Health, Trails, and <br/>Arizona Skies.
         </h1>
         
-        <p className="text-xl md:text-2xl text-zinc-500 serif-text max-w-2xl mx-auto leading-relaxed mb-16 font-medium italic">
+        <p className="text-xl md:text-2xl text-zinc-500 italic max-w-2xl mx-auto leading-relaxed mb-16 font-medium font-serif">
           Exploring the High Desert’s most breathtaking trails and hidden wellness retreats for the modern explorer.
         </p>
         
