@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { GoogleGenAI, Type } from "@google/genai";
-import { GMBReview } from '../types';
+import { GMBReview } from '../types.ts';
 
 const ReviewEngine: React.FC = () => {
   const [reviews, setReviews] = useState<GMBReview[]>([
