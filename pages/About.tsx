@@ -1,5 +1,5 @@
 import React from 'react';
-import { BRAND_NAME } from '../constants';
+import { BRAND_NAME } from '../constants.ts';
 
 const About: React.FC = () => {
   return (
@@ -34,6 +34,10 @@ const About: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export default About;
   );
 };
 
