@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { GoogleGenAI, Type } from "@google/genai";
-import { TravelLead } from '../types';
+import { TravelLead } from '../types.ts';
 
 const LeadQualifier: React.FC = () => {
   const [leads, setLeads] = useState<TravelLead[]>([
