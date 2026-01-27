@@ -10,14 +10,14 @@ const About: React.FC = () => {
           <div className="h-1 w-20 bg-[#0d47a1] mx-auto"></div>
         </header>
 
-        <div className="serif-text space-y-8 text-xl text-zinc-700 leading-relaxed italic">
+        <div className="serif-text space-y-8 text-xl text-zinc-700 leading-relaxed italic font-serif">
           <p>
             Health & Travels began as a simple observation: the desert is the ultimate healing ground, but it demands respect and navigation. 
           </p>
           <p>
             We created this journal to serve as a bridge between the wild beauty of Arizona's hiking trails and the sophisticated world of holistic wellness. We believe that a 6-mile trek through the Sedona red rocks is just as important to your health as a medical consultation.
           </p>
-          <p className="not-italic font-bold text-black border-l-4 border-[#0d47a1] pl-6 my-12 text-2xl tracking-tight uppercase font-inter">
+          <p className="not-italic font-bold text-black border-l-4 border-[#0d47a1] pl-6 my-12 text-2xl tracking-tight uppercase font-sans">
             Our mission is to help you find the space where adventure meets recovery.
           </p>
           <p>
@@ -34,10 +34,6 @@ const About: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default About;
   );
 };
 
