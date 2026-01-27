@@ -1,5 +1,5 @@
-
-export type Role = 'user' | 'assistant' | 'system';
+export type Brand = 'Flightsage' | 'Travelsage' | 'Campsage';
+export type Role = 'user' | 'model' | 'assistant' | 'system';
 export type MessageType = 'text' | 'lead-capture' | 'success';
 
 export interface Source {
@@ -8,7 +8,7 @@ export interface Source {
 }
 
 export interface Message {
-  id: string;
+  id?: string;
   role: Role;
   content: string;
   timestamp: Date;
@@ -16,8 +16,41 @@ export interface Message {
   sources?: Source[];
 }
 
-export interface ChatState {
-  messages: Message[];
-  isLoading: boolean;
-  error: string | null;
+export interface GMBReview {
+  id: string;
+  brand: Brand;
+  author: string;
+  rating: number;
+  text: string;
+  sentiment?: 'Positive' | 'Neutral' | 'Negative';
+  suggestedReply?: string;
+  status: 'pending' | 'replied';
+}
+
+export interface TravelLead {
+  id: string;
+  source: string;
+  rawInput: string;
+  score: number;
+  dreamMap?: string;
+  classification: 'Hot' | 'Inquiry' | 'Support';
+  timestamp: Date;
+}
+
+export interface GeneratedAsset {
+  id: string;
+  type: 'image' | 'video';
+  url: string;
+  prompt: string;
+  timestamp: Date;
+}
+
+export enum ViewType {
+  OVERVIEW = 'overview',
+  REVIEWS = 'reviews',
+  LEADS = 'leads',
+  SEARCH = 'search',
+  MEDIA = 'media',
+  VOICE = 'voice',
+  CHAT = 'chat'
 }
