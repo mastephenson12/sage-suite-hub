@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { GeneratedAsset } from '../types';
+import { GeneratedAsset } from '../types.ts';
 
 export const MediaLabView: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -16,7 +15,7 @@ export const MediaLabView: React.FC = () => {
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-image-preview', // High quality for the suite
+        model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
         config: {
           imageConfig: { aspectRatio: "1:1", imageSize: "1K" }
