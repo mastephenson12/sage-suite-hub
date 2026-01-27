@@ -1,6 +1,8 @@
 {
+  "name": "Sage Suite Hub",
+  "description": "A comprehensive AI-powered productivity suite featuring real-time voice, image/video generation, and advanced search grounding.",
   "requestFramePermissions": [
-    "geolocation",
-    "microphone"
+    "microphone",
+    "geolocation"
   ]
 }
