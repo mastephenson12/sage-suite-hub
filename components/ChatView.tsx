@@ -1,7 +1,6 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { Message } from '../types';
+import { Message } from '../types.ts';
 
 export const ChatView: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -116,6 +115,10 @@ export const ChatView: React.FC = () => {
             {isLoading ? 'Processing' : 'Send'}
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
       </div>
     </div>
   );
