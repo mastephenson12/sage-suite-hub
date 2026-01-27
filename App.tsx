@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx';
 import ChatWidget from './components/ChatWidget.tsx';
-import Hero from './components/Hero.tsx';
+// Fix: Import Hero as a named export to resolve "no default export" error
+import { Hero } from './components/Hero.tsx';
 import Archive from './pages/Archive.tsx';
 import TrailGuides from './pages/TrailGuides.tsx';
 import About from './pages/About.tsx';
@@ -64,10 +66,6 @@ function App() {
     <Router>
       <AppContent />
     </Router>
-  );
-}
-
-export default App;
   );
 }
 
