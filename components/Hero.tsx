@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_DATA_URL, BRAND_NAME } from '../constants';
+import { LOGO_DATA_URL, BRAND_NAME } from '../constants.ts';
 
-const Hero: React.FC = () => {
+// Fix: Using named export to resolve "no default export" error in App.tsx
+export const Hero: React.FC = () => {
   const [imgError, setImgError] = useState(false);
   const logoSrc = LOGO_DATA_URL || 'logo.png';
 
@@ -73,5 +75,3 @@ const Hero: React.FC = () => {
     </div>
   );
 };
-
-export default Hero;
