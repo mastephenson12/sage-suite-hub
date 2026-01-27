@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_DATA_URL, BRAND_NAME, BEEHIIV_URL } from '../constants';
+import { LOGO_DATA_URL, BRAND_NAME, BEEHIIV_URL } from '../constants.ts';
 
 const Navbar: React.FC = () => {
   const [imgError, setImgError] = useState(false);
