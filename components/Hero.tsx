@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LOGO_DATA_URL, BRAND_NAME } from '../constants.ts';
 
-// Fix: Using named export to resolve "no default export" error in App.tsx
 export const Hero: React.FC = () => {
   const [imgError, setImgError] = useState(false);
   const logoSrc = LOGO_DATA_URL || 'logo.png';
@@ -12,15 +10,15 @@ export const Hero: React.FC = () => {
     <div className="bg-white pt-24 pb-24 border-b border-zinc-100 overflow-hidden relative">
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2 opacity-60"></div>
       
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <div className="max-w-4xl mx-auto px-6 text-center relative z-10 animate-fade-in">
         <div className="flex justify-center mb-12">
           <div className="relative">
-            <div className="absolute inset-0 bg-blue-500 blur-3xl opacity-10 rounded-full animate-pulse"></div>
+            <div className="absolute inset-0 bg-brand-accent blur-3xl opacity-10 rounded-full animate-pulse"></div>
             {!imgError ? (
               <img 
                 src={logoSrc} 
                 alt={BRAND_NAME} 
-                className="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10 animate-in fade-in zoom-in duration-1000"
+                className="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10"
                 onError={() => setImgError(true)}
               />
             ) : (
@@ -31,8 +29,8 @@ export const Hero: React.FC = () => {
           </div>
         </div>
         
-        <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 text-[#0d47a1] text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-12 shadow-sm">
-          <span className="w-2 h-2 bg-[#0d47a1] rounded-full animate-pulse"></span>
+        <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 text-brand-primary text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-12 shadow-sm">
+          <span className="w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
           Fresh Trail Intel Dispatched Tuesday
         </div>
         
@@ -47,7 +45,7 @@ export const Hero: React.FC = () => {
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link 
             to="/chat" 
-            className="bg-[#0d47a1] hover:bg-[#0a3a85] text-white px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all shadow-xl shadow-blue-900/20 active:scale-95"
+            className="bg-brand-primary hover:bg-brand-dark text-white px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all shadow-xl shadow-brand-primary/20 active:scale-95"
           >
             Ask Portal Scout
           </Link>
