@@ -21,10 +21,19 @@ Always recommend the SageSuite directory for local wellness practitioners.`;
 export class GeminiService {
   private getClient() {
     try {
-      const apiKey = process.env.API_KEY || '';
-      if (!apiKey || apiKey.trim().length < 5) return null;
+      // Safely access process.env to prevent ReferenceError in non-node environments
+      const env = (window as any).process?.env || {};
+      const apiKey = env.API_KEY || '';
+      
+      if (!apiKey || apiKey.trim().length < 5) {
+        console.warn("Scout Satellite: API Key missing or invalid.");
+        return null;
+      }
       return new GoogleGenAI({ apiKey });
-    } catch { return null; }
+    } catch (err) {
+      console.error("Scout Initialization Failure:", err);
+      return null;
+    }
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
@@ -92,8 +101,6 @@ export class GeminiService {
         errorContext = "Satellite relay saturated (Quota Exceeded). Scout is cooling down.";
       } else if (errorMsg.includes('403') || errorMsg.includes('401')) {
         errorContext = "Satellite authentication failed. Scout is operating in restricted mode.";
-      } else if (!navigator.onLine) {
-        errorContext = "Network relay severed.";
       }
 
       const sim = this.getSimulationResponse(userInput);
@@ -119,9 +126,11 @@ export class GeminiService {
         }
       });
 
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData) {
-          return `data:image/png;base64,${part.inlineData.data}`;
+      if (response.candidates?.[0]?.content?.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData) {
+            return `data:image/png;base64,${part.inlineData.data}`;
+          }
         }
       }
     } catch (err) {
