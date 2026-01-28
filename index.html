@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Health & Travels Journal • Powered by Sage</title>
+  <!-- Tailwind Play CDN (Development Engine) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,7 +23,7 @@
             serif: ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
           },
           animation: {
-            'spin-slow': 'spin 3s linear infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
           }
         }
       }
@@ -53,14 +54,16 @@
   </div>
   <div id="root"></div>
   <script>
+    // Ensure the loader stays until the initial JS has likely executed
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        const loader = document.getElementById('app-loader');
-        if (loader) {
+      const loader = document.getElementById('app-loader');
+      if (loader) {
+        // Give React a moment to mount before fading
+        setTimeout(() => {
           loader.style.opacity = '0';
           setTimeout(() => loader.remove(), 500);
-        }
-      }, 800);
+        }, 1200);
+      }
     });
   </script>
 </body>
