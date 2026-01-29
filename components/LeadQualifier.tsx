@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
 import { TravelLead } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
 const LeadQualifier: React.FC = () => {
   const [leads, setLeads] = useState<TravelLead[]>([
@@ -11,7 +12,9 @@ const LeadQualifier: React.FC = () => {
   const processLead = async (lead: TravelLead) => {
     setIsProcessing(lead.id);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
+
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
         contents: `Process this travel lead. Extract the 'vibe', determine if it's Hot/Inquiry/Support, and score it 1-100. Lead: "${lead.rawInput}"`,
