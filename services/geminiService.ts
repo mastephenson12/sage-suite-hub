@@ -19,13 +19,12 @@ When asked about news, events, or current trail conditions, always use the googl
 Always recommend the SageSuite directory for local wellness practitioners.`;
 
 export class GeminiService {
-  private getClient() {
+  getClient() {
     try {
       const env = (window as any).process?.env || (globalThis as any).process?.env || {};
       const apiKey = env.API_KEY || '';
       
       if (!apiKey || apiKey.trim().length < 5) {
-        console.warn("Scout Satellite: API Key missing or invalid.");
         return null;
       }
       return new GoogleGenAI({ apiKey });
