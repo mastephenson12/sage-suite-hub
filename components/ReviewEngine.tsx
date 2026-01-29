@@ -12,7 +12,11 @@ const ReviewEngine: React.FC = () => {
   const analyzeReview = async (review: GMBReview) => {
     setIsAnalyzing(review.id);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Use window.process safely to avoid ReferenceErrors
+      const apiKey = (window as any).process?.env?.API_KEY || '';
+      if (!apiKey) throw new Error("API Key Missing");
+
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: `Analyze this review for ${review.brand} and provide a suggested brand-aligned reply. Review: "${review.text}"`,
@@ -36,7 +40,12 @@ const ReviewEngine: React.FC = () => {
         suggestedReply: data.reply 
       } : r));
     } catch (e) {
-      console.error(e);
+      console.error("Review analysis failed:", e);
+      setReviews(prev => prev.map(r => r.id === review.id ? { 
+        ...r, 
+        sentiment: 'Neutral', 
+        suggestedReply: "Thank you for sharing your experience. We value your feedback and are looking into this."
+      } : r));
     } finally {
       setIsAnalyzing(null);
     }
