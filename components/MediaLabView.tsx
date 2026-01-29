@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { GoogleGenAI } from "@google/genai";
 import { GeneratedAsset } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
 export const MediaLabView: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -13,7 +13,9 @@ export const MediaLabView: React.FC = () => {
     if (!prompt.trim() || isGenerating) return;
     setIsGenerating(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
+
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
@@ -57,7 +59,9 @@ export const MediaLabView: React.FC = () => {
     setVideoStatus('Initiating cinematic render...');
     
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
+
       let operation = await ai.models.generateVideos({
         model: 'veo-3.1-fast-generate-preview',
         prompt: prompt,
@@ -75,7 +79,8 @@ export const MediaLabView: React.FC = () => {
       }
 
       const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
-      const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
+      const apiKey = (window as any).process?.env?.API_KEY || '';
+      const response = await fetch(`${downloadLink}&key=${apiKey}`);
       const blob = await response.blob();
       const videoUrl = URL.createObjectURL(blob);
 
