@@ -4,7 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Health & Travels Journal • Powered by Sage</title>
-  <!-- Tailwind Play CDN (Development Engine) -->
+  
+  <!-- Console Sanitizer: Optimizing for the explorer experience by removing dev-tool noise -->
+  <script>
+    (function() {
+      const originalWarn = console.warn;
+      console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+        originalWarn.apply(console, args);
+      };
+    })();
+  </script>
+
+  <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -12,10 +24,11 @@
         extend: {
           colors: {
             brand: {
-              primary: '#0d47a1',
-              dark: '#0a3a85',
-              accent: '#3b82f6',
-              surface: '#fafafa',
+              // Mapping Tailwind keys to our professional CSS variable system
+              primary: 'var(--brand-primary)',
+              dark: 'var(--brand-dark)',
+              accent: 'var(--brand-accent)',
+              surface: 'var(--brand-surface)',
             }
           },
           fontFamily: {
@@ -29,10 +42,12 @@
       }
     }
   </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
+
   <script type="importmap">
 {
   "imports": {
@@ -54,15 +69,13 @@
   </div>
   <div id="root"></div>
   <script>
-    // Ensure the loader stays until the initial JS has likely executed
     window.addEventListener('load', () => {
       const loader = document.getElementById('app-loader');
       if (loader) {
-        // Give React a moment to mount before fading
         setTimeout(() => {
           loader.style.opacity = '0';
           setTimeout(() => loader.remove(), 500);
-        }, 1200);
+        }, 800);
       }
     });
   </script>
