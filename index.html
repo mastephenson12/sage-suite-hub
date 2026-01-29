@@ -7,12 +7,11 @@
   
   <!-- Global Environment Shim: Prevents ReferenceErrors on custom domains -->
   <script>
-    window.process = { 
-      env: { 
-        get API_KEY() { return undefined; } 
-      } 
-    };
     (function() {
+      const shim = { env: { API_KEY: undefined } };
+      window.process = shim;
+      globalThis.process = shim;
+      
       const originalWarn = console.warn;
       console.warn = function(...args) {
         if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
@@ -72,8 +71,6 @@
     <p class="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Sage System Booting...</p>
   </div>
   <div id="root"></div>
-  
-  <!-- Note: index.tsx is automatically loaded as an ES module by the environment -->
   
   <script>
     window.addEventListener('load', () => {
