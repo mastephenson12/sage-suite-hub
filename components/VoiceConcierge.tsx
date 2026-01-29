@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
+import { LiveServerMessage, Modality } from '@google/genai';
+import { geminiService } from '../services/gemini.ts';
 
 // Audio Encoding & Decoding Utilities (Manual implementation as per guidelines)
 function decode(base64: string) {
@@ -58,7 +58,9 @@ const VoiceConcierge: React.FC = () => {
   const startVoice = async () => {
     try {
       setStatus('connecting');
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
+
       const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       audioCtxRef.current = { input: inputCtx, output: outputCtx };
