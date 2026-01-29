@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { GoogleGenAI } from "@google/genai";
+import { geminiService } from '../services/gemini.ts';
 
 interface SearchResult {
   text: string;
@@ -16,7 +15,9 @@ export const SearchHubView: React.FC = () => {
     if (!query.trim() || isSearching) return;
     setIsSearching(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
+
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: query,
