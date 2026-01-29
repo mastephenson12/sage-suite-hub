@@ -5,12 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Health & Travels Journal • Powered by Sage</title>
   
-  <!-- Global Environment Shim: Prevents ReferenceErrors on custom domains -->
+  <!-- Diagnostic Script: Catch early errors -->
   <script>
+    window.addEventListener('error', function(e) {
+      console.error('Portal Scout Early Error:', e.error);
+      const loader = document.getElementById('app-loader');
+      if (loader) {
+        loader.innerHTML = `
+          <div class="text-center px-6">
+            <div class="text-red-500 font-black mb-4 uppercase tracking-widest text-xs">Critical Sync Failure</div>
+            <p class="text-zinc-500 text-[10px] leading-relaxed max-w-xs mx-auto">
+              ${e.message}<br><br>
+              The satellite link was interrupted during boot. Check console for telemetry.
+            </p>
+          </div>
+        `;
+      }
+    });
+
+    // Global Environment Shim: Refined to be safer
     (function() {
-      const shim = { env: { API_KEY: undefined } };
-      window.process = shim;
-      globalThis.process = shim;
+      if (!window.process) window.process = { env: {} };
+      if (!globalThis.process) globalThis.process = window.process;
       
       const originalWarn = console.warn;
       console.warn = function(...args) {
@@ -73,12 +89,26 @@
   <div id="root"></div>
   
   <script>
+    // Detection for "Blank Screen" syndrome
+    setTimeout(() => {
+      const root = document.getElementById('root');
+      if (root && root.innerHTML === '' && !window.APP_INITIALIZED) {
+        console.warn('Portal Scout: Detected hung initialization. Attempting emergency recovery...');
+        const loader = document.getElementById('app-loader');
+        if (loader) {
+          loader.innerHTML += `<p class="mt-4 text-[8px] uppercase tracking-widest text-orange-400 animate-pulse">Relay hang detected. Retrying handshake...</p>`;
+        }
+      }
+    }, 5000);
+
     window.addEventListener('load', () => {
       const loader = document.getElementById('app-loader');
       if (loader) {
         setTimeout(() => {
-          loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 500);
+          if (window.APP_INITIALIZED) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 500);
+          }
         }, 1200);
       }
     });
