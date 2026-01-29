@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
+import { LiveServerMessage, Modality } from '@google/genai';
+import { geminiService } from '../services/gemini.ts';
 
 // Audio Helpers as per guidelines
 function decode(base64: string) {
@@ -61,7 +61,9 @@ export const LiveVoiceView: React.FC = () => {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
-    sourcesRef.current.forEach(source => source.stop());
+    sourcesRef.current.forEach(source => {
+      try { source.stop(); } catch(e) {}
+    });
     sourcesRef.current.clear();
     setIsActive(false);
     setStatus('idle');
@@ -70,7 +72,8 @@ export const LiveVoiceView: React.FC = () => {
   const startSession = async () => {
     try {
       setStatus('connecting');
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
       
       const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
@@ -129,7 +132,7 @@ export const LiveVoiceView: React.FC = () => {
             }
 
             if (message.serverContent?.interrupted) {
-              sourcesRef.current.forEach(s => s.stop());
+              sourcesRef.current.forEach(s => { try { s.stop(); } catch(e) {} });
               sourcesRef.current.clear();
               nextStartTimeRef.current = 0;
             }
