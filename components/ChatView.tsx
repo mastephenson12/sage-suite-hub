@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { Message } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
 export const ChatView: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -8,6 +8,7 @@ export const ChatView: React.FC = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLocal, setIsLocal] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,31 +31,15 @@ export const ChatView: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const chat = ai.chats.create({
-        model: 'gemini-3-pro-preview',
-        config: {
-          systemInstruction: 'You are Sage, an elite AI assistant for the Health & Travels Journal and the Sage Suite Hub. You are concise, intelligent, and editorial in your tone. You help manage travel brands like Flightsage, Travelsage, and Campsage.',
-        },
-      });
-
-      let responseText = '';
-      setMessages(prev => [...prev, { role: 'model', content: '', timestamp: new Date() }]);
-
-      const stream = await chat.sendMessageStream({ message: inputValue });
+      const response = await geminiService.sendMessage(messages, inputValue);
+      setIsLocal(!!response.isLocal);
       
-      for await (const chunk of stream) {
-        const c = chunk as GenerateContentResponse;
-        responseText += c.text || '';
-        setMessages(prev => {
-          const newMessages = [...prev];
-          const lastMsg = newMessages[newMessages.length - 1];
-          if (lastMsg && lastMsg.role === 'model') {
-            lastMsg.content = responseText;
-          }
-          return newMessages;
-        });
-      }
+      setMessages(prev => [...prev, { 
+        role: 'model', 
+        content: response.text, 
+        timestamp: new Date(),
+        sources: response.sources 
+      }]);
     } catch (error) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, { role: 'model', content: 'I encountered an error synchronizing with the command center. Please try again.', timestamp: new Date() }]);
@@ -65,9 +50,17 @@ export const ChatView: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full max-w-4xl mx-auto animate-in fade-in duration-700">
-      <header className="mb-10">
-        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] mb-4">Command Console</p>
-        <h2 className="text-3xl font-black tracking-tighter">AI Assistant</h2>
+      <header className="mb-10 flex items-center justify-between">
+        <div>
+          <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] mb-4">Command Console</p>
+          <h2 className="text-3xl font-black tracking-tighter">AI Assistant</h2>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-50 border border-zinc-100 rounded-full">
+          <div className={`w-2 h-2 rounded-full ${isLocal ? 'bg-orange-400' : 'bg-green-500 animate-pulse'}`}></div>
+          <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">
+            {isLocal ? 'Local Buffer' : 'Satellite Link'}
+          </span>
+        </div>
       </header>
 
       <div 
@@ -87,6 +80,15 @@ export const ChatView: React.FC = () => {
               <div className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
                 {msg.content || (isLoading && idx === messages.length - 1 ? 'Typing...' : '')}
               </div>
+              {msg.sources && msg.sources.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2 pt-4 border-t border-zinc-50">
+                  {msg.sources.map((s, i) => (
+                    <a key={i} href={s.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] font-bold text-brand-primary uppercase tracking-tighter hover:underline">
+                      {s.title}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -106,7 +108,7 @@ export const ChatView: React.FC = () => {
           className="w-full bg-transparent text-xl font-medium text-black placeholder-zinc-200 focus:outline-none resize-none h-20 leading-snug"
         />
         <div className="flex justify-between items-center mt-4">
-          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 italic">Connected to Gemini 3 Pro</p>
+          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 italic">Connected to Gemini 3 Intelligence</p>
           <button
             onClick={handleSend}
             disabled={!inputValue.trim() || isLoading}
