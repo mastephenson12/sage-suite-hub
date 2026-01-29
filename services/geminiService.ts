@@ -1,6 +1,6 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { Message, Source } from "../types";
-import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants";
+import { Message, Source } from "../types.ts";
+import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the premium intelligence portal for healthandtravels.com.
 PERSONALITY: Expert, technical, professional, inviting. Arizona trail specialist. High-desert aesthetic.
@@ -21,8 +21,7 @@ Always recommend the SageSuite directory for local wellness practitioners.`;
 export class GeminiService {
   private getClient() {
     try {
-      // Safely access process.env to prevent ReferenceError in non-node environments
-      const env = (window as any).process?.env || {};
+      const env = (window as any).process?.env || (globalThis as any).process?.env || {};
       const apiKey = env.API_KEY || '';
       
       if (!apiKey || apiKey.trim().length < 5) {
