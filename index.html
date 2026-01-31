@@ -75,7 +75,10 @@
     let checks = 0;
     const interval = setInterval(() => {
       checks++;
-      if (window.APP_INITIALIZED) {
+      
+      // Check for manual initialization flag or root hydration
+      const root = document.getElementById('root');
+      if (window.APP_INITIALIZED || (root && root.children.length > 0)) {
         console.log("Portal Scout: App signal detected. Clearing loader.");
         const loader = document.getElementById('app-loader');
         if (loader) {
@@ -85,22 +88,18 @@
         clearInterval(interval);
       }
       
-      if (checks === 40) {
+      if (checks === 60) {
         const text = document.getElementById('loader-text');
         if (text) text.innerText = "Synchronizing Satellite Link...";
       }
       
-      if (checks > 150) { // 15s Timeout
+      if (checks > 300) { // 30s Timeout
         const text = document.getElementById('loader-text');
         if (text) {
           text.innerText = "Handshake Delayed. Checking Hub Integrity...";
           text.style.color = "#ef4444";
         }
-        // Fallback: If it's taking too long, check if root has children anyway
-        const root = document.getElementById('root');
-        if (root && root.children.length > 0) {
-           window.APP_INITIALIZED = true;
-        }
+        clearInterval(interval);
       }
     }, 100);
   </script>
