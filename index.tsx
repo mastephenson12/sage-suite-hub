@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
 const container = document.getElementById('root');
 
@@ -16,7 +16,7 @@ if (container) {
     console.log("Portal Scout: Handshake Phase 2 - App Mounted");
   } catch (err) {
     console.error("Portal Scout: Mounting Failure", err);
-    const loader = document.getElementById('loader-text');
-    if (loader) loader.innerText = "Critical Sync Error - Check Console";
+    const loaderText = document.getElementById('loader-text');
+    if (loaderText) loaderText.innerText = "Critical Sync Error - Check Console";
   }
 }
