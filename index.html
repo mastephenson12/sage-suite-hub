@@ -6,8 +6,9 @@
   <title>Health & Travels Journal • Powered by Sage</title>
   
   <script>
-    // Portal Scout Environment Shim
+    // Portal Scout Environment Handshake
     (function() {
+      // Shim process for the SDK
       const shim = { env: { API_KEY: undefined } };
       window.process = shim;
       globalThis.process = shim;
@@ -69,10 +70,8 @@
 
   <div id="root"></div>
   
-  <!-- Explicit Entry Point -->
-  <script type="module" src="./index.tsx"></script>
-
   <script>
+    // Watchdog to clear loader once the app signals initialization
     let checks = 0;
     const interval = setInterval(() => {
       checks++;
@@ -87,13 +86,13 @@
       
       if (checks === 60) {
         const text = document.getElementById('loader-text');
-        if (text) text.innerText = "Waiting for Satellite Module...";
+        if (text) text.innerText = "Synchronizing Satellite Link...";
       }
       
-      if (checks > 200) { // 20 seconds timeout
+      if (checks > 200) { // 20s Timeout
         const text = document.getElementById('loader-text');
         if (text) {
-          text.innerText = "Satellite Offline. Check Vercel Config.";
+          text.innerText = "Automatic Import Delayed. Refreshing...";
           text.style.color = "#ef4444";
         }
         clearInterval(interval);
