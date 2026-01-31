@@ -4,8 +4,13 @@ import App from './App.tsx';
 
 console.log("Portal Scout: Mounting sequence initiated.");
 
-const rootElement = document.getElementById('root');
-if (rootElement) {
+const init = () => {
+  const rootElement = document.getElementById('root');
+  if (!rootElement) {
+    console.error("Scout critical failure: Root node missing.");
+    return;
+  }
+
   try {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
@@ -17,11 +22,17 @@ if (rootElement) {
     console.log("Portal Scout: Handshake successful. Dashboard operational.");
   } catch (err) {
     console.error("Portal Scout: Render crashed:", err);
-    rootElement.innerHTML = `<div style="padding: 40px; text-align: center; font-family: sans-serif;">
-      <h1 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em; color: #ff0000;">Mounting Failed</h1>
-      <p style="font-size: 12px; color: #666;">Check dev console for satellite error logs.</p>
-    </div>`;
+    rootElement.innerHTML = `
+      <div style="padding: 40px; text-align: center; font-family: sans-serif;">
+        <h1 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em; color: #ef4444;">Mounting Failed</h1>
+        <p style="font-size: 11px; color: #71717a; margin-top: 10px;">The satellite handshake encountered a fatal error during UI projection.</p>
+      </div>
+    `;
   }
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  console.error("Scout critical failure: Root node missing in DOM.");
+  init();
 }
