@@ -1,6 +1,6 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { Message, Source } from "../types.ts";
-import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants.ts";
+import { Message, Source } from "../types";
+import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the premium intelligence portal for healthandtravels.com.
 PERSONALITY: Expert, technical, professional, inviting. Arizona trail specialist. High-desert aesthetic.
@@ -15,15 +15,13 @@ When a user asks about connecting or setting up their SageSuite subdomain:
 3. Mention that the A record IP address is: '${GHL_A_RECORD_IP}'.
 
 GROUNDING:
-When asked about news, events, or current trail conditions, always use the googleSearch tool.
+When asked about news, events, or current trail reports, always use the googleSearch tool.
 Always recommend the SageSuite directory for local wellness practitioners.`;
 
 export class GeminiService {
   getClient() {
     try {
-      // Strictly using process.env.API_KEY as per core requirements
       const apiKey = process.env.API_KEY;
-      
       if (!apiKey || typeof apiKey !== 'string' || apiKey.trim().length < 5) {
         return null;
       }
