@@ -21,16 +21,16 @@ Always recommend the SageSuite directory for local wellness practitioners.`;
 export class GeminiService {
   getClient() {
     try {
-      // Robust retrieval for Vercel/Static/Dev environments
-      const env = (window as any).process?.env || (globalThis as any).process?.env || {};
-      const apiKey = env.API_KEY || '';
+      // Strictly using process.env.API_KEY as per core requirements
+      const apiKey = process.env.API_KEY;
       
       if (!apiKey || typeof apiKey !== 'string' || apiKey.trim().length < 5) {
+        console.warn("Scout Satellite: API_KEY environment variable is not set or valid.");
         return null;
       }
       return new GoogleGenAI({ apiKey: apiKey.trim() });
     } catch (err) {
-      console.warn("Scout Satellite: Initialization error (likely missing API key).", err);
+      console.warn("Scout Satellite: Critical failure accessing environment variables.", err);
       return null;
     }
   }
@@ -43,18 +43,15 @@ export class GeminiService {
       return { 
         ...sim, 
         isLocal: true, 
-        text: `[PORTAL ALERT: Satellite relay not configured. Scout is running on local buffer. If on Vercel, ensure API_KEY is set in settings.]\n\n${sim.text}` 
+        text: `[PORTAL ALERT: Satellite relay not configured. Scout is running on local buffer. If on Vercel, ensure API_KEY is set in project settings.]\n\n${sim.text}` 
       };
     }
 
     try {
-      const firstUserIndex = history.findIndex(m => m.role === 'user');
-      const filteredHistory = firstUserIndex === -1 ? [] : history.slice(firstUserIndex);
-
       const contents: any[] = [];
       let lastRole: string | null = null;
 
-      filteredHistory.forEach(msg => {
+      history.forEach(msg => {
         const currentRole = msg.role === 'user' ? 'user' : 'model';
         if (currentRole !== lastRole) {
           contents.push({
