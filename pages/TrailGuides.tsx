@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { geminiService } from '../services/gemini';
@@ -27,12 +28,25 @@ const TrailGuides: React.FC = () => {
 
   const handleGenerateImage = async (trail: Trail) => {
     if (loadingTrail) return;
+    
+    // Check for API key selection when using Pro Imaging model
+    if (typeof (window as any).aistudio !== 'undefined') {
+      const hasKey = await (window as any).aistudio.hasSelectedApiKey();
+      if (!hasKey) {
+        await (window as any).aistudio.openSelectKey();
+      }
+    }
+
     setLoadingTrail(trail.name);
     try {
       const imageUrl = await geminiService.generateTrailImage(trail.name, trail.description, trail.diff);
       setTrailImages(prev => ({ ...prev, [trail.name]: imageUrl }));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to generate trail vista:", error);
+      // Reset key selection if entity not found
+      if (error.message?.includes("Requested entity was not found") || error.status === 404) {
+        if ((window as any).aistudio) await (window as any).aistudio.openSelectKey();
+      }
     } finally {
       setLoadingTrail(null);
     }
@@ -124,6 +138,7 @@ const TrailGuides: React.FC = () => {
                   ))}
                 </div>
 
+                {/* Fixed typo 'trailName' to 'trail.name' */}
                 <button 
                   onClick={() => handleAccessIntel(trail.name)}
                   className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#0d47a1] transition-all active:scale-[0.98] shadow-2xl shadow-zinc-900/20"
