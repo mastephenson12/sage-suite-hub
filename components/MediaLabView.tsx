@@ -14,8 +14,8 @@ export const MediaLabView: React.FC = () => {
     if (!prompt.trim() || isGenerating) return;
     setIsGenerating(true);
     try {
-      const ai = geminiService.getClient();
-      if (!ai) throw new Error("Satellite Link Down");
+      // Create a fresh instance for generation to ensure correct API key handling
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
@@ -49,13 +49,12 @@ export const MediaLabView: React.FC = () => {
   const generateVideo = async () => {
     if (!prompt.trim() || isGenerating) return;
     
-    // Mandatory API Key Selection for Veo
+    // Mandatory API Key Selection for Veo and Gemini 3 Pro
     if (typeof (window as any).aistudio !== 'undefined') {
         const hasKey = await (window as any).aistudio.hasSelectedApiKey();
         if (!hasKey) {
-            console.log("Portal Scout: Prompting for Video Satellite Key...");
+            console.log("Portal Scout: Prompting for High-Performance Satellite Key...");
             await (window as any).aistudio.openSelectKey();
-            // Proceed assuming selection was successful per guidelines
         }
     }
 
@@ -63,7 +62,7 @@ export const MediaLabView: React.FC = () => {
     setVideoStatus('Initiating cinematic render...');
     
     try {
-      // Create fresh instance per guidelines
+      // Always create a new instance right before generating video/pro images
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       let operation = await ai.models.generateVideos({
@@ -98,7 +97,6 @@ export const MediaLabView: React.FC = () => {
     } catch (error: any) {
       console.error("Video generation failed:", error);
       if (error.message?.includes("Requested entity was not found")) {
-        // Reset key selection if invalid project
         if ((window as any).aistudio) await (window as any).aistudio.openSelectKey();
       }
     } finally {
@@ -108,8 +106,8 @@ export const MediaLabView: React.FC = () => {
   };
 
   return (
-    <div className="animate-in fade-in duration-700">
-      <header className="mb-12 flex items-center justify-between">
+    <div className="animate-in fade-in duration-700 h-full flex flex-col">
+      <header className="mb-12 flex items-center justify-between shrink-0">
         <div>
           <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] mb-4">Generative Lab</p>
           <h2 className="text-3xl font-black tracking-tighter">Media Assets</h2>
@@ -130,15 +128,14 @@ export const MediaLabView: React.FC = () => {
         </div>
       </header>
 
-      <div className="mb-12 border-b-2 border-zinc-100 pb-12">
-        {generationType === 'video' && (
-           <div className="mb-4 flex items-center gap-2">
-             <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-             <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">
-               Veo Satellite Key Required • <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="underline">Billing Documentation</a>
-             </p>
-           </div>
-        )}
+      <div className="mb-12 border-b-2 border-zinc-100 pb-12 shrink-0">
+        <div className="mb-4 flex items-center gap-2">
+           <span className={`w-2 h-2 rounded-full ${generationType === 'video' ? 'bg-blue-500' : 'bg-black'}`}></span>
+           <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">
+             {generationType === 'video' ? 'Veo Satellite Key Required' : 'Gemini 3 Pro Imaging Active'}
+             {generationType === 'video' && <span className="ml-2 opacity-50">• <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="underline">Billing Info</a></span>}
+           </p>
+        </div>
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -159,45 +156,46 @@ export const MediaLabView: React.FC = () => {
         </div>
       </div>
 
-      {isGenerating && (
-        <div className="flex flex-col items-center justify-center py-16">
-          <div className="w-8 h-8 border-2 border-zinc-100 border-t-black rounded-full animate-spin mb-6"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 animate-pulse">
-            {videoStatus || 'Synthesizing Media Node...'}
-          </p>
-        </div>
-      )}
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+        {isGenerating && (
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="w-8 h-8 border-2 border-zinc-100 border-t-black rounded-full animate-spin mb-6"></div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 animate-pulse">
+              {videoStatus || 'Synthesizing Media Node...'}
+            </p>
+          </div>
+        )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {assets.map((asset) => (
-          <div key={asset.id} className="group border border-zinc-100 rounded-sm overflow-hidden hover:border-black transition-all">
-            <div className="aspect-square bg-zinc-50 flex items-center justify-center overflow-hidden">
-              {asset.type === 'image' ? (
-                <img src={asset.url} alt={asset.prompt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
-              ) : (
-                <video src={asset.url} controls className="w-full h-full object-cover" />
-              )}
-            </div>
-            <div className="p-6">
-              <p className="text-xs text-zinc-500 line-clamp-2 italic mb-6">"{asset.prompt}"</p>
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-300">{asset.type} • {asset.timestamp.toLocaleDateString()}</span>
-                <a href={asset.url} download={`sage-${asset.id}.${asset.type === 'image' ? 'png' : 'mp4'}`} className="text-black hover:opacity-50 transition-opacity">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                </a>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
+          {assets.map((asset) => (
+            <div key={asset.id} className="group border border-zinc-100 rounded-sm overflow-hidden hover:border-black transition-all bg-white shadow-sm">
+              <div className="aspect-square bg-zinc-50 flex items-center justify-center overflow-hidden">
+                {asset.type === 'image' ? (
+                  <img src={asset.url} alt={asset.prompt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                ) : (
+                  <video src={asset.url} controls className="w-full h-full object-cover" />
+                )}
+              </div>
+              <div className="p-6">
+                <p className="text-xs text-zinc-500 line-clamp-2 italic mb-6">"{asset.prompt}"</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zinc-300">{asset.type} • {asset.timestamp.toLocaleDateString()}</span>
+                  <a href={asset.url} download={`sage-${asset.id}.${asset.type === 'image' ? 'png' : 'mp4'}`} className="text-black hover:opacity-50 transition-opacity">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {assets.length === 0 && !isGenerating && (
-        <div className="py-24 border-2 border-dashed border-zinc-50 flex flex-col items-center justify-center text-center">
-          <p className="text-[10px] font-black text-zinc-200 uppercase tracking-widest">Gallery Empty</p>
+          ))}
+          {assets.length === 0 && !isGenerating && (
+            <div className="col-span-full py-24 border-2 border-dashed border-zinc-50 flex flex-col items-center justify-center text-center">
+              <p className="text-[10px] font-black text-zinc-200 uppercase tracking-widest">Gallery Empty</p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
