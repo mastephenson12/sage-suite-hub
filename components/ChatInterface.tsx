@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { Message, Source } from '../types.ts';
-import { geminiService } from '../services/gemini.ts';
+import { Message, Source } from '../types';
+import { geminiService } from '../services/gemini';
 
 export interface ChatInterfaceHandle {
   sendMessage: (text: string) => void;
