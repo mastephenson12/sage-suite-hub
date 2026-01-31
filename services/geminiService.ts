@@ -25,12 +25,10 @@ export class GeminiService {
       const apiKey = process.env.API_KEY;
       
       if (!apiKey || typeof apiKey !== 'string' || apiKey.trim().length < 5) {
-        console.warn("Scout Satellite: API_KEY environment variable is not set or valid.");
         return null;
       }
       return new GoogleGenAI({ apiKey: apiKey.trim() });
     } catch (err) {
-      console.warn("Scout Satellite: Critical failure accessing environment variables.", err);
       return null;
     }
   }
@@ -43,7 +41,7 @@ export class GeminiService {
       return { 
         ...sim, 
         isLocal: true, 
-        text: `[PORTAL ALERT: Satellite relay not configured. Scout is running on local buffer. If on Vercel, ensure API_KEY is set in project settings.]\n\n${sim.text}` 
+        text: `[PORTAL ALERT: Satellite relay not configured. Scout is running on local buffer.]\n\n${sim.text}` 
       };
     }
 
@@ -90,20 +88,11 @@ export class GeminiService {
 
     } catch (err: any) {
       console.error("Scout Satellite Error:", err);
-      let errorContext = "Satellite link interrupted.";
-      const errorMsg = err.message || "";
-
-      if (errorMsg.includes('429')) {
-        errorContext = "Satellite relay saturated (Quota Exceeded). Scout is cooling down.";
-      } else if (errorMsg.includes('403') || errorMsg.includes('401')) {
-        errorContext = "Satellite authentication failed. Scout is operating in restricted mode.";
-      }
-
       const sim = this.getSimulationResponse(userInput);
       return { 
         ...sim, 
         isLocal: true, 
-        text: `[PORTAL ALERT: ${errorContext}]\n\n${sim.text}` 
+        text: `[PORTAL ALERT: Satellite link interrupted.]\n\n${sim.text}` 
       };
     }
   }
@@ -115,10 +104,10 @@ export class GeminiService {
     try {
       const prompt = `A cinematic, ultra-high resolution photograph of the ${name} trail in Arizona. Context: ${description}. Intensity: ${difficulty}. High-desert aesthetic, professional lighting, photorealistic, 4k.`;
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash-image',
+        model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
         config: {
-          imageConfig: { aspectRatio: "16:9" }
+          imageConfig: { aspectRatio: "16:9", imageSize: "1K" }
         }
       });
 
