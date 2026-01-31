@@ -82,7 +82,7 @@
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => { if(loader.parentNode) loader.remove(); }, 500);
+          setTimeout(() => { if(loader.parentNode) loader.remove(); }, 600);
         }
         clearInterval(interval);
       }
@@ -92,11 +92,16 @@
         if (text) text.innerText = "Synchronizing Satellite Link...";
       }
       
-      if (checks > 120) { // 12s Timeout
+      if (checks > 150) { // 15s Timeout
         const text = document.getElementById('loader-text');
         if (text) {
-          text.innerText = "Link Delayed. Check Console for Telemetry.";
+          text.innerText = "Handshake Delayed. Check Console for Telemetry.";
           text.style.color = "#ef4444";
+        }
+        // Force attempt to clear if we see root has content even without flag
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+           window.APP_INITIALIZED = true;
         }
       }
     }, 100);
