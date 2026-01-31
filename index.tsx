@@ -2,21 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 
-console.log("Portal Scout: Hub initialization sequence started.");
-
 const container = document.getElementById('root');
 
 if (container) {
-  const root = ReactDOM.createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-  
-  // Signal to index.html that the app has successfully mounted
-  (window as any).APP_INITIALIZED = true;
-  console.log("Portal Scout: Handshake complete. Hub active.");
-} else {
-  console.error("Portal Scout: Critical failure - root container not found.");
+  try {
+    const root = ReactDOM.createRoot(container);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    (window as any).APP_INITIALIZED = true;
+    console.log("Portal Scout: Handshake Phase 2 - App Mounted");
+  } catch (err) {
+    console.error("Portal Scout: Mounting Failure", err);
+    const loader = document.getElementById('loader-text');
+    if (loader) loader.innerText = "Critical Sync Error - Check Console";
+  }
 }
