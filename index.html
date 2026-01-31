@@ -6,32 +6,17 @@
   <title>Health & Travels Journal • Powered by Sage</title>
   
   <script>
-    // Global Environment Handshake
+    // Portal Scout Environment Shim
     (function() {
-      // Ensuring process.env is available for the SDK
-      if (!window.process) window.process = { env: {} };
-      if (!globalThis.process) globalThis.process = window.process;
-
-      // Diagnostic logging
+      const shim = { env: { API_KEY: undefined } };
+      window.process = shim;
+      globalThis.process = shim;
+      
       console.log("Portal Scout: Handshake Phase 1 - Environment Primed");
 
       window.addEventListener('error', function(e) {
-        // Suppress benign script errors from external extensions
         if (e.message.includes('ResizeObserver') || e.message.includes('Extension')) return;
-        
         console.error('Portal Scout Telemetry Error:', e.error || e.message);
-        const loader = document.getElementById('app-loader');
-        if (loader) {
-          loader.innerHTML = `
-            <div style="text-align:center; padding:30px; font-family:sans-serif; color:#18181b; background:white; border:2px solid #ef4444; border-radius:24px; max-width:320px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-              <div style="color:#ef4444; font-weight:900; margin-bottom:12px; text-transform:uppercase; font-size:11px; letter-spacing:0.2em;">Satellite Sync Failure</div>
-              <div style="font-size:10px; line-height:1.6; color:#71717a;">
-                ${e.message}<br><br>
-                <span style="font-weight:700; color:#18181b;">Action Required:</span> If this is a SyntaxError, ensure no manual script tags are pointing to .tsx files. The system handles imports automatically.
-              </div>
-            </div>
-          `;
-        }
       });
     })();
   </script>
@@ -84,15 +69,14 @@
 
   <div id="root"></div>
   
-  <!-- Manual index.tsx script removed: System auto-imports it -->
+  <!-- Explicit Entry Point -->
+  <script type="module" src="./index.tsx"></script>
 
   <script>
-    // Watchdog to clear loader once the auto-imported index.tsx confirms mount
     let checks = 0;
     const interval = setInterval(() => {
       checks++;
       if (window.APP_INITIALIZED) {
-        console.log("Portal Scout: App signal detected. Clearing loader.");
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
@@ -103,14 +87,15 @@
       
       if (checks === 60) {
         const text = document.getElementById('loader-text');
-        if (text) {
-          text.innerText = "Initializing Satellite Module...";
-          text.style.color = "#0d47a1";
-        }
+        if (text) text.innerText = "Waiting for Satellite Module...";
       }
       
-      if (checks > 150) { // 15 seconds timeout
-        console.warn("Portal Scout: Handshake timeout. Automatic import may have failed.");
+      if (checks > 200) { // 20 seconds timeout
+        const text = document.getElementById('loader-text');
+        if (text) {
+          text.innerText = "Satellite Offline. Check Vercel Config.";
+          text.style.color = "#ef4444";
+        }
         clearInterval(interval);
       }
     }, 100);
