@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GoogleGenAI } from "@google/genai";
 import { GeneratedAsset } from '../types.ts';
 import { geminiService } from '../services/gemini.ts';
 
@@ -48,10 +49,13 @@ export const MediaLabView: React.FC = () => {
   const generateVideo = async () => {
     if (!prompt.trim() || isGenerating) return;
     
+    // Mandatory API Key Selection for Veo
     if (typeof (window as any).aistudio !== 'undefined') {
         const hasKey = await (window as any).aistudio.hasSelectedApiKey();
         if (!hasKey) {
+            console.log("Portal Scout: Prompting for Video Satellite Key...");
             await (window as any).aistudio.openSelectKey();
+            // Proceed assuming selection was successful per guidelines
         }
     }
 
@@ -59,8 +63,8 @@ export const MediaLabView: React.FC = () => {
     setVideoStatus('Initiating cinematic render...');
     
     try {
-      const ai = geminiService.getClient();
-      if (!ai) throw new Error("Satellite Link Down");
+      // Create fresh instance per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       let operation = await ai.models.generateVideos({
         model: 'veo-3.1-fast-generate-preview',
@@ -74,13 +78,12 @@ export const MediaLabView: React.FC = () => {
 
       while (!operation.done) {
         setVideoStatus('Processing frames with Veo 3.1...');
-        await new Promise(resolve => setTimeout(resolve, 8000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
         operation = await ai.operations.getVideosOperation({ operation: operation });
       }
 
       const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
-      const apiKey = (window as any).process?.env?.API_KEY || '';
-      const response = await fetch(`${downloadLink}&key=${apiKey}`);
+      const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
       const blob = await response.blob();
       const videoUrl = URL.createObjectURL(blob);
 
@@ -92,8 +95,12 @@ export const MediaLabView: React.FC = () => {
         timestamp: new Date()
       };
       setAssets(prev => [newAsset, ...prev]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Video generation failed:", error);
+      if (error.message?.includes("Requested entity was not found")) {
+        // Reset key selection if invalid project
+        if ((window as any).aistudio) await (window as any).aistudio.openSelectKey();
+      }
     } finally {
       setIsGenerating(false);
       setVideoStatus('');
@@ -124,6 +131,14 @@ export const MediaLabView: React.FC = () => {
       </header>
 
       <div className="mb-12 border-b-2 border-zinc-100 pb-12">
+        {generationType === 'video' && (
+           <div className="mb-4 flex items-center gap-2">
+             <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+             <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">
+               Veo Satellite Key Required • <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="underline">Billing Documentation</a>
+             </p>
+           </div>
+        )}
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -144,10 +159,12 @@ export const MediaLabView: React.FC = () => {
         </div>
       </div>
 
-      {isGenerating && videoStatus && (
+      {isGenerating && (
         <div className="flex flex-col items-center justify-center py-16">
           <div className="w-8 h-8 border-2 border-zinc-100 border-t-black rounded-full animate-spin mb-6"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 animate-pulse">{videoStatus}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 animate-pulse">
+            {videoStatus || 'Synthesizing Media Node...'}
+          </p>
         </div>
       )}
 
