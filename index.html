@@ -6,27 +6,29 @@
   <title>Health & Travels Journal • Powered by Sage</title>
   
   <script>
-    // Emergency Error Catch
-    window.addEventListener('error', function(e) {
-      console.error('Portal Scout Telemetry Error:', e.error);
-      const loader = document.getElementById('app-loader');
-      if (loader) {
-        loader.innerHTML = `
-          <div style="text-align:center; padding:20px; font-family:sans-serif;">
-            <div style="color:#ef4444; font-weight:900; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Sync Failure</div>
-            <div style="color:#71717a; font-size:10px;">${e.message}</div>
-          </div>
-        `;
-      }
-    });
-
-    // Global Environment Shim
+    // Portal Scout Diagnostic Core
     (function() {
+      // Setup resilient process environment
       const shim = { env: { API_KEY: undefined } };
       window.process = shim;
       globalThis.process = shim;
+
+      window.addEventListener('error', function(e) {
+        console.error('Portal Scout Telemetry Error:', e.error || e.message);
+        const loader = document.getElementById('app-loader');
+        if (loader) {
+          loader.innerHTML = `
+            <div style="text-align:center; padding:30px; font-family:sans-serif; color:#71717a;">
+              <div style="color:#ef4444; font-weight:900; margin-bottom:12px; text-transform:uppercase; font-size:11px; letter-spacing:0.2em;">Sync Failure</div>
+              <div style="font-size:10px; line-height:1.6; max-width:240px; margin:0 auto;">
+                ${e.message}<br><br>
+                Check the developer console. If you see "MIME type" errors, the server configuration is preventing the satellite link.
+              </div>
+            </div>
+          `;
+        }
+      });
       
-      // Prevent Tailwind noise in console
       const originalWarn = console.warn;
       console.warn = function(...args) {
         if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
@@ -79,20 +81,22 @@
 </head>
 <body class="bg-white antialiased">
   <div id="app-loader" style="position:fixed; inset:0; background:white; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; transition: opacity 0.5s ease;">
-    <div style="width:40px; height:40px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 1s linear infinite; margin-bottom:16px;"></div>
-    <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#a1a1aa;">Booting Scout...</p>
+    <div style="width:32px; height:32px; border:2px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
+    <p style="font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:0.4em; color:#a1a1aa;">Establishing Handshake...</p>
   </div>
   
   <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
   <div id="root"></div>
   
-  <!-- Explicit Entry Point -->
+  <!-- Main Entry Point -->
   <script type="module" src="./index.tsx"></script>
 
   <script>
-    // Watchdog to clear loader if app takes too long but initialized
+    // Watchdog to clear loader once React confirms it has mounted
+    let checks = 0;
     const interval = setInterval(() => {
+      checks++;
       if (window.APP_INITIALIZED) {
         const loader = document.getElementById('app-loader');
         if (loader) {
@@ -101,10 +105,12 @@
         }
         clearInterval(interval);
       }
+      
+      if (checks > 100) { // 10 seconds timeout
+        console.warn("Portal Scout: Handshake timeout. Script execution may be blocked by server MIME policies.");
+        clearInterval(interval);
+      }
     }, 100);
-    
-    // Auto-clear interval after 10 seconds to prevent infinite polling
-    setTimeout(() => clearInterval(interval), 10000);
   </script>
 </body>
 </html>
