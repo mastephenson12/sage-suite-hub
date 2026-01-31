@@ -1,12 +1,12 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ReviewEngine from '../components/ReviewEngine.tsx';
-import LeadQualifier from '../components/LeadQualifier.tsx';
-import { MediaLabView } from '../components/MediaLabView.tsx';
-import { SearchHubView } from '../components/SearchHubView.tsx';
-import { ChatView } from '../components/ChatView.tsx';
-import { Sidebar } from '../components/Sidebar.tsx';
-import { geminiService } from '../services/gemini.ts';
+import ReviewEngine from '../components/ReviewEngine';
+import LeadQualifier from '../components/LeadQualifier';
+import { MediaLabView } from '../components/MediaLabView';
+import { SearchHubView } from '../components/SearchHubView';
+import { ChatView } from '../components/ChatView';
+import { Sidebar } from '../components/Sidebar';
+import { geminiService } from '../services/gemini';
 
 const SuiteDashboard: React.FC = () => {
   const isSatelliteLinked = !!geminiService.getClient();
