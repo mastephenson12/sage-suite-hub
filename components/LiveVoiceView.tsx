@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LiveServerMessage, Modality } from '@google/genai';
-// Fixed: Removed .ts extension from import
 import { geminiService } from '../services/gemini';
 
 // Audio Helpers as per guidelines
