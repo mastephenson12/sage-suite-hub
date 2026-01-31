@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
 import { GMBReview } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
 const ReviewEngine: React.FC = () => {
   const [reviews, setReviews] = useState<GMBReview[]>([
@@ -12,11 +13,9 @@ const ReviewEngine: React.FC = () => {
   const analyzeReview = async (review: GMBReview) => {
     setIsAnalyzing(review.id);
     try {
-      // Use window.process safely to avoid ReferenceErrors
-      const apiKey = (window as any).process?.env?.API_KEY || '';
-      if (!apiKey) throw new Error("API Key Missing");
+      const ai = geminiService.getClient();
+      if (!ai) throw new Error("Satellite Link Down");
 
-      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: `Analyze this review for ${review.brand} and provide a suggested brand-aligned reply. Review: "${review.text}"`,
