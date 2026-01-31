@@ -21,15 +21,16 @@ Always recommend the SageSuite directory for local wellness practitioners.`;
 export class GeminiService {
   getClient() {
     try {
+      // Robust retrieval for Vercel/Static/Dev environments
       const env = (window as any).process?.env || (globalThis as any).process?.env || {};
       const apiKey = env.API_KEY || '';
       
-      if (!apiKey || apiKey.trim().length < 5) {
+      if (!apiKey || typeof apiKey !== 'string' || apiKey.trim().length < 5) {
         return null;
       }
-      return new GoogleGenAI({ apiKey });
+      return new GoogleGenAI({ apiKey: apiKey.trim() });
     } catch (err) {
-      console.error("Scout Initialization Failure:", err);
+      console.warn("Scout Satellite: Initialization error (likely missing API key).", err);
       return null;
     }
   }
@@ -42,7 +43,7 @@ export class GeminiService {
       return { 
         ...sim, 
         isLocal: true, 
-        text: `[PORTAL ALERT: Satellite relay not configured. Scout is running on local buffer.]\n\n${sim.text}` 
+        text: `[PORTAL ALERT: Satellite relay not configured. Scout is running on local buffer. If on Vercel, ensure API_KEY is set in settings.]\n\n${sim.text}` 
       };
     }
 
