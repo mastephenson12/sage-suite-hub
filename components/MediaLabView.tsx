@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { GeneratedAsset } from '../types.ts';
@@ -12,10 +13,19 @@ export const MediaLabView: React.FC = () => {
 
   const generateImage = async () => {
     if (!prompt.trim() || isGenerating) return;
+
+    // Mandatory API Key Selection check for Pro Imaging
+    if (typeof (window as any).aistudio !== 'undefined') {
+      const hasKey = await (window as any).aistudio.hasSelectedApiKey();
+      if (!hasKey) {
+        await (window as any).aistudio.openSelectKey();
+      }
+    }
+
     setIsGenerating(true);
     try {
       // Create fresh instance for Pro Imaging
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
@@ -41,8 +51,12 @@ export const MediaLabView: React.FC = () => {
           break;
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Image generation failed:", error);
+      // Reset key selection if entity not found
+      if (error.message?.includes("Requested entity was not found") || error.status === 404) {
+        if ((window as any).aistudio) await (window as any).aistudio.openSelectKey();
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -65,7 +79,7 @@ export const MediaLabView: React.FC = () => {
     
     try {
       // Fresh instance for Veo
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
       let operation = await ai.models.generateVideos({
         model: 'veo-3.1-fast-generate-preview',
@@ -199,6 +213,11 @@ export const MediaLabView: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+};
+
       </div>
     </div>
   );
