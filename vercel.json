@@ -1,13 +1,4 @@
 {
-  "headers": [
-    {
-      "source": "/(.*).(ts|tsx)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
