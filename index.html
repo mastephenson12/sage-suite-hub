@@ -13,11 +13,6 @@
     })();
   </script>
 
-  <!-- Performance: Preload Critical Assets -->
-  <link rel="modulepreload" href="https://esm.sh/react@18.3.1">
-  <link rel="modulepreload" href="https://esm.sh/react-dom@18.3.1">
-  <link rel="modulepreload" href="./App.tsx">
-
   <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -57,7 +52,7 @@
   </script>
 </head>
 <body class="bg-white antialiased">
-  <div id="app-loader" style="position:fixed; inset:0; background:white; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; transition: opacity 0.4s ease;">
+  <div id="app-loader" style="position:fixed; inset:0; background:white; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; transition: opacity 0.5s ease;">
     <div style="width:24px; height:24px; border:2px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.6s linear infinite; margin-bottom:16px;"></div>
     <p id="loader-text" style="font-size:8px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#a1a1aa;">Synchronizing Portal...</p>
   </div>
@@ -67,24 +62,30 @@
   <div id="root"></div>
   
   <script>
-    // Improved watchdog: dismisses if initialized or if root gets content
+    // Enhanced watchdog to ensure the loader always dismisses once the app is ready
     const interval = setInterval(() => {
       const root = document.getElementById('root');
-      if (window.APP_INITIALIZED || (root && root.children.length > 0)) {
+      const hasContent = root && root.children.length > 0;
+      if (window.APP_INITIALIZED || hasContent) {
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 400);
+          setTimeout(() => loader.remove(), 500);
         }
         clearInterval(interval);
+        console.log("Portal Scout: UI Handshake Complete");
       }
-    }, 50);
-    // Safety timeout: 8 seconds
+    }, 100);
+
+    // Hard fallback to prevent infinite hanging if a module fails to load
     setTimeout(() => {
-      clearInterval(interval);
       const loader = document.getElementById('app-loader');
-      if (loader) loader.style.display = 'none';
-    }, 8000);
+      if (loader && loader.style.opacity !== '0') {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 500);
+      }
+      clearInterval(interval);
+    }, 10000);
   </script>
 </body>
 </html>
