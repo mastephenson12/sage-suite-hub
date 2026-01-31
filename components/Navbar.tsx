@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BRAND_NAME, BEEHIIV_URL } from '../constants.ts';
+import { BRAND_NAME, BEEHIIV_URL } from '../constants';
 
 const Navbar: React.FC = () => {
   return (
