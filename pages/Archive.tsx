@@ -1,5 +1,6 @@
 import React from 'react';
-import { BRAND_NAME } from '../constants.ts';
+// Fixed: Removed .ts extension from import
+import { BRAND_NAME } from '../constants';
 
 const Archive: React.FC = () => {
   const issues = [
