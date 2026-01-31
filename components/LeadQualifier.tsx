@@ -102,5 +102,4 @@ const LeadQualifier: React.FC = () => {
   );
 };
 
-// Fixed: Added missing default export
 export default LeadQualifier;
