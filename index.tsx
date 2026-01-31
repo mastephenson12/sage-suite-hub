@@ -1,19 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-console.log("Portal Scout: Satellite handshake initiated.");
+console.log("Portal Scout: Hub initialization sequence started.");
 
 const container = document.getElementById('root');
 
 if (container) {
   const root = ReactDOM.createRoot(container);
-  
-  // Use createElement to avoid JSX syntax at the very edge of the entry point
   root.render(
-    React.createElement(React.StrictMode, null, 
-      React.createElement(App)
-    )
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
   );
   
   // Signal to index.html that the app has successfully mounted
