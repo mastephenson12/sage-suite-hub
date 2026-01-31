@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LiveServerMessage, Modality } from '@google/genai';
-// Fixed: Removed .ts extension from import
 import { geminiService } from '../services/gemini';
 
 // Audio Encoding & Decoding Utilities (Manual implementation as per guidelines)
@@ -180,9 +179,3 @@ const VoiceConcierge: React.FC = () => {
     </div>
   );
 };
-
-export default VoiceConcierge;
-  );
-};
-
-export default VoiceConcierge;
