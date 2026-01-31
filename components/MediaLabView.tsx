@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { GeneratedAsset } from '../types';
-import { geminiService } from '../services/gemini';
+import { GeneratedAsset } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
 export const MediaLabView: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -14,6 +14,7 @@ export const MediaLabView: React.FC = () => {
     if (!prompt.trim() || isGenerating) return;
     setIsGenerating(true);
     try {
+      // Create fresh instance for Pro Imaging
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       const response = await ai.models.generateContent({
@@ -23,6 +24,8 @@ export const MediaLabView: React.FC = () => {
           imageConfig: { aspectRatio: "1:1", imageSize: "1K" }
         }
       });
+
+      if (!response.candidates?.[0]?.content?.parts) throw new Error("No image data returned.");
 
       for (const part of response.candidates[0].content.parts) {
         if (part.inlineData) {
@@ -48,17 +51,20 @@ export const MediaLabView: React.FC = () => {
   const generateVideo = async () => {
     if (!prompt.trim() || isGenerating) return;
     
+    // Mandatory API Key Selection check for Veo
     if (typeof (window as any).aistudio !== 'undefined') {
         const hasKey = await (window as any).aistudio.hasSelectedApiKey();
         if (!hasKey) {
+            console.log("Portal Scout: Requesting Satellite Key for Video Render...");
             await (window as any).aistudio.openSelectKey();
         }
     }
 
     setIsGenerating(true);
-    setVideoStatus('Initiating cinematic render...');
+    setVideoStatus('Establishing Secure Satellite Link...');
     
     try {
+      // Fresh instance for Veo
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       let operation = await ai.models.generateVideos({
@@ -72,12 +78,14 @@ export const MediaLabView: React.FC = () => {
       });
 
       while (!operation.done) {
-        setVideoStatus('Processing frames with Veo 3.1...');
+        setVideoStatus('Processing Cinematic Frames via Veo 3.1...');
         await new Promise(resolve => setTimeout(resolve, 10000));
         operation = await ai.operations.getVideosOperation({ operation: operation });
       }
 
       const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+      if (!downloadLink) throw new Error("Video generation completed but no link found.");
+      
       const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
       const blob = await response.blob();
       const videoUrl = URL.createObjectURL(blob);
@@ -92,7 +100,7 @@ export const MediaLabView: React.FC = () => {
       setAssets(prev => [newAsset, ...prev]);
     } catch (error: any) {
       console.error("Video generation failed:", error);
-      if (error.message?.includes("Requested entity was not found")) {
+      if (error.message?.includes("Requested entity was not found") || error.status === 404) {
         if ((window as any).aistudio) await (window as any).aistudio.openSelectKey();
       }
     } finally {
@@ -126,10 +134,10 @@ export const MediaLabView: React.FC = () => {
 
       <div className="mb-12 border-b-2 border-zinc-100 pb-12 shrink-0">
         <div className="mb-4 flex items-center gap-2">
-           <span className={`w-2 h-2 rounded-full ${generationType === 'video' ? 'bg-blue-500' : 'bg-black'}`}></span>
+           <span className={`w-2 h-2 rounded-full ${generationType === 'video' ? 'bg-blue-500 animate-pulse' : 'bg-black'}`}></span>
            <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">
-             {generationType === 'video' ? 'Veo Satellite Key Required' : 'Gemini 3 Pro Imaging Active'}
-             {generationType === 'video' && <span className="ml-2 opacity-50">• <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="underline">Billing Info</a></span>}
+             {generationType === 'video' ? 'Veo Render Key Required' : 'Gemini 3 Pro Imaging Link'}
+             {generationType === 'video' && <span className="ml-2 opacity-50">• <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="underline">Billing Intel</a></span>}
            </p>
         </div>
         <textarea
@@ -147,7 +155,7 @@ export const MediaLabView: React.FC = () => {
              disabled={!prompt.trim() || isGenerating}
              className="px-12 py-4 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] hover:opacity-80 disabled:opacity-20 transition-all shadow-xl shadow-black/5"
            >
-             {isGenerating ? 'Synthesizing' : `Generate ${generationType}`}
+             {isGenerating ? 'Synthesizing...' : `Generate ${generationType}`}
            </button>
         </div>
       </div>
