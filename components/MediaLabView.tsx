@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { GeneratedAsset } from '../types.ts';
-import { geminiService } from '../services/gemini.ts';
+import { GeneratedAsset } from '../types';
+import { geminiService } from '../services/gemini';
 
 export const MediaLabView: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -14,7 +14,6 @@ export const MediaLabView: React.FC = () => {
     if (!prompt.trim() || isGenerating) return;
     setIsGenerating(true);
     try {
-      // Create a fresh instance for generation to ensure correct API key handling
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       const response = await ai.models.generateContent({
@@ -49,11 +48,9 @@ export const MediaLabView: React.FC = () => {
   const generateVideo = async () => {
     if (!prompt.trim() || isGenerating) return;
     
-    // Mandatory API Key Selection for Veo and Gemini 3 Pro
     if (typeof (window as any).aistudio !== 'undefined') {
         const hasKey = await (window as any).aistudio.hasSelectedApiKey();
         if (!hasKey) {
-            console.log("Portal Scout: Prompting for High-Performance Satellite Key...");
             await (window as any).aistudio.openSelectKey();
         }
     }
@@ -62,7 +59,6 @@ export const MediaLabView: React.FC = () => {
     setVideoStatus('Initiating cinematic render...');
     
     try {
-      // Always create a new instance right before generating video/pro images
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
       let operation = await ai.models.generateVideos({
