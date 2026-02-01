@@ -8,13 +8,9 @@ if (container) {
   try {
     const root = ReactDOM.createRoot(container);
     
-    // Safely resolve the component from the module
+    // Resolve the App component (handling potential ESM wrapper)
     const RootComponent = (App as any).default || App;
     
-    if (!RootComponent) {
-      throw new Error("Portal Scout: Could not resolve App component.");
-    }
-
     root.render(
       <React.StrictMode>
         <RootComponent />
@@ -32,4 +28,3 @@ if (container) {
     }
   }
 }
-
