@@ -8,8 +8,7 @@ if (container) {
   try {
     const root = ReactDOM.createRoot(container);
     
-    // Use the component directly. 
-    // Mismatched React symbols from the import map (18 vs 19) were causing the "Objects are not valid as a React child" error.
+    // Ensure standard rendering. The version mismatch is handled via the importmap in index.html.
     root.render(
       <React.StrictMode>
         <App />
