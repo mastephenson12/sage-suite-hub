@@ -8,10 +8,16 @@ if (container) {
   try {
     const root = ReactDOM.createRoot(container);
     
-    // Ensure standard rendering. The version mismatch is handled via the importmap in index.html.
+    // Safely resolve the component from the module
+    const RootComponent = (App as any).default || App;
+    
+    if (!RootComponent) {
+      throw new Error("Portal Scout: Could not resolve App component.");
+    }
+
     root.render(
       <React.StrictMode>
-        <App />
+        <RootComponent />
       </React.StrictMode>
     );
     
@@ -26,3 +32,4 @@ if (container) {
     }
   }
 }
+
