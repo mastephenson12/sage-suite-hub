@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
 
 const container = document.getElementById('root');
 
@@ -8,7 +8,6 @@ if (container) {
   try {
     const root = ReactDOM.createRoot(container);
     
-    // Mount the application
     root.render(
       <React.StrictMode>
         <App />
