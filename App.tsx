@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
@@ -42,12 +42,10 @@ function AppContent() {
                   Adventure Command Center Powered by SageSuite
                 </p>
               </div>
-              <div className="flex gap-8">
-                {['Archive', 'Trails', 'Community'].map(item => (
-                  <span key={item} className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-black cursor-pointer transition-colors">
-                    {item}
-                  </span>
-                ))}
+              <div className="flex gap-8 text-zinc-400 font-black uppercase tracking-widest text-[10px]">
+                <span className="hover:text-black cursor-pointer">Archive</span>
+                <span className="hover:text-black cursor-pointer">Trails</span>
+                <span className="hover:text-black cursor-pointer">Community</span>
               </div>
             </div>
           </div>
