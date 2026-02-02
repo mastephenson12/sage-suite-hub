@@ -8,12 +8,10 @@ if (container) {
   try {
     const root = ReactDOM.createRoot(container);
     
-    // Handle potential module default wrapping in ESM environments
-    const RootComponent = (App as any).default || App;
-    
+    // Mount the application
     root.render(
       <React.StrictMode>
-        <RootComponent />
+        <App />
       </React.StrictMode>
     );
     
