@@ -84,11 +84,11 @@
 
   <div id="root"></div>
   
-  <!-- Entry Point -->
-  <script type="module" src="./index.tsx"></script>
-
   <script>
     // Lifecycle Watchdog
+    // Note: The script type="module" src="./index.tsx" is intentionally omitted 
+    // because the environment automatically imports index.tsx.
+    
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       if (window.APP_INITIALIZED || (root && root.children.length > 0)) {
