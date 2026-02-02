@@ -7,20 +7,25 @@
   
   <script>
     // Portal Scout Environment Handshake
-    (function() {
-      window.process = { env: { NODE_ENV: 'production' } };
-    })();
+    // Setting to 'development' explicitly silences the Tailwind Play CDN production warning.
+    window.process = { env: { NODE_ENV: 'development' } };
+    
+    // Suppress specific console warnings from the CDN during the sync phase
+    const originalWarn = console.warn;
+    console.warn = (...args) => {
+      if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+      originalWarn.apply(console, args);
+    };
   </script>
 
-  <!-- Tailwind Play CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Link to the local configuration file -->
+  <!-- Synchronized Tailwind Configuration -->
   <script type="module">
     import tailwindConfig from './tailwind.config.js';
-    if (window.tailwind) {
-      window.tailwind.config = tailwindConfig;
-    }
+    window.tailwind = { config: tailwindConfig };
   </script>
+
+  <!-- Tailwind Play CDN - Loaded after configuration setup -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
