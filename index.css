@@ -1,5 +1,4 @@
 :root {
-  /* Brand Identity Variables */
   --brand-primary: #0d47a1;
   --brand-dark: #0a3a85;
   --brand-accent: #3b82f6;
@@ -10,50 +9,47 @@ body {
   margin: 0; 
   background-color: #ffffff; 
   color: #18181b;
+  font-family: 'Inter', sans-serif;
 }
 
-.selection-blue::selection { 
+/* Smooth brand selection */
+::selection { 
   background: var(--brand-primary); 
   color: #fff; 
 }
 
-/* Custom Scrollbars */
-.custom-scrollbar::-webkit-scrollbar { 
-  width: 5px; 
+/* Minimalist Scrollbar */
+::-webkit-scrollbar { 
+  width: 6px; 
 }
-.custom-scrollbar::-webkit-scrollbar-track { 
+::-webkit-scrollbar-track { 
   background: transparent; 
 }
-.custom-scrollbar::-webkit-scrollbar-thumb { 
+::-webkit-scrollbar-thumb { 
   background: #e4e4e7; 
   border-radius: 10px; 
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: #d4d4d8;
 }
 
-/* UI Surfaces */
-.glass-light { 
-  background: rgba(255, 255, 255, 0.8); 
-  backdrop-filter: blur(12px); 
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #e4e4e7 transparent;
+}
+
+/* Custom UI Layers */
+.glass-surface { 
+  background: rgba(255, 255, 255, 0.7); 
+  backdrop-filter: blur(10px); 
   border: 1px solid rgba(0, 0, 0, 0.05); 
 }
 
-.serif-text { 
-  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; 
+.serif-display { 
+  font-family: 'Georgia', serif;
+  font-style: italic;
 }
 
-/* Performance Optimized Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* App Loader Transitions */
 #app-loader {
   position: fixed;
   inset: 0;
@@ -63,5 +59,5 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease-out;
 }
