@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ViewType } from '../types';
-import { BRAND_NAME } from '../constants';
+import { ViewType } from '../types.ts';
+import { BRAND_NAME } from '../constants.ts';
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
