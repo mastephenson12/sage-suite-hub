@@ -6,10 +6,21 @@
   <title>Health & Travels Journal • Powered by Sage</title>
   
   <script>
-    // Force development mode for Tailwind Play CDN to suppress production warning
+    // System Handshake: Silencing environment warnings
     window.process = { env: { NODE_ENV: 'development' } };
     
-    // Inlined Tailwind Configuration for maximum stability
+    // Global warning interceptor for a clean console
+    (function() {
+      const originalWarn = console.warn;
+      console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && (args[0].includes('cdn.tailwindcss.com') || args[0].includes('production'))) {
+          return;
+        }
+        originalWarn.apply(console, args);
+      };
+    })();
+
+    // Synchronous Tailwind Config initialization
     window.tailwind = {
       config: {
         theme: {
@@ -21,51 +32,26 @@
                 accent: '#3b82f6',
                 surface: '#fafafa',
               },
-              zinc: {
-                950: '#09090b',
-              }
+              zinc: { 950: '#09090b' }
             },
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
-              serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
-            },
-            letterSpacing: {
-              tightest: '-.075em',
-              widest: '.3em',
+              serif: ['Georgia', 'serif'],
             },
             animation: {
-              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-              'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in': 'fadeIn 0.6s ease-out forwards',
+              'slide-up': 'slideUp 0.5s ease-out forwards',
             },
             keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(4px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              }
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
             }
           }
         }
       }
     };
-
-    // Global warning interceptor
-    (function() {
-      const originalWarn = console.warn;
-      console.warn = function(...args) {
-        if (args[0] && typeof args[0] === 'string' && (args[0].includes('cdn.tailwindcss.com') || args[0].includes('production'))) {
-          return;
-        }
-        originalWarn.apply(console, args);
-      };
-    })();
   </script>
 
-  <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,10 +74,10 @@
 }
 </script>
 </head>
-<body class="bg-white antialiased selection-blue">
+<body class="bg-white antialiased">
   <div id="app-loader">
-    <div style="width:24px; height:24px; border:2px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.6s linear infinite; margin-bottom:16px;"></div>
-    <p id="loader-text" style="font-size:8px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#a1a1aa;">Synchronizing Portal...</p>
+    <div style="width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
+    <p id="loader-text" style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;">Sage Portal Syncing...</p>
   </div>
   
   <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
@@ -99,25 +85,25 @@
   <div id="root"></div>
   
   <script>
-    // Watchdog to dismiss loader once React mounts
+    // Lifecycle Watchdog
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       if (window.APP_INITIALIZED || (root && root.children.length > 0)) {
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 400);
+          setTimeout(() => loader.remove(), 500);
         }
         clearInterval(interval);
       }
     }, 100);
 
-    // Hard fallback: 10 seconds
+    // Safety timeout
     setTimeout(() => {
       clearInterval(interval);
       const loader = document.getElementById('app-loader');
       if (loader) loader.style.display = 'none';
-    }, 10000);
+    }, 8000);
   </script>
 </body>
 </html>
