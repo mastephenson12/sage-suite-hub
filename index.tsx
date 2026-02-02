@@ -5,26 +5,17 @@ import App from './App';
 const container = document.getElementById('root');
 
 if (container) {
-  try {
-    const root = ReactDOM.createRoot(container);
-    
-    // Resolve the App component (handling potential ESM wrapper)
-    const RootComponent = (App as any).default || App;
-    
-    root.render(
-      <React.StrictMode>
-        <RootComponent />
-      </React.StrictMode>
-    );
-    
-    (window as any).APP_INITIALIZED = true;
-    console.log("Portal Scout: Handshake Phase 2 - App Mounted Successfully");
-  } catch (err) {
-    console.error("Portal Scout: Mounting Failure", err);
-    const loaderText = document.getElementById('loader-text');
-    if (loaderText) {
-      loaderText.innerText = "Critical Sync Error - Check Console";
-      loaderText.style.color = "#ef4444";
-    }
-  }
+  const root = ReactDOM.createRoot(container);
+  
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+  
+  // Set initialization flag for the index.html loader script
+  (window as any).APP_INITIALIZED = true;
+  console.log("Sage Hub: Portal Core Online");
+} else {
+  console.error("Sage Hub: Critical Failure - Root container not found");
 }
