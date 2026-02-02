@@ -6,25 +6,32 @@
   <title>Health & Travels Journal • Powered by Sage</title>
   
   <script>
-    // Portal Scout Environment Handshake
-    // Setting to 'development' explicitly silences the Tailwind Play CDN production warning.
+    // Force development mode for Tailwind Play CDN to suppress production warning
     window.process = { env: { NODE_ENV: 'development' } };
     
-    // Suppress specific console warnings from the CDN during the sync phase
-    const originalWarn = console.warn;
-    console.warn = (...args) => {
-      if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
-      originalWarn.apply(console, args);
-    };
+    // Global warning interceptor
+    (function() {
+      const originalWarn = console.warn;
+      console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && (args[0].includes('cdn.tailwindcss.com') || args[0].includes('production'))) {
+          return;
+        }
+        originalWarn.apply(console, args);
+      };
+    })();
   </script>
 
   <!-- Synchronized Tailwind Configuration -->
   <script type="module">
     import tailwindConfig from './tailwind.config.js';
-    window.tailwind = { config: tailwindConfig };
+    if (window.tailwind) {
+      window.tailwind.config = tailwindConfig;
+    } else {
+      window.tailwind = { config: tailwindConfig };
+    }
   </script>
 
-  <!-- Tailwind Play CDN - Loaded after configuration setup -->
+  <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,6 +64,8 @@
 
   <div id="root"></div>
   
+  <script type="module" src="index.tsx"></script>
+
   <script>
     // Watchdog to dismiss loader once React mounts
     const interval = setInterval(() => {
