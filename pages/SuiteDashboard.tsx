@@ -1,12 +1,12 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ReviewEngine from '../components/ReviewEngine';
-import LeadQualifier from '../components/LeadQualifier';
-import { MediaLabView } from '../components/MediaLabView';
-import { SearchHubView } from '../components/SearchHubView';
-import { ChatView } from '../components/ChatView';
-import { Sidebar } from '../components/Sidebar';
-import { geminiService } from '../services/gemini';
+import ReviewEngine from '../components/ReviewEngine.tsx';
+import LeadQualifier from '../components/LeadQualifier.tsx';
+import { MediaLabView } from '../components/MediaLabView.tsx';
+import { SearchHubView } from '../components/SearchHubView.tsx';
+import { ChatView } from '../components/ChatView.tsx';
+import { Sidebar } from '../components/Sidebar.tsx';
+import { geminiService } from '../services/gemini.ts';
 
 const SuiteDashboard: React.FC = () => {
   const isSatelliteLinked = !!geminiService.getClient();
@@ -21,7 +21,7 @@ const SuiteDashboard: React.FC = () => {
           <div className="bg-orange-50 border-b border-orange-100 px-12 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-black uppercase tracking-widest text-orange-600 bg-white px-2 py-0.5 rounded shadow-sm border border-orange-200">Local Mode</span>
-              <p className="text-[11px] font-bold text-orange-800 uppercase tracking-tight">API Satellite Link Not Configured. Check Vercel Environment Variables.</p>
+              <p className="text-[11px] font-bold text-orange-800 uppercase tracking-tight">API Satellite Link Not Configured.</p>
             </div>
             <a href="https://aistudio.google.com/" target="_blank" className="text-[10px] font-black uppercase tracking-widest text-orange-600 underline hover:text-orange-800">Get Key</a>
           </div>
