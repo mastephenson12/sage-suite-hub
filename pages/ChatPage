@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import ChatInterface, { ChatInterfaceHandle } from '../components/ChatInterface';
+import ChatInterface, { ChatInterfaceHandle } from '../components/ChatInterface.tsx';
 
 const ChatPage: React.FC = () => {
   const chatRef = useRef<ChatInterfaceHandle>(null);
