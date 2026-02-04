@@ -6,10 +6,9 @@
   <title>Health & Travels Journal • Powered by Sage</title>
   
   <script>
-    // System Handshake: Silencing environment warnings
     window.process = { env: { NODE_ENV: 'development' } };
     
-    // Global warning interceptor for a clean console
+    // Global warning interceptor
     (function() {
       const originalWarn = console.warn;
       console.warn = function(...args) {
@@ -20,7 +19,6 @@
       };
     })();
 
-    // Synchronous Tailwind Config initialization
     window.tailwind = {
       config: {
         theme: {
@@ -37,14 +35,6 @@
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
               serif: ['Georgia', 'serif'],
-            },
-            animation: {
-              'fade-in': 'fadeIn 0.6s ease-out forwards',
-              'slide-up': 'slideUp 0.5s ease-out forwards',
-            },
-            keyframes: {
-              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-              slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
             }
           }
         }
@@ -53,7 +43,6 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -84,11 +73,7 @@
 
   <div id="root"></div>
   
-  <!-- Critical: Manual Entry Point Restoration -->
-  <script type="module" src="./index.tsx"></script>
-
   <script>
-    // Lifecycle Watchdog
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       if (window.APP_INITIALIZED || (root && root.children.length > 0)) {
@@ -101,16 +86,13 @@
       }
     }, 100);
 
-    // Safety timeout
     setTimeout(() => {
       clearInterval(interval);
       const loader = document.getElementById('app-loader');
       if (loader && !window.APP_INITIALIZED && (!document.getElementById('root').children.length)) {
         const text = document.getElementById('loader-text');
         if (text) text.innerText = "Connection Latency Detected - Refreshing Portal Link...";
-        setTimeout(() => {
-           if (loader) loader.style.display = 'none';
-        }, 3000);
+        setTimeout(() => { if (loader) loader.style.display = 'none'; }, 3000);
       }
     }, 10000);
   </script>
