@@ -1,14 +1,14 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar.tsx';
-import ChatWidget from './components/ChatWidget.tsx';
-import { Hero } from './components/Hero.tsx';
-import Archive from './pages/Archive.tsx';
-import TrailGuides from './pages/TrailGuides.tsx';
-import About from './pages/About.tsx';
-import Community from './pages/Community.tsx';
-import ChatPage from './pages/ChatPage.tsx';
-import SuiteDashboard from './pages/SuiteDashboard.tsx';
+import Navbar from './components/Navbar';
+import ChatWidget from './components/ChatWidget';
+import { Hero } from './components/Hero';
+import Archive from './pages/Archive';
+import TrailGuides from './pages/TrailGuides';
+import About from './pages/About';
+import Community from './pages/Community';
+import ChatPage from './pages/ChatPage';
+import SuiteDashboard from './pages/SuiteDashboard';
 
 function AppContent() {
   const location = useLocation();
@@ -57,12 +57,10 @@ function AppContent() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <Router>
       <AppContent />
     </Router>
   );
 }
-
-export default App;
