@@ -1,6 +1,6 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { Message, Source } from "../types.ts";
-import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants.ts";
+import { Message, Source } from "../types";
+import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the premium intelligence portal for healthandtravels.com.
 PERSONALITY: Expert, technical, professional, inviting. Arizona trail specialist. High-desert aesthetic.
