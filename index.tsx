@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
 
 const container = document.getElementById('root');
 
@@ -11,5 +11,6 @@ if (container) {
       <App />
     </React.StrictMode>
   );
+  // Mark app as initialized for the index.html loader
   (window as any).APP_INITIALIZED = true;
 }
