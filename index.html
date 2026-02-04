@@ -84,11 +84,11 @@
 
   <div id="root"></div>
   
+  <!-- Critical: Manual Entry Point Restoration -->
+  <script type="module" src="./index.tsx"></script>
+
   <script>
     // Lifecycle Watchdog
-    // Note: The script type="module" src="./index.tsx" is intentionally omitted 
-    // because the environment automatically imports index.tsx.
-    
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       if (window.APP_INITIALIZED || (root && root.children.length > 0)) {
@@ -107,12 +107,12 @@
       const loader = document.getElementById('app-loader');
       if (loader && !window.APP_INITIALIZED && (!document.getElementById('root').children.length)) {
         const text = document.getElementById('loader-text');
-        if (text) text.innerText = "Connection Latency Detected - Syncing Portals...";
+        if (text) text.innerText = "Connection Latency Detected - Refreshing Portal Link...";
         setTimeout(() => {
            if (loader) loader.style.display = 'none';
         }, 3000);
       }
-    }, 8000);
+    }, 10000);
   </script>
 </body>
 </html>
