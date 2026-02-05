@@ -2,8 +2,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
-console.log("Sage Suite: Initializing Command Center...");
-
 const container = document.getElementById('root');
 
 if (container) {
@@ -13,9 +11,7 @@ if (container) {
       <App />
     </React.StrictMode>
   );
-  // Mark app as initialized for the index.html loader
+  // Mark app as initialized for the index.html loader watchdog
   (window as any).APP_INITIALIZED = true;
   console.log("Sage Suite: Portal Online.");
-} else {
-  console.error("Sage Suite: Root container not found.");
 }
