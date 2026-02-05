@@ -216,3 +216,7 @@ export const MediaLabView: React.FC = () => {
     </div>
   );
 };
+      </div>
+    </div>
+  );
+};
