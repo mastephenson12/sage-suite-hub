@@ -4,14 +4,15 @@ import App from './App';
 
 /**
  * Entry point for Sage Suite.
- * This script is imported by index.html as a module.
+ * This file is automatically transpiled and loaded by the environment.
  */
+
+// Mark app as initialized immediately to signal the bootloader to clear the splash screen
+(window as any).APP_INITIALIZED = true;
+
 const container = document.getElementById('root');
 
 if (container) {
-  // Flag immediately to signal the bootloader to clear the splash screen
-  (window as any).APP_INITIALIZED = true;
-  
   try {
     const root = createRoot(container);
     root.render(
@@ -19,7 +20,7 @@ if (container) {
         <App />
       </React.StrictMode>
     );
-    console.log("Sage Suite: Portal Online.");
+    console.log("Sage Suite: Command Node Online.");
   } catch (error) {
     console.error("Sage Suite: Initialization Error:", error);
   }
