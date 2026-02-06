@@ -7,6 +7,7 @@ export const Sidebar: React.FC = () => {
   const navItems = [
     { label: 'Command', path: '/suite' },
     { label: 'Chat', path: '/suite/chat' },
+    { label: 'Booking', path: '/suite/booking' },
     { label: 'Search', path: '/suite/search' },
     { label: 'Media Lab', path: '/suite/media' },
     { label: 'Reviews', path: '/suite/reviews' },
