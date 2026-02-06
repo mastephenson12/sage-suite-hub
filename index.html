@@ -90,26 +90,14 @@
       }
     }, 100);
 
-    // Error Monitor
+    // Global Error Monitor
     window.onerror = function(msg, url, lineNo, columnNo, error) {
-      console.error('Sage Portal Sync Error:', msg);
+      console.error('Sage System Fault:', msg);
       const loaderText = document.getElementById('loader-text');
       if (loaderText && !window.APP_INITIALIZED) {
         loaderText.innerText = "Synchronization Interrupted. Check Console.";
         loaderText.style.color = "#ef4444";
       }
-    };
-
-    // Latency fallback message
-    setTimeout(() => {
-      const loaderText = document.getElementById('loader-text');
-      if (loaderText && !window.APP_INITIALIZED) {
-        loaderText.innerText = "Synchronizing Command Nodes...";
-      }
-    }, 3000);
-  </script>
-</body>
-</html>
     };
   </script>
 </body>
