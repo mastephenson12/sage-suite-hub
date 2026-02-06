@@ -74,11 +74,9 @@
 
   <div id="root"></div>
   
-  <!-- Explicit module entry to force correct MIME processing in strict environments -->
-  <script type="module" src="./index.tsx"></script>
-  
   <script>
     // Lifecycle Watchdog to hide loader once React mounts
+    // Note: index.tsx is automatically loaded by the host environment
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
@@ -98,12 +96,11 @@
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const loaderText = document.getElementById('loader-text');
-        const spinner = document.getElementById('loader-spinner');
         const btn = document.getElementById('troubleshoot-btn');
-        if (loaderText) loaderText.innerText = "Connection Delay Detected...";
+        if (loaderText) loaderText.innerText = "Syncing Command Node...";
         if (btn) btn.style.display = 'block';
       }
-    }, 6000);
+    }, 5000);
 
     // Global Error Monitor
     window.onerror = function(msg, url, lineNo, columnNo, error) {
