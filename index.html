@@ -8,7 +8,7 @@
   <script>
     window.process = { env: { NODE_ENV: 'development' } };
     
-    // Global warning interceptor
+    // Global warning interceptor to keep console clean
     (function() {
       const originalWarn = console.warn;
       console.warn = function(...args) {
@@ -94,17 +94,17 @@
       }
     }, 100);
 
-    // Timeout check
+    // Latency handling
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
         if (errDiv) errDiv.style.display = 'block';
       }
-    }, 8000);
+    }, 6000);
 
     // Global Error Monitor
     window.onerror = function(msg, url, lineNo, columnNo, error) {
-      console.error('Sage System Fault:', msg);
+      console.error('Sage System Fault:', msg, 'at', url, ':', lineNo);
       const loaderText = document.getElementById('loader-text');
       if (loaderText && !window.APP_INITIALIZED) {
         loaderText.innerText = "Synchronization Interrupted.";
