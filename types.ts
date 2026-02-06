@@ -52,5 +52,6 @@ export enum ViewType {
   SEARCH = 'search',
   MEDIA = 'media',
   VOICE = 'voice',
-  CHAT = 'chat'
+  CHAT = 'chat',
+  BOOKING = 'booking'
 }
