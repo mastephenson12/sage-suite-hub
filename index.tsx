@@ -4,21 +4,25 @@ import App from './App';
 
 /**
  * Entry point for Sage Suite.
+ * This script is imported by index.html as a module.
  */
 const container = document.getElementById('root');
 
 if (container) {
-  // Mark app as initialized immediately to clear the loader
+  // Flag immediately to signal the bootloader to clear the splash screen
   (window as any).APP_INITIALIZED = true;
   
-  const root = createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-  
-  console.log("Sage Suite: Command Node Synchronized.");
+  try {
+    const root = createRoot(container);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    console.log("Sage Suite: Portal Online.");
+  } catch (error) {
+    console.error("Sage Suite: Initialization Error:", error);
+  }
 } else {
   console.error("Sage Suite: Critical Failure - Root container missing.");
 }
