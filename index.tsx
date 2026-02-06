@@ -1,8 +1,3 @@
-// Mark app as initialized immediately to signal the bootloader to clear the splash screen
-// We do this before imports because ESM imports are hoisted, 
-// but in some envs this helps if execution reaches here.
-(window as any).APP_INITIALIZED = true;
-
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
@@ -11,6 +6,10 @@ import App from './App';
  * Entry point for Sage Suite.
  * This file is automatically transpiled and loaded by the environment.
  */
+
+// Mark app as initialized immediately to signal the bootloader to clear the splash screen
+(window as any).APP_INITIALIZED = true;
+
 const container = document.getElementById('root');
 
 if (container) {
