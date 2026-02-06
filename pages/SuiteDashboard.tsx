@@ -7,6 +7,7 @@ import { SearchHubView } from '../components/SearchHubView';
 import { ChatView } from '../components/ChatView';
 import { Sidebar } from '../components/Sidebar';
 import { LiveVoiceView } from '../components/LiveVoiceView';
+import { BookingView } from '../components/BookingView';
 
 const SuiteDashboard: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const SuiteDashboard: React.FC = () => {
           <Routes>
             <Route path="/" element={<WelcomeOverview />} />
             <Route path="/chat" element={<ChatView />} />
+            <Route path="/booking" element={<BookingView />} />
             <Route path="/reviews" element={<ReviewEngine />} />
             <Route path="/leads" element={<LeadQualifier />} />
             <Route path="/media" element={<MediaLabView />} />
