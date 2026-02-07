@@ -17,7 +17,7 @@ export class GeminiService {
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
     const ai = this.getClient();
-    if (!ai) return { text: "Local buffer mode active.", isLocal: true };
+    if (!ai) return { text: "Local buffer mode active. Please ensure an API key is present.", isLocal: true };
 
     try {
       const contents = history.map(msg => ({
@@ -35,7 +35,7 @@ export class GeminiService {
         }
       });
 
-      const text = response.text || "Connection hazy.";
+      const text = response.text || "Connection hazy. Satellite link returned an empty signal.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
         title: c.web?.title || "Vetted Source"
@@ -43,7 +43,8 @@ export class GeminiService {
 
       return { text, sources, isLocal: false };
     } catch (err) {
-      return { text: "Satellite link interrupted.", isLocal: true };
+      console.error("Gemini Service Fault:", err);
+      return { text: "Satellite link interrupted. Switching to local emergency frequency.", isLocal: true };
     }
   }
 
@@ -51,15 +52,18 @@ export class GeminiService {
     const ai = this.getClient();
     if (!ai) return "";
     try {
-      const prompt = `A cinematic, high-res photo of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. 4k, realistic.`;
+      const prompt = `A cinematic, high-res photo of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. 4k, realistic terrain.`;
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
         config: { imageConfig: { aspectRatio: "16:9" } }
       });
+      
       const part = response.candidates?.[0]?.content?.parts.find((p: any) => p.inlineData);
       return part ? `data:image/png;base64,${part.inlineData.data}` : "";
-    } catch { return ""; }
+    } catch { 
+      return ""; 
+    }
   }
 }
 
