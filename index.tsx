@@ -7,6 +7,9 @@ import App from './App';
  * This file is automatically transpiled and loaded by the environment.
  */
 
+// Mark as initialized so the watchdog in index.html hides the splash screen immediately
+(window as any).APP_INITIALIZED = true;
+
 const container = document.getElementById('root');
 
 if (container) {
@@ -17,10 +20,6 @@ if (container) {
         <App />
       </React.StrictMode>
     );
-    
-    // Mark as initialized so the watchdog in index.html hides the splash screen
-    (window as any).APP_INITIALIZED = true;
-    
     console.log("Sage Suite: Command Node Online.");
   } catch (error) {
     console.error("Sage Suite: Initialization Error:", error);
