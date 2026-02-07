@@ -1,13 +1,13 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ReviewEngine from '../components/ReviewEngine';
-import LeadQualifier from '../components/LeadQualifier';
-import { MediaLabView } from '../components/MediaLabView';
-import { SearchHubView } from '../components/SearchHubView';
-import { ChatView } from '../components/ChatView';
-import { Sidebar } from '../components/Sidebar';
-import { LiveVoiceView } from '../components/LiveVoiceView';
-import { BookingView } from '../components/BookingView';
+import ReviewEngine from '../components/ReviewEngine.tsx';
+import LeadQualifier from '../components/LeadQualifier.tsx';
+import { MediaLabView } from '../components/MediaLabView.tsx';
+import { SearchHubView } from '../components/SearchHubView.tsx';
+import { ChatView } from '../components/ChatView.tsx';
+import { Sidebar } from '../components/Sidebar.tsx';
+import { LiveVoiceView } from '../components/LiveVoiceView.tsx';
+import { BookingView } from '../components/BookingView.tsx';
 
 const SuiteDashboard: React.FC = () => {
   return (
