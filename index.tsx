@@ -1,6 +1,3 @@
-// Mark app as initialized immediately to signal the bootloader to clear the splash screen
-(window as any).APP_INITIALIZED = true;
-
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
@@ -20,6 +17,10 @@ if (container) {
         <App />
       </React.StrictMode>
     );
+    
+    // Mark as initialized so the watchdog in index.html hides the splash screen
+    (window as any).APP_INITIALIZED = true;
+    
     console.log("Sage Suite: Command Node Online.");
   } catch (error) {
     console.error("Sage Suite: Initialization Error:", error);
