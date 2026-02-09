@@ -13,4 +13,6 @@ if (container) {
       <App />
     </React.StrictMode>
   );
+} else {
+  console.error("Failed to find root container");
 }
