@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ReviewEngine from '../components/ReviewEngine.tsx';
-import LeadQualifier from '../components/LeadQualifier.tsx';
+import { ReviewEngine } from '../components/ReviewEngine.tsx';
+import { LeadQualifier } from '../components/LeadQualifier.tsx';
 import { MediaLabView } from '../components/MediaLabView.tsx';
 import { SearchHubView } from '../components/SearchHubView.tsx';
 import { ChatView } from '../components/ChatView.tsx';
@@ -44,7 +44,7 @@ const WelcomeOverview = () => (
       {['Flightsage', 'Travelsage', 'Campsage'].map(brand => (
         <div key={brand} className="p-10 border border-zinc-100 rounded-sm hover:border-black transition-all group bg-white hover:shadow-xl hover:shadow-black/5">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">{brand}</p>
-          <div className="mt-8 pt-8 border-t border-zinc-50 flex items-center text-[9px] font-black uppercase tracking-widest text-zinc-300 group-hover:text-black">
+          <div className="mt-8 pt-8 border-t border-zinc-50 flex items-center text-[9px] font-black uppercase tracking-widest text-zinc-300 group-hover:text-black transition-colors">
             Manage Brand 
             <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </div>
