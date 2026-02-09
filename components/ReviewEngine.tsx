@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Type } from "@google/genai";
-import { GMBReview } from '../types';
-import { geminiService } from '../services/gemini';
+import { GMBReview } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
-const ReviewEngine: React.FC = () => {
+export const ReviewEngine: React.FC = () => {
   const [reviews, setReviews] = useState<GMBReview[]>([
     { id: '1', brand: 'Campsage', author: 'Mark T.', rating: 5, text: 'The wilderness sites were primitive but perfectly kept. Unforgettable memories.', status: 'pending' },
     { id: '2', brand: 'Flightsage', author: 'Sarah L.', rating: 2, text: 'Flight was delayed 6 hours and no one helped with the reunion booking.', status: 'pending' }
@@ -14,7 +14,7 @@ const ReviewEngine: React.FC = () => {
     setIsAnalyzing(review.id);
     try {
       const ai = geminiService.getClient();
-      if (!ai) throw new Error("Satellite Link Down");
+      if (!ai) throw new Error("Connection failed");
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -24,8 +24,8 @@ const ReviewEngine: React.FC = () => {
           responseSchema: {
             type: Type.OBJECT,
             properties: {
-              sentiment: { type: Type.STRING, description: 'Positive, Neutral, or Negative' },
-              reply: { type: Type.STRING, description: 'A brand-aware, empathetic response.' }
+              sentiment: { type: Type.STRING },
+              reply: { type: Type.STRING }
             },
             required: ['sentiment', 'reply']
           }
@@ -39,12 +39,7 @@ const ReviewEngine: React.FC = () => {
         suggestedReply: data.reply 
       } : r));
     } catch (e) {
-      console.error("Review analysis failed:", e);
-      setReviews(prev => prev.map(r => r.id === review.id ? { 
-        ...r, 
-        sentiment: 'Neutral', 
-        suggestedReply: "Thank you for sharing your experience. We value your feedback and are looking into this."
-      } : r));
+      console.error(e);
     } finally {
       setIsAnalyzing(null);
     }
@@ -56,13 +51,12 @@ const ReviewEngine: React.FC = () => {
         <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] mb-4">GMB Integration</p>
         <h2 className="text-3xl font-black tracking-tighter">AI Review Engine</h2>
       </header>
-      
       <div className="space-y-8">
         {reviews.map(review => (
           <div key={review.id} className="p-10 border border-zinc-100 rounded-sm bg-white hover:border-zinc-200 transition-colors">
             <div className="flex justify-between items-start mb-8">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">{review.brand} • Global Marketplace</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">{review.brand}</p>
                 <h3 className="text-xl font-black">{review.author}</h3>
                 <div className="flex space-x-0.5 mt-1">
                   {[...Array(5)].map((_, i) => (
@@ -75,13 +69,11 @@ const ReviewEngine: React.FC = () => {
                   review.sentiment === 'Positive' ? 'bg-zinc-50 text-black border border-zinc-100' : 
                   review.sentiment === 'Negative' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-zinc-50 text-zinc-500'
                 }`}>
-                  {review.sentiment} Analysis
+                  {review.sentiment}
                 </span>
               )}
             </div>
-            
             <p className="text-zinc-600 mb-10 text-sm leading-relaxed italic border-l-2 border-zinc-100 pl-6">"{review.text}"</p>
-
             {review.suggestedReply ? (
               <div className="bg-zinc-50/50 p-8 border border-zinc-100 rounded-sm">
                 <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-4">AI Suggested Response</p>
@@ -97,7 +89,7 @@ const ReviewEngine: React.FC = () => {
                 disabled={isAnalyzing === review.id}
                 className="text-[10px] font-black uppercase tracking-widest border border-zinc-200 px-10 py-4 hover:bg-black hover:text-white hover:border-black transition-all disabled:opacity-30"
               >
-                {isAnalyzing === review.id ? 'Analyzing Content...' : 'Generate Brand-Aware Reply'}
+                {isAnalyzing === review.id ? 'Analyzing Content...' : 'Generate Brand Reply'}
               </button>
             )}
           </div>
@@ -106,5 +98,3 @@ const ReviewEngine: React.FC = () => {
     </div>
   );
 };
-
-export default ReviewEngine;
