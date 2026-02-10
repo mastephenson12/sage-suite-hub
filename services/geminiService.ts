@@ -1,12 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
-import { Message, Source } from "../types";
-import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants";
+import { Message, Source } from "../types.ts";
+import { GHL_CNAME_TARGET, GHL_A_RECORD_IP, SAGESUITE_URL } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the premium intelligence portal for healthandtravels.com.
-Expert, technical, professional, inviting. Arizona trail specialist. High-desert aesthetic.
-Portal: ${SAGESUITE_URL}.
-Setup: Subdomains use CNAME ${GHL_CNAME_TARGET} and A Record ${GHL_A_RECORD_IP}.
-Grounding: Use googleSearch for real-time news/trails.`;
+YOUR PRIMARY GOAL: Provide useful, actionable information. 
+
+Intel categories:
+1. Arizona Trail Specialist: Provide parking tips, hydration requirements, and seasonal warnings for AZ trails (Sedona, Phoenix, Flagstaff).
+2. Wellness Recovery: Suggest specific local protocols like salt rooms, red light therapy, or sports massage nearby.
+3. SageSuite Technical: Guide users on subdomain setup using CNAME ${GHL_CNAME_TARGET} and A Record ${GHL_A_RECORD_IP}.
+
+Tone: Professional, high-desert aesthetic, efficient, and authoritative. 
+Grounding: ALWAYS use googleSearch to verify current trail conditions, weather alerts, or business hours before recommending.`;
 
 export class GeminiService {
   getClient() {
@@ -39,7 +44,7 @@ export class GeminiService {
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
         title: c.web?.title || "Vetted Source"
-      })).filter((s: any) => s.uri) || [];
+      })).filter((s: any) => s && s.uri) || [];
 
       return { text, sources, isLocal: false };
     } catch (err) {
@@ -52,7 +57,7 @@ export class GeminiService {
     const ai = this.getClient();
     if (!ai) return "";
     try {
-      const prompt = `A cinematic, high-res photo of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. 4k, realistic terrain.`;
+      const prompt = `A cinematic, high-res photo of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. 4k, realistic terrain, golden hour lighting.`;
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
