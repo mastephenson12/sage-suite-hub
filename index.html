@@ -1,95 +1,87 @@
-<script type="importmap">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health & Travels Journal • Scout Portal</title>
+  
+  <script>
+    window.process = { env: { NODE_ENV: 'development' } };
+    window.tailwind = {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                primary: '#0d47a1',
+                dark: '#0a3a85',
+                accent: '#3b82f6',
+                surface: '#fafafa',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              serif: ['Lora', 'Georgia', 'serif'],
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+
+  <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.26.2?deps=react@18.3.1,react-dom@18.3.1",
+    "@google/genai": "https://esm.sh/@google/genai@1.3.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
+    "react/": "https://esm.sh/react@^19.2.4/"
   }
 }
 </script>
-import { GoogleGenAI } from "@google/genai";
-import { Message, Source } from "../types.ts";
-import { GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
+</head>
+<body class="bg-white antialiased m-0 font-sans">
+  <div id="app-loader">
+    <div id="loader-spinner" style="width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
+    <p id="loader-text" style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;">Syncing Scout Portal...</p>
+  </div>
 
-const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal for healthandtravels.com.
-YOUR PRIMARY MISSION: Provide high-utility, vetted intelligence. Avoid generic filler.
+  <div id="root"></div>
 
-Intelligence Protocols:
-1. Arizona Trail Expert: 
-   - GROUNDING MANDATORY: Always use googleSearch to verify current trail status, fire bans, or water availability.
-   - Precision Parking: Identify exact parking lot names (e.g., "Park at the Soldier Pass lot") and mention if a Red Rock Pass or shuttle is required.
-   - Hydration Metrics: Provide specific water volume recommendations based on current temperature (e.g., "Carry 3.5L of water for this loop in current 92° heat").
-   - Safety Nodes: Note specific seasonal hazards like rattlesnake activity windows or flash flood risks in canyons.
+  <script type="module" src="index.tsx"></script>
 
-2. Wellness & Recovery:
-   - Specificity: Recommend specific local Arizona businesses (e.g., "After hiking Flatiron, visit the Salt Room in Mesa for respiratory recovery").
-   - Contextual Match: Align the recovery protocol with the physical toll of the specific trek mentioned.
-
-3. Technical Support:
-   - Domain Nodes: Subdomains must point CNAME to ${GHL_CNAME_TARGET} or A Record to ${GHL_A_RECORD_IP}.
-   - GHL Sync: Provide clear, numbered steps for GoHighLevel Community synchronization.
-
-Tone: Authoritative, elite journal style, desert-refined. Be the partner the traveler relies on for accuracy.`;
-
-export class GeminiService {
-  getClient() {
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) return null;
-    return new GoogleGenAI({ apiKey });
-  }
-
-  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
-    const ai = this.getClient();
-    if (!ai) return { text: "Link established but AI link is offline. Please ensure API Key is active in the environment.", isLocal: true };
-
-    try {
-      const contents = history.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-      }));
-      contents.push({ role: 'user', parts: [{ text: userInput }] });
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents,
-        config: { 
-          systemInstruction: SYSTEM_INSTRUCTION, 
-          tools: [{ googleSearch: {} }] 
+  <script>
+    // Failsafe to hide loader once React mounts
+    const checkInit = setInterval(() => {
+      if (window.APP_INITIALIZED === 'mounted') {
+        const loader = document.getElementById('app-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.remove(), 500);
         }
-      });
-
-      const text = response.text || "Connection established, but no text packets received from Scout.";
-      const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
-        uri: c.web?.uri,
-        title: c.web?.title || "Vetted Data Node"
-      })).filter((s: any) => s && s.uri) || [];
-
-      return { text, sources, isLocal: false };
-    } catch (err) {
-      console.error("Sage Intel Fault:", err);
-      return { text: "Satellite link interrupted by atmospheric noise. Switching to local buffer.", isLocal: true };
-    }
-  }
-
-  async generateTrailImage(name: string, description: string, difficulty: string): Promise<string> {
-    const ai = this.getClient();
-    if (!ai) return "";
-    try {
-      const prompt = `A professional, ultra-high-resolution photograph of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. Cinematic high-desert lighting, high-end travel journal aesthetic.`;
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-image-preview',
-        contents: { parts: [{ text: prompt }] },
-        config: { imageConfig: { aspectRatio: "16:9" } }
-      });
-      
-      const part = response.candidates?.[0]?.content?.parts.find((p: any) => p.inlineData);
-      return part ? `data:image/png;base64,${part.inlineData.data}` : "";
-    } catch { 
-      return ""; 
-    }
-  }
-}
-
-export const geminiService = new GeminiService();
+        clearInterval(checkInit);
+      }
+    }, 100);
+    
+    // Emergency reveal after 5 seconds
+    setTimeout(() => {
+      const loader = document.getElementById('app-loader');
+      if (loader) loader.remove();
+    }, 5000);
+  </script>
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #app-loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; items: center; justify-content: center; transition: opacity 0.5s ease; }
+  </style>
+</body>
+</html>
