@@ -79,10 +79,10 @@
   
   <div id="root"></div>
 
-  <!-- The environment automatically imports index.tsx. Manually importing it causes MIME type errors. -->
+  <!-- Note: index.tsx is imported automatically by the environment. Do not add manual script tags. -->
 
   <script>
-    // Monitor for app initialization
+    // Monitor for successful app mount
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
@@ -96,7 +96,7 @@
       }
     }, 100);
     
-    // Safety reveal if app takes too long to mount
+    // Safety reveal if the app fails to signal ready
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
