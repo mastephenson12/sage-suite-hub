@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Type } from "@google/genai";
 import { TravelLead } from '../types.ts';
-import { geminiService } from '../services/gemini.ts';
+import { geminiService } from '../services/geminiService.ts';
 
 export const LeadQualifier: React.FC = () => {
   const [leads, setLeads] = useState<TravelLead[]>([
