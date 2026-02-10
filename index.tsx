@@ -2,8 +2,9 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 
-// Signal to loader that the script has successfully executed
+// Signal to loader that the script has started executing
 (window as any).APP_INITIALIZED = true;
+console.log("Sage Hub: Initializing Application...");
 
 const container = document.getElementById('root');
 if (container) {
