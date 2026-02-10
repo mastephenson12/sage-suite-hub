@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { GeneratedAsset } from '../types';
-import { geminiService } from '../services/gemini';
+import { GeneratedAsset } from '../types.ts';
+import { geminiService } from '../services/gemini.ts';
 
 export const MediaLabView: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -13,7 +13,6 @@ export const MediaLabView: React.FC = () => {
   const generateImage = async () => {
     if (!prompt.trim() || isGenerating) return;
 
-    // Mandatory API Key Selection check for Pro Imaging
     if (typeof (window as any).aistudio !== 'undefined') {
       const hasKey = await (window as any).aistudio.hasSelectedApiKey();
       if (!hasKey) {
@@ -23,7 +22,6 @@ export const MediaLabView: React.FC = () => {
 
     setIsGenerating(true);
     try {
-      // Create fresh instance for Pro Imaging
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
       const response = await ai.models.generateContent({
@@ -52,7 +50,6 @@ export const MediaLabView: React.FC = () => {
       }
     } catch (error: any) {
       console.error("Image generation failed:", error);
-      // Reset key selection if entity not found
       if (error.message?.includes("Requested entity was not found") || error.status === 404) {
         if ((window as any).aistudio) await (window as any).aistudio.openSelectKey();
       }
@@ -64,11 +61,9 @@ export const MediaLabView: React.FC = () => {
   const generateVideo = async () => {
     if (!prompt.trim() || isGenerating) return;
     
-    // Mandatory API Key Selection check for Veo
     if (typeof (window as any).aistudio !== 'undefined') {
         const hasKey = await (window as any).aistudio.hasSelectedApiKey();
         if (!hasKey) {
-            console.log("Portal Scout: Requesting Satellite Key for Video Render...");
             await (window as any).aistudio.openSelectKey();
         }
     }
@@ -77,7 +72,6 @@ export const MediaLabView: React.FC = () => {
     setVideoStatus('Establishing Secure Satellite Link...');
     
     try {
-      // Fresh instance for Veo
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
       let operation = await ai.models.generateVideos({
