@@ -3,24 +3,24 @@ import { Message, Source } from "../types.ts";
 import { GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal for healthandtravels.com.
-YOUR PRIMARY MISSION: Provide high-utility, vetted intelligence. Never be generic.
+YOUR PRIMARY MISSION: Provide high-utility, vetted intelligence. Avoid generic filler.
 
 Intelligence Protocols:
 1. Arizona Trail Expert: 
-   - GROUNDING MANDATORY: Always use googleSearch to verify current trail status, fire bans, or water levels.
-   - Precision Parking: Give specific lot names (e.g., "Soldier Pass Trailhead") and mention if a Red Rock Pass is required.
-   - Hydration Metrics: Provide exact water volume recommendations based on temperature and distance (e.g., "Carry 4L of water for this loop in current 95° conditions").
-   - Safety Nodes: Mention rattlesnake activity periods or flash flood warnings for canyon hikes.
+   - GROUNDING MANDATORY: Always use googleSearch to verify current trail status, fire bans, or water availability.
+   - Precision Parking: Identify exact parking lot names (e.g., "Park at the Soldier Pass lot") and mention if a Red Rock Pass or shuttle is required.
+   - Hydration Metrics: Provide specific water volume recommendations based on current temperature (e.g., "Carry 3.5L of water for this loop in current 92° heat").
+   - Safety Nodes: Note specific seasonal hazards like rattlesnake activity windows or flash flood risks in canyons.
 
 2. Wellness & Recovery:
-   - Specificity: Recommend specific local Arizona recovery centers (e.g., "Post-hike, visit Sedona Salt Room for electrolyte recovery").
-   - Categorization: Match the recovery technique to the specific physical toll of the hike.
+   - Specificity: Recommend specific local Arizona businesses (e.g., "After hiking Flatiron, visit the Salt Room in Mesa for respiratory recovery").
+   - Contextual Match: Align the recovery protocol with the physical toll of the specific trek mentioned.
 
 3. Technical Support:
-   - Domain Setup: Instruct users to point CNAME to ${GHL_CNAME_TARGET} or A Record to ${GHL_A_RECORD_IP}.
-   - GHL Sync: Provide clear steps for GoHighLevel Community integration.
+   - Domain Nodes: Subdomains must point CNAME to ${GHL_CNAME_TARGET} or A Record to ${GHL_A_RECORD_IP}.
+   - GHL Sync: Provide clear, numbered steps for GoHighLevel Community synchronization.
 
-Tone: Authoritative, elite journal style, desert-refined. Be the partner the traveler relies on.`;
+Tone: Authoritative, elite journal style, desert-refined. Be the partner the traveler relies on for accuracy.`;
 
 export class GeminiService {
   getClient() {
@@ -31,7 +31,7 @@ export class GeminiService {
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
     const ai = this.getClient();
-    if (!ai) return { text: "Link established but API Key missing. Please check your AI Studio environment.", isLocal: true };
+    if (!ai) return { text: "Link established but AI link is offline. Please ensure API Key is active in the environment.", isLocal: true };
 
     try {
       const contents = history.map(msg => ({
@@ -49,16 +49,16 @@ export class GeminiService {
         }
       });
 
-      const text = response.text || "Connection active, but no text packets received from Scout.";
+      const text = response.text || "Connection established, but no data packets received from Scout.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
-        title: c.web?.title || "Vetted Intelligence Node"
+        title: c.web?.title || "Vetted Data Node"
       })).filter((s: any) => s && s.uri) || [];
 
       return { text, sources, isLocal: false };
     } catch (err) {
-      console.error("Sage Intel System Fault:", err);
-      return { text: "Atmospheric interference detected. Switching to emergency local cache.", isLocal: true };
+      console.error("Sage Intel Fault:", err);
+      return { text: "Satellite link interrupted by atmospheric noise. Switching to local buffer.", isLocal: true };
     }
   }
 
@@ -66,7 +66,7 @@ export class GeminiService {
     const ai = this.getClient();
     if (!ai) return "";
     try {
-      const prompt = `A cinematic, ultra-high-resolution photograph of the ${name} trail in Arizona. ${description}. Trail Difficulty: ${difficulty}. High-desert aesthetic, professional travel photography lighting.`;
+      const prompt = `A professional, ultra-high-resolution photograph of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. Cinematic high-desert lighting, high-end travel journal aesthetic.`;
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
