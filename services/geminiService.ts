@@ -49,7 +49,7 @@ export class GeminiService {
         }
       });
 
-      const text = response.text || "Connection established, but no data packets received from Scout.";
+      const text = response.text || "Connection established, but no text packets received from Scout.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
         title: c.web?.title || "Vetted Data Node"
