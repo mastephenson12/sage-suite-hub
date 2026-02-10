@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { geminiService } from '../services/gemini.ts';
+import { geminiService } from '../services/geminiService.ts';
 
 interface Trail {
   name: string;
@@ -136,6 +136,7 @@ const TrailGuides: React.FC = () => {
                   ))}
                 </div>
 
+                {/* Fix: Passed trail.name directly to handleAccessIntel instead of the invalid nested function */}
                 <button 
                   onClick={() => handleAccessIntel(trail.name)}
                   className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#0d47a1] transition-all active:scale-[0.98] shadow-2xl shadow-zinc-900/20"
