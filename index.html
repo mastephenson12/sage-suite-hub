@@ -95,12 +95,15 @@
         clearInterval(interval);
       }
     }, 100);
+    
+    // Auto-reveal fail-safe: if after 5s the app hasn't shown up, allow user to force open
     setTimeout(() => {
-      if (!window.APP_INITIALIZED) {
+      const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
+      if (!initialized) {
         const errDiv = document.getElementById('loader-error');
         if (errDiv) errDiv.style.display = 'block';
       }
-    }, 8000);
+    }, 5000);
   </script>
 </body>
 </html>
