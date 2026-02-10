@@ -13,6 +13,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Elegant serif for journal content */
+.serif-text {
+  font-family: 'Lora', 'Georgia', serif;
+}
+
 /* Smooth brand selection */
 ::selection { 
   background: var(--brand-primary); 
@@ -21,7 +26,7 @@ body {
 
 /* Minimalist Scrollbar */
 ::-webkit-scrollbar { 
-  width: 6px; 
+  width: 5px; 
 }
 ::-webkit-scrollbar-track { 
   background: transparent; 
@@ -39,16 +44,14 @@ body {
   scrollbar-color: #e4e4e7 transparent;
 }
 
-/* Custom UI Layers */
-.glass-surface { 
-  background: rgba(255, 255, 255, 0.7); 
-  backdrop-filter: blur(10px); 
-  border: 1px solid rgba(0, 0, 0, 0.05); 
+/* App transition */
+#root {
+  animation: fadeIn 0.8s ease-out;
 }
 
-.serif-display { 
-  font-family: 'Georgia', serif;
-  font-style: italic;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 #app-loader {
@@ -62,13 +65,7 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  transition: opacity 0.5s ease-out, visibility 0.5s;
-}
-
-#app-loader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  transition: opacity 0.4s ease-out;
 }
 
 @keyframes spin {
