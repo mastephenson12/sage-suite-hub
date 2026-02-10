@@ -83,6 +83,8 @@
     // Monitor for successful app mount
     const interval = setInterval(() => {
       const root = document.getElementById('root');
+      // If the JS bundle executes, it sets window.APP_INITIALIZED
+      // If the app successfully renders components, root will have children
       const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
       if (initialized) {
         const loader = document.getElementById('app-loader');
@@ -94,13 +96,13 @@
       }
     }, 100);
     
-    // Safety reveal if the app fails to signal ready
+    // Safety reveal if the app fails to signal ready after 6 seconds
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
         if (errDiv) errDiv.style.display = 'block';
       }
-    }, 5000);
+    }, 6000);
   </script>
 </body>
 </html>
