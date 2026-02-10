@@ -1,6 +1,5 @@
 import React from 'react';
-// Fixed: Removed .ts extension from import
-import { BRAND_NAME } from '../constants';
+import { BRAND_NAME } from '../constants.ts';
 
 const About: React.FC = () => {
   return (
