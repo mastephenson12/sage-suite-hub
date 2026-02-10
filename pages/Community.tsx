@@ -1,6 +1,5 @@
 import React from 'react';
-// Fixed: Removed .ts extension from import
-import { SAGESUITE_URL, SAGESUITE_APPLY, BRAND_NAME } from '../constants';
+import { SAGESUITE_URL, SAGESUITE_APPLY, BRAND_NAME } from '../constants.ts';
 
 const Community: React.FC = () => {
   return (
