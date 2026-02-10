@@ -8,7 +8,7 @@
   <script>
     window.process = { env: { NODE_ENV: 'development' } };
     
-    // Performance: Filter out unnecessary logs
+    // Silence common library warnings to keep console clean for debugging
     (function() {
       const originalWarn = console.warn;
       console.warn = function(...args) {
@@ -43,7 +43,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 
   <script type="importmap">
@@ -66,10 +66,10 @@
     <div id="loader-spinner" style="width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
     <p id="loader-text" style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;">Sage Portal Syncing...</p>
     <div id="loader-error" style="display:none; margin-top:20px; text-align:center; max-width: 250px;">
-       <p style="font-size:11px; color:#ef4444; font-weight:bold; margin-bottom:12px; line-height:1.4;">The satellite link is taking longer than expected.</p>
+       <p style="font-size:11px; color:#ef4444; font-weight:bold; margin-bottom:12px; line-height:1.4;">Atmospheric interference detected. Establish manual link?</p>
        <div style="display: flex; flex-direction: column; gap: 8px;">
          <button onclick="location.reload()" style="font-size:10px; font-weight:900; color:white; background:#0d47a1; border:none; padding:10px 20px; border-radius:4px; text-transform:uppercase; cursor:pointer; width:100%;">Retry Sync</button>
-         <button onclick="document.getElementById('app-loader').remove()" style="font-size:9px; font-weight:bold; color:#71717a; background:none; border:none; text-decoration:underline; cursor:pointer;">Bypass & Open Portal</button>
+         <button onclick="document.getElementById('app-loader').remove()" style="font-size:9px; font-weight:bold; color:#71717a; background:none; border:none; text-decoration:underline; cursor:pointer;">Force Reveal Portal</button>
        </div>
     </div>
   </div>
@@ -78,7 +78,7 @@
   <div id="root"></div>
 
   <script>
-    // Critical synchronization check
+    // Robust app initialization check
     const syncInterval = setInterval(() => {
       if (window.APP_INITIALIZED) {
         const loader = document.getElementById('app-loader');
@@ -90,7 +90,7 @@
       }
     }, 100);
     
-    // Safety reveal if initialization fails
+    // Reveal failsafe UI after 5 seconds if React hasn't mounted
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
