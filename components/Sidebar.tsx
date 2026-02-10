@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BRAND_NAME } from '../constants';
+import { BRAND_NAME, LOGO_DATA_URL } from '../constants.ts';
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -18,8 +18,8 @@ export const Sidebar: React.FC = () => {
     <div className="w-64 border-r border-zinc-100 flex flex-col bg-white h-full shrink-0">
       <div className="p-8 border-b border-zinc-100">
         <Link to="/" className="flex items-center space-x-3 mb-8">
-          <div className="w-8 h-8 bg-black flex items-center justify-center rounded-sm">
-            <span className="text-white text-[10px] font-black">S</span>
+          <div className="w-10 h-10 flex items-center justify-center rounded-sm overflow-hidden">
+            <img src={LOGO_DATA_URL} alt={BRAND_NAME} className="w-full h-full object-contain" />
           </div>
           <span className="text-[10px] font-black uppercase tracking-[0.3em]">{BRAND_NAME} Hub</span>
         </Link>
