@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Message } from '../types.ts';
-import { geminiService } from '../services/gemini.ts';
+import { geminiService } from '../services/geminiService.ts';
 
 export interface ChatInterfaceHandle { sendMessage: (text: string) => void; }
 
@@ -46,6 +46,12 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
       }]);
     } catch (error) {
       console.error("Chat Fault:", error);
+      setMessages(prev => [...prev, { 
+        id: 'error-' + Date.now(), 
+        role: 'assistant', 
+        content: "Scout link interrupted. Satellite re-acquisition in progress.", 
+        timestamp: new Date() 
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -60,26 +66,27 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
             <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 mb-2">
               {msg.role === 'user' ? 'Direct Inquiry' : 'Scout Dispatch'} • {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
-            <div className={`max-w-[90%] md:max-w-[80%] p-6 ${
+            <div className={`max-w-[95%] md:max-w-[85%] p-6 ${
               msg.role === 'user' 
               ? 'bg-zinc-100 rounded-2xl border border-zinc-200 text-black' 
-              : 'font-serif italic text-lg md:text-xl text-zinc-800 leading-relaxed'
+              : 'font-serif text-lg md:text-xl text-zinc-800 leading-relaxed'
             }`}>
               {msg.content}
               
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-8 pt-6 border-t border-zinc-100">
-                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">Vetted Intelligence Sources:</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4 italic">Vetted Intelligence Sources:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {msg.sources.map((s, i) => (
                       <a 
                         key={i} 
                         href={s.uri} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="text-[9px] font-black bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-sm text-brand-primary hover:bg-brand-primary hover:text-white transition-all uppercase tracking-tighter"
+                        className="flex items-center justify-between text-[10px] font-black bg-zinc-50 border border-zinc-200 px-4 py-2 rounded-lg text-brand-primary hover:bg-black hover:text-white transition-all uppercase tracking-tighter"
                       >
-                        {s.title}
+                        <span className="truncate mr-2">{s.title}</span>
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                       </a>
                     ))}
                   </div>
@@ -90,7 +97,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
         ))}
         {isLoading && (
           <div className="flex flex-col items-start animate-pulse">
-            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 mb-2">Scout Decoding Satellite Packets...</p>
+            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 mb-2">Scout Decoding Data Packets...</p>
             <div className="max-w-[80%] p-6 bg-zinc-50 rounded-2xl flex space-x-2">
               <div className="w-2 h-2 bg-zinc-200 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
               <div className="w-2 h-2 bg-zinc-200 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
@@ -103,7 +110,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
       {/* Input Area */}
       <div className="px-6 md:px-10 py-8 border-t border-zinc-100 bg-white/80 backdrop-blur-xl">
         {!isLoading && messages.length < 5 && (
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap gap-2 mb-6">
             {suggestionChips.map((chip, i) => (
               <button
                 key={i}
@@ -135,11 +142,11 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
         </div>
         <div className="flex justify-between items-center mt-4">
           <p className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-300">
-            Powered by Gemini 3 Synthetic Intelligence
+            Satellite Grounding Link: Established
           </p>
           <div className="flex items-center gap-1">
              <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-             <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Grounding Active</span>
+             <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Live Sync Active</span>
           </div>
         </div>
       </div>
