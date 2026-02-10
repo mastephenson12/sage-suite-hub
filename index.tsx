@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 
-// Signal to loader that app is starting
+// Signal to loader that the script has successfully executed
 (window as any).APP_INITIALIZED = true;
 
 const container = document.getElementById('root');
@@ -14,5 +14,5 @@ if (container) {
     </React.StrictMode>
   );
 } else {
-  console.error("Failed to find root container");
+  console.error("Critical Failure: Root container not found in DOM.");
 }
