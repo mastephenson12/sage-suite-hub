@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { geminiService } from '../services/gemini';
-import { Source } from '../types';
+import { geminiService } from '../services/gemini.ts';
+import { Source } from '../types.ts';
 
 export const BookingView: React.FC = () => {
   const [goal, setGoal] = useState('');
