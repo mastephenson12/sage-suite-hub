@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LiveServerMessage, Modality } from '@google/genai';
-import { geminiService } from '../services/gemini.ts';
+import { geminiService } from '../services/geminiService.ts';
 
 // Audio Helpers as per guidelines
 function decode(base64: string) {
