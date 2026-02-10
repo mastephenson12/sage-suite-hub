@@ -8,12 +8,18 @@
   <script>
     window.process = { env: { NODE_ENV: 'development' } };
     
-    // Silence common library warnings to keep console clean for debugging
+    // Silence common library warnings and extension noise
     (function() {
       const originalWarn = console.warn;
+      const originalError = console.error;
       console.warn = function(...args) {
         if (args[0] && typeof args[0] === 'string' && (args[0].includes('cdn.tailwindcss.com') || args[0].includes('production'))) return;
         originalWarn.apply(console, args);
+      };
+      // If an extension causes a non-fatal error, don't let it crash our logs
+      console.error = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && (args[0].includes('Ubersuggest') || args[0].includes('extension'))) return;
+        originalError.apply(console, args);
       };
     })();
 
@@ -32,7 +38,7 @@
             },
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
-              serif: ['Georgia', 'serif'],
+              serif: ['Lora', 'Georgia', 'serif'],
             }
           }
         }
@@ -78,7 +84,7 @@
   <div id="root"></div>
 
   <script>
-    // Robust app initialization check
+    // Critical synchronization check to prevent infinite spinning
     const syncInterval = setInterval(() => {
       if (window.APP_INITIALIZED) {
         const loader = document.getElementById('app-loader');
@@ -90,7 +96,7 @@
       }
     }, 100);
     
-    // Reveal failsafe UI after 5 seconds if React hasn't mounted
+    // Reveal failsafe UI after 5 seconds
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
