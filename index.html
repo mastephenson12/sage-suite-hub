@@ -79,13 +79,10 @@
   
   <div id="root"></div>
 
-  <!-- Use inline import to better handle TSX files in this environment -->
-  <script type="module">
-    import "./index.tsx";
-  </script>
+  <!-- The environment automatically imports index.tsx. Manually importing it causes MIME type errors. -->
 
   <script>
-    // Robust loader removal logic
+    // Monitor for app initialization
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
@@ -99,13 +96,13 @@
       }
     }, 100);
     
-    // Safety timeout
+    // Safety reveal if app takes too long to mount
     setTimeout(() => {
       if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
         if (errDiv) errDiv.style.display = 'block';
       }
-    }, 5000);
+    }, 6000);
   </script>
 </body>
 </html>
