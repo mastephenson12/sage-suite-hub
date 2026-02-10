@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { geminiService } from '../services/gemini.ts';
+import { geminiService } from '../services/geminiService.ts';
 import { Source } from '../types.ts';
 
 export const BookingView: React.FC = () => {
