@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { geminiService } from '../services/gemini';
+import { geminiService } from '../services/gemini.ts';
 
 interface Trail {
   name: string;
