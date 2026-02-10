@@ -79,10 +79,13 @@
   
   <div id="root"></div>
 
-  <!-- Critical: Import the entry point script -->
-  <script type="module" src="index.tsx"></script>
+  <!-- Use inline import to better handle TSX files in this environment -->
+  <script type="module">
+    import "./index.tsx";
+  </script>
 
   <script>
+    // Robust loader removal logic
     const interval = setInterval(() => {
       const root = document.getElementById('root');
       const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
@@ -96,10 +99,9 @@
       }
     }, 100);
     
-    // Auto-reveal fail-safe: if after 5s the app hasn't shown up, allow user to force open
+    // Safety timeout
     setTimeout(() => {
-      const initialized = window.APP_INITIALIZED || (root && root.children.length > 0);
-      if (!initialized) {
+      if (!window.APP_INITIALIZED) {
         const errDiv = document.getElementById('loader-error');
         if (errDiv) errDiv.style.display = 'block';
       }
