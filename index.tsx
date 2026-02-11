@@ -12,6 +12,8 @@ if (container) {
     </React.StrictMode>
   );
 
-  // Signal to index.html that we have successfully mounted
-  (window as any).APP_INITIALIZED = 'mounted';
+  // Set timeout to ensure render loop has started before clearing loader
+  setTimeout(() => {
+    (window as any).APP_INITIALIZED = 'mounted';
+  }, 0);
 }
