@@ -49,7 +49,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
       setMessages(prev => [...prev, { 
         id: 'error-' + Date.now(), 
         role: 'assistant', 
-        content: "Scout link interrupted. Satellite re-acquisition in progress.", 
+        content: "Scout link interrupted by atmospheric noise. Satellite re-acquisition in progress.", 
         timestamp: new Date() 
       }]);
     } finally {
@@ -60,33 +60,33 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
   return (
     <div className={`flex flex-col h-full bg-white ${props.className}`}>
       {/* Message Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-10 space-y-12 custom-scrollbar">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-12 space-y-16 custom-scrollbar">
         {messages.map((msg) => (
-          <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 mb-2">
+          <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-fade-in`}>
+            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-300 mb-4">
               {msg.role === 'user' ? 'Direct Inquiry' : 'Scout Dispatch'} • {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
-            <div className={`max-w-[95%] md:max-w-[85%] p-6 ${
+            <div className={`max-w-[95%] md:max-w-[80%] ${
               msg.role === 'user' 
-              ? 'bg-zinc-100 rounded-2xl border border-zinc-200 text-black' 
-              : 'font-serif text-lg md:text-xl text-zinc-800 leading-relaxed'
+              ? 'bg-zinc-100 rounded-[24px] px-8 py-6 text-black border border-zinc-200' 
+              : 'font-serif text-xl md:text-2xl text-zinc-800 leading-relaxed italic'
             }`}>
-              {msg.content}
+              <div className="whitespace-pre-wrap">{msg.content}</div>
               
               {msg.sources && msg.sources.length > 0 && (
-                <div className="mt-8 pt-6 border-t border-zinc-100">
-                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4 italic">Vetted Intelligence Sources:</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="mt-10 pt-8 border-t border-zinc-100 font-sans italic not-italic">
+                  <p className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-6">Vetted Intel Nodes:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {msg.sources.map((s, i) => (
                       <a 
                         key={i} 
                         href={s.uri} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="flex items-center justify-between text-[10px] font-black bg-zinc-50 border border-zinc-200 px-4 py-2 rounded-lg text-brand-primary hover:bg-black hover:text-white transition-all uppercase tracking-tighter"
+                        className="flex items-center justify-between text-[10px] font-black bg-zinc-50 border border-zinc-100 px-5 py-3 rounded-xl text-brand-primary hover:bg-brand-primary hover:text-white transition-all uppercase tracking-tighter shadow-sm"
                       >
                         <span className="truncate mr-2">{s.title}</span>
-                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                        <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                       </a>
                     ))}
                   </div>
@@ -97,56 +97,56 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, { initialMessage?: string,
         ))}
         {isLoading && (
           <div className="flex flex-col items-start animate-pulse">
-            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 mb-2">Scout Decoding Data Packets...</p>
-            <div className="max-w-[80%] p-6 bg-zinc-50 rounded-2xl flex space-x-2">
-              <div className="w-2 h-2 bg-zinc-200 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-              <div className="w-2 h-2 bg-zinc-200 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-              <div className="w-2 h-2 bg-zinc-200 rounded-full animate-bounce"></div>
+            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-300 mb-4">Scout Syncing Data Packets...</p>
+            <div className="max-w-[80%] p-8 bg-zinc-50 rounded-[32px] flex space-x-3">
+              <div className="w-2.5 h-2.5 bg-zinc-200 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+              <div className="w-2.5 h-2.5 bg-zinc-200 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+              <div className="w-2.5 h-2.5 bg-zinc-200 rounded-full animate-bounce"></div>
             </div>
           </div>
         )}
       </div>
 
       {/* Input Area */}
-      <div className="px-6 md:px-10 py-8 border-t border-zinc-100 bg-white/80 backdrop-blur-xl">
+      <div className="px-6 md:px-12 py-10 border-t border-zinc-100 bg-white/90 backdrop-blur-2xl">
         {!isLoading && messages.length < 5 && (
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-3 mb-8">
             {suggestionChips.map((chip, i) => (
               <button
                 key={i}
                 onClick={() => handleSend(chip.query)}
-                className="text-[10px] font-black uppercase tracking-widest bg-zinc-50 border border-zinc-200 px-4 py-2.5 rounded-full hover:bg-black hover:text-white hover:border-black transition-all shadow-sm"
+                className="text-[10px] font-black uppercase tracking-widest bg-zinc-50 border border-zinc-100 px-6 py-3 rounded-full hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
               >
                 {chip.label}
               </button>
             ))}
           </div>
         )}
-        <div className="relative flex items-center">
+        <div className="relative flex items-center group">
           <input 
             value={input} 
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-8 py-5 outline-none text-lg placeholder-zinc-300 focus:border-black focus:ring-1 focus:ring-black/5 transition-all"
+            className="w-full bg-zinc-50 border border-zinc-200 rounded-[28px] pl-10 pr-20 py-7 outline-none text-xl placeholder-zinc-300 focus:border-brand-primary focus:bg-white focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
             placeholder="Issue a command or ask Scout..."
           />
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
-            className="absolute right-3 p-4 bg-black text-white rounded-xl disabled:opacity-20 hover:scale-105 active:scale-95 transition-all shadow-xl"
+            className="absolute right-4 w-14 h-14 flex items-center justify-center bg-black text-white rounded-[20px] disabled:opacity-20 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/20"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </button>
         </div>
-        <div className="flex justify-between items-center mt-4">
-          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-300">
-            Satellite Grounding Link: Established
+        <div className="flex justify-between items-center mt-6">
+          <p className="text-[9px] font-black uppercase tracking-[0.5em] text-zinc-300">
+            Satellite Grounding Engine: Synchronized
           </p>
-          <div className="flex items-center gap-1">
-             <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-             <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Live Sync Active</span>
+          <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+             <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Linked to Gemini 3</span>
           </div>
         </div>
       </div>
