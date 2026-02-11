@@ -12,7 +12,7 @@ if (container) {
     </React.StrictMode>
   );
 
-  // Set signal immediately to clear the loading screen
+  // Set signal to clear the loading screen
   (window as any).APP_INITIALIZED = 'mounted';
 } else {
   console.error("Critical Failure: Root container not found in DOM.");
