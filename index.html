@@ -6,7 +6,18 @@
   <title>Health & Travels Journal • Scout Portal</title>
   
   <script>
+    // Environment setup
     window.process = { env: { NODE_ENV: 'development' } };
+    
+    // Silence Tailwind CDN production warning
+    (function() {
+      const originalWarn = console.warn;
+      console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+        originalWarn.apply(console, args);
+      };
+    })();
+
     window.tailwind = {
       config: {
         theme: {
@@ -55,36 +66,51 @@
     <div id="loader-spinner"></div>
     <p id="loader-text">Sage Portal Syncing...</p>
     <div id="loader-failsafe" style="display:none; margin-top:20px; text-align:center;">
-      <p style="font-size:10px; color:#71717a; margin-bottom:10px;">Portal taking longer than expected.</p>
+      <p style="font-size:10px; color:#71717a; margin-bottom:10px;">Portal sync taking longer than expected.</p>
       <button onclick="document.getElementById('app-loader').remove()" style="font-size:10px; font-weight:bold; color:#0d47a1; text-decoration:underline; background:none; border:none; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em;">Bypass Loader</button>
     </div>
   </div>
 
   <div id="root"></div>
 
+  <!-- Main Entry Point -->
+  <script type="module" src="index.tsx"></script>
+
   <script>
-    // Monitor for React mount signal
+    // 1. JS Monitor for React mount signal
     const checkInit = setInterval(() => {
       if (window.APP_INITIALIZED === 'mounted') {
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => { if (loader.parentNode) loader.remove(); }, 500);
+          loader.style.pointerEvents = 'none';
+          setTimeout(() => { if (loader.parentNode) loader.remove(); }, 600);
         }
         clearInterval(checkInit);
       }
     }, 50);
     
-    // Show failsafe after 3 seconds
+    // 2. Timed Failsafe: Show bypass button after 3 seconds
     setTimeout(() => {
       const failsafe = document.getElementById('loader-failsafe');
       if (failsafe && window.APP_INITIALIZED !== 'mounted') {
         failsafe.style.display = 'block';
       }
     }, 3000);
+
+    // 3. Absolute Failsafe: Remove loader after 6 seconds regardless
+    setTimeout(() => {
+      const loader = document.getElementById('app-loader');
+      if (loader && window.APP_INITIALIZED !== 'mounted') {
+        console.warn("Forcing loader removal after timeout.");
+        loader.remove();
+      }
+    }, 6000);
   </script>
+
   <style>
     @keyframes spin { to { transform: rotate(360deg); } }
+    
     #app-loader { 
       position: fixed; 
       inset: 0; 
@@ -94,13 +120,21 @@
       flex-direction: column; 
       align-items: center; 
       justify-content: center; 
-      transition: opacity 0.5s ease; 
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
     }
+
     #loader-spinner {
       width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;
     }
+
     #loader-text {
       font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;
+    }
+
+    /* 4. CSS-only Failsafe: Hide loader if #root has any children */
+    body:has(#root > *) #app-loader {
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </body>
