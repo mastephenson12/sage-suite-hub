@@ -12,8 +12,8 @@ if (container) {
     </React.StrictMode>
   );
 
-  // Set timeout to ensure render loop has started before clearing loader
-  setTimeout(() => {
-    (window as any).APP_INITIALIZED = 'mounted';
-  }, 0);
+  // Set signal immediately to clear the loading screen
+  (window as any).APP_INITIALIZED = 'mounted';
+} else {
+  console.error("Critical Failure: Root container not found in DOM.");
 }
