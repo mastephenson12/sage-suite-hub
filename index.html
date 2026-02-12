@@ -76,7 +76,7 @@
   <script>
     // 1. JS Monitor for React mount signal
     const checkInit = setInterval(() => {
-      if (window.APP_INITIALIZED === 'mounted') {
+      if (window.APP_INITIALIZED === 'mounted' || (document.getElementById('root') && document.getElementById('root').children.length > 0)) {
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
@@ -87,22 +87,22 @@
       }
     }, 50);
     
-    // 2. Timed Failsafe: Show bypass button after 3 seconds
+    // 2. Timed Failsafe: Show bypass button after 2.5 seconds
     setTimeout(() => {
       const failsafe = document.getElementById('loader-failsafe');
       if (failsafe && window.APP_INITIALIZED !== 'mounted') {
         failsafe.style.display = 'block';
       }
-    }, 3000);
+    }, 2500);
 
-    // 3. Absolute Failsafe: Remove loader after 8 seconds regardless
+    // 3. Absolute Failsafe: Remove loader after 6 seconds regardless
     setTimeout(() => {
       const loader = document.getElementById('app-loader');
-      if (loader && window.APP_INITIALIZED !== 'mounted') {
-        console.warn("Forcing loader removal after timeout.");
-        loader.remove();
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => { if (loader.parentNode) loader.remove(); }, 600);
       }
-    }, 8000);
+    }, 6000);
   </script>
 
   <style>
@@ -128,10 +128,10 @@
       font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;
     }
 
-    /* 4. CSS-only Failsafe: Hide loader if #root has any children */
-    body:has(#root > *) #app-loader {
-      opacity: 0;
-      pointer-events: none;
+    /* 4. CSS-only Failsafe: Hide loader if #root is NOT empty */
+    body:has(#root > *:not(script)) #app-loader {
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
   </style>
 </body>
