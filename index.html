@@ -73,9 +73,6 @@
 
   <div id="root"></div>
 
-  <!-- Main Entry Point -->
-  <script type="module" src="index.tsx"></script>
-
   <script>
     // 1. JS Monitor for React mount signal
     const checkInit = setInterval(() => {
@@ -98,14 +95,14 @@
       }
     }, 3000);
 
-    // 3. Absolute Failsafe: Remove loader after 6 seconds regardless
+    // 3. Absolute Failsafe: Remove loader after 8 seconds regardless
     setTimeout(() => {
       const loader = document.getElementById('app-loader');
       if (loader && window.APP_INITIALIZED !== 'mounted') {
         console.warn("Forcing loader removal after timeout.");
         loader.remove();
       }
-    }, 6000);
+    }, 8000);
   </script>
 
   <style>
