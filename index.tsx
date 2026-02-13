@@ -5,15 +5,11 @@ import App from './App.tsx';
 const container = document.getElementById('root');
 if (container) {
   const root = createRoot(container);
-  
   root.render(
     <React.StrictMode>
       <App />
     </React.StrictMode>
   );
-
-  // Set flag immediately
-  (window as any).APP_INITIALIZED = 'mounted';
 } else {
   console.error("Critical Failure: Root container not found in DOM.");
 }
