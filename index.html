@@ -6,6 +6,7 @@
   <title>Health & Travels Journal • Scout Portal</title>
   
   <script>
+    // Environment setup
     window.process = { env: { NODE_ENV: 'development' } };
     
     // Silence Tailwind CDN production warning
@@ -50,14 +51,14 @@
     "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
     "react-router-dom": "https://esm.sh/react-router-dom@6.26.2?deps=react@18.3.1,react-dom@18.3.1",
     "@google/genai": "https://esm.sh/@google/genai@1.3.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/"
   }
 }
 </script>
 </head>
 <body class="bg-white antialiased m-0 font-sans">
-  <div id="app-loader" style="position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease;">
+  <div id="app-loader" style="position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease-in-out, visibility 0.5s;">
     <div style="width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
     <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;">Sage Portal Syncing...</p>
     <button id="loader-bypass" onclick="document.getElementById('app-loader').remove()" style="display:none; margin-top:20px; font-size:10px; font-weight:bold; color:#0d47a1; text-decoration:underline; background:none; border:none; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em;">Bypass Loader</button>
@@ -70,25 +71,34 @@
   </style>
 
   <script>
-    // Monitor for successful React mount by checking for rendered children
+    // Robust detection of successful React mount
+    function hideLoader() {
+      const loader = document.getElementById('app-loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        loader.style.visibility = 'hidden';
+        setTimeout(() => { if (loader.parentNode) loader.remove(); }, 600);
+      }
+    }
+
     const checkInit = setInterval(() => {
       const root = document.getElementById('root');
-      if (root && root.children.length > 0) {
-        const loader = document.getElementById('app-loader');
-        if (loader) {
-          loader.style.opacity = '0';
-          loader.style.pointerEvents = 'none';
-          setTimeout(() => { if (loader.parentNode) loader.remove(); }, 600);
-        }
+      const hasContent = root && root.children.length > 0;
+      
+      if (hasContent || window.APP_READY === true) {
+        hideLoader();
         clearInterval(checkInit);
       }
     }, 50);
     
-    // Failsafe: show bypass button if initialization takes longer than 5 seconds
+    // Safety net: Show bypass button after 5 seconds if still spinning
     setTimeout(() => {
       const btn = document.getElementById('loader-bypass');
       if (btn) btn.style.display = 'block';
     }, 5000);
+
+    // Final safety: force hide after 12 seconds regardless
+    setTimeout(hideLoader, 12000);
   </script>
 </body>
 </html>
