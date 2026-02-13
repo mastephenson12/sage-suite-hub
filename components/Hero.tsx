@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_DATA_URL, BRAND_NAME } from '../constants';
+import { LOGO_DATA_URL, BRAND_NAME } from '../constants.ts';
 
 export const Hero: React.FC = () => {
   const [imgError, setImgError] = useState(false);
