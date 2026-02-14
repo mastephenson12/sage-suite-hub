@@ -32,12 +32,22 @@ export const ReviewEngine: React.FC = () => {
         }
       });
 
-      const data = JSON.parse(response.text);
-      setReviews(prev => prev.map(r => r.id === review.id ? { 
-        ...r, 
-        sentiment: data.sentiment as any, 
-        suggestedReply: data.reply 
-      } : r));
+      try {
+        const data = JSON.parse(response.text || '{}');
+        setReviews(prev => prev.map(r => r.id === review.id ? { 
+          ...r, 
+          sentiment: data.sentiment as any, 
+          suggestedReply: data.reply 
+        } : r));
+      } catch (parseError) {
+        console.error("Failed to parse AI response:", parseError);
+        // Fallback for non-JSON or partial response
+        setReviews(prev => prev.map(r => r.id === review.id ? { 
+          ...r, 
+          sentiment: 'Neutral', 
+          suggestedReply: response.text 
+        } : r));
+      }
     } catch (e) {
       console.error(e);
     } finally {
