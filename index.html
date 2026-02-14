@@ -71,7 +71,6 @@
   </style>
 
   <script>
-    // Robust detection of successful React mount
     function hideLoader() {
       const loader = document.getElementById('app-loader');
       if (loader) {
@@ -91,13 +90,11 @@
       }
     }, 50);
     
-    // Safety net: Show bypass button after 5 seconds if still spinning
     setTimeout(() => {
       const btn = document.getElementById('loader-bypass');
       if (btn) btn.style.display = 'block';
     }, 5000);
 
-    // Final safety: force hide after 12 seconds regardless
     setTimeout(hideLoader, 12000);
   </script>
 </body>
