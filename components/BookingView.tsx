@@ -24,17 +24,19 @@ export const BookingView: React.FC = () => {
     setIsSearching(true);
     setStep('finalizing');
     try {
-      const prompt = `Build a custom Arizona adventure for ${selections.group}. 
+      const prompt = `Act as 'Scout'. Build a professional field guide and itinerary for Arizona exploration.
+      Target Group: ${selections.group}. 
       Duration: ${selections.duration}. 
-      Intensity Level: ${selections.intensity}. 
-      Main Focus: ${selections.focus}.
+      Pace: ${selections.intensity}. 
+      Priority: ${selections.focus}.
       
-      REQUIREMENTS:
-      1. Provide a titled, professional itinerary.
-      2. For families: focus on accessibility and safety. For groups: focus on scenic intensity and dining proximity.
-      3. Include exact trail names and parking requirements.
-      4. MANDATORY: Suggest one local wellness recovery center (e.g. sauna, massage) for each major trek.
-      5. Format it like a premium travel journal entry.`;
+      STRUCTURE YOUR RESPONSE:
+      1. TITLE: Give it a professional scouting mission name.
+      2. THE TREK: Provide 1-3 specific Arizona trail names. Include parking lot details and permit requirements.
+      3. THE RECOVERY: Suggest one specific local wellness business (Name & City) for post-hike recovery.
+      4. SCOUT NOTES: Provide 3 high-density pro tips specifically for ${selections.group}.
+      
+      MANDATORY: Use googleSearch to check for current weather and closures.`;
 
       const response = await geminiService.sendMessage([], prompt);
       setPlan({
@@ -65,13 +67,13 @@ export const BookingView: React.FC = () => {
         <div className="bg-zinc-50 p-12 rounded-[40px] border border-zinc-100 flex-grow flex flex-col justify-center items-center text-center shadow-inner overflow-y-auto">
           {step === 'group' && (
             <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
-              <h3 className="text-3xl font-black mb-10 tracking-tighter uppercase">Who is exploring?</h3>
+              <h3 className="text-4xl font-black mb-10 tracking-tighter uppercase">Who is exploring?</h3>
               <div className="grid grid-cols-1 gap-4">
                 {['Family with Kids', 'Group of Friends', 'Solo / Couple'].map(opt => (
                   <button 
                     key={opt}
                     onClick={() => updateSelection('group', opt, 'duration')}
-                    className="px-8 py-6 bg-white border border-zinc-200 rounded-3xl font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
+                    className="px-8 py-7 bg-white border-2 border-transparent hover:border-black rounded-[24px] font-black uppercase tracking-widest text-[11px] transition-all shadow-sm active:scale-95"
                   >
                     {opt}
                   </button>
@@ -82,13 +84,13 @@ export const BookingView: React.FC = () => {
 
           {step === 'duration' && (
             <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
-              <h3 className="text-3xl font-black mb-10 tracking-tighter uppercase">How long is the trek?</h3>
+              <h3 className="text-4xl font-black mb-10 tracking-tighter uppercase">Timeframe?</h3>
               <div className="grid grid-cols-1 gap-4">
-                {['Single Day', 'Weekend (3 Days)', 'Full Week Adventure'].map(opt => (
+                {['Single Day Trip', 'Weekend (3 Days)', 'Full Week Adventure'].map(opt => (
                   <button 
                     key={opt}
                     onClick={() => updateSelection('duration', opt, 'intensity')}
-                    className="px-8 py-6 bg-white border border-zinc-200 rounded-3xl font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
+                    className="px-8 py-7 bg-white border-2 border-transparent hover:border-black rounded-[24px] font-black uppercase tracking-widest text-[11px] transition-all shadow-sm active:scale-95"
                   >
                     {opt}
                   </button>
@@ -99,13 +101,13 @@ export const BookingView: React.FC = () => {
 
           {step === 'intensity' && (
             <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
-              <h3 className="text-3xl font-black mb-10 tracking-tighter uppercase">Intensity Level</h3>
+              <h3 className="text-4xl font-black mb-10 tracking-tighter uppercase">Set the Pace</h3>
               <div className="grid grid-cols-1 gap-4">
-                {['Leisurely (Scenic)', 'Moderate (Active)', 'Strenuous (Pro)'].map(opt => (
+                {['Leisurely (Scenic)', 'Moderate (Active)', 'Strenuous (Extreme)'].map(opt => (
                   <button 
                     key={opt}
                     onClick={() => updateSelection('intensity', opt, 'focus')}
-                    className="px-8 py-6 bg-white border border-zinc-200 rounded-3xl font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
+                    className="px-8 py-7 bg-white border-2 border-transparent hover:border-black rounded-[24px] font-black uppercase tracking-widest text-[11px] transition-all shadow-sm active:scale-95"
                   >
                     {opt}
                   </button>
@@ -116,13 +118,13 @@ export const BookingView: React.FC = () => {
 
           {step === 'focus' && (
             <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
-              <h3 className="text-3xl font-black mb-10 tracking-tighter uppercase">Adventure Focus</h3>
+              <h3 className="text-4xl font-black mb-10 tracking-tighter uppercase">Main Priority</h3>
               <div className="grid grid-cols-1 gap-4 mb-10">
-                {['Hidden Trails', 'Wellness & Recovery', 'Photo Ops & Vistas'].map(opt => (
+                {['Hidden Trails', 'Wellness & Spas', 'Photography Nodes'].map(opt => (
                   <button 
                     key={opt}
                     onClick={() => setSelections(prev => ({ ...prev, focus: opt }))}
-                    className={`px-8 py-6 rounded-3xl font-black uppercase tracking-widest text-[11px] transition-all shadow-sm active:scale-95 ${selections.focus === opt ? 'bg-black text-white' : 'bg-white border border-zinc-200 hover:bg-zinc-50'}`}
+                    className={`px-8 py-7 rounded-[24px] font-black uppercase tracking-widest text-[11px] transition-all shadow-sm active:scale-95 ${selections.focus === opt ? 'bg-black text-white border-black' : 'bg-white border-2 border-transparent hover:border-zinc-200'}`}
                   >
                     {opt}
                   </button>
@@ -131,38 +133,38 @@ export const BookingView: React.FC = () => {
               <button 
                 onClick={generateAdventure}
                 disabled={!selections.focus}
-                className="w-full bg-[#0d47a1] text-white px-12 py-6 rounded-full font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl hover:scale-105 transition-all disabled:opacity-30"
+                className="w-full bg-blue-700 text-white px-12 py-6 rounded-full font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl hover:bg-blue-800 transition-all disabled:opacity-20"
               >
-                Synthesize Itinerary
+                Assemble Field Guide
               </button>
             </div>
           )}
 
           {step === 'finalizing' && (
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 border-4 border-zinc-100 border-t-blue-600 rounded-full animate-spin mb-8"></div>
-              <h3 className="text-2xl font-black uppercase tracking-widest mb-4">Scout Mapping Active...</h3>
-              <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest">Grounding Arizona trail nodes via satellite link</p>
+              <div className="w-12 h-12 border-4 border-zinc-100 border-t-blue-700 rounded-full animate-spin mb-8"></div>
+              <h3 className="text-2xl font-black uppercase tracking-widest mb-4">Grounding Arizona Data...</h3>
+              <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest">Syncing with Sentinel-2 Satellite & Local News Nodes</p>
             </div>
           )}
         </div>
       )}
 
       {plan && (
-        <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 space-y-12 animate-in slide-in-from-bottom-8 duration-700">
+        <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 space-y-12 animate-in slide-in-from-bottom-8 duration-700 pb-12">
           <div className="flex justify-between items-center bg-zinc-950 p-8 rounded-[40px] text-white">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-blue-400">Custom Protocol Verified</p>
-              </div>
-              <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Adventure for: {selections.group} • {selections.duration}</p>
+            <div className="flex items-center gap-4">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-400">Vetted Scouting Protocol</p>
+                  <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{selections.group} • {selections.duration}</p>
+                </div>
             </div>
             <button 
               onClick={resetBuilder}
               className="text-[9px] font-black uppercase border border-white/20 px-6 py-3 rounded-full hover:bg-white hover:text-black transition-all"
             >
-              Start New Builder
+              Start New Protocol
             </button>
           </div>
 
@@ -177,18 +179,14 @@ export const BookingView: React.FC = () => {
 
             <div className="lg:col-span-1 space-y-6">
                <div className="bg-zinc-50 p-8 rounded-[32px] border border-zinc-100">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-6 underline decoration-blue-500/30 underline-offset-4">Builder Log</p>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-6 border-b border-zinc-200 pb-2">Scout Log</p>
                  <div className="space-y-6">
                    <div>
-                     <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1">Explorer Group</p>
+                     <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1">Target Group</p>
                      <p className="text-[11px] font-black text-black uppercase">{selections.group}</p>
                    </div>
                    <div>
-                     <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1">Duration</p>
-                     <p className="text-[11px] font-black text-black uppercase">{selections.duration}</p>
-                   </div>
-                   <div>
-                     <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1">Pace</p>
+                     <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1">Pace Node</p>
                      <p className="text-[11px] font-black text-black uppercase">{selections.intensity}</p>
                    </div>
                  </div>
