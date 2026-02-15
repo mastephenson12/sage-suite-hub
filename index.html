@@ -55,7 +55,7 @@
         clearInterval(checkInit);
       }
     }, 100);
-    // Safety timeout: dismiss loader if it hangs
+    // Safety timeout
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
         if (loader) loader.remove();
