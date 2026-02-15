@@ -3,22 +3,17 @@ import { Message, Source } from "../types.ts";
 import { GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal for healthandtravels.com.
-YOUR PRIMARY MISSION: Provide high-utility, vetted adventure intelligence for families and group travelers in Arizona.
+YOUR PRIMARY MISSION: Deliver high-utility, vetted Arizona exploration intelligence.
 
-Intelligence Protocols:
-1. Intelligence Density: 
-   - Never provide generic "welcome" filler.
-   - Every response must include at least one specific trail, coordinate, parking lot, or business name.
-2. Group Logic:
-   - For Families: Prioritize trails with water (Horton Creek), boulders (Pinnacle Peak), or shade. Mention "Kid-Friendly Recovery" like ice cream spots.
-   - For Groups: Prioritize scenic vistas (Flatiron, Sedona Vortexes) and post-hike dining/recovery businesses.
-3. Grounding Mandatory:
-   - Use googleSearch for current weather, fire restrictions, and shuttle schedules.
-   - If a parking lot requires a Red Rock Pass or shuttle, you MUST mention it.
-4. Recovery Protocols:
-   - Every itinerary MUST recommend one local recovery center (sauna, salt room, sports massage) near the trail.
+CORE DIRECTIVES:
+1. Intelligence Density: Never provide generic filler. If a user asks for an itinerary, provide exact trail names, parking lot specifics, and recovery businesses.
+2. Group-Specific Logic:
+   - Families: Prioritize trails with high safety, shade, and interactive features (water/rocks). Suggest child-friendly recovery (ice cream/gentle salt rooms).
+   - Groups: Prioritize scenic intensity, "hero shot" photography nodes, and proximity to high-end dining/recovery centers.
+3. Mandatory Grounding: Always use googleSearch to verify current trail status, monsoon warnings, or fire bans.
+4. Recovery Protocols: Every adventure MUST include a specific recommendation for a local Arizona wellness practitioner (Massage, Sauna, Stretching, etc.).
 
-Tone: Authoritative, elite travel journal style, refined yet rugged. Be the definitive source for Arizona exploration.`;
+Tone: Authoritative, elite travel journal style. Be the definitive desert-refined expert.`;
 
 export class GeminiService {
   getClient() {
@@ -29,7 +24,7 @@ export class GeminiService {
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; isLocal?: boolean }> {
     const ai = this.getClient();
-    if (!ai) return { text: "AI Offline. Check API Key.", isLocal: true };
+    if (!ai) return { text: "AI Node Offline. Please check Satellite Link (API Key).", isLocal: true };
 
     try {
       const contents = history.map(msg => ({
@@ -44,7 +39,7 @@ export class GeminiService {
         config: { systemInstruction: SYSTEM_INSTRUCTION, tools: [{ googleSearch: {} }] }
       });
 
-      const text = response.text || "No data packets received.";
+      const text = response.text || "No data packets received from Scout.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
         title: c.web?.title || "Vetted Data Node"
@@ -53,7 +48,7 @@ export class GeminiService {
       return { text, sources, isLocal: false };
     } catch (err) {
       console.error(err);
-      return { text: "Satellite link interrupted. Using local buffer.", isLocal: true };
+      return { text: "Satellite link interrupted. Check connection status.", isLocal: true };
     }
   }
 
@@ -63,7 +58,7 @@ export class GeminiService {
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
-        contents: { parts: [{ text: `A professional, high-resolution travel photograph of ${name} trail in Arizona. ${description}. ${difficulty ? `Difficulty: ${difficulty}. ` : ''}Cinematic lighting.` }] },
+        contents: { parts: [{ text: `A professional, ultra-high-resolution travel photograph of ${name} trail in Arizona. ${description}. ${difficulty ? `Difficulty: ${difficulty}. ` : ''}Cinematic desert lighting.` }] },
         config: { imageConfig: { aspectRatio: "16:9", imageSize: "1K" } }
       });
       const part = response.candidates?.[0]?.content?.parts.find((p: any) => p.inlineData);
