@@ -18,13 +18,17 @@ body {
   font-family: 'Lora', 'Georgia', serif;
 }
 
+.mono-text {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Fix for Sidebar Layout to prevent horizontal overflow */
+/* Sidebar behavior */
 .ue-sidebar-container {
   position: sticky !important;
   top: 0;
@@ -32,11 +36,7 @@ body {
   z-index: 40;
 }
 
-/* Smooth Scrolling & Refined Scrollbars */
-html {
-  scroll-behavior: smooth;
-}
-
+/* Custom Scrollbars */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 10px; }
@@ -47,17 +47,16 @@ html {
   scrollbar-color: #e4e4e7 transparent;
 }
 
-/* Utility Animations */
+/* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Form & Input Reset */
-input, textarea {
-  font-family: inherit;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
