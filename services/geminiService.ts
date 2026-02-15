@@ -3,35 +3,33 @@ import { Message, Source } from "../types.ts";
 import { GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal for healthandtravels.com.
-YOUR PRIMARY MISSION: Provide high-utility, vetted intelligence. Avoid generic filler.
+YOUR PRIMARY MISSION: Provide high-utility, vetted adventure intelligence for families and group travelers in Arizona.
 
 Intelligence Protocols:
-1. Arizona Trail Expert: 
-   - GROUNDING MANDATORY: Always use googleSearch to verify current trail status, fire bans, or water availability.
-   - Precision Parking: Identify exact parking lot names (e.g., "Park at the Soldier Pass lot") and mention if a Red Rock Pass or shuttle is required.
-   - Hydration Metrics: Provide specific water volume recommendations based on current temperature (e.g., "Carry 3.5L of water for this loop in current 92° heat").
-   - Safety Nodes: Note specific seasonal hazards like rattlesnake activity windows or flash flood risks in canyons.
+1. Intelligence Density: 
+   - Never provide generic "welcome" filler.
+   - Every response must include at least one specific trail, coordinate, parking lot, or business name.
+2. Group Logic:
+   - For Families: Prioritize trails with water (Horton Creek), boulders (Pinnacle Peak), or shade. Mention "Kid-Friendly Recovery" like ice cream spots.
+   - For Groups: Prioritize scenic vistas (Flatiron, Sedona Vortexes) and post-hike dining/recovery businesses.
+3. Grounding Mandatory:
+   - Use googleSearch for current weather, fire restrictions, and shuttle schedules.
+   - If a parking lot requires a Red Rock Pass or shuttle, you MUST mention it.
+4. Recovery Protocols:
+   - Every itinerary MUST recommend one local recovery center (sauna, salt room, sports massage) near the trail.
 
-2. Wellness & Recovery:
-   - Specificity: Recommend specific local Arizona businesses (e.g., "After hiking Flatiron, visit the Salt Room in Mesa for respiratory recovery").
-   - Contextual Match: Align the recovery protocol with the physical toll of the specific trek mentioned.
-
-3. Technical Support:
-   - Domain Nodes: Subdomains must point CNAME to ${GHL_CNAME_TARGET} or A Record to ${GHL_A_RECORD_IP}.
-   - GHL Sync: Provide clear, numbered steps for GoHighLevel Community synchronization.
-
-Tone: Authoritative, elite journal style, desert-refined. Be the partner the traveler relies on for accuracy.`;
+Tone: Authoritative, elite travel journal style, refined yet rugged. Be the definitive source for Arizona exploration.`;
 
 export class GeminiService {
-  public getClient() {
+  getClient() {
     const apiKey = process.env.API_KEY;
     if (!apiKey) return null;
     return new GoogleGenAI({ apiKey });
   }
 
-  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; triggerLead?: boolean; isLocal?: boolean }> {
+  async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; isLocal?: boolean }> {
     const ai = this.getClient();
-    if (!ai) return { text: "Link established but AI link is offline. Please ensure API Key is active in the environment.", isLocal: true };
+    if (!ai) return { text: "AI Offline. Check API Key.", isLocal: true };
 
     try {
       const contents = history.map(msg => ({
@@ -43,13 +41,10 @@ export class GeminiService {
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents,
-        config: { 
-          systemInstruction: SYSTEM_INSTRUCTION, 
-          tools: [{ googleSearch: {} }] 
-        }
+        config: { systemInstruction: SYSTEM_INSTRUCTION, tools: [{ googleSearch: {} }] }
       });
 
-      const text = response.text || "Connection established, but no data packets received from Scout.";
+      const text = response.text || "No data packets received.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
         title: c.web?.title || "Vetted Data Node"
@@ -57,27 +52,23 @@ export class GeminiService {
 
       return { text, sources, isLocal: false };
     } catch (err) {
-      console.error("Sage Intel Fault:", err);
-      return { text: "Satellite link interrupted by atmospheric noise. Switching to local buffer.", isLocal: true };
+      console.error(err);
+      return { text: "Satellite link interrupted. Using local buffer.", isLocal: true };
     }
   }
 
-  async generateTrailImage(name: string, description: string, difficulty: string): Promise<string> {
+  async generateTrailImage(name: string, description: string, difficulty?: string): Promise<string> {
     const ai = this.getClient();
     if (!ai) return "";
     try {
-      const prompt = `A professional, ultra-high-resolution photograph of the ${name} trail in Arizona. ${description}. Difficulty: ${difficulty}. Cinematic high-desert lighting, high-end travel journal aesthetic.`;
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
-        contents: { parts: [{ text: prompt }] },
-        config: { imageConfig: { aspectRatio: "16:9" } }
+        contents: { parts: [{ text: `A professional, high-resolution travel photograph of ${name} trail in Arizona. ${description}. ${difficulty ? `Difficulty: ${difficulty}. ` : ''}Cinematic lighting.` }] },
+        config: { imageConfig: { aspectRatio: "16:9", imageSize: "1K" } }
       });
-      
       const part = response.candidates?.[0]?.content?.parts.find((p: any) => p.inlineData);
       return part ? `data:image/png;base64,${part.inlineData.data}` : "";
-    } catch { 
-      return ""; 
-    }
+    } catch { return ""; }
   }
 }
 
