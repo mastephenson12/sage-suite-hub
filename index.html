@@ -19,7 +19,7 @@
     };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
   <script type="importmap">
 {
@@ -37,7 +37,6 @@
 </script>
 </head>
 <body class="bg-white antialiased m-0 font-sans">
-  <!-- Interactive Loader -->
   <div id="app-loader" style="position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s;">
     <div style="width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
     <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;">Sage Intelligence Syncing...</p>
@@ -56,7 +55,6 @@
         clearInterval(checkInit);
       }
     }, 100);
-    // Safe-release timeout
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
         if (loader) loader.remove();
