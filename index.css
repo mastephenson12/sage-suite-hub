@@ -60,3 +60,8 @@ body {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Utility for text hierarchy */
+.tracking-ultra {
+  letter-spacing: 0.4em;
+}
