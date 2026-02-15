@@ -2,17 +2,42 @@ import React, { useState } from 'react';
 import { geminiService } from '../services/geminiService.ts';
 import { Source } from '../types.ts';
 
+type Step = 'group' | 'duration' | 'intensity' | 'focus' | 'finalizing';
+
 export const BookingView: React.FC = () => {
-  const [goal, setGoal] = useState('');
-  const [suggestions, setSuggestions] = useState<{ text: string; sources: Source[] } | null>(null);
+  const [step, setStep] = useState<Step>('group');
+  const [selections, setSelections] = useState({
+    group: '',
+    duration: '',
+    intensity: '',
+    focus: ''
+  });
+  const [plan, setPlan] = useState<{ text: string; sources: Source[] } | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const handlePlan = async () => {
-    if (!goal.trim() || isSearching) return;
+  const updateSelection = (key: keyof typeof selections, value: string, nextStep: Step | null) => {
+    setSelections(prev => ({ ...prev, [key]: value }));
+    if (nextStep) setStep(nextStep);
+  };
+
+  const generateAdventure = async () => {
     setIsSearching(true);
+    setStep('finalizing');
     try {
-      const response = await geminiService.sendMessage([], `Plan a 3-day wellness and adventure trip in Arizona for someone interested in: ${goal}. Focus on booking flights, high-end retreats, and specific health-focused trails. Provide links where possible.`);
-      setSuggestions({
+      const prompt = `Build a custom Arizona adventure for ${selections.group}. 
+      Duration: ${selections.duration}. 
+      Intensity Level: ${selections.intensity}. 
+      Main Focus: ${selections.focus}.
+      
+      REQUIREMENTS:
+      1. Provide a titled itinerary with clear Day 1, Day 2, etc headers.
+      2. Include exact trail names and parking requirements.
+      3. MANDATORY: Suggest one specific local wellness business (name and city) for recovery for each day.
+      4. Note any current permit or shuttle requirements you find in your search.
+      5. Format it like an elite traveler's field guide.`;
+
+      const response = await geminiService.sendMessage([], prompt);
+      setPlan({
         text: response.text,
         sources: response.sources || []
       });
@@ -23,62 +48,164 @@ export const BookingView: React.FC = () => {
     }
   };
 
+  const resetBuilder = () => {
+    setPlan(null);
+    setStep('group');
+    setSelections({ group: '', duration: '', intensity: '', focus: '' });
+  };
+
   return (
     <div className="animate-in fade-in duration-700 h-full flex flex-col">
       <header className="mb-12">
-        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] mb-4">Travel Intelligence</p>
-        <h2 className="text-3xl font-black tracking-tighter uppercase">Booking Engine</h2>
+        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] mb-4">Health & Travels Lab</p>
+        <h2 className="text-3xl font-black tracking-tighter uppercase">Adventure Builder</h2>
       </header>
 
-      <div className="bg-zinc-50 p-12 rounded-[32px] mb-12 border border-zinc-100">
-        <h3 className="text-xl font-black mb-6 uppercase tracking-tight">Define Your Protocol</h3>
-        <textarea
-          value={goal}
-          onChange={(e) => setGoal(e.target.value)}
-          placeholder="e.g., Altitude training in Flagstaff with spa recovery, or Sedona red rock healing with boutique hotel stay..."
-          className="w-full bg-transparent text-2xl font-medium text-black placeholder-zinc-300 border-b border-zinc-200 focus:border-black focus:outline-none resize-none h-32 mb-8 leading-snug"
-        />
-        <button
-          onClick={handlePlan}
-          disabled={!goal.trim() || isSearching}
-          className="bg-black text-white px-12 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl hover:bg-brand-primary transition-all disabled:opacity-20"
-        >
-          {isSearching ? 'Synchronizing Itinerary...' : 'Generate Itinerary'}
-        </button>
-      </div>
-
-      {suggestions && (
-        <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 space-y-12 animate-in slide-in-from-bottom-8 duration-700">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-brand-primary mb-6">Sage Recommended Route</p>
-            <div className="text-lg text-zinc-800 leading-relaxed font-serif italic whitespace-pre-wrap bg-white p-10 border border-zinc-100 rounded-[32px] shadow-sm">
-              {suggestions.text}
-            </div>
-          </div>
-
-          {suggestions.sources.length > 0 && (
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-6">Vetted Booking Nodes</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {suggestions.sources.map((source, i) => (
-                  <a key={i} href={source.uri} target="_blank" rel="noopener noreferrer" className="p-6 bg-zinc-50 border border-zinc-100 rounded-xl hover:border-black transition-all group flex justify-between items-center">
-                    <div>
-                      <p className="text-xs font-black uppercase tracking-tight truncate max-w-[200px]">{source.title}</p>
-                      <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest truncate max-w-[200px]">{new URL(source.uri).hostname}</p>
-                    </div>
-                    <svg className="w-4 h-4 text-zinc-300 group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                  </a>
+      {!plan && (
+        <div className="bg-zinc-50 p-12 rounded-[40px] border border-zinc-100 flex-grow flex flex-col justify-center items-center text-center shadow-inner overflow-y-auto">
+          {step === 'group' && (
+            <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
+              <h3 className="text-4xl font-black mb-8 tracking-tighter uppercase">Who is exploring?</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {['Family & Kids', 'Group of Friends', 'Solo / Couple'].map(opt => (
+                  <button 
+                    key={opt}
+                    onClick={() => updateSelection('group', opt, 'duration')}
+                    className="px-8 py-6 bg-white border border-zinc-200 rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
+                  >
+                    {opt}
+                  </button>
                 ))}
               </div>
+            </div>
+          )}
+
+          {step === 'duration' && (
+            <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
+              <h3 className="text-4xl font-black mb-8 tracking-tighter uppercase">How long is the trek?</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {['Single Day', 'Weekend (3 Days)', 'Full Week'].map(opt => (
+                  <button 
+                    key={opt}
+                    onClick={() => updateSelection('duration', opt, 'intensity')}
+                    className="px-8 py-6 bg-white border border-zinc-200 rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 'intensity' && (
+            <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
+              <h3 className="text-4xl font-black mb-8 tracking-tighter uppercase">Select Intensity</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {['Leisurely (Scenic)', 'Moderate (Active)', 'Strenuous (Pro)'].map(opt => (
+                  <button 
+                    key={opt}
+                    onClick={() => updateSelection('intensity', opt, 'focus')}
+                    className="px-8 py-6 bg-white border border-zinc-200 rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-black hover:text-white hover:border-black transition-all shadow-sm active:scale-95"
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 'focus' && (
+            <div className="animate-in slide-in-from-bottom-4 duration-500 max-w-md w-full">
+              <h3 className="text-4xl font-black mb-8 tracking-tighter uppercase">What is the focus?</h3>
+              <div className="grid grid-cols-1 gap-4 mb-8">
+                {['Hidden Trails', 'Wellness/Recovery', 'Family Bonding'].map(opt => (
+                  <button 
+                    key={opt}
+                    onClick={() => setSelections(prev => ({ ...prev, focus: opt }))}
+                    className={`px-8 py-6 rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all shadow-sm active:scale-95 ${selections.focus === opt ? 'bg-black text-white' : 'bg-white border border-zinc-200 hover:bg-zinc-50'}`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              <button 
+                onClick={generateAdventure}
+                disabled={!selections.focus}
+                className="w-full bg-[#0d47a1] text-white px-12 py-5 rounded-full font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl hover:scale-105 transition-all disabled:opacity-30"
+              >
+                Synthesize Field Guide
+              </button>
+            </div>
+          )}
+
+          {step === 'finalizing' && (
+            <div className="animate-pulse">
+              <div className="w-16 h-16 border-4 border-zinc-200 border-t-black rounded-full animate-spin mx-auto mb-8"></div>
+              <h3 className="text-2xl font-black uppercase tracking-widest">Scout Intel Mapping...</h3>
+              <p className="text-zinc-400 text-xs font-bold uppercase mt-4 tracking-widest">Grounding Arizona Nodes via Gemini 3</p>
             </div>
           )}
         </div>
       )}
 
-      {!suggestions && !isSearching && (
-        <div className="flex-1 flex flex-col items-center justify-center opacity-20 py-20 border-2 border-dashed border-zinc-100 rounded-[32px]">
-          <svg className="w-12 h-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <p className="text-[10px] font-black uppercase tracking-widest">Awaiting Travel Query</p>
+      {plan && (
+        <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 space-y-12 animate-in slide-in-from-bottom-8 duration-700">
+          <div className="flex justify-between items-center bg-zinc-950 p-6 rounded-3xl text-white mb-8">
+            <div className="flex items-center gap-4">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <p className="text-[10px] font-black uppercase tracking-widest">Satellite Verified Protocol</p>
+            </div>
+            <button 
+              onClick={resetBuilder}
+              className="text-[9px] font-black uppercase border border-white/20 px-4 py-2 rounded-full hover:bg-white hover:text-black transition-all"
+            >
+              Start New Protocol
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3">
+              <div className="bg-white p-12 border border-zinc-100 rounded-[48px] shadow-2xl shadow-blue-900/5 prose prose-zinc max-w-none">
+                <div className="text-lg text-zinc-800 leading-relaxed font-serif italic whitespace-pre-wrap">
+                  {plan.text}
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-1 space-y-6">
+               <div className="bg-zinc-50 p-8 rounded-[32px] border border-zinc-100">
+                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-6">Discovery Log</p>
+                 <div className="space-y-4">
+                   <div className="flex justify-between items-center">
+                     <span className="text-[10px] font-black text-zinc-500 uppercase">Group</span>
+                     <span className="text-[10px] font-black text-black uppercase">{selections.group}</span>
+                   </div>
+                   <div className="flex justify-between items-center">
+                     <span className="text-[10px] font-black text-zinc-500 uppercase">Duration</span>
+                     <span className="text-[10px] font-black text-black uppercase">{selections.duration}</span>
+                   </div>
+                   <div className="flex justify-between items-center">
+                     <span className="text-[10px] font-black text-zinc-500 uppercase">Intensity</span>
+                     <span className="text-[10px] font-black text-black uppercase">{selections.intensity}</span>
+                   </div>
+                 </div>
+               </div>
+
+               {plan.sources.length > 0 && (
+                <div className="bg-white p-8 rounded-[32px] border border-zinc-100 shadow-sm">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-6">Grounding Nodes</p>
+                  <div className="space-y-3">
+                    {plan.sources.slice(0, 4).map((source, i) => (
+                      <a key={i} href={source.uri} target="_blank" rel="noopener noreferrer" className="block p-3 bg-zinc-50 border border-zinc-100 rounded-xl hover:border-black transition-all group overflow-hidden">
+                        <p className="text-[10px] font-black uppercase tracking-tight truncate group-hover:text-blue-700">{source.title}</p>
+                        <p className="text-[8px] text-zinc-400 font-bold uppercase tracking-widest truncate">{new URL(source.uri).hostname}</p>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
