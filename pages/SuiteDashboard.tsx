@@ -10,10 +10,6 @@ import { LiveVoiceView } from '../components/LiveVoiceView.tsx';
 import { BookingView } from '../components/BookingView.tsx';
 import { geminiService } from '../services/geminiService.ts';
 
-/**
- * WelcomeOverview provides the immediate landing experience for the suite.
- * It combines instant static data (Expert Intel Nodes) with live AI data.
- */
 const WelcomeOverview: React.FC = () => {
   const [brief, setBrief] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,8 +42,8 @@ const WelcomeOverview: React.FC = () => {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        {/* Main Live Briefing Section */}
         <div className="lg:col-span-2 space-y-8">
+          {/* AI Satellite Briefing */}
           <section className="bg-zinc-950 p-10 rounded-[48px] text-white shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
             <div className="relative z-10">
@@ -69,14 +65,14 @@ const WelcomeOverview: React.FC = () => {
             </div>
           </section>
 
-          {/* Expert Intel Nodes (Immediate Availability) */}
+          {/* Expert Intel Nodes (Static, Instant) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-8 border border-zinc-100 rounded-[32px] bg-white hover:border-black transition-all group">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 mb-6">Regional Node: Sedona</p>
               <h4 className="text-xl font-black uppercase mb-4 tracking-tighter">Red Rock Protocol</h4>
               <ul className="text-[11px] text-zinc-500 space-y-3 font-medium uppercase tracking-widest">
                 <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Red Rock Pass required for all trailheads.</li>
-                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Shuttle Mandatory: Thurs-Sun (Soldier Pass focus).</li>
+                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Shuttle Mandatory: Thurs-Sun (Soldier Pass/Cathedral).</li>
                 <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> High-vibe Recovery: Visit "Sedona Salt Room" post-trek.</li>
               </ul>
             </div>
@@ -90,14 +86,14 @@ const WelcomeOverview: React.FC = () => {
                 </div>
                 <div className="pt-4 border-t border-zinc-200">
                   <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Scout Recommends</p>
-                  <p className="text-xs font-bold uppercase tracking-tight">Merino tech-wool layers for canyon humidity management.</p>
+                  <p className="text-xs font-bold uppercase tracking-tight leading-tight">Always scale your hydration +30% for high-desert summer trekking.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Operational Sidebar Stats */}
+        {/* Operational Stats */}
         <div className="space-y-6">
           <div className="bg-blue-50/50 p-8 rounded-[40px] border border-blue-100 shadow-sm">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-800 mb-8">Active Data Streams</h4>
