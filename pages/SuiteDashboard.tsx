@@ -39,11 +39,11 @@ const WelcomeOverview = () => {
   useEffect(() => {
     const fetchBrief = async () => {
       try {
-        const prompt = "Provide a high-density intelligence briefing for Arizona explorers TODAY. 1. Critical Weather hazards (heat/wind/monsoon). 2. Specific Trail Status (Soldier Pass parking, Camelback Echo Canyon, Sedona Shuttles). 3. One elite wellness recovery recommendation. Keep it bulleted, authoritative, and professional.";
+        const prompt = "Provide a high-density intelligence briefing for Arizona explorers TODAY. 1. Critical Weather hazards. 2. Specific Trail Status (Sedona focusing on shuttles). 3. One recovery business recommendation. Keep it bulleted and authoritative.";
         const res = await geminiService.sendMessage([], prompt);
         setBrief(res.text);
       } catch (e) {
-        setBrief("Satellite link unstable. Please check official Forest Service channels for fire and trail alerts.");
+        setBrief("Satellite link unstable. Please check official Forest Service alerts for fire and weather updates.");
       } finally {
         setLoading(false);
       }
@@ -63,10 +63,10 @@ const WelcomeOverview = () => {
         </h1>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Live Briefing Section */}
         <div className="lg:col-span-2 space-y-8">
-          <section className="bg-zinc-950 p-10 rounded-[48px] text-white shadow-2xl relative overflow-hidden">
+          <section className="bg-zinc-950 p-10 rounded-[48px] text-white shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
             <div className="relative z-10">
                <div className="flex items-center gap-3 mb-8">
@@ -87,15 +87,15 @@ const WelcomeOverview = () => {
             </div>
           </section>
 
-          {/* Expert Intel Nodes (Immediate Visibility) */}
+          {/* Expert Intel Nodes (Immediate Availability) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-8 border border-zinc-100 rounded-[32px] bg-white hover:border-black transition-all group">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 mb-6">Regional Node: Sedona</p>
               <h4 className="text-xl font-black uppercase mb-4 tracking-tighter">Red Rock Protocol</h4>
               <ul className="text-[11px] text-zinc-500 space-y-3 font-medium uppercase tracking-widest">
                 <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Red Rock Pass required for all trailheads.</li>
-                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Shuttle Mandatory: Thurs-Sun (Cathedral & Soldier Pass).</li>
-                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Hydration: 1L per hour minimum for canyon trekking.</li>
+                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Shuttle Mandatory: Thurs-Sun (Soldier Pass focus).</li>
+                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> High-vibe Recovery: Visit "Sedona Salt Room" post-trek.</li>
               </ul>
             </div>
             <div className="p-8 border border-zinc-100 rounded-[32px] bg-zinc-50 hover:bg-white hover:border-black transition-all group">
@@ -163,4 +163,4 @@ const WelcomeOverview = () => {
   );
 };
 
-export default WelcomeOverview;
+export default SuiteDashboard;
