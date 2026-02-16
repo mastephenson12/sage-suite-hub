@@ -10,29 +10,11 @@ import { LiveVoiceView } from '../components/LiveVoiceView.tsx';
 import { BookingView } from '../components/BookingView.tsx';
 import { geminiService } from '../services/geminiService.ts';
 
-const SuiteDashboard: React.FC = () => {
-  return (
-    <div className="flex h-screen bg-white overflow-hidden">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white custom-scrollbar">
-        <div className="max-w-6xl mx-auto p-6 md:p-12 h-full flex flex-col">
-          <Routes>
-            <Route path="/" element={<WelcomeOverview />} />
-            <Route path="/chat" element={<ChatView />} />
-            <Route path="/booking" element={<BookingView />} />
-            <Route path="/reviews" element={<ReviewEngine />} />
-            <Route path="/leads" element={<LeadQualifier />} />
-            <Route path="/media" element={<MediaLabView />} />
-            <Route path="/search" element={<SearchHubView />} />
-            <Route path="/voice" element={<LiveVoiceView />} />
-          </Routes>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-const WelcomeOverview = () => {
+/**
+ * WelcomeOverview provides the immediate landing experience for the suite.
+ * It combines instant static data (Expert Intel Nodes) with live AI data.
+ */
+const WelcomeOverview: React.FC = () => {
   const [brief, setBrief] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +45,7 @@ const WelcomeOverview = () => {
         </h1>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         {/* Main Live Briefing Section */}
         <div className="lg:col-span-2 space-y-8">
           <section className="bg-zinc-950 p-10 rounded-[48px] text-white shadow-2xl relative overflow-hidden group">
@@ -159,6 +141,28 @@ const WelcomeOverview = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const SuiteDashboard: React.FC = () => {
+  return (
+    <div className="flex h-screen bg-white overflow-hidden">
+      <Sidebar />
+      <main className="flex-1 overflow-y-auto bg-white custom-scrollbar">
+        <div className="max-w-6xl mx-auto p-6 md:p-12 h-full flex flex-col">
+          <Routes>
+            <Route path="/" element={<WelcomeOverview />} />
+            <Route path="/chat" element={<ChatView />} />
+            <Route path="/booking" element={<BookingView />} />
+            <Route path="/reviews" element={<ReviewEngine />} />
+            <Route path="/leads" element={<LeadQualifier />} />
+            <Route path="/media" element={<MediaLabView />} />
+            <Route path="/search" element={<SearchHubView />} />
+            <Route path="/voice" element={<LiveVoiceView />} />
+          </Routes>
+        </div>
+      </main>
     </div>
   );
 };
