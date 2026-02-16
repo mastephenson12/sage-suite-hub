@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Health & Travels Journal • Scout Portal</title>
   <script>
-    window.process = { env: { NODE_ENV: 'development' } };
+    window.process = { env: { NODE_ENV: 'development', API_KEY: '' } };
     window.tailwind = {
       config: {
         theme: {
@@ -47,7 +47,7 @@
   
   <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
   <script>
-    // Reveal app once mounted
+    // Reveal app once root has content
     const checkInit = setInterval(() => {
       const root = document.getElementById('root');
       if (root && root.children.length > 0) {
@@ -58,13 +58,18 @@
         }
         clearInterval(checkInit);
       }
-    }, 100);
+    }, 50);
     
-    // Safety release: If React fails to mount for any reason, remove loader after 4s
+    // Safety release: If React fails to mount after 5 seconds, clear the loader so we can see errors
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
-        if (loader) loader.remove();
-    }, 4000);
+        if (loader) {
+            console.warn("App mount timeout - clearing loader.");
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 600);
+        }
+        clearInterval(checkInit);
+    }, 5000);
   </script>
 </body>
 </html>
