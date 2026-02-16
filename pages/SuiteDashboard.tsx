@@ -39,11 +39,11 @@ const WelcomeOverview = () => {
   useEffect(() => {
     const fetchBrief = async () => {
       try {
-        const prompt = "Provide a high-density intelligence briefing for Arizona explorers TODAY. 1. Critical Weather hazards (heat/wind). 2. Specific Trail Status (Soldier Pass, Camelback, Sedona shuttles). 3. One elite wellness recovery recommendation. Keep it bulleted and efficient.";
+        const prompt = "Provide a high-density intelligence briefing for Arizona explorers TODAY. 1. Critical Weather hazards (heat/wind/monsoon). 2. Specific Trail Status (Soldier Pass parking, Camelback Echo Canyon, Sedona Shuttles). 3. One elite wellness recovery recommendation. Keep it bulleted, authoritative, and professional.";
         const res = await geminiService.sendMessage([], prompt);
         setBrief(res.text);
       } catch (e) {
-        setBrief("Satellite link unstable. Please check official Forest Service alerts for fire and weather updates.");
+        setBrief("Satellite link unstable. Please check official Forest Service channels for fire and trail alerts.");
       } finally {
         setLoading(false);
       }
@@ -63,8 +63,8 @@ const WelcomeOverview = () => {
         </h1>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Briefing Node */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        {/* Main Live Briefing Section */}
         <div className="lg:col-span-2 space-y-8">
           <section className="bg-zinc-950 p-10 rounded-[48px] text-white shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
@@ -87,41 +87,42 @@ const WelcomeOverview = () => {
             </div>
           </section>
 
-          {/* Expert Intel Nodes (Immediate Information) */}
+          {/* Expert Intel Nodes (Immediate Visibility) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-8 border border-zinc-100 rounded-[32px] bg-white hover:border-black transition-all group">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 mb-6">Regional Node: Sedona</p>
               <h4 className="text-xl font-black uppercase mb-4 tracking-tighter">Red Rock Protocol</h4>
               <ul className="text-[11px] text-zinc-500 space-y-3 font-medium uppercase tracking-widest">
                 <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Red Rock Pass required for all trailheads.</li>
-                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Shuttle Mandatory: Thurs-Sun for Cathedral/Soldier Pass.</li>
-                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> High-vibe Recovery: Visit "Sedona Salt Room" post-hike.</li>
+                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Shuttle Mandatory: Thurs-Sun (Cathedral & Soldier Pass).</li>
+                <li className="flex items-start gap-3"><span className="w-1 h-1 bg-black rounded-full mt-1.5 shrink-0"></span> Hydration: 1L per hour minimum for canyon trekking.</li>
               </ul>
             </div>
             <div className="p-8 border border-zinc-100 rounded-[32px] bg-zinc-50 hover:bg-white hover:border-black transition-all group">
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 mb-6">Field Prep: Hydration</p>
-              <div className="space-y-6">
-                <div className="flex justify-between items-end">
-                  <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest">Safety Margin</p>
-                  <p className="text-xs font-black">1.5L / Hour</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 mb-6">Expert Gear Check</p>
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  {['UV-50 Layer', '3L Bladder', 'Salt Tabs', 'Offline Maps'].map(item => (
+                    <span key={item} className="px-3 py-1.5 bg-white border border-zinc-200 rounded-lg text-[9px] font-black uppercase tracking-widest text-zinc-600 shadow-sm">{item}</span>
+                  ))}
                 </div>
-                <div className="w-full h-1.5 bg-zinc-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600 w-3/4"></div>
+                <div className="pt-4 border-t border-zinc-200">
+                  <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Scout Recommends</p>
+                  <p className="text-xs font-bold uppercase tracking-tight">Merino tech-wool layers for canyon humidity management.</p>
                 </div>
-                <p className="text-[10px] text-zinc-500 font-medium leading-relaxed italic">"The desert doesn't offer second chances on water. Scale your bladder +30% for canyon treks."</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Intelligence Streams */}
+        {/* Operational Sidebar Stats */}
         <div className="space-y-6">
-          <div className="bg-blue-50/30 p-8 rounded-[40px] border border-blue-100">
+          <div className="bg-blue-50/50 p-8 rounded-[40px] border border-blue-100 shadow-sm">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-800 mb-8">Active Data Streams</h4>
             <div className="space-y-8">
               {[
-                { label: 'Flightsage', val: '4 Active Bookings' },
-                { label: 'Travelsage', val: '12 Vetted Paths' },
+                { label: 'Flightsage', val: '4 Confirmed' },
+                { label: 'Travelsage', val: '12 Active Paths' },
                 { label: 'Campsage', val: '8 Inspections' }
               ].map(brand => (
                 <div key={brand.label}>
@@ -137,12 +138,12 @@ const WelcomeOverview = () => {
             </div>
           </div>
 
-          <div className="p-8 border border-zinc-100 rounded-[32px] flex items-center justify-between bg-white shadow-sm">
+          <div className="p-8 border border-zinc-100 rounded-[32px] flex items-center justify-between bg-white shadow-sm hover:border-black transition-all cursor-default">
             <div className="space-y-1">
               <p className="text-[9px] font-black uppercase text-zinc-400 tracking-widest">Active Scout</p>
               <p className="text-sm font-black uppercase text-black">Gemini 3 Pro</p>
             </div>
-            <div className="w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center text-white text-xs font-black shadow-xl shadow-zinc-200">
+            <div className="w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center text-white text-xs font-black shadow-lg shadow-zinc-200">
               S3
             </div>
           </div>
@@ -150,10 +151,10 @@ const WelcomeOverview = () => {
           <div className="p-8 bg-zinc-50 border border-zinc-100 rounded-[32px]">
              <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-4">Satellite Signal</p>
              <div className="flex items-center gap-3">
-               <div className="flex gap-1">
+               <div className="flex gap-1.5">
                  {[1,2,3,4,5].map(i => <div key={i} className={`w-1.5 h-4 rounded-full ${i <= 4 ? 'bg-blue-500' : 'bg-zinc-200'}`}></div>)}
                </div>
-               <span className="text-[10px] font-black uppercase tracking-widest text-zinc-900">High Strength</span>
+               <span className="text-[10px] font-black uppercase tracking-widest text-zinc-900">84% Strength</span>
              </div>
           </div>
         </div>
@@ -162,4 +163,4 @@ const WelcomeOverview = () => {
   );
 };
 
-export default SuiteDashboard;
+export default WelcomeOverview;
