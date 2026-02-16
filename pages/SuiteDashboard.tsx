@@ -21,6 +21,7 @@ const WelcomeOverview: React.FC = () => {
         const res = await geminiService.sendMessage([], prompt);
         setBrief(res.text);
       } catch (e) {
+        console.error("Dashboard brief error:", e);
         setBrief("Satellite link unstable. Please check official Forest Service alerts for fire and weather updates.");
       } finally {
         setLoading(false);
