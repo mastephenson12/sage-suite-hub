@@ -47,7 +47,7 @@
   
   <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
   <script>
-    // Reveal app once mounted or after safety timeout
+    // Reveal app once mounted
     const checkInit = setInterval(() => {
       const root = document.getElementById('root');
       if (root && root.children.length > 0) {
@@ -60,7 +60,7 @@
       }
     }, 100);
     
-    // Safety release: If React fails to mount for any reason, remove loader so user sees SOMETHING
+    // Safety release: If React fails to mount for any reason, remove loader after 4s
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
         if (loader) loader.remove();
