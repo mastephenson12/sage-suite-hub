@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Health & Travels Journal • Scout Portal</title>
+  <title>Sage Suite • Adventure Command</title>
   <script>
-    // Ensure process.env is available for React and SDKs without overwriting injected values
-    window.process = window.process || { env: {} };
-    window.process.env = window.process.env || {};
-    window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'development';
-
+    window.process = { env: { NODE_ENV: 'development' } };
     window.tailwind = {
       config: {
         theme: {
@@ -40,39 +36,39 @@
 }
 </script>
 </head>
-<body class="bg-white antialiased m-0 font-sans">
-  <!-- Interactive App Loader -->
-  <div id="app-loader" style="position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s;">
-    <div style="width:32px; height:32px; border:3px solid #f4f4f5; border-top-color:#0d47a1; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
-    <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#18181b;">Sage Intelligence Syncing...</p>
+<body class="bg-white antialiased m-0 font-sans overflow-x-hidden">
+  <!-- Intelligence Sync Loader -->
+  <div id="app-loader" style="position: fixed; inset: 0; background: #09090b; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);">
+    <div style="width:40px; height:40px; border:2px solid #27272a; border-top-color:#3b82f6; border-radius:50%; animation: spin 1s linear infinite; margin-bottom:24px;"></div>
+    <div style="text-align:center;">
+      <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.4em; color:#f4f4f5; margin-bottom:8px;">Satellite Link Establishing</p>
+      <p style="font-size:9px; font-weight:500; text-transform:uppercase; letter-spacing:0.2em; color:#71717a;">Sage Suite v3.1 • Operations Hub</p>
+    </div>
   </div>
   
   <div id="root"></div>
   
   <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
   <script>
-    // Reveal app once root has content
     const checkInit = setInterval(() => {
       const root = document.getElementById('root');
       if (root && root.children.length > 0) {
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 600);
+          setTimeout(() => loader.remove(), 800);
         }
         clearInterval(checkInit);
       }
-    }, 50);
-    
-    // Safety release: If React fails to mount after 4 seconds, clear the loader so we can see errors
+    }, 100);
+    // Hard timeout for visibility
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
         if (loader) {
             loader.style.opacity = '0';
-            setTimeout(() => loader.remove(), 600);
+            setTimeout(() => loader.remove(), 800);
         }
-        clearInterval(checkInit);
-    }, 4000);
+    }, 5000);
   </script>
 </body>
 </html>
