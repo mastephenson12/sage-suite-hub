@@ -6,25 +6,26 @@ const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal f
 YOUR PRIMARY MISSION: Deliver high-utility, vetted Arizona exploration intelligence.
 
 CORE DIRECTIVES:
-1. Intelligence Density: Never provide generic filler. If a user asks for an itinerary, provide exact trail names, parking lot specifics, and recovery businesses.
-2. Group-Specific Logic:
-   - Families: Prioritize trails with high safety, shade, and interactive features (water/rocks). Suggest child-friendly recovery (ice cream/gentle salt rooms).
-   - Groups: Prioritize scenic intensity, "hero shot" photography nodes, and proximity to high-end dining/recovery centers.
-3. Mandatory Grounding: Always use googleSearch to verify current trail status, monsoon warnings, or fire bans.
-4. Recovery Protocols: Every adventure MUST include a specific recommendation for a local Arizona wellness practitioner (Massage, Sauna, Stretching, etc.).
+1. Intelligence Density: Never provide generic filler. Provide exact trail names, parking lot specifics, and recovery businesses.
+2. Mandatory Grounding: Always use googleSearch to verify current trail status, monsoon warnings, or fire bans.
+3. Recovery Protocols: Every adventure MUST include a specific recommendation for a local Arizona wellness practitioner.
 
 Tone: Authoritative, elite travel journal style. Be the definitive desert-refined expert.`;
 
 export class GeminiService {
   getClient() {
+    // API Key is injected into process.env by the environment
     const apiKey = process.env.API_KEY;
-    if (!apiKey) return null;
+    if (!apiKey) {
+      console.warn("API Key missing from environment.");
+      return null;
+    }
     return new GoogleGenAI({ apiKey });
   }
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; isLocal?: boolean }> {
     const ai = this.getClient();
-    if (!ai) return { text: "AI Node Offline. Please check Satellite Link (API Key).", isLocal: true };
+    if (!ai) return { text: "Intelligence link offline. Please verify API configuration.", isLocal: true };
 
     try {
       const contents = history.map(msg => ({
@@ -36,19 +37,23 @@ export class GeminiService {
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents,
-        config: { systemInstruction: SYSTEM_INSTRUCTION, tools: [{ googleSearch: {} }] }
+        config: { 
+            systemInstruction: SYSTEM_INSTRUCTION, 
+            tools: [{ googleSearch: {} }],
+            temperature: 0.7 
+        }
       });
 
-      const text = response.text || "No data packets received from Scout.";
+      const text = response.text || "Communication timeout: Scout failed to transmit data packets.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((c: any) => ({
         uri: c.web?.uri,
-        title: c.web?.title || "Vetted Data Node"
+        title: c.web?.title || "Vetted Intel Node"
       })).filter((s: any) => s && s.uri) || [];
 
       return { text, sources, isLocal: false };
     } catch (err) {
-      console.error(err);
-      return { text: "Satellite link interrupted. Check connection status.", isLocal: true };
+      console.error("Gemini Critical Error:", err);
+      return { text: "Satellite link interrupted by atmospheric noise. Switching to local survival buffer.", isLocal: true };
     }
   }
 
@@ -58,12 +63,19 @@ export class GeminiService {
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
-        contents: { parts: [{ text: `A professional, ultra-high-resolution travel photograph of ${name} trail in Arizona. ${description}. ${difficulty ? `Difficulty: ${difficulty}. ` : ''}Cinematic desert lighting.` }] },
-        config: { imageConfig: { aspectRatio: "16:9", imageSize: "1K" } }
+        contents: { 
+            parts: [{ text: `A high-end, ultra-HD travel journal photograph of ${name} trail, Arizona. ${description}. ${difficulty ? `Difficulty: ${difficulty}.` : ''} Cinematic sunset lighting.` }] 
+        },
+        config: { 
+            imageConfig: { aspectRatio: "16:9", imageSize: "1K" } 
+        }
       });
       const part = response.candidates?.[0]?.content?.parts.find((p: any) => p.inlineData);
       return part ? `data:image/png;base64,${part.inlineData.data}` : "";
-    } catch { return ""; }
+    } catch (e) { 
+      console.error("Image Synthesis Failed:", e);
+      return ""; 
+    }
   }
 }
 
