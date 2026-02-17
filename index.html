@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sage Suite • Adventure Command</title>
   <script>
-    // Safe initialization of process.env for React/GenAI SDK
+    // Initialize global process env safely for React and SDKs
     window.process = window.process || { env: {} };
     window.process.env = window.process.env || {};
     window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'development';
@@ -41,17 +41,17 @@
 </script>
 </head>
 <body class="bg-white antialiased m-0 font-sans overflow-x-hidden">
-  <!-- Interactive App Loader -->
-  <div id="app-loader" style="position: fixed; inset: 0; background: #09090b; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s;">
-    <div style="width:32px; height:32px; border:3px solid #27272a; border-top-color:#3b82f6; border-radius:50%; animation: spin 0.8s linear infinite; margin-bottom:20px;"></div>
-    <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#f4f4f5;">Sage Intelligence Syncing...</p>
+  <!-- Intelligence Sync Loader -->
+  <div id="app-loader" style="position: fixed; inset: 0; background: #09090b; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);">
+    <div style="width:32px; height:32px; border:2px solid #27272a; border-top-color:#3b82f6; border-radius:50%; animation: spin 1s linear infinite; margin-bottom:20px;"></div>
+    <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#f4f4f5;">Satellite Link Syncing...</p>
   </div>
   
   <div id="root"></div>
   
   <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
   <script>
-    // Reveal app once root has content
+    // Reveal app once root has content (React successfully mounted)
     const checkInit = setInterval(() => {
       const root = document.getElementById('root');
       if (root && root.children.length > 0) {
@@ -64,11 +64,11 @@
       }
     }, 50);
     
-    // Safety release: If React fails to mount after 4 seconds, clear the loader so we can see errors
+    // Safety release: If React fails for 4 seconds, release anyway so we can see error logs
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
         if (loader) {
-            console.warn("Manual loader release triggered.");
+            console.warn("Mount timeout - clearing loader.");
             loader.style.opacity = '0';
             setTimeout(() => loader.remove(), 600);
         }
