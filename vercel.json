@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    { "source": "/suite/(.*)", "destination": "/index.html" },
+    { "source": "/chat", "destination": "/index.html" },
+    { "source": "/archive", "destination": "/index.html" },
+    { "source": "/trail-guides", "destination": "/index.html" }
+  ],
   "cleanUrls": true,
   "trailingSlash": false
 }
