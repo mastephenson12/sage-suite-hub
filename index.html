@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sage Suite • Adventure Command</title>
   <script>
-    window.process = { env: { NODE_ENV: 'development' } };
+    // Safe initialization of process.env for React/GenAI SDK
+    window.process = window.process || { env: {} };
+    window.process.env = window.process.env || {};
+    window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'development';
+
     window.tailwind = {
       config: {
         theme: {
@@ -39,20 +43,18 @@
 <body class="bg-white antialiased m-0 font-sans overflow-x-hidden">
   <!-- Intelligence Sync Loader -->
   <div id="app-loader" style="position: fixed; inset: 0; background: #09090b; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);">
-    <div style="width:48px; height:48px; border:2px solid #27272a; border-top-color:#3b82f6; border-radius:50%; animation: spin 1s linear infinite; margin-bottom:24px;"></div>
-    <div style="text-align:center;">
-      <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.4em; color:#f4f4f5; margin-bottom:8px;">Satellite Link Establishing</p>
-      <p id="loader-status" style="font-size:9px; font-weight:500; text-transform:uppercase; letter-spacing:0.2em; color:#71717a;">Sage Suite Operations Hub v3.1</p>
+    <div style="width:32px; height:32px; border:2px solid #27272a; border-top-color:#3b82f6; border-radius:50%; animation: spin 1s linear infinite; margin-bottom:20px;"></div>
+    <div style="text-align: center;">
+      <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#f4f4f5; margin-bottom: 4px;">Satellite Link Syncing</p>
+      <p style="font-size:8px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:#52525b;">Sage Intelligence Node 3.1</p>
     </div>
   </div>
   
   <div id="root"></div>
-
-  <!-- Explicit Entry Point -->
-  <script type="module" src="index.tsx"></script>
   
   <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
   <script>
+    // Reveal app once root has content (React successfully mounted)
     const checkInit = setInterval(() => {
       const root = document.getElementById('root');
       if (root && root.children.length > 0) {
@@ -63,22 +65,18 @@
         }
         clearInterval(checkInit);
       }
-    }, 100);
+    }, 50);
     
+    // Safety release: If React fails to mount after 4 seconds, clear the loader so we can see errors
     setTimeout(() => {
         const loader = document.getElementById('app-loader');
-        const status = document.getElementById('loader-status');
         if (loader && loader.style.opacity !== '0') {
-            if (status) status.innerText = "System Sync Lagging • Retrying...";
-            setTimeout(() => {
-              if (loader && loader.style.opacity !== '0') {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 600);
-              }
-            }, 5000);
+            console.warn("Manual loader release triggered.");
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 600);
         }
         clearInterval(checkInit);
-    }, 10000);
+    }, 4000);
   </script>
 </body>
 </html>
