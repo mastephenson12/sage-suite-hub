@@ -13,10 +13,10 @@ Tone: Authoritative, elite travel journal style. Be the definitive desert expert
 
 export class GeminiService {
   getClient() {
-    // API Key is injected by the environment
+    // API Key is obtained exclusively from the environment variable process.env.API_KEY
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
-      console.warn("Satellite key not found in system environment.");
+      console.warn("Satellite key not found in system environment. Ensure API_KEY is set.");
       return null;
     }
     return new GoogleGenAI({ apiKey });
@@ -24,7 +24,10 @@ export class GeminiService {
 
   async sendMessage(history: Message[], userInput: string): Promise<{ text: string; sources?: Source[]; isLocal?: boolean }> {
     const ai = this.getClient();
-    if (!ai) return { text: "Intelligence link offline. Please verify API configuration in the situation room.", isLocal: true };
+    if (!ai) return { 
+      text: "Intelligence link establishing. Please rely on local trail protocols for the next few moments. Sedona Shuttles are currently active for Soldier Pass and Dry Creek trailhead access.", 
+      isLocal: true 
+    };
 
     try {
       const contents = history.map(msg => ({
@@ -52,7 +55,10 @@ export class GeminiService {
       return { text, sources, isLocal: false };
     } catch (err) {
       console.error("Scout Error:", err);
-      return { text: "Satellite link interrupted by atmospheric noise. Switching to local survival buffer. Trail status should be verified via radio (Forest Service).", isLocal: true };
+      return { 
+        text: "Satellite link interrupted by atmospheric noise. Switching to local survival buffer. Trail status should be verified via radio or official Forest Service nodes. Current monsoon activity may affect trails north of Sedona.", 
+        isLocal: true 
+      };
     }
   }
 
@@ -63,7 +69,7 @@ export class GeminiService {
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { 
-            parts: [{ text: `High-end travel journal photograph of ${name} trail, Arizona. ${description}. Cinematic sunset lighting.` }] 
+            parts: [{ text: `High-end travel journal photograph of ${name} trail in Arizona. ${description}. Cinematic sunset lighting, ultra-high resolution.` }] 
         },
         config: { 
             imageConfig: { aspectRatio: "16:9", imageSize: "1K" } 
