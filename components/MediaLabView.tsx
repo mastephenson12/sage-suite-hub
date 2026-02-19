@@ -22,14 +22,14 @@ export const MediaLabView: React.FC = () => {
 
     setIsGenerating(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: prompt }] },
         config: {
           imageConfig: { aspectRatio: "1:1", imageSize: "1K" }
-        }
+        } as any
       });
 
       if (!response.candidates?.[0]?.content?.parts) throw new Error("No image data returned.");
@@ -72,7 +72,7 @@ export const MediaLabView: React.FC = () => {
     setVideoStatus('Establishing Secure Satellite Link...');
     
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
       let operation = await ai.models.generateVideos({
         model: 'veo-3.1-fast-generate-preview',
@@ -93,7 +93,7 @@ export const MediaLabView: React.FC = () => {
       const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
       if (!downloadLink) throw new Error("Video generation completed but no link found.");
       
-      const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
+      const response = await fetch(`${downloadLink}&key=${process.env.GEMINI_API_KEY}`);
       const blob = await response.blob();
       const videoUrl = URL.createObjectURL(blob);
 
