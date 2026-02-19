@@ -9,36 +9,9 @@
     window.process = window.process || { env: {} };
     window.process.env = window.process.env || {};
     window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'development';
-
-    window.tailwind = {
-      config: {
-        theme: {
-          extend: {
-            colors: {
-              brand: { primary: '#0d47a1', dark: '#0a3a85', accent: '#3b82f6', surface: '#fafafa' }
-            }
-          }
-        }
-      }
-    };
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="index.css">
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.3.1",
-    "react-dom": "https://esm.sh/react-dom@18.3.1",
-    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
-    "react-router-dom": "https://esm.sh/react-router-dom@6.26.2?deps=react@18.3.1,react-dom@18.3.1",
-    "@google/genai": "https://esm.sh/@google/genai@1.3.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
+  <link rel="stylesheet" href="/src/index.css">
 </head>
 <body class="bg-white antialiased m-0 font-sans overflow-x-hidden">
   <!-- Intelligence Sync Loader -->
@@ -78,5 +51,6 @@
         clearInterval(checkInit);
     }, 4000);
   </script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
