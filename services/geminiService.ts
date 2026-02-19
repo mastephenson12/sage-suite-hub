@@ -13,10 +13,10 @@ Tone: Authoritative, elite travel journal style. Be the definitive desert expert
 
 export class GeminiService {
   getClient() {
-    // API Key is obtained exclusively from the environment variable process.env.API_KEY
-    const apiKey = process.env.API_KEY;
+    // API Key is obtained exclusively from the environment variable process.env.GEMINI_API_KEY
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      console.warn("Satellite key not found in system environment. Ensure API_KEY is set.");
+      console.warn("Satellite key not found in system environment. Ensure GEMINI_API_KEY is set.");
       return null;
     }
     return new GoogleGenAI({ apiKey });
@@ -73,7 +73,7 @@ export class GeminiService {
         },
         config: { 
             imageConfig: { aspectRatio: "16:9", imageSize: "1K" } 
-        }
+        } as any
       });
       const part = response.candidates?.[0]?.content?.parts.find((p: any) => p.inlineData);
       return part ? `data:image/png;base64,${part.inlineData.data}` : "";
