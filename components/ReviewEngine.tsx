@@ -1,40 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { BRAND_NAME, BEEHIIV_URL, LOGO_DATA_URL } from '../constants.ts';
+import React, { useState } from 'react';
+import { GMBReview } from '../types.ts';
+import { geminiService } from '../services/geminiService.ts';
 
-const Navbar: React.FC = () => {
+export const ReviewEngine: React.FC = () => {
+  const [reviews] = useState<GMBReview[]>([
+    { id: '1', brand: 'Campsage', author: 'Mark T.', rating: 5, text: 'Perfectly kept sites.', status: 'pending' },
+    { id: '2', brand: 'Flightsage', author: 'Sarah L.', rating: 2, text: 'Delay was frustrating.', status: 'pending' }
+  ]);
+  const [analysis, setAnalysis] = useState<Record<string, string>>({});
+
+  const handleAnalyze = async (id: string, text: string) => {
+    const ai = geminiService.getClient();
+    if (!ai) return;
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: `Draft a professional brand reply for this review: "${text}"`
+    });
+    setAnalysis(prev => ({ ...prev, [id]: response.text || "" }));
+  };
+
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-100 py-3">
-      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-10">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 flex items-center justify-center rounded-xl overflow-hidden group-hover:scale-110 transition-transform">
-              <img src={LOGO_DATA_URL} alt={BRAND_NAME} className="w-full h-full object-contain" />
+    <div className="animate-in fade-in duration-700">
+      <h2 className="text-3xl font-black tracking-tighter mb-12 uppercase">AI Review Engine</h2>
+      <div className="space-y-6">
+        {reviews.map(review => (
+          <div key={review.id} className="p-8 border border-zinc-100 rounded-sm bg-white shadow-sm">
+            <div className="flex justify-between mb-4">
+              <p className="text-[10px] font-black uppercase text-zinc-400">{review.brand}</p>
+              <div className="text-black">{'★'.repeat(review.rating)}</div>
             </div>
-            <span className="text-xl font-[900] tracking-tighter uppercase text-black hidden sm:block">
-              {BRAND_NAME}
-            </span>
-          </Link>
-          <div className="hidden lg:flex items-center gap-8 text-[12px] font-bold text-zinc-500 uppercase tracking-widest">
-            <Link to="/archive" className="hover:text-black transition-colors">Archive</Link>
-            <Link to="/trail-guides" className="hover:text-black transition-colors">Trail Guides</Link>
-            <Link to="/community" className="hover:text-brand-primary transition-colors">Community</Link>
+            <p className="text-sm italic mb-6">"{review.text}"</p>
+            {analysis[review.id] ? (
+              <div className="bg-zinc-50 p-6 border border-zinc-100 text-xs leading-relaxed">
+                {analysis[review.id]}
+              </div>
+            ) : (
+              <button 
+                onClick={() => handleAnalyze(review.id, review.text)}
+                className="text-[10px] font-black uppercase border border-black px-6 py-2 hover:bg-black hover:text-white transition-all"
+              >
+                Generate Reply
+              </button>
+            )}
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link to="/chat" className="hidden md:block bg-zinc-50 text-zinc-800 px-4 py-2 rounded-lg text-[11px] font-black uppercase tracking-widest border border-zinc-200 hover:bg-zinc-100 transition-colors">Portal Scout</Link>
-          <a 
-            href={BEEHIIV_URL} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-brand-primary hover:bg-brand-dark text-white px-6 py-2.5 rounded-lg text-[13px] font-black uppercase tracking-wider transition-all shadow-lg shadow-brand-primary/10 active:scale-95"
-          >
-            Subscribe
-          </a>
-        </div>
+        ))}
       </div>
-    </nav>
+    </div>
   );
 };
-
-export default Navbar;
