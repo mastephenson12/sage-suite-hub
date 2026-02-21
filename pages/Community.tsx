@@ -1,5 +1,5 @@
 import React from 'react';
-import { SAGESUITE_URL, SAGESUITE_APPLY, BRAND_NAME } from '../constants.ts';
+import { SAGESUITE_URL, SAGESUITE_APPLY, BRAND_NAME } from '../constants';
 
 const Community: React.FC = () => {
   return (
