@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { geminiService } from '../services/geminiService.ts';
+import { geminiService } from '../services/geminiService';
 
 interface SearchResult {
   text: string;
