@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
-import { Message, Source } from "../types.ts";
-import { GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants.ts";
+import { Message, Source } from "../types";
+import { GHL_CNAME_TARGET, GHL_A_RECORD_IP } from "../constants";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal for healthandtravels.com.
 YOUR PRIMARY MISSION: Provide high-utility, vetted intelligence. Avoid generic filler.
@@ -78,6 +78,10 @@ export class GeminiService {
     } catch { 
       return ""; 
     }
+  }
+}
+
+export const geminiService = new GeminiService();
   }
 }
 
