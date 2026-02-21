@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import { ReviewEngine } from '../components/ReviewEngine.tsx';
-import { LeadQualifier } from '../components/LeadQualifier.tsx';
-import { MediaLabView } from '../components/MediaLabView.tsx';
-import { SearchHubView } from '../components/SearchHubView.tsx';
-import { ChatView } from '../components/ChatView.tsx';
-import { Sidebar } from '../components/Sidebar.tsx';
-import { LiveVoiceView } from '../components/LiveVoiceView.tsx';
-import { BookingView } from '../components/BookingView.tsx';
-import { geminiService } from '../services/geminiService.ts';
+import { ReviewEngine } from '../components/ReviewEngine';
+import { LeadQualifier } from '../components/LeadQualifier';
+import { MediaLabView } from '../components/MediaLabView';
+import { SearchHubView } from '../components/SearchHubView';
+import { ChatView } from '../components/ChatView';
+import { Sidebar } from '../components/Sidebar';
+import { LiveVoiceView } from '../components/LiveVoiceView';
+import { BookingView } from '../components/BookingView';
+import { geminiService } from '../services/geminiService';
 
 const WelcomeOverview: React.FC = () => {
   const [brief, setBrief] = useState<string | null>(null);
