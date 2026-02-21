@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { Message, Source } from "../types.ts";
+import { Message, Source } from "../types";
 
 const SYSTEM_INSTRUCTION = `You are "Scout", the precision intelligence portal for healthandtravels.com.
 YOUR PRIMARY MISSION: Deliver high-utility, vetted Arizona exploration intelligence.
