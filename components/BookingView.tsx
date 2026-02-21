@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { geminiService } from '../services/geminiService.ts';
-import { Source } from '../types.ts';
+import { geminiService } from '../services/geminiService';
+import { Source } from '../types';
 
 type Step = 'group' | 'duration' | 'intensity' | 'focus' | 'finalizing';
 
@@ -208,6 +208,10 @@ export const BookingView: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+    </div>
+  );
+};
       )}
     </div>
   );
