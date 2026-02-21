@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BRAND_NAME, LOGO_DATA_URL } from '../constants.ts';
+import { BRAND_NAME, LOGO_DATA_URL } from '../constants';
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
