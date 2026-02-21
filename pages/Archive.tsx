@@ -1,5 +1,5 @@
 import React from 'react';
-import { BRAND_NAME } from '../constants.ts';
+import { BRAND_NAME } from '../constants';
 
 const Archive: React.FC = () => {
   const issues = [
