@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { GMBReview } from '../types.ts';
-import { geminiService } from '../services/geminiService.ts';
+import { GMBReview } from '../types';
+import { geminiService } from '../services/geminiService';
 
 export const ReviewEngine: React.FC = () => {
   const [reviews] = useState<GMBReview[]>([
