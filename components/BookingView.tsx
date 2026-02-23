@@ -212,7 +212,3 @@ export const BookingView: React.FC = () => {
     </div>
   );
 };
-      )}
-    </div>
-  );
-};
