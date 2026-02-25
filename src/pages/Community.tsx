@@ -63,7 +63,7 @@ const Community: React.FC = () => {
         <div className="bg-brand-primary rounded-[48px] p-12 text-white">
           <h2 className="text-3xl font-black uppercase tracking-tighter mb-8">Community Spotlight</h2>
           <div className="aspect-video bg-white/10 rounded-3xl mb-8 overflow-hidden relative group cursor-pointer">
-            <img src="https://picsum.photos/seed/expedition/800/600" alt="Spotlight" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+            <img src="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?auto=format&fit=crop&w=800&q=80" alt="Spotlight" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                 <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-brand-primary border-b-[8px] border-b-transparent ml-1"></div>
@@ -82,3 +82,4 @@ const Community: React.FC = () => {
 };
 
 export default Community;
+
