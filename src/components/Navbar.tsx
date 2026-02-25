@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BRAND_NAME, BEEHIIV_URL, LOGO_DATA_URL } from '../constants';
+import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from '../constants';
 
 const Navbar: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-4">
           <Link to="/chat" className="hidden md:block bg-zinc-50 text-zinc-800 px-4 py-2 rounded-lg text-[11px] font-black uppercase tracking-widest border border-zinc-200 hover:bg-zinc-100 transition-colors">Portal Scout</Link>
           <a 
-            href={BEEHIIV_URL} 
+            href={SUBSCRIBE_URL} 
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-brand-primary hover:bg-brand-dark text-white px-6 py-2.5 rounded-lg text-[13px] font-black uppercase tracking-wider transition-all shadow-lg shadow-brand-primary/10 active:scale-95"
