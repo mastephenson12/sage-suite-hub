@@ -3,10 +3,10 @@ import { MapPin, Star, Clock, Zap } from 'lucide-react';
 
 const TrailGuides: React.FC = () => {
   const guides = [
-    { name: 'Devil\'s Bridge', location: 'Sedona, AZ', rating: 4.8, time: '2.5h', difficulty: 'Moderate', img: 'https://picsum.photos/seed/sedona/800/600' },
-    { name: 'Camelback Mountain', location: 'Phoenix, AZ', rating: 4.9, time: '3h', difficulty: 'Hard', img: 'https://picsum.photos/seed/camelback/800/600' },
-    { name: 'Humphreys Peak', location: 'Flagstaff, AZ', rating: 4.7, time: '8h', difficulty: 'Expert', img: 'https://picsum.photos/seed/flagstaff/800/600' },
-    { name: 'Flatiron via Siphon Draw', location: 'Apache Junction, AZ', rating: 4.9, time: '5h', difficulty: 'Hard', img: 'https://picsum.photos/seed/flatiron/800/600' },
+    { name: 'Devil\'s Bridge', location: 'Sedona, AZ', rating: 4.8, time: '2.5h', difficulty: 'Moderate', img: 'https://images.unsplash.com/photo-1620127252536-03bdfcf6d5c3?auto=format&fit=crop&w=800&q=80' },
+    { name: 'Camelback Mountain', location: 'Phoenix, AZ', rating: 4.9, time: '3h', difficulty: 'Hard', img: 'https://images.unsplash.com/photo-1599408162410-67634289324e?auto=format&fit=crop&w=800&q=80' },
+    { name: 'Humphreys Peak', location: 'Flagstaff, AZ', rating: 4.7, time: '8h', difficulty: 'Expert', img: 'https://images.unsplash.com/photo-1605197548411-502230b96626?auto=format&fit=crop&w=800&q=80' },
+    { name: 'Flatiron via Siphon Draw', location: 'Apache Junction, AZ', rating: 4.9, time: '5h', difficulty: 'Hard', img: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?auto=format&fit=crop&w=800&q=80' },
   ];
 
   return (
