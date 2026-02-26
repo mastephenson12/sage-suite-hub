@@ -1,14 +1,9 @@
 import React from 'react';
 import { MapPin, Star, Clock, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { trails } from '../data/trails';
 
 const TrailGuides: React.FC = () => {
-  const guides = [
-    { name: 'Devil\'s Bridge', location: 'Sedona, AZ', rating: 4.8, time: '2.5h', difficulty: 'Moderate', img: 'https://images.unsplash.com/photo-1620127252536-03bdfcf6d5c3?auto=format&fit=crop&w=800&q=80' },
-    { name: 'Camelback Mountain', location: 'Phoenix, AZ', rating: 4.9, time: '3h', difficulty: 'Hard', img: 'https://images.unsplash.com/photo-1599408162410-67634289324e?auto=format&fit=crop&w=800&q=80' },
-    { name: 'Humphreys Peak', location: 'Flagstaff, AZ', rating: 4.7, time: '8h', difficulty: 'Expert', img: 'https://images.unsplash.com/photo-1605197548411-502230b96626?auto=format&fit=crop&w=800&q=80' },
-    { name: 'Flatiron via Siphon Draw', location: 'Apache Junction, AZ', rating: 4.9, time: '5h', difficulty: 'Hard', img: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?auto=format&fit=crop&w=800&q=80' },
-  ];
-
   return (
     <div className="max-w-6xl mx-auto px-6 py-24">
       <header className="mb-20 text-center">
@@ -20,12 +15,12 @@ const TrailGuides: React.FC = () => {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {guides.map((guide, i) => (
-          <div key={i} className="group bg-white border border-zinc-100 rounded-[40px] overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 transition-all">
+        {trails.map((trail) => (
+          <div key={trail.id} className="group bg-white border border-zinc-100 rounded-[40px] overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 transition-all">
             <div className="h-64 overflow-hidden relative">
-              <img src={guide.img} alt={guide.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+              <img src={trail.image} alt={trail.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
               <div className="absolute top-6 left-6 px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm">
-                {guide.difficulty}
+                {trail.difficulty}
               </div>
             </div>
             <div className="p-8">
@@ -33,24 +28,27 @@ const TrailGuides: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 text-zinc-400 mb-1">
                     <MapPin className="w-3 h-3" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">{guide.location}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest">{trail.location}</span>
                   </div>
-                  <h3 className="text-2xl font-black uppercase tracking-tight">{guide.name}</h3>
+                  <h3 className="text-2xl font-black uppercase tracking-tight">{trail.name}</h3>
                 </div>
                 <div className="flex items-center gap-1 bg-zinc-50 px-3 py-1.5 rounded-lg">
                   <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                  <span className="text-[11px] font-black">{guide.rating}</span>
+                  <span className="text-[11px] font-black">{trail.rating}</span>
                 </div>
               </div>
               
               <div className="flex items-center gap-6 pt-6 border-t border-zinc-50">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-zinc-300" />
-                  <span className="text-[11px] font-black uppercase tracking-widest text-zinc-500">{guide.time}</span>
+                  <span className="text-[11px] font-black uppercase tracking-widest text-zinc-500">{trail.time}</span>
                 </div>
-                <button className="ml-auto bg-zinc-900 text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-primary transition-colors">
+                <Link 
+                  to={`/trail-guides/${trail.id}`}
+                  className="ml-auto bg-zinc-900 text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-primary transition-colors"
+                >
                   View Intel
-                </button>
+                </Link>
               </div>
             </div>
           </div>
