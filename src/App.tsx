@@ -9,10 +9,11 @@ import About from './pages/About';
 import Community from './pages/Community';
 import ChatPage from './pages/ChatPage';
 import SuiteDashboard from './pages/SuiteDashboard';
+import ArticlePage from './pages/ArticlePage';
 
 function AppContent() {
   const location = useLocation();
-  const isSuite = location.pathname.startsWith('/suite') || location.pathname === '/chat';
+  const isSuite = location.pathname.startsWith('/suite') || location.pathname === '/chat' || location.pathname.startsWith('/archive/');
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -24,6 +25,7 @@ function AppContent() {
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
           <Route path="/archive" element={<Archive />} />
+          <Route path="/archive/:id" element={<ArticlePage />} />
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
