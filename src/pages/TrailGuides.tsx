@@ -37,6 +37,10 @@ const TrailGuides: React.FC = () => {
                   <span className="text-[11px] font-black">{trail.rating}</span>
                 </div>
               </div>
+
+              <p className="text-xs text-zinc-500 line-clamp-2 mb-6 font-serif italic">
+                {trail.description}
+              </p>
               
               <div className="flex items-center gap-6 pt-6 border-t border-zinc-50">
                 <div className="flex items-center gap-2">
