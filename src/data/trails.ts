@@ -22,7 +22,7 @@ export const trails: Trail[] = [
     difficulty: 'Moderate',
     distance: '4.2 miles',
     elevationGain: '564 ft',
-    image: 'https://images.unsplash.com/photo-1619537903549-0981d6bca911?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1580234797602-22c37b2a6230?auto=format&fit=crop&w=1200&q=80',
     description: 'The largest natural sandstone arch in the Sedona area. A must-see for any explorer visiting the Red Rock Country.',
     intel: `
 # Devil's Bridge Intel Report
@@ -50,7 +50,7 @@ Devil's Bridge is one of Sedona's most iconic landmarks. It's a natural sandston
     difficulty: 'Hard',
     distance: '2.5 miles',
     elevationGain: '1,420 ft',
-    image: 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1599408162410-67634289324e?auto=format&fit=crop&w=1200&q=80',
     description: 'A challenging summit hike in the heart of Phoenix. Offers 360-degree views of the Valley of the Sun.',
     intel: `
 # Camelback Mountain Intel Report
@@ -126,4 +126,3 @@ The Flatiron is a massive rock formation in the Superstition Wilderness. The rou
     `
   }
 ];
-
