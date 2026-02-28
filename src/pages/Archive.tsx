@@ -27,20 +27,28 @@ const Archive: React.FC = () => {
           <Link 
             key={article.id} 
             to={`/archive/${article.id}`}
-            className="group flex items-center justify-between p-8 bg-white border border-zinc-100 rounded-[32px] hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50 transition-all cursor-pointer"
+            className="group flex items-center gap-8 p-6 bg-white border border-zinc-100 rounded-[32px] hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50 transition-all cursor-pointer"
           >
-            <div className="flex items-center gap-8">
-              <div className="hidden md:flex flex-col items-center justify-center w-16 h-16 bg-zinc-50 rounded-2xl group-hover:bg-blue-50 transition-colors">
-                <Calendar className="w-5 h-5 text-zinc-400 group-hover:text-brand-primary transition-colors" />
-              </div>
-              <div>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-2 block">{article.category}</span>
-                <h3 className="text-xl font-black uppercase tracking-tight group-hover:text-brand-primary transition-colors">{article.title}</h3>
+            <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-2xl">
+              <img 
+                src={article.image || 'https://picsum.photos/seed/article/400/400'} 
+                alt={article.title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="flex-grow">
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-2 block">{article.category}</span>
+              <h3 className="text-xl font-black uppercase tracking-tight group-hover:text-brand-primary transition-colors mb-2">{article.title}</h3>
+              <div className="flex items-center gap-4 text-zinc-400">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3 h-3" />
+                  <span className="text-[10px] font-black uppercase tracking-widest">{article.date}</span>
+                </div>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{article.date}</p>
-              <span className="mt-2 inline-block text-[10px] font-black uppercase tracking-widest text-zinc-300 group-hover:text-black transition-colors">Read Intel →</span>
+            <div className="hidden md:block text-right pr-4">
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300 group-hover:text-black transition-colors">Read Intel →</span>
             </div>
           </Link>
         ))}
@@ -50,3 +58,4 @@ const Archive: React.FC = () => {
 };
 
 export default Archive;
+
