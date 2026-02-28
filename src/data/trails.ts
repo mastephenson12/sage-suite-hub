@@ -22,7 +22,7 @@ export const trails: Trail[] = [
     difficulty: 'Moderate',
     distance: '4.2 miles',
     elevationGain: '564 ft',
-    image: 'https://images.unsplash.com/photo-1542401886-65d6c61db217?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1502481851512-e9e2529bbbf9?auto=format&fit=crop&w=1200&q=80',
     description: 'The largest natural sandstone arch in the Sedona area. A must-see for any explorer visiting the Red Rock Country.',
     intel: `
 # Devil's Bridge Intel Report
@@ -78,7 +78,7 @@ Camelback Mountain is the crown jewel of Phoenix hiking. It features two primary
     difficulty: 'Expert',
     distance: '10.7 miles',
     elevationGain: '3,395 ft',
-    image: 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1581333100576-b73bbe623c5a?auto=format&fit=crop&w=1200&q=80',
     description: 'The highest point in Arizona. An alpine expedition that takes you through diverse life zones to the 12,633-foot summit.',
     intel: `
 # Humphreys Peak Intel Report
@@ -106,7 +106,7 @@ Humphreys Peak is the highest point in the San Francisco Peaks and the entire st
     difficulty: 'Hard',
     distance: '6.2 miles',
     elevationGain: '2,782 ft',
-    image: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=1200&q=80',
     description: 'A rugged, vertical ascent in the Superstition Mountains. Not a formal trail, but a legendary desert scramble.',
     intel: `
 # Flatiron Intel Report
