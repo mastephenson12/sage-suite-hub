@@ -37,3 +37,7 @@ async function run() {
 }
 
 run();
+  console.log(JSON.stringify(results));
+}
+
+run();
