@@ -31,7 +31,7 @@ While the term "vortex" is metaphysical, the physiological effects of these loca
 - **Cathedral Rock**: Best for "upward" energy and creative clarity.
 - **Boynton Canyon**: Known for "balanced" energy, ideal for emotional regulation.
     `,
-    image: '/input_file_0.png'
+    image: 'input_file_0.png'
   },
   {
     id: 'flagstaff-winter-survival',
@@ -56,7 +56,7 @@ In survival situations, you can last 3 minutes without air, 3 hours without shel
 - MSR WhisperLite or similar liquid fuel stove (canisters fail in sub-zero temps).
 - Emergency bivy sack.
     `,
-    image: '/input_file_2.png'
+    image: 'input_file_2.png'
   },
   {
     id: 'superstition-hidden-springs',
@@ -79,7 +79,7 @@ While the range looks bone-dry, the volcanic geology creates natural catchments 
 ## Safety Warning:
 Never rely on a spring being active. Always carry 1 gallon of water per person per day as your baseline. The "hidden" springs are a bonus, not a primary supply.
     `,
-    image: '/input_file_3.png'
+    image: 'input_file_3.png'
   },
   {
     id: 'desert-hydration-science',
@@ -104,6 +104,6 @@ In Arizona, sweat evaporates instantly. You may feel dry while losing liters of 
 - Cessation of sweating (Level 2 - CRITICAL)
 - Confusion or irritability (Level 3 - EVACUATE)
     `,
-    image: '/input_file_1.png'
+    image: 'input_file_1.png'
   }
 ];
