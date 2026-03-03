@@ -28,12 +28,18 @@ const TrailPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
+      <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-zinc-100">
         <img 
           src={trail.image} 
           alt={trail.name}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
+            target.parentElement!.innerHTML = `<div class="text-zinc-300 text-xs font-black uppercase tracking-[0.4em]">Intelligence Asset Unavailable</div>`;
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
         
@@ -147,4 +153,3 @@ const TrailPage: React.FC = () => {
 };
 
 export default TrailPage;
-
