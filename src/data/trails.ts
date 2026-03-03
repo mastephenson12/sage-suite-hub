@@ -22,7 +22,7 @@ export const trails: Trail[] = [
     difficulty: 'Moderate',
     distance: '4.2 miles',
     elevationGain: '564 ft',
-    image: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://picsum.photos/seed/sedona/1200/800',
     description: 'The largest natural sandstone arch in the Sedona area. A must-see for any explorer visiting the Red Rock Country.',
     intel: `
 # Devil's Bridge Intel Report
@@ -50,7 +50,7 @@ Devil's Bridge is one of Sedona's most iconic landmarks. It's a natural sandston
     difficulty: 'Hard',
     distance: '2.5 miles',
     elevationGain: '1,420 ft',
-    image: 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://picsum.photos/seed/camelback/1200/800',
     description: 'A challenging summit hike in the heart of Phoenix. Offers 360-degree views of the Valley of the Sun.',
     intel: `
 # Camelback Mountain Intel Report
@@ -78,7 +78,7 @@ Camelback Mountain is the crown jewel of Phoenix hiking. It features two primary
     difficulty: 'Expert',
     distance: '10.7 miles',
     elevationGain: '3,395 ft',
-    image: 'https://images.unsplash.com/photo-1605197548411-502230b96626?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://picsum.photos/seed/flagstaff/1200/800',
     description: 'The highest point in Arizona. An alpine expedition that takes you through diverse life zones to the 12,633-foot summit.',
     intel: `
 # Humphreys Peak Intel Report
@@ -106,7 +106,7 @@ Humphreys Peak is the highest point in the San Francisco Peaks and the entire st
     difficulty: 'Hard',
     distance: '6.2 miles',
     elevationGain: '2,782 ft',
-    image: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://picsum.photos/seed/superstition/1200/800',
     description: 'A rugged, vertical ascent in the Superstition Mountains. Not a formal trail, but a legendary desert scramble.',
     intel: `
 # Flatiron Intel Report
@@ -126,3 +126,4 @@ The Flatiron is a massive rock formation in the Superstition Wilderness. The rou
     `
   }
 ];
+
