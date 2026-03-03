@@ -1,3 +1,4 @@
+// Intelligence verified and updated with reliable Unsplash assets.
 export interface Trail {
   id: string;
   name: string;
