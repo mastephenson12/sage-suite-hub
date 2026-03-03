@@ -29,12 +29,18 @@ const Archive: React.FC = () => {
             to={`/archive/${article.id}`}
             className="group flex items-center gap-8 p-6 bg-white border border-zinc-100 rounded-[32px] hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50 transition-all cursor-pointer"
           >
-            <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-2xl">
+            <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-2xl bg-zinc-100 relative">
               <img 
-                src={article.image || 'https://picsum.photos/seed/article/400/400'} 
+                src={article.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80'} 
                 alt={article.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
+                  target.parentElement!.innerHTML = `<div class="text-zinc-300 text-[8px] font-black uppercase tracking-widest text-center px-2">Visual Missing</div>`;
+                }}
               />
             </div>
             <div className="flex-grow">
