@@ -17,8 +17,20 @@ const TrailGuides: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {trails.map((trail) => (
           <div key={trail.id} className="group bg-white border border-zinc-100 rounded-[40px] overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 transition-all">
-            <div className="h-64 overflow-hidden relative">
-              <img src={trail.image} alt={trail.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+            <div className="h-64 overflow-hidden relative bg-zinc-100">
+              <img 
+                src={trail.image} 
+                alt={trail.name} 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  console.error(`Failed to load image for ${trail.name}:`, trail.image);
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
+                  target.parentElement!.innerHTML = `<div class="text-zinc-300 text-[10px] font-black uppercase tracking-widest">Image Unavailable</div>`;
+                }}
+              />
               <div className="absolute top-6 left-6 px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm">
                 {trail.difficulty}
               </div>
