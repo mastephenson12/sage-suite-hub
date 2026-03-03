@@ -29,12 +29,18 @@ const ArticlePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
+      <div className="relative h-[50vh] min-h-[400px] w-full overflow-hidden bg-zinc-100">
         <img 
-          src={article.image || 'https://picsum.photos/seed/article/1200/800'} 
+          src={article.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80'} 
           alt={article.title}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
+            target.parentElement!.innerHTML = `<div class="text-zinc-300 text-xs font-black uppercase tracking-[0.4em]">Archive Visual Missing</div>`;
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
         
