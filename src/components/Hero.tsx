@@ -8,8 +8,16 @@ export const Hero: React.FC = () => {
   const logoSrc = LOGO_DATA_URL || 'logo.png';
 
   return (
-    <div className="bg-white pt-24 pb-24 border-b border-zinc-100 overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2 opacity-60"></div>
+    <div className="bg-white pt-24 pb-24 border-b border-zinc-100 overflow-hidden relative min-h-[80vh] flex items-center">
+      <div className="absolute inset-0 -z-10">
+        <img 
+          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80" 
+          alt="Arizona" 
+          className="w-full h-full object-cover opacity-10"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/80 to-white"></div>
+      </div>
       
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10 animate-fade-in">
         <div className="flex justify-center mb-12">
@@ -20,6 +28,7 @@ export const Hero: React.FC = () => {
                 src={logoSrc} 
                 alt={BRAND_NAME} 
                 className="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10"
+                referrerPolicy="no-referrer"
                 onError={() => setImgError(true)}
               />
             ) : (
@@ -90,7 +99,12 @@ export const Hero: React.FC = () => {
           <div className="flex -space-x-3">
             {[1,2,3,4,5].map(i => (
               <div key={i} className="w-10 h-10 rounded-full border-4 border-white bg-zinc-200 overflow-hidden shadow-md">
-                 <img src={`https://i.pravatar.cc/100?u=${i+10}`} alt="explorer" className="w-full h-full object-cover" />
+                 <img 
+                  src={`https://i.pravatar.cc/100?u=${i+10}`} 
+                  alt="explorer" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
               </div>
             ))}
           </div>
@@ -99,5 +113,3 @@ export const Hero: React.FC = () => {
     </div>
   );
 };
-
-
