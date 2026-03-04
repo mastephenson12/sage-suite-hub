@@ -34,6 +34,7 @@ const Archive: React.FC = () => {
                 src={article.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80'} 
                 alt={article.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                referrerPolicy="no-referrer"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
@@ -63,4 +64,3 @@ const Archive: React.FC = () => {
 };
 
 export default Archive;
-
