@@ -22,7 +22,6 @@ const TrailGuides: React.FC = () => {
                 src={trail.image} 
                 alt={trail.name} 
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                referrerPolicy="no-referrer"
                 onError={(e) => {
                   console.error(`Failed to load image for ${trail.name}:`, trail.image);
                   const target = e.target as HTMLImageElement;
