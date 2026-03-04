@@ -33,7 +33,6 @@ const TrailPage: React.FC = () => {
           src={trail.image} 
           alt={trail.name}
           className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
