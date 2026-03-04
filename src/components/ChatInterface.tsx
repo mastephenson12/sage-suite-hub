@@ -34,11 +34,11 @@ export const ChatInterface: React.FC = () => {
     try {
       const apiKey = process.env.GEMINI_API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
       if (!apiKey) {
-        throw new Error('API Key missing. Please set GEMINI_API_KEY in your environment.');
+        throw new Error('Intelligence Link Offline: GEMINI_API_KEY is missing. Please configure your Vercel Environment Variables.');
       }
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-3-flash-preview',
         contents: [
           { role: 'user', parts: [{ text: userMessage }] }
         ],
@@ -138,4 +138,3 @@ export const ChatInterface: React.FC = () => {
     </div>
   );
 };
-
