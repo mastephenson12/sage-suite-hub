@@ -1,153 +1,100 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, Loader2, Image as ImageIcon } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { chatWithGemini, generateImage } from '../services/geminiService';
+import { Send, User, Bot, Loader2, Map, Shield, Zap } from 'lucide-react';
+import { GoogleGenAI } from '@google/genai';
 
 interface Message {
-  id: string;
   role: 'user' | 'model';
   content: string;
-  timestamp: Date;
-  type?: 'text' | 'image';
 }
 
-interface ChatInterfaceProps {
-  className?: string;
-  initialMessage?: string;
-}
-
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ className = '', initialMessage }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+export const ChatInterface: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'model', content: "Command Center active. I am Portal Scout, your high-desert intelligence asset. What trail intel or wellness protocols do you require for your next Arizona deployment?" }
+  ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (initialMessage && messages.length === 0) {
-      setMessages([{
-        id: 'initial',
-        role: 'model',
-        content: initialMessage,
-        timestamp: new Date()
-      }]);
-    }
-  }, [initialMessage]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(scrollToBottom, [messages]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-  const handleSend = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: input,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+    const userMessage = input.trim();
     setInput('');
+    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    // Check if it's an image request
-    const isImageRequest = input.toLowerCase().startsWith('/image') || input.toLowerCase().includes('generate an image');
-    
-    if (isImageRequest) {
-      const imageUrl = await generateImage(input);
-      if (imageUrl) {
-        setMessages(prev => [...prev, {
-          id: (Date.now() + 1).toString(),
-          role: 'model',
-          content: imageUrl,
-          timestamp: new Date(),
-          type: 'image'
-        }]);
-      } else {
-        setMessages(prev => [...prev, {
-          id: (Date.now() + 1).toString(),
-          role: 'model',
-          content: "I couldn't generate that image for you. There might be a technical issue or content restriction.",
-          timestamp: new Date()
-        }]);
+    try {
+      const apiKey = process.env.GEMINI_API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
+      if (!apiKey) {
+        throw new Error('API Key missing. Please set GEMINI_API_KEY in your environment.');
       }
-    } else {
-      const response = await chatWithGemini(input);
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'model',
-        content: response || "I'm sorry, I couldn't process that request.",
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
-    }
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash-exp',
+        contents: [
+          { role: 'user', parts: [{ text: userMessage }] }
+        ],
+        config: {
+          systemInstruction: `You are Portal Scout, a highly advanced AI intelligence asset for "Health & Travels". 
+          Your tone is professional, tactical, and slightly futuristic. You specialize in Arizona hiking trails, desert survival, and high-altitude wellness protocols.
+          
+          Guidelines:
+          - Use tactical terminology (e.g., "intel", "deployment", "protocol", "coordinates").
+          - Be extremely precise about Arizona geography (Sedona, Flagstaff, Superstition Mountains).
+          - Always prioritize safety and hydration in your advice.
+          - Keep responses concise and scannable.
+          - If asked about specific trails, provide "Strategic Intel" and "Wellness Protocols".`
+        }
+      });
 
-    setIsLoading(false);
+      const modelResponse = response.text || "Communication link unstable. Please retry transmission.";
+      setMessages(prev => [...prev, { role: 'model', content: modelResponse }]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, { role: 'model', content: "CRITICAL ERROR: Intelligence stream interrupted. Check your uplink." }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className={`flex flex-col bg-white ${className}`}>
-      {/* Header */}
-      <div className="px-6 py-4 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-            <Bot className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-widest text-black">Portal Scout</h3>
-            <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-wider">Intelligence Node 3.1</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-          <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Active</span>
-        </div>
-      </div>
-
-      {/* Messages */}
-      <div className="flex-grow overflow-y-auto px-6 py-8 space-y-8 custom-scrollbar">
-        {messages.map((msg) => (
-          <div key={msg.id} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-            <div className={`w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center ${
-              msg.role === 'user' ? 'bg-zinc-100' : 'bg-blue-50'
-            }`}>
-              {msg.role === 'user' ? <User className="w-4 h-4 text-zinc-600" /> : <Bot className="w-4 h-4 text-brand-primary" />}
-            </div>
-            <div className={`max-w-[80%] space-y-1 ${msg.role === 'user' ? 'text-right' : ''}`}>
-              <div className={`inline-block px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                msg.role === 'user' 
-                  ? 'bg-zinc-900 text-white rounded-tr-none' 
-                  : 'bg-zinc-50 text-zinc-800 border border-zinc-100 rounded-tl-none'
+    <div className="flex flex-col h-full bg-white">
+      <div className="flex-grow overflow-y-auto p-6 space-y-6 scrollbar-hide">
+        {messages.map((msg, i) => (
+          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`max-w-[85%] flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+              <div className={`w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center shadow-sm ${
+                msg.role === 'user' ? 'bg-zinc-100' : 'bg-zinc-950'
               }`}>
-                {msg.type === 'image' ? (
-                  <img src={msg.content} alt="Generated" className="rounded-lg max-w-full h-auto shadow-sm" />
-                ) : (
-                  <div className="markdown-body prose prose-sm max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
-                  </div>
-                )}
+                {msg.role === 'user' ? <User className="w-5 h-5 text-zinc-500" /> : <Bot className="w-5 h-5 text-white" />}
               </div>
-              <p className="text-[9px] text-zinc-400 font-medium uppercase tracking-widest">
-                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </p>
+              <div className={`p-5 rounded-[24px] text-sm leading-relaxed ${
+                msg.role === 'user' 
+                  ? 'bg-brand-primary text-white rounded-tr-none' 
+                  : 'bg-zinc-50 text-zinc-800 border border-zinc-100 rounded-tl-none font-serif italic'
+              }`}>
+                {msg.content}
+              </div>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex gap-4">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-              <Loader2 className="w-4 h-4 text-brand-primary animate-spin" />
-            </div>
-            <div className="bg-zinc-50 border border-zinc-100 px-4 py-3 rounded-2xl rounded-tl-none">
-              <div className="flex gap-1">
-                <span className="w-1.5 h-1.5 bg-zinc-300 rounded-full animate-bounce"></span>
-                <span className="w-1.5 h-1.5 bg-zinc-300 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                <span className="w-1.5 h-1.5 bg-zinc-300 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+          <div className="flex justify-start">
+            <div className="max-w-[85%] flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-zinc-950 flex items-center justify-center shadow-sm">
+                <Bot className="w-5 h-5 text-white" />
+              </div>
+              <div className="p-5 rounded-[24px] rounded-tl-none bg-zinc-50 border border-zinc-100 flex items-center gap-3">
+                <Loader2 className="w-4 h-4 animate-spin text-brand-primary" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Decrypting Intel...</span>
               </div>
             </div>
           </div>
@@ -155,41 +102,40 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ className = '', initialMe
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <form onSubmit={handleSend} className="p-6 border-t border-zinc-100 bg-white">
-        <div className="relative flex items-center">
+      <div className="p-6 border-t border-zinc-100 bg-white">
+        <div className="relative">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Scout about trails, wellness, or generate an image..."
-            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 pr-24 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
-            disabled={isLoading}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            placeholder="Request Intel..."
+            className="w-full pl-6 pr-16 py-5 bg-zinc-50 border border-zinc-100 rounded-2xl text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-brand-primary/10 transition-all"
           />
-          <div className="absolute right-2 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setInput('/image ')}
-              className="p-2 text-zinc-400 hover:text-brand-primary transition-colors"
-              title="Generate Image"
-            >
-              <ImageIcon className="w-5 h-5" />
-            </button>
-            <button
-              type="submit"
-              disabled={!input.trim() || isLoading}
-              className="bg-brand-primary text-white p-2.5 rounded-xl hover:bg-brand-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/20"
-            >
-              <Send className="w-4 h-4" />
-            </button>
+          <button
+            onClick={handleSend}
+            disabled={isLoading || !input.trim()}
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-zinc-950 text-white rounded-xl flex items-center justify-center hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="mt-4 flex justify-center gap-6">
+          <div className="flex items-center gap-2">
+            <Map className="w-3 h-3 text-zinc-300" />
+            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Topo Mapping</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Shield className="w-3 h-3 text-zinc-300" />
+            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Survival Protocol</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Zap className="w-3 h-3 text-zinc-300" />
+            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Real-time Stream</span>
           </div>
         </div>
-        <p className="mt-3 text-[9px] text-zinc-400 text-center font-medium uppercase tracking-[0.2em]">
-          Powered by Sage Intelligence Node 3.1 • Arizona Command
-        </p>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default ChatInterface;
