@@ -23,7 +23,7 @@ export const trails: Trail[] = [
     difficulty: 'Moderate',
     distance: '4.2 miles',
     elevationGain: '564 ft',
-    image: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=800&q=80&auto=format&fit=crop&v=1',
+    image: 'https://images.unsplash.com/photo-1613109526778-27605f1f27d2?w=800&q=80&auto=format&fit=crop',
     description: 'The largest natural sandstone arch in the Sedona area. A must-see for any explorer visiting the Red Rock Country.',
     intel: `
 # Devil's Bridge Intel Report
@@ -51,7 +51,7 @@ Devil's Bridge is one of Sedona's most iconic landmarks. It's a natural sandston
     difficulty: 'Hard',
     distance: '2.5 miles',
     elevationGain: '1,420 ft',
-    image: 'https://images.unsplash.com/photo-1523214344605-236f0687f87f?w=800&q=80&auto=format&fit=crop&v=1',
+    image: 'https://images.unsplash.com/photo-1599408162172-66a737730842?w=800&q=80&auto=format&fit=crop',
     description: 'A challenging summit hike in the heart of Phoenix. Offers 360-degree views of the Valley of the Sun.',
     intel: `
 # Camelback Mountain Intel Report
@@ -79,7 +79,7 @@ Camelback Mountain is the crown jewel of Phoenix hiking. It features two primary
     difficulty: 'Expert',
     distance: '10.7 miles',
     elevationGain: '3,395 ft',
-    image: 'https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=800&q=80&auto=format&fit=crop&v=1',
+    image: 'https://images.unsplash.com/photo-1605197548411-502230b96626?w=800&q=80&auto=format&fit=crop',
     description: 'The highest point in Arizona. An alpine expedition that takes you through diverse life zones to the 12,633-foot summit.',
     intel: `
 # Humphreys Peak Intel Report
@@ -107,7 +107,7 @@ Humphreys Peak is the highest point in the San Francisco Peaks and the entire st
     difficulty: 'Hard',
     distance: '6.2 miles',
     elevationGain: '2,782 ft',
-    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80&auto=format&fit=crop&v=1',
+    image: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?w=800&q=80&auto=format&fit=crop',
     description: 'A rugged, vertical ascent in the Superstition Mountains. Not a formal trail, but a legendary desert scramble.',
     intel: `
 # Flatiron Intel Report
