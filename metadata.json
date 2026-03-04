@@ -1,9 +1,7 @@
 {
-  "name": "Sage Suite Hub",
-  "description": "A comprehensive AI-powered productivity suite featuring real-time voice, image/video generation, and advanced search grounding.",
+  "name": "Health & Travels",
+  "description": "Arizona family hiking spots, road-trip guides & healthy travel hacks.",
   "requestFramePermissions": [
-    "camera",
-    "microphone",
     "geolocation"
   ]
 }
