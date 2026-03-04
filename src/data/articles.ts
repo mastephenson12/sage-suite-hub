@@ -31,7 +31,7 @@ While the term "vortex" is metaphysical, the physiological effects of these loca
 - **Cathedral Rock**: Best for "upward" energy and creative clarity.
 - **Boynton Canyon**: Known for "balanced" energy, ideal for emotional regulation.
     `,
-    image: 'https://images.unsplash.com/photo-1502933691298-84fa1463cc82?w=800&q=80&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=800&q=80&auto=format&fit=crop'
   },
   {
     id: 'flagstaff-winter-survival',
@@ -79,7 +79,7 @@ While the range looks bone-dry, the volcanic geology creates natural catchments 
 ## Safety Warning:
 Never rely on a spring being active. Always carry 1 gallon of water per person per day as your baseline. The "hidden" springs are a bonus, not a primary supply.
     `,
-    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?w=800&q=80&auto=format&fit=crop'
   },
   {
     id: 'desert-hydration-science',
@@ -104,6 +104,6 @@ In Arizona, sweat evaporates instantly. You may feel dry while losing liters of 
 - Cessation of sweating (Level 2 - CRITICAL)
 - Confusion or irritability (Level 3 - EVACUATE)
     `,
-    image: 'https://images.unsplash.com/photo-1523214344605-236f0687f87f?w=800&q=80&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1599408162172-66a737730842?w=800&q=80&auto=format&fit=crop'
   }
 ];
