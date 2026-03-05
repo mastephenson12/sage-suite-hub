@@ -24,7 +24,7 @@ const TrailGuides: React.FC = () => {
           >
             <div className="relative h-80 overflow-hidden bg-zinc-100">
               <img 
-                src={trail.image} 
+                src={getTrailImage(trail)} 
                 alt={trail.name} 
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                 referrerPolicy="no-referrer"
