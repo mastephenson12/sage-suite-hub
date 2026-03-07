@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { trails } from '../data/trails';
 import { MapPin, Star, Clock, Mountain } from 'lucide-react';
+import { getTrailImage } from '../utils/getTrailImage';
 
 const TrailGuides: React.FC = () => {
   return (
