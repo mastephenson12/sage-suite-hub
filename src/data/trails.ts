@@ -7,7 +7,7 @@ export interface Trail {
   elevationGain: string;
   time: string;
   rating: number;
-  image: string;
+  image?: string;
   description: string;
   intel: string;
 }
