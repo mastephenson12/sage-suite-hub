@@ -7,9 +7,17 @@ interface Message {
   content: string;
 }
 
-export const ChatInterface: React.FC = () => {
+interface ChatInterfaceProps {
+  className?: string;
+  initialMessage?: string;
+}
+
+export const ChatInterface: React.FC<ChatInterfaceProps> = ({
+  className = '',
+  initialMessage = "Command Center active. I am Portal Scout, your high-desert intelligence asset. What trail intel or wellness protocols do you require for your next Arizona deployment?"
+}) => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', content: "Command Center active. I am Portal Scout, your high-desert intelligence asset. What trail intel or wellness protocols do you require for your next Arizona deployment?" }
+    { role: 'model', content: initialMessage }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
