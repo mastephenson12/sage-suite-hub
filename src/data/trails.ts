@@ -1,3 +1,17 @@
+export interface Trail {
+  id: string;
+  name: string;
+  location: string;
+  difficulty: 'Easy' | 'Moderate' | 'Hard' | 'Extreme';
+  distance: string;
+  elevationGain: string;
+  time: string;
+  rating: number;
+  image?: string;
+  description: string;
+  intel: string;
+}
+
 export const trails: Trail[] = [
   {
     id: 'devils-bridge',
