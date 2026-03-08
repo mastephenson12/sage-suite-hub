@@ -21,7 +21,7 @@ export const trails: Trail[] = [
     elevationGain: '1,420 ft',
     time: '2-4 hours',
     rating: 4.7,
-    image: '/images/camelback-mountain.jpg',
+    image: '/images/camelback-mountain.png',
     description: 'A challenging climb to the highest point in Phoenix. Offers 360-degree views of the Valley of the Sun.',
     intel: `...`
   },
