@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChatInterface } from '../components/ChatInterface';
-import { ArrowLeft, Plane, Tent, Hotel, MapPinned } from 'lucide-react';
+import { ArrowLeft, Plane, Tent, Hotel, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ChatPage: React.FC = () => {
