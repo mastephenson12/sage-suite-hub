@@ -46,7 +46,7 @@ function AppContent() {
                   © {new Date().getFullYear()} Health & Travels Journal
                 </p>
                 <p className="text-[10px] text-zinc-300 font-medium uppercase tracking-[0.1em]">
-                  Adventure Command Center Powered by SageSuite
+                  Trip planning powered by Sage • Health & Travels
                 </p>
               </div>
               <div className="flex gap-8 text-zinc-400 font-black uppercase tracking-widest text-[10px]">
