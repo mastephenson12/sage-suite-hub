@@ -61,7 +61,7 @@ const ChatPage: React.FC = () => {
           </button>
 
           <button onClick={() => setMode('arizona')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
-            <MapPinned className="w-6 h-6 mb-3 text-brand-primary" />
+            <MapPin className="w-6 h-6 mb-3 text-brand-primary" />
             <div className="font-black mb-1">ArizonaSage</div>
             <div className="text-sm text-zinc-500">Arizona-first local expertise</div>
           </button>
