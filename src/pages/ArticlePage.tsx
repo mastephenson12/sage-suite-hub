@@ -71,7 +71,7 @@ const ArticlePage: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <Tag className="w-4 h-4" />
-            <span className="text-[11px] font-black uppercase tracking-widest">Field Report</span>
+            <span className="text-[11px] font-black uppercase tracking-widest">Travel Guide</span>
           </div>
           <button className="ml-auto p-2 hover:text-black transition-colors">
             <Share2 className="w-4 h-4" />
