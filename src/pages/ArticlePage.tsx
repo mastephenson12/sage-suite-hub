@@ -38,7 +38,7 @@ const ArticlePage: React.FC = () => {
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
             target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
-            target.parentElement!.innerHTML = `<div class="text-zinc-300 text-xs font-black uppercase tracking-[0.4em]">Visual Intelligence Unavailable</div>`;
+            target.parentElement!.innerHTML = `<div class="text-zinc-300 text-xs font-black uppercase tracking-[0.4em]">Image Unavailable</div>`;
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
