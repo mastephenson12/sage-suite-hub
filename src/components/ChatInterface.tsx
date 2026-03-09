@@ -14,8 +14,7 @@ interface ChatInterfaceProps {
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
-  initialMessage = "Command Center active. I am Portal Scout, your high-desert intelligence asset. What trail intel or wellness protocols do you require for your next Arizona deployment?"
-}) => {
+  initialMessage = "Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona. Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget."}) => {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', content: initialMessage }
   ]);
