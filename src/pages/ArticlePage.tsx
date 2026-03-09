@@ -85,9 +85,10 @@ const ArticlePage: React.FC = () => {
         {/* Footer Note */}
         <div className="mt-24 p-12 bg-zinc-50 rounded-[48px] border border-zinc-100 relative overflow-hidden">
           <div className="relative z-10">
-            <h3 className="text-xs font-black uppercase tracking-[0.3em] mb-4">Scout's Disclaimer</h3>
-            <p className="text-sm text-zinc-500 leading-relaxed italic font-serif">
-              "The intelligence provided in this report is based on field observations and current conditions. Arizona environments are dynamic and unpredictable. Always verify with local authorities before deployment."
+            <h3 className="text-xs font-black uppercase tracking-[0.3em] mb-4">Helpful Note</h3>
+<p className="text-sm text-zinc-500 leading-relaxed italic font-serif">
+  "Travel information can change with weather, seasonal conditions, closures, and local updates. Always double-check trail, park, and destination details before your trip."
+</p>
             </p>
           </div>
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
