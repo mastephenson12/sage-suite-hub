@@ -1,30 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChatInterface } from '../components/ChatInterface';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plane, Tent, Hotel, MapPinned } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ChatPage: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-zinc-50 flex flex-col">
-      {/* Navigation */}
-      <div className="bg-white border-b border-zinc-100 px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-zinc-500 hover:text-black transition-colors">
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-[10px] font-black uppercase tracking-widest">Return to Base</span>
-        </Link>
-        <div className="text-center">
-          <h1 className="text-xs font-black uppercase tracking-[0.3em]">Adventure Command</h1>
-          <p className="text-[8px] text-zinc-400 font-medium uppercase tracking-widest mt-1">Satellite Link: Established</p>
-        </div>
-        <div className="w-24"></div> {/* Spacer */}
-      </div>
+  const [mode, setMode] = useState<'general' | 'flights' | 'camping' | 'lodging' | 'arizona'>('general');
 
-      {/* Main Chat Area */}
-      <div className="flex-grow flex items-center justify-center p-6 md:p-12">
-        <div className="w-full max-w-4xl h-[800px] max-h-[85vh] bg-white rounded-[40px] shadow-2xl shadow-zinc-200/50 overflow-hidden border border-zinc-100 flex flex-col">
-          <ChatInterface 
-            className="flex-grow" 
-            initialMessage="Scout Portal Active. I'm connected to the Arizona Command Center. How can I assist your expedition today?" 
+  const initialMessages = {
+    general:
+      "Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona. Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.",
+    flights:
+      "Welcome to FlightSage. I can help you plan flights for your family or group. Tell me your departure city, destination, dates, number of travelers, and your budget.",
+    camping:
+      "Welcome to CampSage. I can help with campsites, RV parks, national parks, and state parks. Tell me where you want to camp, your dates, group size, and whether you want tent camping, RV, cabins, or glamping.",
+    lodging:
+      "Welcome to TravelSage. I can help find hotels, vacation rentals, resorts, and family-friendly lodging. Tell me your destination, dates, number of adults and kids, and your price range.",
+    arizona:
+      "Welcome to ArizonaSage. I specialize in Arizona family adventures, trails, scenic drives, small towns, and seasonal tips. Tell me what part of Arizona interests you, who is traveling, and what kind of adventure you want."
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        <div className="mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Health & Travels
+          </Link>
+        </div>
+
+        <header className="mb-10 text-center">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-4">
+            Plan Your Trip with Sage
+          </h1>
+          <p className="text-lg text-zinc-500 max-w-3xl mx-auto">
+            Flights, camping, hotels, and Arizona adventure planning in one place.
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <button onClick={() => setMode('flights')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
+            <Plane className="w-6 h-6 mb-3 text-brand-primary" />
+            <div className="font-black mb-1">FlightSage</div>
+            <div className="text-sm text-zinc-500">Plan flights and routing</div>
+          </button>
+
+          <button onClick={() => setMode('camping')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
+            <Tent className="w-6 h-6 mb-3 text-brand-primary" />
+            <div className="font-black mb-1">CampSage</div>
+            <div className="text-sm text-zinc-500">Camping, parks, and RV stays</div>
+          </button>
+
+          <button onClick={() => setMode('lodging')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
+            <Hotel className="w-6 h-6 mb-3 text-brand-primary" />
+            <div className="font-black mb-1">TravelSage</div>
+            <div className="text-sm text-zinc-500">Hotels and vacation rentals</div>
+          </button>
+
+          <button onClick={() => setMode('arizona')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
+            <MapPinned className="w-6 h-6 mb-3 text-brand-primary" />
+            <div className="font-black mb-1">ArizonaSage</div>
+            <div className="text-sm text-zinc-500">Arizona-first local expertise</div>
+          </button>
+        </div>
+
+        <div className="rounded-3xl border border-zinc-200 overflow-hidden bg-white shadow-sm">
+          <ChatInterface
+            className="min-h-[700px]"
+            initialMessage={initialMessages[mode]}
           />
         </div>
       </div>
