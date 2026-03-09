@@ -1,4 +1,4 @@
-# ✈️ SageSuite: The Adventure Command Center
+# ✈️ SageSuite:  Family Trip Planning for Arizona and Beyond
 
 **The centralized intelligence hub for Flightsage, Travelsage, and Campsage.**
 
