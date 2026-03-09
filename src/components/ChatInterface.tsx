@@ -146,15 +146,15 @@ Rules:
         <div className="mt-4 flex justify-center gap-6">
           <div className="flex items-center gap-2">
             <Map className="w-3 h-3 text-zinc-300" />
-            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Topo Mapping</span>
+            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Family Trip Planning</span>
           </div>
           <div className="flex items-center gap-2">
             <Shield className="w-3 h-3 text-zinc-300" />
-            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Survival Protocol</span>
+            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Arizona Expertise</span>
           </div>
           <div className="flex items-center gap-2">
             <Zap className="w-3 h-3 text-zinc-300" />
-            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Real-time Stream</span>
+            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">Flights • Camping • Hotels</span>
           </div>
         </div>
       </div>
