@@ -16,8 +16,8 @@ const ArticlePage: React.FC = () => {
   if (!article) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        <h1 className="text-4xl font-black uppercase mb-4">Intel Missing</h1>
-        <p className="text-zinc-500 mb-8">The requested intelligence report could not be found.</p>
+        <h1 className="text-4xl font-black uppercase mb-4">Article Not Found</h1>
+<p className="text-zinc-500 mb-8">The article you’re looking for could not be found.</p>
         <Link to="/archive" className="bg-brand-primary text-white px-8 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
           Return to Archive
         </Link>
