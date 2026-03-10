@@ -125,7 +125,7 @@ const modelResponse = response.text || "I'm having trouble planning that right n
               </div>
               <div className="p-5 rounded-[24px] rounded-tl-none bg-zinc-50 border border-zinc-100 flex items-center gap-3">
                 <Loader2 className="w-4 h-4 animate-spin text-brand-primary" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Decrypting Intel...</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planning your trip...</span>
               </div>
             </div>
           </div>
