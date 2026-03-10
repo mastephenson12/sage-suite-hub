@@ -1,3 +1,4 @@
+import { chatWithGemini } from '../services/geminiService';
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, User, Bot, Loader2, Map, Shield, Zap } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
