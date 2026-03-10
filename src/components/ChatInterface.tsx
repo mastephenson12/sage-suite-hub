@@ -42,7 +42,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     try {
       const apiKey = process.env.GEMINI_API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
       if (!apiKey) {
-        throw new Error('Intelligence Link Offline: GEMINI_API_KEY is missing. Please configure your Vercel Environment Variables.');
+        throw new Error('Sage is not connected right now. Please configure your GEMINI API key in Vercel.');
       }
       const ai = new GoogleGenAI({ apiKey });
 const response = await ai.models.generateContent({
