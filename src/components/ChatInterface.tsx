@@ -90,7 +90,7 @@ const modelResponse = response.text || "I'm having trouble planning that right n
       setMessages(prev => [...prev, { role: 'model', content: modelResponse }]);
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { role: 'model', content: "CRITICAL ERROR: Intelligence stream interrupted. Check your uplink." }]);
+      setMessages(prev => [...prev, { role: 'model', content: "I’m having trouble connecting right now. Please try again in a moment." }]);
     } finally {
       setIsLoading(false);
     }
