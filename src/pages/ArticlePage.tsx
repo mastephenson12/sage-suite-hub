@@ -89,7 +89,6 @@ const ArticlePage: React.FC = () => {
 <p className="text-sm text-zinc-500 leading-relaxed italic font-serif">
   "Travel information can change with weather, seasonal conditions, closures, and local updates. Always double-check trail, park, and destination details before your trip."
 </p>
-            </p>
           </div>
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
         </div>
