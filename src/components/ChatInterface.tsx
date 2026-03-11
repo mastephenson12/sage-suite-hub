@@ -96,7 +96,7 @@ const modelResponse = response.text || "I'm having trouble planning that right n
   };
 
   return (
-    <div className={`flex flex-col h-full overflow-hidden bg-white ${className}`}>
+    <div className={`flex flex-col h-full min-h-0 overflow-hidden bg-white ${className}`}>
       <div className="flex-grow overflow-y-auto p-6 space-y-6 scrollbar-hide">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
