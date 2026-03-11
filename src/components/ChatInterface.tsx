@@ -97,7 +97,7 @@ const modelResponse = response.text || "I'm having trouble planning that right n
 
   return (
     <div className={`flex flex-col h-full min-h-0 overflow-hidden bg-white ${className}`}>
-      <div className="flex-grow overflow-y-auto p-6 space-y-6 scrollbar-hide">
+      <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 scrollbar-hide">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
