@@ -72,7 +72,7 @@ const ChatPage: React.FC = () => {
             <ChatInterface
             className="h-[70vh] md:h-[75vh]"
             initialMessage={initialMessages[mode]}
-            />
+          />
         </div>
       </div>
     </div>
