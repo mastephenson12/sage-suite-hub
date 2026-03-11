@@ -27,8 +27,17 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const container = messagesEndRef.current?.parentElement;
+  if (!container) return;
+
+  const nearBottom =
+    container.scrollHeight - container.scrollTop - container.clientHeight < 120;
+
+  if (nearBottom) {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [messages]);
+
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
