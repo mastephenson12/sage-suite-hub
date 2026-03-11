@@ -20,9 +20,9 @@ const ChatPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <div className="mb-8">
+    <div className="h-screen bg-white overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 py-6 h-full flex flex-col min-h-0">
+        <div className="mb-4 flex-shrink-0">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
@@ -32,46 +32,58 @@ const ChatPage: React.FC = () => {
           </Link>
         </div>
 
-        <header className="mb-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-4">
+        <header className="mb-6 text-center flex-shrink-0">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-3">
             Plan Your Trip with Sage
           </h1>
-          <p className="text-lg text-zinc-500 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-zinc-500 max-w-3xl mx-auto">
             Flights, camping, hotels, and Arizona adventure planning in one place.
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <button onClick={() => setMode('flights')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
-            <Plane className="w-6 h-6 mb-3 text-brand-primary" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 flex-shrink-0">
+          <button
+            onClick={() => setMode('flights')}
+            className="p-4 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all"
+          >
+            <Plane className="w-5 h-5 mb-2 text-brand-primary" />
             <div className="font-black mb-1">FlightSage</div>
-            <div className="text-sm text-zinc-500">Plan flights and routing</div>
+            <div className="text-xs text-zinc-500">Plan flights and routing</div>
           </button>
 
-          <button onClick={() => setMode('camping')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
-            <Tent className="w-6 h-6 mb-3 text-brand-primary" />
+          <button
+            onClick={() => setMode('camping')}
+            className="p-4 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all"
+          >
+            <Tent className="w-5 h-5 mb-2 text-brand-primary" />
             <div className="font-black mb-1">CampSage</div>
-            <div className="text-sm text-zinc-500">Camping, parks, and RV stays</div>
+            <div className="text-xs text-zinc-500">Camping, parks, and RV stays</div>
           </button>
 
-          <button onClick={() => setMode('lodging')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
-            <Hotel className="w-6 h-6 mb-3 text-brand-primary" />
+          <button
+            onClick={() => setMode('lodging')}
+            className="p-4 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all"
+          >
+            <Hotel className="w-5 h-5 mb-2 text-brand-primary" />
             <div className="font-black mb-1">TravelSage</div>
-            <div className="text-sm text-zinc-500">Hotels and vacation rentals</div>
+            <div className="text-xs text-zinc-500">Hotels and vacation rentals</div>
           </button>
 
-          <button onClick={() => setMode('arizona')} className="p-5 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all">
-            <MapPin className="w-6 h-6 mb-3 text-brand-primary" />
+          <button
+            onClick={() => setMode('arizona')}
+            className="p-4 rounded-2xl border border-zinc-200 hover:border-brand-primary hover:bg-zinc-50 text-left transition-all"
+          >
+            <MapPin className="w-5 h-5 mb-2 text-brand-primary" />
             <div className="font-black mb-1">ArizonaSage</div>
-            <div className="text-sm text-zinc-500">Arizona-first local expertise</div>
+            <div className="text-xs text-zinc-500">Arizona-first local expertise</div>
           </button>
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 overflow-hidden bg-white shadow-sm">
+        <div className="rounded-3xl border border-zinc-200 overflow-hidden bg-white shadow-sm flex-1 min-h-0">
           <ChatInterface
-            className="h-[calc(100vh-420px)] min-h-[450px]"
+            className="h-full"
             initialMessage={initialMessages[mode]}
-            />
+          />
         </div>
       </div>
     </div>
