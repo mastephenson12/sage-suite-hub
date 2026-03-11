@@ -69,10 +69,9 @@ const ChatPage: React.FC = () => {
 
         <div className="rounded-3xl border border-zinc-200 overflow-hidden bg-white shadow-sm">
           <ChatInterface
-            <ChatInterface
             className="h-[70vh] md:h-[75vh]"
             initialMessage={initialMessages[mode]}
-          />
+            />
         </div>
       </div>
     </div>
