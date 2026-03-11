@@ -69,7 +69,7 @@ const ChatPage: React.FC = () => {
 
         <div className="rounded-3xl border border-zinc-200 overflow-hidden bg-white shadow-sm">
           <ChatInterface
-            className="h-[70vh] md:h-[75vh]"
+            className="h-[calc(100vh-420px)] min-h-[450px]"
             initialMessage={initialMessages[mode]}
             />
         </div>
