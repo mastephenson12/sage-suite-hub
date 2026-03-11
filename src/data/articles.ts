@@ -79,7 +79,7 @@ While the range looks bone-dry, the volcanic geology creates natural catchments 
 ## Safety Warning:
 Never rely on a spring being active. Always carry 1 gallon of water per person per day as your baseline. The "hidden" springs are a bonus, not a primary supply.
     `,
-    image: 'https://images.unsplash.com/photo-1597167237494-21139050cd55?w=800&q=80&auto=format&fit=crop'
+    image: '/images/superstition-springs.jpg'
   },
   {
     id: 'desert-hydration-science',
@@ -104,6 +104,6 @@ In Arizona, sweat evaporates instantly. You may feel dry while losing liters of 
 - Cessation of sweating (Level 2 - CRITICAL)
 - Confusion or irritability (Level 3 - EVACUATE)
     `,
-    image: 'https://images.unsplash.com/photo-1599408162172-66a737730842?w=800&q=80&auto=format&fit=crop'
+    image: '/images/desert-hydration.jpg'
   }
 ];
