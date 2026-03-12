@@ -144,7 +144,7 @@ const modelResponse = response.text || "I'm having trouble planning that right n
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Tell me where you want to go, your dates, and who is traveling..."
+            placeholder="Example: Sedona in April, 2 adults and 2 kids, hotel, moderate budget"
             className="w-full pl-6 pr-16 py-3 bg-zinc-50 border border-zinc-100 rounded-2xl text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-brand-primary/10 transition-all"
           />
           <button
