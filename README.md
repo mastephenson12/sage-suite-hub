@@ -40,8 +40,8 @@ A world-first **Gemini 2.5 Live** integration. A voice-activated guide that help
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/adventure-hub.git
-cd adventure-hub
+git clone https://github.com/mastephenson12/sage-suite-hub.git
+cd sage-suite-hub
 ```
 
 ### 2. Environment Variables
