@@ -27,10 +27,7 @@ const messagesEndRef = useRef<HTMLDivElement>(null);
   const container = messagesEndRef.current?.parentElement;
   if (!container) return;
 
-  const nearBottom =
-    container.scrollHeight - container.scrollTop - container.clientHeight < 120;
-
-  if (nearBottom) {
+  if (container.scrollHeight > container.clientHeight) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 }, [messages]);
