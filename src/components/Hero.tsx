@@ -23,7 +23,7 @@ export const Hero: React.FC = () => {
       
         
         {/* Popular Arizona Adventures */}
-<div className="mt-10">
+<div className="mt-2 mb-16">
   <p className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-4">
     Popular Arizona Adventures
   </p>
