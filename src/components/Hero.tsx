@@ -19,7 +19,7 @@ export const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/80 to-white"></div>
       </div>
       
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10 animate-fade-in">
+      <div className="max-w-4xl mx-auto px-6 text-left relative z-10 animate-fade-in">
         <div className="flex justify-center mb-12">
           <div className="relative">
             <div className="absolute inset-0 bg-brand-accent blur-3xl opacity-10 rounded-full animate-pulse"></div>
