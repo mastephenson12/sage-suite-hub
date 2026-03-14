@@ -40,6 +40,9 @@ const messagesEndRef = useRef<HTMLDivElement>(null);
   }
 }, [messages]);
 
+  useEffect(() => {
+  localStorage.setItem('sage-chat-messages', JSON.stringify(messages));
+}, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
