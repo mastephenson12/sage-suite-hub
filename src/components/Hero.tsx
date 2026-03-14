@@ -20,25 +20,7 @@ export const Hero: React.FC = () => {
       </div>
       
       <div className="max-w-4xl mx-auto px-6 text-left relative z-10 animate-fade-in">
-        <div className="flex justify-center mb-12">
-          <div className="relative">
-            <div className="absolute inset-0 bg-brand-accent blur-3xl opacity-10 rounded-full animate-pulse"></div>
-            {!imgError ? (
-              <img 
-                src={logoSrc} 
-                alt={BRAND_NAME} 
-                className="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10"
-                referrerPolicy="no-referrer"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div className="w-36 h-36 md:w-44 md:h-44 bg-zinc-950 rounded-[40px] flex items-center justify-center relative z-10 shadow-2xl">
-                <span className="text-white font-black text-4xl">H&T</span>
-              </div>
-            )}
-          </div>
-        </div>
-        
+      
         <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 text-brand-primary text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-6 shadow-sm">
           <span className="w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
           Fresh Trail Intel Dispatched Tuesday
