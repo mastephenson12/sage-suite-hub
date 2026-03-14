@@ -82,6 +82,25 @@ const ArticlePage: React.FC = () => {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
         </div>
 
+        {/* Sage Trip Planner CTA */}
+<div className="mt-16 p-10 bg-brand-primary/5 border border-brand-primary/20 rounded-3xl text-center">
+  <h3 className="text-lg md:text-xl font-black uppercase tracking-wider mb-4">
+    Let Sage Plan This Trip For You
+  </h3>
+
+  <p className="text-zinc-600 mb-6 max-w-xl mx-auto">
+    Sage can build a complete adventure itinerary including hikes,
+    restaurants, scenic viewpoints, and local hidden spots.
+  </p>
+
+  <Link
+    to="/chat"
+    className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-dark text-white px-8 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all"
+  >
+    Plan My Trip With Sage
+  </Link>
+</div>
+        
         {/* Footer Note */}
         <div className="mt-24 p-12 bg-zinc-50 rounded-[48px] border border-zinc-100 relative overflow-hidden">
           <div className="relative z-10">
