@@ -44,29 +44,7 @@ export const Hero: React.FC = () => {
           Fresh Trail Intel Dispatched Tuesday
         </div>
         
-        <h1 className="text-6xl md:text-[88px] font-[900] text-black mb-12 leading-[0.85] tracking-tighter uppercase">
-          Health, Trails, and <br/>Arizona Skies.
-        </h1>
-        
-        <p className="text-xl md:text-2xl text-zinc-500 italic max-w-2xl mx-auto leading-relaxed mb-16 font-medium font-serif">
-          Exploring the High Desert’s most breathtaking trails and hidden wellness retreats for the modern explorer.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link 
-            to="/chat" 
-            className="bg-brand-primary hover:bg-brand-dark text-white px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all shadow-xl shadow-brand-primary/20 active:scale-95 flex items-center justify-center gap-2"
-          >
-            Ask Portal Scout <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link 
-            to="/trail-guides" 
-            className="bg-zinc-100 hover:bg-zinc-200 text-black px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all active:scale-95"
-          >
-            Browse Trail Intel
-          </Link>
-        </div>
-{/* Popular Arizona Adventures */}
+        {/* Popular Arizona Adventures */}
 <div className="mt-10">
   <p className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-4">
     Popular Arizona Adventures
@@ -95,6 +73,30 @@ export const Hero: React.FC = () => {
     </button>
   </div>
 </div>
+        
+        <h1 className="text-6xl md:text-[88px] font-[900] text-black mb-12 leading-[0.85] tracking-tighter uppercase">
+          Health, Trails, and <br/>Arizona Skies.
+        </h1>
+        
+        <p className="text-xl md:text-2xl text-zinc-500 italic max-w-2xl mx-auto leading-relaxed mb-16 font-medium font-serif">
+          Exploring the High Desert’s most breathtaking trails and hidden wellness retreats for the modern explorer.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Link 
+            to="/chat" 
+            className="bg-brand-primary hover:bg-brand-dark text-white px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all shadow-xl shadow-brand-primary/20 active:scale-95 flex items-center justify-center gap-2"
+          >
+            Ask Portal Scout <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link 
+            to="/trail-guides" 
+            className="bg-zinc-100 hover:bg-zinc-200 text-black px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all active:scale-95"
+          >
+            Browse Trail Intel
+          </Link>
+        </div>
+
         {/* Feature Grid */}
         <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
           <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 hover:border-brand-primary/20 transition-all group">
