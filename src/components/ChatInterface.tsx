@@ -15,9 +15,17 @@ interface ChatInterfaceProps {
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
   initialMessage = "Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona. Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget."}) => {
-  const [messages, setMessages] = useState<Message[]>([
-  { role: 'model', content: initialMessage }
-]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+  const saved = localStorage.getItem('sage-chat-messages');
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [{ role: 'model', content: initialMessage }];
+    }
+  }
+  return [{ role: 'model', content: initialMessage }];
+});
 
 const [input, setInput] = useState('');
 const [isLoading, setIsLoading] = useState(false);
