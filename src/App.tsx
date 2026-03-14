@@ -50,9 +50,9 @@ function AppContent() {
                 </p>
               </div>
               <div className="flex gap-8 text-zinc-400 font-black uppercase tracking-widest text-[10px]">
-                <span className="hover:text-black cursor-pointer">Archive</span>
-                <span className="hover:text-black cursor-pointer">Trails</span>
-                <span className="hover:text-black cursor-pointer">Community</span>
+                <Link to="/archive" className="hover:text-black">Archive</Link>
+                <Link to="/trail-guides" className="hover:text-black">Trails</Link>
+                <Link to="/community" className="hover:text-black">Community</Link>
               </div>
             </div>
           </div>
