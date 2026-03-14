@@ -22,9 +22,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 const [input, setInput] = useState('');
 const [isLoading, setIsLoading] = useState(false);
 const messagesEndRef = useRef<HTMLDivElement>(null);
-const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
   const container = messagesEndRef.current?.parentElement;
