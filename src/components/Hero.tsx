@@ -21,10 +21,6 @@ export const Hero: React.FC = () => {
       
       <div className="max-w-4xl mx-auto px-6 text-left relative z-10 animate-fade-in">
       
-        <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 text-brand-primary text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-6 shadow-sm">
-          <span className="w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
-          Fresh Trail Intel Dispatched Tuesday
-        </div>
         
         {/* Popular Arizona Adventures */}
 <div className="mt-10">
