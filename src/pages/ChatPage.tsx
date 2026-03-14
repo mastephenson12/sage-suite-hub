@@ -26,6 +26,16 @@ Finish with a short packing list.`;
 const ChatPage: React.FC = () => {
   const [mode, setMode] = useState<'general' | 'flights' | 'camping' | 'lodging' | 'arizona'>('general');
 
+  const [searchParams] = useSearchParams();
+
+useEffect(() => {
+  const trip = searchParams.get('trip');
+
+  if (trip === 'sedona') {
+    setMode('arizona');
+  }
+}, [searchParams]);
+  
   const initialMessages = {
     general:
       "Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona. Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.",
