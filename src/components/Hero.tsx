@@ -66,7 +66,35 @@ export const Hero: React.FC = () => {
             Browse Trail Intel
           </Link>
         </div>
+{/* Popular Arizona Adventures */}
+<div className="mt-10">
+  <p className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-4">
+    Popular Arizona Adventures
+  </p>
 
+  <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
+    <Link
+      to="/chat?trip=sedona"
+      className="bg-brand-primary hover:bg-brand-dark text-white px-6 py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.14em] transition-all active:scale-95"
+    >
+      Plan a Sedona Family Adventure
+    </Link>
+
+    <button
+      disabled
+      className="bg-zinc-100 text-zinc-400 px-6 py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.14em] border border-zinc-200 cursor-not-allowed"
+    >
+      Plan a Grand Canyon Trip
+    </button>
+
+    <button
+      disabled
+      className="bg-zinc-100 text-zinc-400 px-6 py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.14em] border border-zinc-200 cursor-not-allowed"
+    >
+      Plan a Flagstaff Escape
+    </button>
+  </div>
+</div>
         {/* Feature Grid */}
         <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
           <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 hover:border-brand-primary/20 transition-all group">
