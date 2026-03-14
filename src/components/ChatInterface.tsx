@@ -15,7 +15,14 @@ interface ChatInterfaceProps {
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
   initialMessage = "Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona. Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget."}) => {
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+  { role: 'model', content: initialMessage }
+]);
+
+const [input, setInput] = useState('');
+const [isLoading, setIsLoading] = useState(false);
+const messagesEndRef = useRef<HTMLDivElement>(null);
+const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
