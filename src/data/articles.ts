@@ -105,5 +105,91 @@ In Arizona, sweat evaporates instantly. You may feel dry while losing liters of 
 - Confusion or irritability (Level 3 - EVACUATE)
     `,
     image: '/images/desert-hydration.jpg'
-  }
+  },
+  {
+  id: 'sedona-family-adventure',
+  title: '3-Day Sedona Family Adventure Itinerary',
+  date: 'Mar 15, 2026',
+  category: 'Travel',
+  content: `
+# 3-Day Sedona Family Adventure Itinerary
+
+Sedona is one of the most beautiful destinations in the American Southwest. Towering red rock formations, easy hikes, swimming holes, and jeep tours make it a perfect destination for families.
+
+This itinerary works well for:
+
+• two adults  
+• a 9-year-old daughter  
+• a 5-year-old son  
+
+---
+
+## Day 1 — Bell Rock & Jeep Adventure
+
+Start your trip with an easy hike at **Bell Rock Pathway Trail**.
+
+This is one of Sedona’s most scenic and family-friendly trails with wide paths and incredible red rock views.
+
+Later in the afternoon, experience Sedona’s most famous adventure:
+
+**The Broken Arrow Jeep Tour**
+
+This off-road ride takes you deep into the red rock backcountry with thrilling climbs and amazing viewpoints.
+
+👉 Book a Sedona Jeep Tour
+
+---
+
+## Day 2 — Cathedral Rock & Oak Creek Swimming
+
+Visit the iconic **Cathedral Rock** area early in the morning.
+
+The views here are some of the most photographed landscapes in Arizona.
+
+After hiking, cool off at **Red Rock Crossing on Oak Creek**, one of the best swimming spots in Sedona.
+
+Bring:
+
+• water shoes  
+• swimsuits  
+• snacks for a picnic
+
+---
+
+## Day 3 — Art Village & Sunset Views
+
+Start the morning exploring **Tlaquepaque Arts Village**, a beautiful Spanish-style courtyard full of galleries and shops.
+
+In the evening drive to **Airport Mesa Overlook**.
+
+This is one of the best sunset views in the entire Southwest.
+
+---
+
+## Let Sage Plan Your Sedona Adventure
+
+Want a custom Sedona itinerary built for your family?
+
+[**Plan My Sedona Adventure**](/chat?trip=sedona)
+
+Sage will generate a personalized 3-day Sedona adventure with hikes, restaurants, and hidden local spots.
+
+---
+
+## Recommended Packing List
+
+For a comfortable Sedona adventure bring:
+
+• hiking shoes  
+• refillable water bottles  
+• sunscreen  
+• sun hat  
+• swimsuits  
+• light jacket for evenings
+
+Sedona’s desert climate means warm days and cool nights.
+
+`,
+  image: '/images/sedona-family.jpg'
+}
 ];
