@@ -14,6 +14,9 @@ import TrailPage from './pages/TrailPage';
 
 function AppContent() {
   const location = useLocation();
+  React.useEffect(() => {
+  window.scrollTo(0, 0);
+}, [location.pathname]);
   const isSuite = location.pathname.startsWith('/suite') || 
                   location.pathname === '/chat' || 
                   location.pathname.startsWith('/archive/') ||
