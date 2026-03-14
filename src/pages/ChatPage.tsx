@@ -1,7 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChatInterface } from '../components/ChatInterface';
 import { ArrowLeft, Plane, Tent, Hotel, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+
+const SEDONA_PROMPT = `Create a 3-day Sedona Arizona family adventure itinerary.
+
+The trip should work for:
+• two adults
+• a 9-year-old daughter
+• a 5-year-old son
+
+Include:
+
+• kid friendly hikes
+• scenic viewpoints
+• a jeep tour
+• a swimming spot
+• family restaurants
+• hotel suggestions
+
+Organize the itinerary by day.
+
+Finish with a short packing list.`;
 
 const ChatPage: React.FC = () => {
   const [mode, setMode] = useState<'general' | 'flights' | 'camping' | 'lodging' | 'arizona'>('general');
