@@ -22,7 +22,7 @@ export const trails: Trail[] = [
     elevationGain: '564 ft',
     time: '2-3 hours',
     rating: 4.8,
-    image: '/images/devils-bridge.jpg',
+    image: '/images/devils-bridge.avif',
     description: 'The largest natural sandstone arch in the Sedona area. A must-see for any explorer visiting the Red Rock Country.',
     intel: `
 # Devil's Bridge Intel Report
