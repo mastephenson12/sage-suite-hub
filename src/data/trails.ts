@@ -94,7 +94,7 @@ The alpine tundra at the top is one of the few places in the Southwest where you
     elevationGain: '2,900 ft',
     time: '4-6 hours',
     rating: 4.9,
-    image: '/images/flatiron.jpg',
+    image: '/images/flatiron.avif',
     description: 'A legendary climb in the Superstition Mountains. A sheer rock face that rewards you with the best views in the state.',
     intel: `
 # Flatiron Intel Report
