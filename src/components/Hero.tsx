@@ -21,35 +21,15 @@ export const Hero: React.FC = () => {
       
       <div className="max-w-4xl mx-auto px-6 text-left relative z-10 animate-fade-in">
       
-        
-        {/* Popular Arizona Adventures */}
-<div className="mt-2 mb-16">
   <p className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-4">
-    Popular Arizona Adventures
-  </p>
-
-  <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
-    <Link
-      to="/chat?trip=sedona"
-      className="bg-brand-primary hover:bg-brand-dark text-white px-6 py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.14em] transition-all active:scale-95"
-    >
-      Plan a Sedona Family Adventure
-    </Link>
-
-    <button
-      disabled
-      className="bg-zinc-100 text-zinc-400 px-6 py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.14em] border border-zinc-200 cursor-not-allowed"
-    >
-      Plan a Grand Canyon Trip
-    </button>
-
-    <button
-      disabled
-      className="bg-zinc-100 text-zinc-400 px-6 py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.14em] border border-zinc-200 cursor-not-allowed"
-    >
-      Plan a Flagstaff Escape
-    </button>
-  </div>
+    <div className="mt-6 mb-16">
+  <Link
+    to="/arizona"
+    className="inline-flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 text-black px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all active:scale-95"
+  >
+    Explore Arizona Adventures
+  </Link>
+</div>
 </div>
         
         <h1 className="text-6xl md:text-[88px] font-[900] text-black mb-12 leading-[0.85] tracking-tighter uppercase">
