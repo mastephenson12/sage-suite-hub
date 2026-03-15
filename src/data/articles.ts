@@ -104,7 +104,7 @@ In Arizona, sweat evaporates instantly. You may feel dry while losing liters of 
 - Cessation of sweating (Level 2 - CRITICAL)
 - Confusion or irritability (Level 3 - EVACUATE)
     `,
-    image: '/images/desert-hydration.jpg'
+    image: '/images/desert-hydration.avif'
   },
   {
   id: 'sedona-family-adventure',
