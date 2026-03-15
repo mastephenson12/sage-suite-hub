@@ -70,7 +70,7 @@ The summit is a perfect place for "horizon scanning"—a technique used to reduc
     elevationGain: '3,391 ft',
     time: '6-8 hours',
     rating: 4.9,
-    image: '/images/humphreys-peak.jpg',
+    image: '/images/humphreys-peak.avif',
     description: 'The highest point in Arizona. An alpine adventure that takes you above the tree line into a different world.',
     intel: `
 # Humphreys Peak Intel Report
