@@ -44,6 +44,7 @@ function AppContent() {
           <Route path="/trail-guides/:id" element={<TrailPage />} />
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
+          <Route path="/arizona" element={<Arizona />} />
         </Routes>
       </main>
 
