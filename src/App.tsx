@@ -11,6 +11,7 @@ import ChatPage from './pages/ChatPage';
 import SuiteDashboard from './pages/SuiteDashboard';
 import ArticlePage from './pages/ArticlePage';
 import TrailPage from './pages/TrailPage';
+import Arizona from './pages/Arizona';
 
 function AppContent() {
   const location = useLocation();
