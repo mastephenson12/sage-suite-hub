@@ -33,7 +33,7 @@ const Archive: React.FC = () => {
               <img 
                 src={article.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=90'} 
                 alt={article.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
