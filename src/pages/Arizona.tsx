@@ -45,14 +45,18 @@ const Arizona: React.FC = () => {
             </Link>
           </div>
 
-          <div className="p-6 border rounded-3xl opacity-60">
+          <div className="p-6 border rounded-3xl">
             <h2 className="font-black text-xl mb-3">Flagstaff</h2>
             <p className="text-sm text-zinc-500 mb-4">
-              Pines, mountains, and cooler summer hikes.
+              Pine forests, lava caves, scenic drives, and cool mountain air.
             </p>
-            <button disabled className="bg-zinc-200 px-5 py-3 rounded-xl text-xs uppercase font-black">
-              Coming Soon
-            </button>
+
+            <Link
+            to="/archive/flagstaff-family-escape"
+            className="inline-flex items-center justify-center bg-brand-primary text-white px-5 py-3 rounded-xl font-black text-xs uppercase"
+            >
+              View Flagstaff Guide
+            </Link>
           </div>
         </div>
       </div>
