@@ -24,11 +24,11 @@ const Arizona: React.FC = () => {
               Red rock hikes, jeep tours, and family adventures.
             </p>
             <Link
-              to="/chat?trip=sedona"
-              className="inline-flex items-center justify-center bg-brand-primary text-white px-5 py-3 rounded-xl font-black text-xs uppercase"
-            >
-              Plan a Sedona Adventure
-            </Link>
+  to="/archive/sedona-family-adventure"
+  className="inline-flex items-center justify-center bg-brand-primary text-white px-5 py-3 rounded-xl font-black text-xs uppercase"
+>
+  View Sedona Guide
+</Link>
           </div>
 
           <div className="p-6 border rounded-3xl opacity-60">
