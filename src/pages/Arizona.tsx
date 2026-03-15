@@ -31,14 +31,18 @@ const Arizona: React.FC = () => {
 </Link>
           </div>
 
-          <div className="p-6 border rounded-3xl opacity-60">
+          <div className="p-6 border rounded-3xl">
             <h2 className="font-black text-xl mb-3">Grand Canyon</h2>
             <p className="text-sm text-zinc-500 mb-4">
-              Scenic overlooks and epic canyon views.
+              Scenic overlooks, rim walks, and unforgettable family views.
             </p>
-            <button disabled className="bg-zinc-200 px-5 py-3 rounded-xl text-xs uppercase font-black">
-              Coming Soon
-            </button>
+
+            <Link
+              to="/archive/grand-canyon-family-adventure"
+              className="inline-flex items-center justify-center bg-brand-primary text-white px-5 py-3 rounded-xl font-black text-xs uppercase"
+            >
+              View Grand Canyon Guide
+            </Link>
           </div>
 
           <div className="p-6 border rounded-3xl opacity-60">
