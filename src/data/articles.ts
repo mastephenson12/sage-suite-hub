@@ -56,7 +56,7 @@ In survival situations, you can last 3 minutes without air, 3 hours without shel
 - MSR WhisperLite or similar liquid fuel stove (canisters fail in sub-zero temps).
 - Emergency bivy sack.
     `,
-    image: '/images/flagstaff-winter.jpg'
+    image: '/images/flagstaff-winter.avif'
   },
   {
     id: 'superstition-hidden-springs',
