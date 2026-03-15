@@ -79,7 +79,7 @@ While the range looks bone-dry, the volcanic geology creates natural catchments 
 ## Safety Warning:
 Never rely on a spring being active. Always carry 1 gallon of water per person per day as your baseline. The "hidden" springs are a bonus, not a primary supply.
     `,
-    image: '/images/superstition-springs.jpg'
+    image: '/images/superstition-springs.avif'
   },
   {
     id: 'desert-hydration-science',
