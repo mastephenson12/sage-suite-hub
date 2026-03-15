@@ -29,19 +29,14 @@ const Archive: React.FC = () => {
             to={`/archive/${article.id}`}
             className="group flex items-center gap-8 p-6 bg-white border border-zinc-100 rounded-[32px] hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50 transition-all cursor-pointer"
           >
-            <div className="w-56 h-32 flex-shrink-0 overflow-hidden rounded-2xl bg-zinc-100 relative">
-              <img 
-                src={article.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=90'} 
-                alt={article.title}
-                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
-                  target.parentElement!.innerHTML = `<div class="text-zinc-300 text-[8px] font-black uppercase tracking-widest text-center px-2">Visual Missing</div>`;
-                }}
-              />
+            <div className="aspect-[16/9] overflow-hidden rounded-2xl bg-zinc-100">
+  <img
+    src={article.image}
+    alt={article.title}
+    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+    loading="lazy"
+  />
+</div>
             </div>
             <div className="flex-grow">
               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-2 block">{article.category}</span>
