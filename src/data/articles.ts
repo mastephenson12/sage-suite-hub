@@ -31,7 +31,7 @@ While the term "vortex" is metaphysical, the physiological effects of these loca
 - **Cathedral Rock**: Best for "upward" energy and creative clarity.
 - **Boynton Canyon**: Known for "balanced" energy, ideal for emotional regulation.
     `,
-    image: '/images/sedona-vortex.jpg'
+    image: '/images/sedona-vortex.avif'
   },
   {
     id: 'flagstaff-winter-survival',
