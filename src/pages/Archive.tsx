@@ -29,7 +29,7 @@ const Archive: React.FC = () => {
             to={`/archive/${article.id}`}
             className="group flex items-center gap-8 p-6 bg-white border border-zinc-100 rounded-[32px] hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50 transition-all cursor-pointer"
           >
-            <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded-2xl bg-zinc-100 relative">
+            <div className="w-48 h-32 flex-shrink-0 overflow-hidden rounded-2xl bg-zinc-100 relative">
               <img 
                 src={article.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80'} 
                 alt={article.title}
