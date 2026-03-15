@@ -190,6 +190,6 @@ For a comfortable Sedona adventure bring:
 Sedona’s desert climate means warm days and cool nights.
 
 `,
-  image: '/images/sedona-family.jpg'
+  image: '/images/sedona-family.avif'
 }
 ];
