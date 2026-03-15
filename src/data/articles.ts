@@ -191,5 +191,132 @@ Sedona’s desert climate means warm days and cool nights.
 
 `,
   image: '/images/sedona-family.avif'
+},
+  {
+  id: 'grand-canyon-family-adventure',
+  title: 'Grand Canyon Family Adventure: The Ultimate First-Time Guide',
+  date: 'Mar 17, 2026',
+  category: 'Travel',
+  image: '/images/grand-canyon.avif',
+  content: `
+# Grand Canyon Family Adventure Guide
+
+The Grand Canyon is one of the most awe-inspiring landscapes on Earth. Standing on the rim for the first time feels almost unreal — a mile-deep canyon carved by the Colorado River over millions of years.
+
+For families traveling through Arizona, the **South Rim** is the best place to start. It offers easy viewpoints, short hikes, visitor centers, and incredible scenery without requiring extreme hiking or backcountry experience.
+
+---
+
+## Best Time to Visit the Grand Canyon
+
+The canyon is open year-round, but some seasons are better for families.
+
+**Spring (March–May)**  
+Cool temperatures and fewer crowds.
+
+**Fall (September–November)**  
+Probably the best overall weather.
+
+**Summer (June–August)**  
+Very busy, but sunrise and sunset are spectacular.
+
+---
+
+## Best Viewpoints on the South Rim
+
+These viewpoints are easy to access and perfect for a first visit.
+
+### Mather Point
+
+One of the most famous viewpoints in the park. It is only a short walk from the visitor center and provides a massive panoramic view of the canyon.
+
+### Yavapai Point
+
+Great for photography and geology exhibits. The view of the Colorado River far below is incredible.
+
+### Desert View Watchtower
+
+Located further east along the rim drive, this historic stone tower offers a different perspective and often fewer crowds.
+
+---
+
+## Easy Family-Friendly Walks
+
+You do not need to hike into the canyon to experience its beauty.
+
+**Rim Trail**
+
+A mostly flat path that follows the canyon edge for miles. Perfect for families with younger kids.
+
+**Bright Angel Trail (upper section)**
+
+Walking just the first half mile gives you a taste of hiking into the canyon without committing to a long descent.
+
+---
+
+## Sunrise and Sunset at the Canyon
+
+Sunrise and sunset transform the canyon walls into layers of gold, red, and deep purple.
+
+Best sunset viewpoints:
+
+• Hopi Point  
+• Yaki Point  
+• Desert View  
+
+Bring a light jacket even in summer — evenings can cool quickly at elevation.
+
+---
+
+## Where to Stay Near the Grand Canyon
+
+There are several great lodging options both inside the park and nearby.
+
+Inside the park:
+
+• El Tovar Hotel  
+• Bright Angel Lodge  
+
+Nearby towns:
+
+• Tusayan (10 minutes from the entrance)  
+• Williams, Arizona (historic Route 66 town)
+
+---
+
+## Plan This Trip With Sage
+
+Planning a Grand Canyon trip can be overwhelming, especially if you are visiting with kids.
+
+Let Sage build a personalized itinerary with viewpoints, hikes, food stops, and nearby adventures.
+
+[**Plan My Grand Canyon Trip**](/chat)
+
+---
+
+## What to Pack for the Grand Canyon
+
+Even short visits require preparation.
+
+Bring:
+
+• water bottles  
+• sunscreen  
+• sunglasses  
+• comfortable walking shoes  
+• a light jacket
+
+The canyon sits around **7,000 feet elevation**, so temperatures can change quickly.
+
+---
+
+## Related Arizona Guides
+
+If you are planning a longer Arizona adventure, you may also enjoy:
+
+- [Best Sedona Jeep Tours](/archive/best-sedona-jeep-tours)
+- [The Sedona Vortex Protocol](/archive/sedona-vortex-protocol)
+- [3-Day Sedona Family Adventure Itinerary](/archive/sedona-family-adventure)
+`
 }
 ];
