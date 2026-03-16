@@ -6,7 +6,7 @@ const arizonaCards = [
     title: 'Sedona',
     description: 'Red rock hikes, jeep tours, and family adventures.',
     image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+      '/images/sedona-plateau.avif',
     to: '/archive/sedona-family-adventure',
     cta: 'View Sedona Guide',
   },
