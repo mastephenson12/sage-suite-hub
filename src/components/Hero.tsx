@@ -14,7 +14,7 @@ const arizonaCards = [
     title: 'Grand Canyon',
     description: 'Scenic overlooks, rim walks, and unforgettable family views.',
     image:
-      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80',
+      '/images/grand-canyon.avif',
     to: '/archive/grand-canyon-family-adventure',
     cta: 'View Grand Canyon Guide',
   },
