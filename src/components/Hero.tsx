@@ -22,7 +22,7 @@ const arizonaCards = [
     title: 'Flagstaff',
     description: 'Pine forests, lava caves, scenic drives, and cool mountain air.',
     image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+      '/images/flagstaff-family-adventure.avif',
     to: '/archive/flagstaff-family-escape',
     cta: 'View Flagstaff Guide',
   },
