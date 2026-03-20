@@ -42,9 +42,10 @@ interface ChatInterfaceProps {
   className?: string;
   initialMessage?: string;
   planDepth?: PlanDepth;
+  starterPrompt?: string;
 }
 
-const STORAGE_KEY = 'sage-chat-state-v2';
+const STORAGE_KEY = 'sage-chat-state-v3';
 
 const STARTER_PROMPTS = [
   'Plan a weekend in Sedona with kids',
@@ -89,7 +90,7 @@ const FIELD_QUESTIONS: Record<Exclude<TripField, 'complete'>, string> = {
   destination:
     'Great — where are you going? You can say Arizona, Sedona, the Grand Canyon, or anywhere else.',
   dates:
-    'What dates are you traveling, or what month/season are you aiming for?',
+    'What dates are you traveling, or what month or season are you aiming for?',
   travelers:
     'Who is going? Tell me how many adults, kids, or if it’s a couples or solo trip.',
   budget:
@@ -98,9 +99,9 @@ const FIELD_QUESTIONS: Record<Exclude<TripField, 'complete'>, string> = {
     'What kind of trip do you want — hotel, camping, road trip, luxury, budget, family adventure, outdoor, or a mix?',
 };
 
-const INITIAL_GUIDED_MESSAGE = `Hi, I’m Sage — your travel planning concierge.
+const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Sage — your travel planning concierge.
 
-I can help you book an Arizona adventure or a trip anywhere else.
+I can help you plan an Arizona adventure or a trip anywhere else.
 
 To build a useful plan fast, I’ll guide you through 5 quick things:
 1. Destination
@@ -165,8 +166,9 @@ If detailed mode, include a simple day-by-day itinerary.
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
-  initialMessage = INITIAL_GUIDED_MESSAGE,
+  initialMessage = DEFAULT_INITIAL_MESSAGE,
   planDepth = 'quick',
+  starterPrompt,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -174,93 +176,17 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [tripDetails, setTripDetails] = useState<TripDetails>(getEmptyTripDetails);
   const [currentStep, setCurrentStep] = useState<TripField>('destination');
   const [hasHydrated, setHasHydrated] = useState(false);
+  const [lastStarterPrompt, setLastStarterPrompt] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+  const appendUserMessage = (content: string) => {
+    setMessages((prev) => [...prev, { role: 'user', content }]);
+  };
 
-      if (saved) {
-        const parsed = JSON.parse(saved) as {
-          messages?: Message[];
-          tripDetails?: TripDetails;
-          currentStep?: TripField;
-        };
-
-        if (parsed.messages?.length) {
-          setMessages(parsed.messages);
-        } else {
-          setMessages([{ role: 'model', content: initialMessage }]);
-        }
-
-        if (parsed.tripDetails) {
-          setTripDetails(parsed.tripDetails);
-        }
-
-        if (parsed.currentStep) {
-          setCurrentStep(parsed.currentStep);
-        } else if (parsed.tripDetails) {
-          setCurrentStep(getNextMissingField(parsed.tripDetails));
-        }
-      } else {
-        setMessages([{ role: 'model', content: initialMessage }]);
-      }
-    } catch (error) {
-      console.error('Failed to load saved chat state:', error);
-      setMessages([{ role: 'model', content: initialMessage }]);
-    } finally {
-      setHasHydrated(true);
-    }
-  }, [initialMessage]);
-
-  useEffect(() => {
-    if (!hasHydrated) return;
-
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          messages,
-          tripDetails,
-          currentStep,
-        })
-      );
-    } catch (error) {
-      console.error('Failed to save chat state:', error);
-    }
-  }, [messages, tripDetails, currentStep, hasHydrated]);
-
-  useEffect(() => {
-    const container = messagesEndRef.current?.parentElement;
-    if (!container) return;
-
-    if (container.scrollHeight > container.clientHeight) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, isLoading]);
-
-  const isIntakeComplete = useMemo(
-    () => getNextMissingField(tripDetails) === 'complete',
-    [tripDetails]
-  );
-
-  const placeholder = useMemo(() => {
-    switch (currentStep) {
-      case 'destination':
-        return 'Example: Sedona, Arizona or Maui, Hawaii';
-      case 'dates':
-        return 'Example: April 12–15 or late June';
-      case 'travelers':
-        return 'Example: 2 adults and 2 kids';
-      case 'budget':
-        return 'Example: under $1,500 total';
-      case 'tripStyle':
-        return 'Example: family adventure with hotel and easy hikes';
-      default:
-        return 'Ask Sage to refine your itinerary, stays, activities, or booking plan';
-    }
-  }, [currentStep]);
+  const appendModelMessage = (content: string) => {
+    setMessages((prev) => [...prev, { role: 'model', content }]);
+  };
 
   const saveStepAnswer = (step: TripField, value: string) => {
     if (step === 'complete') return;
@@ -273,22 +199,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         [step]: trimmed,
       };
 
-      const nextStep = getNextMissingField(next);
-      setCurrentStep(nextStep);
-
+      setCurrentStep(getNextMissingField(next));
       return next;
     });
   };
 
-  const appendModelMessage = (content: string) => {
-    setMessages((prev) => [...prev, { role: 'model', content }]);
-  };
-
-  const appendUserMessage = (content: string) => {
-    setMessages((prev) => [...prev, { role: 'user', content }]);
-  };
-
-  const handleGuidedReply = async (rawInput: string) => {
+  const runGuidedReply = async (rawInput: string) => {
     const trimmed = rawInput.trim();
     if (!trimmed || isLoading) return;
 
@@ -374,7 +290,6 @@ Suggest next-step booking actions whenever helpful.
 `.trim();
 
       const modelResponse = await chatWithGemini(contextualPrompt, history);
-
       appendModelMessage(modelResponse);
     } catch (error) {
       console.error('Chat error:', error);
@@ -392,10 +307,11 @@ Suggest next-step booking actions whenever helpful.
     const emptyDetails = getEmptyTripDetails();
     setTripDetails(emptyDetails);
     setCurrentStep('destination');
+    setInput('');
     setMessages([{ role: 'model', content: initialMessage }]);
 
-    setTimeout(() => {
-      handleGuidedReply(prompt);
+    window.setTimeout(() => {
+      runGuidedReply(prompt);
     }, 0);
   };
 
@@ -405,6 +321,7 @@ Suggest next-step booking actions whenever helpful.
     setCurrentStep('destination');
     setInput('');
     setMessages([{ role: 'model', content: initialMessage }]);
+    setLastStarterPrompt('');
 
     try {
       localStorage.removeItem(STORAGE_KEY);
@@ -414,11 +331,103 @@ Suggest next-step booking actions whenever helpful.
   };
 
   const handleSend = async () => {
-    await handleGuidedReply(input);
+    await runGuidedReply(input);
   };
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+
+      if (saved) {
+        const parsed = JSON.parse(saved) as {
+          messages?: Message[];
+          tripDetails?: TripDetails;
+          currentStep?: TripField;
+        };
+
+        if (parsed.messages?.length) {
+          setMessages(parsed.messages);
+        } else {
+          setMessages([{ role: 'model', content: initialMessage }]);
+        }
+
+        if (parsed.tripDetails) {
+          setTripDetails(parsed.tripDetails);
+        }
+
+        if (parsed.currentStep) {
+          setCurrentStep(parsed.currentStep);
+        } else if (parsed.tripDetails) {
+          setCurrentStep(getNextMissingField(parsed.tripDetails));
+        }
+      } else {
+        setMessages([{ role: 'model', content: initialMessage }]);
+      }
+    } catch (error) {
+      console.error('Failed to load saved chat state:', error);
+      setMessages([{ role: 'model', content: initialMessage }]);
+    } finally {
+      setHasHydrated(true);
+    }
+  }, [initialMessage]);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          messages,
+          tripDetails,
+          currentStep,
+        })
+      );
+    } catch (error) {
+      console.error('Failed to save chat state:', error);
+    }
+  }, [messages, tripDetails, currentStep, hasHydrated]);
+
+  useEffect(() => {
+    const container = messagesEndRef.current?.parentElement;
+    if (!container) return;
+
+    if (container.scrollHeight > container.clientHeight) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (!starterPrompt || starterPrompt === lastStarterPrompt || isLoading) return;
+
+    setLastStarterPrompt(starterPrompt);
+    handleStarterPrompt(starterPrompt);
+  }, [starterPrompt, lastStarterPrompt, isLoading]);
+
+  const isIntakeComplete = useMemo(
+    () => getNextMissingField(tripDetails) === 'complete',
+    [tripDetails]
+  );
+
+  const placeholder = useMemo(() => {
+    switch (currentStep) {
+      case 'destination':
+        return 'Example: Sedona, Arizona or Maui, Hawaii';
+      case 'dates':
+        return 'Example: April 12–15 or late June';
+      case 'travelers':
+        return 'Example: 2 adults and 2 kids';
+      case 'budget':
+        return 'Example: under $1,500 total';
+      case 'tripStyle':
+        return 'Example: family adventure with hotel and easy hikes';
+      default:
+        return 'Ask Sage to refine your itinerary, stays, activities, or booking plan';
+    }
+  }, [currentStep]);
+
   return (
-    <div className={`flex flex-col h-full min-h-0 overflow-hidden bg-white ${className}`}>
+    <div className={`flex h-full min-h-0 flex-col overflow-hidden bg-white ${className}`}>
       <div className="border-b border-zinc-100 bg-gradient-to-b from-zinc-50 to-white px-6 py-5">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-2">
@@ -440,7 +449,7 @@ Suggest next-step booking actions whenever helpful.
               Start with a travel prompt
             </h3>
             <p className="mt-1 text-sm text-zinc-500">
-              Don’t make people guess what to type. These get the trip planning flow moving fast.
+              Give people a fast way to start instead of making them guess what to type.
             </p>
           </div>
 
@@ -480,64 +489,9 @@ Suggest next-step booking actions whenever helpful.
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 scrollbar-hide">
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div
-              className={`max-w-[90%] flex gap-4 ${
-                msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-              }`}
-            >
-              <div
-                className={`w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center shadow-sm ${
-                  msg.role === 'user' ? 'bg-zinc-100' : 'bg-zinc-950'
-                }`}
-              >
-                {msg.role === 'user' ? (
-                  <User className="w-5 h-5 text-zinc-500" />
-                ) : (
-                  <Bot className="w-5 h-5 text-white" />
-                )}
-              </div>
-
-              <div
-                className={`p-5 rounded-[24px] text-sm leading-relaxed whitespace-pre-wrap ${
-                  msg.role === 'user'
-                    ? 'bg-brand-primary text-white rounded-tr-none'
-                    : 'bg-zinc-50 text-zinc-800 border border-zinc-100 rounded-tl-none'
-                }`}
-              >
-                {msg.content}
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="max-w-[90%] flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-zinc-950 flex items-center justify-center shadow-sm">
-                <Bot className="w-5 h-5 text-white" />
-              </div>
-              <div className="p-5 rounded-[24px] rounded-tl-none bg-zinc-50 border border-zinc-100 flex items-center gap-3">
-                <Loader2 className="w-4 h-4 animate-spin text-brand-primary" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
-                  Building your travel plan...
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="border-t border-zinc-100 bg-white p-6">
+      <div className="border-b border-zinc-100 bg-white p-6">
         <div className="mb-4 rounded-2xl border border-zinc-100 bg-zinc-50 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <div className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400">
                 Current trip intake
@@ -583,41 +537,97 @@ Suggest next-step booking actions whenever helpful.
               }
             }}
             placeholder={placeholder}
-            className="w-full pl-6 pr-16 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary/10 transition-all"
+            className="w-full rounded-2xl border border-zinc-100 bg-zinc-50 py-4 pl-6 pr-16 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/10"
           />
 
           <button
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-zinc-950 text-white rounded-xl flex items-center justify-center hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl bg-zinc-950 text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Send message"
           >
-            <Send className="w-4 h-4" />
+            <Send className="h-4 w-4" />
           </button>
         </div>
 
         <div className="mt-4 flex flex-wrap justify-center gap-6">
           <div className="flex items-center gap-2">
-            <Map className="w-3 h-3 text-zinc-300" />
+            <Map className="h-3 w-3 text-zinc-300" />
             <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">
               Family Trip Planning
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <Shield className="w-3 h-3 text-zinc-300" />
+            <Shield className="h-3 w-3 text-zinc-300" />
             <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">
               Arizona Expertise
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <Zap className="w-3 h-3 text-zinc-300" />
+            <Zap className="h-3 w-3 text-zinc-300" />
             <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300">
               Flights • Camping • Hotels
             </span>
           </div>
         </div>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto p-6 pt-4 space-y-6 scrollbar-hide">
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div
+              className={`flex max-w-[90%] gap-4 ${
+                msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'
+              }`}
+            >
+              <div
+                className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl shadow-sm ${
+                  msg.role === 'user' ? 'bg-zinc-100' : 'bg-zinc-950'
+                }`}
+              >
+                {msg.role === 'user' ? (
+                  <User className="h-5 w-5 text-zinc-500" />
+                ) : (
+                  <Bot className="h-5 w-5 text-white" />
+                )}
+              </div>
+
+              <div
+                className={`whitespace-pre-wrap rounded-[24px] p-5 text-sm leading-relaxed ${
+                  msg.role === 'user'
+                    ? 'rounded-tr-none bg-brand-primary text-white'
+                    : 'rounded-tl-none border border-zinc-100 bg-zinc-50 text-zinc-800'
+                }`}
+              >
+                {msg.content}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="flex max-w-[90%] gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 shadow-sm">
+                <Bot className="h-5 w-5 text-white" />
+              </div>
+
+              <div className="flex items-center gap-3 rounded-[24px] rounded-tl-none border border-zinc-100 bg-zinc-50 p-5">
+                <Loader2 className="h-4 w-4 animate-spin text-brand-primary" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                  Building your travel plan...
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div ref={messagesEndRef} />
       </div>
     </div>
   );
