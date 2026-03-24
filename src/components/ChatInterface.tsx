@@ -12,6 +12,8 @@ import {
   Tent,
   Plane,
   Hotel,
+  Mail,
+  CheckCircle2,
 } from 'lucide-react';
 import { chatWithGemini } from '../services/geminiService';
 
@@ -43,9 +45,12 @@ interface ChatInterfaceProps {
   initialMessage?: string;
   planDepth?: PlanDepth;
   starterPrompt?: string;
+  leadEndpoint?: string;
 }
 
-const STORAGE_KEY = 'sage-chat-state-v3';
+type EmailCaptureStatus = 'idle' | 'submitting' | 'success' | 'error';
+
+const STORAGE_KEY = 'sage-chat-state-v4';
 
 const STARTER_PROMPTS = [
   'Plan a weekend in Sedona with kids',
@@ -132,9 +137,9 @@ function getNextMissingField(details: TripDetails): TripField {
   return 'complete';
 }
 
-function buildStructuredPrompt(details: TripDetails, planDepth: PlanDepth) {
+function buildInitialPlanPrompt(details: TripDetails, planDepth: PlanDepth) {
   return `
-You are creating a ${planDepth === 'quick' ? 'quick' : 'detailed'} travel plan.
+You are Sage, a travel planning concierge.
 
 Traveler request:
 - Destination: ${details.destination}
@@ -143,24 +148,51 @@ Traveler request:
 - Budget: ${details.budget}
 - Trip style: ${details.tripStyle}
 
+Goal:
+Give the traveler immediate starter value, but do NOT overwhelm them.
+This is the initial preview they see before deciding whether they want more trip help by email.
+
 Instructions:
 - Prioritize Arizona expertise when relevant.
-- Be practical, specific, and booking-oriented.
+- Be practical, specific, and easy to skim.
 - Reduce decision fatigue.
-- Include clear next steps.
-- Suggest real categories of things the traveler should book.
+- Keep recommendations realistic for the stated budget and traveler type.
+- Do not mention JSON or metadata.
+- Do not ask for their email inside the plan.
+- End with one short sentence that says you can give them a fuller version next.
 
 Return your answer in this exact structure:
 1. Trip Summary
 2. Best Area to Stay
-3. Recommended Hotels or Camping Style
+3. Stay Option Ideas
 4. Top Activities
 5. Food Stops
 6. Booking Game Plan
-7. Packing or Prep Notes
+7. One simple next step
 
-If quick mode, keep it concise and skimmable.
-If detailed mode, include a simple day-by-day itinerary.
+${
+  planDepth === 'quick'
+    ? 'Keep the whole response concise and scannable.'
+    : 'Make it richer, but still preview-level rather than a full deep-dive itinerary.'
+}
+`.trim();
+}
+
+function buildFollowupPrompt(details: TripDetails, request: string) {
+  return `
+The user already provided these trip details:
+- Destination: ${details.destination}
+- Dates: ${details.dates}
+- Travelers: ${details.travelers}
+- Budget: ${details.budget}
+- Trip style: ${details.tripStyle}
+
+Current request:
+${request}
+
+Respond as a practical travel concierge.
+Keep helping them make booking decisions.
+Suggest next-step booking actions whenever helpful.
 `.trim();
 }
 
@@ -169,6 +201,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   initialMessage = DEFAULT_INITIAL_MESSAGE,
   planDepth = 'quick',
   starterPrompt,
+  leadEndpoint = '/api/trip-leads',
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -177,6 +210,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [currentStep, setCurrentStep] = useState<TripField>('destination');
   const [hasHydrated, setHasHydrated] = useState(false);
   const [lastStarterPrompt, setLastStarterPrompt] = useState('');
+
+  const [previewPlan, setPreviewPlan] = useState('');
+  const [showLeadCapture, setShowLeadCapture] = useState(false);
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadConsent, setLeadConsent] = useState(true);
+  const [leadStatus, setLeadStatus] = useState<EmailCaptureStatus>('idle');
+  const [leadError, setLeadError] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -202,6 +242,53 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       setCurrentStep(getNextMissingField(next));
       return next;
     });
+  };
+
+  const submitLead = async () => {
+    const email = leadEmail.trim();
+
+    if (!email) {
+      setLeadError('Please enter your email address.');
+      setLeadStatus('error');
+      return;
+    }
+
+    setLeadStatus('submitting');
+    setLeadError('');
+
+    try {
+      const response = await fetch(leadEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          consent: leadConsent,
+          source: 'trip-finder-chat',
+          planDepth,
+          tripDetails,
+          previewPlan,
+          messages,
+          submittedAt: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Lead submit failed with status ${response.status}`);
+      }
+
+      setLeadStatus('success');
+      appendModelMessage(
+        `Perfect — I’ll send this trip starter to ${email} and save your preferences so we can follow up with more trip ideas and planning help.`
+      );
+    } catch (error) {
+      console.error('Lead capture error:', error);
+      setLeadStatus('error');
+      setLeadError(
+        'I could not save your email right now. Your trip preview is still here, and you can try again in a moment.'
+      );
+    }
   };
 
   const runGuidedReply = async (rawInput: string) => {
@@ -231,7 +318,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       setIsLoading(true);
 
       try {
-        const structuredPrompt = buildStructuredPrompt(updatedDetails, planDepth);
+        const structuredPrompt = buildInitialPlanPrompt(updatedDetails, planDepth);
 
         const history = [
           ...messages,
@@ -243,13 +330,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
         const modelResponse = await chatWithGemini(structuredPrompt, history);
 
+        setPreviewPlan(modelResponse);
+        setShowLeadCapture(true);
+        setLeadStatus('idle');
+        setLeadError('');
+
         setMessages((prev) => [
           ...prev,
           {
             role: 'model',
             content:
               `Perfect — I’ve got what I need.\n\n` +
-              `Here’s your ${planDepth === 'quick' ? 'quick trip plan' : 'full itinerary'}:\n\n` +
+              `Here’s your ${planDepth === 'quick' ? 'trip starter' : 'trip preview'}:\n\n` +
               modelResponse,
           },
         ]);
@@ -273,22 +365,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         parts: [{ text: msg.content }],
       }));
 
-      const contextualPrompt = `
-The user already provided these trip details:
-- Destination: ${tripDetails.destination}
-- Dates: ${tripDetails.dates}
-- Travelers: ${tripDetails.travelers}
-- Budget: ${tripDetails.budget}
-- Trip style: ${tripDetails.tripStyle}
-
-Current request:
-${trimmed}
-
-Respond as a practical travel concierge.
-Keep helping them move toward booking decisions.
-Suggest next-step booking actions whenever helpful.
-`.trim();
-
+      const contextualPrompt = buildFollowupPrompt(tripDetails, trimmed);
       const modelResponse = await chatWithGemini(contextualPrompt, history);
       appendModelMessage(modelResponse);
     } catch (error) {
@@ -308,6 +385,12 @@ Suggest next-step booking actions whenever helpful.
     setTripDetails(emptyDetails);
     setCurrentStep('destination');
     setInput('');
+    setPreviewPlan('');
+    setShowLeadCapture(false);
+    setLeadEmail('');
+    setLeadConsent(true);
+    setLeadStatus('idle');
+    setLeadError('');
     setMessages([{ role: 'model', content: initialMessage }]);
 
     window.setTimeout(() => {
@@ -320,6 +403,12 @@ Suggest next-step booking actions whenever helpful.
     setTripDetails(emptyDetails);
     setCurrentStep('destination');
     setInput('');
+    setPreviewPlan('');
+    setShowLeadCapture(false);
+    setLeadEmail('');
+    setLeadConsent(true);
+    setLeadStatus('idle');
+    setLeadError('');
     setMessages([{ role: 'model', content: initialMessage }]);
     setLastStarterPrompt('');
 
@@ -343,6 +432,11 @@ Suggest next-step booking actions whenever helpful.
           messages?: Message[];
           tripDetails?: TripDetails;
           currentStep?: TripField;
+          previewPlan?: string;
+          showLeadCapture?: boolean;
+          leadEmail?: string;
+          leadConsent?: boolean;
+          leadStatus?: EmailCaptureStatus;
         };
 
         if (parsed.messages?.length) {
@@ -359,6 +453,18 @@ Suggest next-step booking actions whenever helpful.
           setCurrentStep(parsed.currentStep);
         } else if (parsed.tripDetails) {
           setCurrentStep(getNextMissingField(parsed.tripDetails));
+        }
+
+        if (parsed.previewPlan) setPreviewPlan(parsed.previewPlan);
+        if (typeof parsed.showLeadCapture === 'boolean') {
+          setShowLeadCapture(parsed.showLeadCapture);
+        }
+        if (parsed.leadEmail) setLeadEmail(parsed.leadEmail);
+        if (typeof parsed.leadConsent === 'boolean') {
+          setLeadConsent(parsed.leadConsent);
+        }
+        if (parsed.leadStatus && parsed.leadStatus !== 'submitting') {
+          setLeadStatus(parsed.leadStatus);
         }
       } else {
         setMessages([{ role: 'model', content: initialMessage }]);
@@ -381,12 +487,27 @@ Suggest next-step booking actions whenever helpful.
           messages,
           tripDetails,
           currentStep,
+          previewPlan,
+          showLeadCapture,
+          leadEmail,
+          leadConsent,
+          leadStatus: leadStatus === 'submitting' ? 'idle' : leadStatus,
         })
       );
     } catch (error) {
       console.error('Failed to save chat state:', error);
     }
-  }, [messages, tripDetails, currentStep, hasHydrated]);
+  }, [
+    messages,
+    tripDetails,
+    currentStep,
+    previewPlan,
+    showLeadCapture,
+    leadEmail,
+    leadConsent,
+    leadStatus,
+    hasHydrated,
+  ]);
 
   useEffect(() => {
     const container = messagesEndRef.current?.parentElement;
@@ -395,7 +516,7 @@ Suggest next-step booking actions whenever helpful.
     if (container.scrollHeight > container.clientHeight) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, showLeadCapture, leadStatus]);
 
   useEffect(() => {
     if (!starterPrompt || starterPrompt === lastStarterPrompt || isLoading) return;
@@ -442,6 +563,13 @@ Suggest next-step booking actions whenever helpful.
                 Step {Math.max(1, FIELD_ORDER.indexOf(currentStep) + 1)} of 5
               </span>
             )}
+
+            {showLeadCapture && (
+              <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
+                <Mail className="h-3 w-3" />
+                Ready to email trip info
+              </span>
+            )}
           </div>
 
           <div>
@@ -449,7 +577,7 @@ Suggest next-step booking actions whenever helpful.
               Start with a travel prompt
             </h3>
             <p className="mt-1 text-sm text-zinc-500">
-              Give people a fast way to start instead of making them guess what to type.
+              Give people instant trip ideas first, then offer the full version by email.
             </p>
           </div>
 
@@ -574,7 +702,7 @@ Suggest next-step booking actions whenever helpful.
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto p-6 pt-4 space-y-6 scrollbar-hide">
+      <div className="flex-1 min-h-0 space-y-6 overflow-y-auto p-6 pt-4 scrollbar-hide">
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -609,6 +737,95 @@ Suggest next-step booking actions whenever helpful.
             </div>
           </div>
         ))}
+
+        {showLeadCapture && (
+          <div className="flex justify-start">
+            <div className="flex max-w-[90%] gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 shadow-sm">
+                <Mail className="h-5 w-5 text-white" />
+              </div>
+
+              <div className="w-full rounded-[24px] rounded-tl-none border border-emerald-100 bg-emerald-50 p-5">
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
+                      Want more trip help?
+                    </div>
+                    <h4 className="mt-2 text-base font-black text-zinc-950">
+                      Want this emailed to you?
+                    </h4>
+                    <p className="mt-1 text-sm text-zinc-600">
+                      Get this starter plan in your inbox and save your trip preferences so we can send deeper trip ideas, itinerary help, and follow-up options.
+                    </p>
+                  </div>
+
+                  {leadStatus === 'success' ? (
+                    <div className="rounded-2xl border border-emerald-200 bg-white p-4">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600" />
+                        <div>
+                          <div className="font-bold text-zinc-900">Saved successfully</div>
+                          <div className="mt-1 text-sm text-zinc-600">
+                            We saved the traveler details and email for follow-up.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid gap-3 md:grid-cols-[1fr_auto]">
+                        <input
+                          type="email"
+                          value={leadEmail}
+                          onChange={(e) => setLeadEmail(e.target.value)}
+                          placeholder="Enter your email address"
+                          className="w-full rounded-2xl border border-white bg-white px-4 py-3 text-sm font-medium text-zinc-900 outline-none ring-1 ring-emerald-100 transition focus:ring-2 focus:ring-emerald-300"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={submitLead}
+                          disabled={leadStatus === 'submitting'}
+                          className="inline-flex items-center justify-center rounded-2xl bg-zinc-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          {leadStatus === 'submitting' ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <Mail className="mr-2 h-4 w-4" />
+                              Email this trip
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      <label className="flex items-start gap-3 text-sm text-zinc-600">
+                        <input
+                          type="checkbox"
+                          checked={leadConsent}
+                          onChange={(e) => setLeadConsent(e.target.checked)}
+                          className="mt-1 h-4 w-4 rounded border-zinc-300"
+                        />
+                        <span>
+                          Yes, save my trip preferences and send me more helpful travel planning information.
+                        </span>
+                      </label>
+
+                      {leadStatus === 'error' && leadError && (
+                        <div className="rounded-2xl border border-red-200 bg-white p-3 text-sm text-red-600">
+                          {leadError}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {isLoading && (
           <div className="flex justify-start">
