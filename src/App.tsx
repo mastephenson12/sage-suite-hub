@@ -24,10 +24,8 @@ function AppContent() {
 
   return () => window.clearTimeout(id);
 }, [location.pathname]);
-  const isSuite = location.pathname.startsWith('/suite') || 
-                  location.pathname === '/chat' || 
-                  location.pathname.startsWith('/archive/') ||
-                  location.pathname.startsWith('/trail-guides/');
+  const hideSiteChrome = location.pathname.startsWith('/suite') || 
+                       location.pathname === '/chat';
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
