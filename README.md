@@ -52,6 +52,7 @@ npm install
 npm run dev
 
 Then open http://localhost:5173 in your browser to see SageSuite!
+
 ### 4. Environment Variables
 You must provide a Gemini API Key to power the AI features. Create a `.env` file or add this to your deployment settings:
 
