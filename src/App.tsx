@@ -15,22 +15,24 @@ import Arizona from './pages/Arizona';
 
 function AppContent() {
   const location = useLocation();
+
   React.useLayoutEffect(() => {
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-
-  const id = window.setTimeout(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, 0);
 
-  return () => window.clearTimeout(id);
-}, [location.pathname]);
-  const hideSiteChrome = location.pathname.startsWith('/suite') || 
-                       location.pathname === '/chat';
+    const id = window.setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, 0);
+
+    return () => window.clearTimeout(id);
+  }, [location.pathname]);
+
+  const hideSiteChrome =
+    location.pathname.startsWith('/suite') || location.pathname === '/chat';
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {!isSuite && <Navbar />}
-      
+      {!hideSiteChrome && <Navbar />}
+
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Hero />} />
@@ -46,7 +48,7 @@ function AppContent() {
         </Routes>
       </main>
 
-      {!isSuite && (
+      {!hideSiteChrome && (
         <footer className="bg-white border-t border-zinc-100 py-16 mt-auto">
           <div className="max-w-6xl mx-auto px-6 text-center md:text-left">
             <div className="flex flex-col md:flex-row justify-between items-center gap-8">
@@ -68,7 +70,7 @@ function AppContent() {
         </footer>
       )}
 
-      {!isSuite && <ChatWidget />}
+      {!hideSiteChrome && <ChatWidget />}
     </div>
   );
 }
