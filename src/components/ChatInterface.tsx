@@ -36,10 +36,6 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    localStorage.setItem('sage-chat-messages', JSON.stringify(messages));
-  }, [messages]);
-
-  useEffect(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
