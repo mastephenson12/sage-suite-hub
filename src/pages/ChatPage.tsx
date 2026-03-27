@@ -142,15 +142,14 @@ const ChatPage: React.FC = () => {
         {/* Chat Container */}
         <div className="flex-1 min-h-0 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
           <ChatInterface
-            className="h-full"
-            initialMessage={
-              searchParams.get('trip') === 'sedona'
-                ? SEDONA_PROMPT
-                : initialMessages[mode]
-            }
-            planDepth={planDepth}
-            starterPrompt={searchParams.get('starter') || undefined}
-          />
+  className="h-full"
+  initialMessage={
+    searchParams.get('trip') === 'sedona'
+      ? SEDONA_PROMPT
+      : initialMessages[mode]
+  }
+  starterPrompt={searchParams.get('starter') || undefined}
+/>
         </div>
       </div>
     </div>
