@@ -59,9 +59,9 @@ const ChatPage: React.FC = () => {
   }, [mode]);
 
   return (
-    <div className="h-screen bg-white">
-      <div className="mx-auto flex h-full max-w-5xl flex-col px-4 py-3 md:px-5">
-        <div className="mb-2 flex-shrink-0">
+    <div className="min-h-screen bg-white">
+      <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-3 md:px-5">
+        <div className="mb-2">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black"
@@ -71,7 +71,7 @@ const ChatPage: React.FC = () => {
           </Link>
         </div>
 
-        <section className="mb-3 flex-shrink-0 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
+        <section className="mb-3 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
@@ -96,7 +96,7 @@ const ChatPage: React.FC = () => {
                 onClick={() => setMode(item.key)}
                 className={`rounded-full px-4 py-2 text-sm font-semibold ${
                   mode === item.key
-                    ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20'
+                    ? 'border border-brand-primary/20 bg-brand-primary/10 text-brand-primary'
                     : 'border border-zinc-200 bg-white text-zinc-700'
                 }`}
               >
@@ -106,9 +106,9 @@ const ChatPage: React.FC = () => {
           </div>
         </section>
 
-        <div className="flex-1 min-h-0 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+        <div className="flex-1 rounded-3xl border border-zinc-200 bg-white shadow-sm min-h-[70vh]">
           <ChatInterface
-            className="h-full"
+            className="h-[70vh] md:h-[72vh]"
             initialMessage={
               searchParams.get('trip') === 'sedona'
                 ? SEDONA_PROMPT
