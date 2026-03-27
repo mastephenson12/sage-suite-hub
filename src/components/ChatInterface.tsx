@@ -24,19 +24,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
 Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`,
 }) => {
-  const [messages, setMessages] = useState<Message[]>(() => {
-    const saved = localStorage.getItem('sage-chat-messages');
-
-    if (saved) {
-      try {
-        return JSON.parse(saved) as Message[];
-      } catch {
-        return [{ role: 'model', content: initialMessage }];
-      }
-    }
-
-    return [{ role: 'model', content: initialMessage }];
-  });
+  const [messages, setMessages] = useState<Message[]>([
+  { role: 'model', content: initialMessage },
+]);
 
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
