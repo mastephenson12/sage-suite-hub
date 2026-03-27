@@ -4,7 +4,6 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 type Mode = 'general' | 'flights' | 'camping' | 'lodging' | 'arizona';
-type PlanDepth = 'quick' | 'detailed';
 
 const SEDONA_PROMPT = `Create a 3-day Sedona Arizona family adventure itinerary.
 
@@ -35,13 +34,11 @@ const MODES: { key: Mode; label: string }[] = [
 
 const ChatPage: React.FC = () => {
   const [mode, setMode] = useState<Mode>('general');
-  const [planDepth, setPlanDepth] = useState<PlanDepth>('quick');
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (searchParams.get('trip') === 'sedona') {
       setMode('arizona');
-      setPlanDepth('detailed');
     }
   }, [searchParams]);
 
@@ -64,8 +61,6 @@ const ChatPage: React.FC = () => {
   return (
     <div className="h-screen bg-white">
       <div className="mx-auto flex h-full max-w-5xl flex-col px-4 py-3 md:px-5">
-        
-        {/* Back */}
         <div className="mb-2 flex-shrink-0">
           <Link
             to="/"
@@ -76,10 +71,8 @@ const ChatPage: React.FC = () => {
           </Link>
         </div>
 
-        {/* Compact Header */}
         <section className="mb-3 flex-shrink-0 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
                 <Sparkles className="h-3 w-3" />
@@ -94,34 +87,8 @@ const ChatPage: React.FC = () => {
                 Fast trip planning without the clutter.
               </p>
             </div>
-
-            {/* Quick / Detailed */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setPlanDepth('quick')}
-                className={`rounded-full px-4 py-2 text-sm font-black ${
-                  planDepth === 'quick'
-                    ? 'bg-zinc-950 text-white'
-                    : 'border border-zinc-200 bg-white text-zinc-700'
-                }`}
-              >
-                Quick
-              </button>
-
-              <button
-                onClick={() => setPlanDepth('detailed')}
-                className={`rounded-full px-4 py-2 text-sm font-black ${
-                  planDepth === 'detailed'
-                    ? 'bg-zinc-950 text-white'
-                    : 'border border-zinc-200 bg-white text-zinc-700'
-                }`}
-              >
-                Detailed
-              </button>
-            </div>
           </div>
 
-          {/* Mode Pills (compact instead of big cards) */}
           <div className="mt-3 flex flex-wrap gap-2">
             {MODES.map((item) => (
               <button
@@ -139,7 +106,6 @@ const ChatPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Chat Container */}
         <div className="flex-1 min-h-0 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
           <ChatInterface
             className="h-full"
