@@ -61,7 +61,7 @@ const ChatPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-3 md:px-5">
-        <div className="mb-2">
+        <div className="mb-3">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black"
@@ -71,7 +71,19 @@ const ChatPage: React.FC = () => {
           </Link>
         </div>
 
-        <section className="mb-3 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
+        <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
+          <ChatInterface
+            key={`${mode}-${searchParams.get('trip') || 'default'}`}
+            className="h-[60vh] md:h-[65vh]"
+            initialMessage={
+              searchParams.get('trip') === 'sedona'
+                ? SEDONA_PROMPT
+                : initialMessages[mode]
+            }
+          />
+        </div>
+
+        <section className="mt-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
@@ -105,17 +117,6 @@ const ChatPage: React.FC = () => {
             ))}
           </div>
         </section>
-
-        <div className="flex-1 rounded-3xl border border-zinc-200 bg-white shadow-sm min-h-[70vh]">
-          <ChatInterface
-            className="h-[70vh] md:h-[72vh]"
-            initialMessage={
-              searchParams.get('trip') === 'sedona'
-                ? SEDONA_PROMPT
-                : initialMessages[mode]
-            }
-          />
-        </div>
       </div>
     </div>
   );
