@@ -69,26 +69,54 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
   };
 
   const handleSend = async () => {
-    const trimmed = input.trim();
-    if (!trimmed || isLoading) return;
+  const trimmed = input.trim();
+  if (!trimmed || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: trimmed };
+  const userMessage: Message = { role: 'user', content: trimmed };
 
-    setInput('');
-    setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
+  setInput('');
+  setMessages((prev) => [...prev, userMessage]);
+  setIsLoading(true);
 
-    try {
-      const apiKey =
-        process.env.GEMINI_API_KEY ||
-        (import.meta as any).env?.VITE_GEMINI_API_KEY ||
-        '';
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [...messages, userMessage],
+      }),
+    });
 
-      if (!apiKey) {
-        throw new Error(
-          'Sage is not connected right now. Please configure your GEMINI API key in Vercel.',
-        );
-      }
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'model',
+        content:
+          data.text ||
+          'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.',
+      },
+    ]);
+  } catch (error) {
+    console.error('Chat error:', error);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'model',
+        content:
+          'I’m having trouble connecting right now. Please try again in a moment.',
+      },
+    ]);
+  } finally {
+    setIsLoading(false);
+    textareaRef.current?.focus();
+  }
+};
 
       const ai = new GoogleGenAI({ apiKey });
 
