@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Send, User, Bot, Loader2, Sparkles } from 'lucide-react';
+import { Send, User, Bot, Loader2, Sparkles, RotateCcw } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
 interface Message {
@@ -25,15 +25,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`,
 }) => {
   const [messages, setMessages] = useState<Message[]>([
-  { role: 'model', content: initialMessage },
-]);
-
+    { role: 'model', content: initialMessage },
+  ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    setMessages([{ role: 'model', content: initialMessage }]);
+    setInput('');
+  }, [initialMessage]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -54,6 +58,16 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
     textarea.style.height = 'auto';
     textarea.style.height = `${Math.min(textarea.scrollHeight, 220)}px`;
   }, [input]);
+
+  const resetTrip = () => {
+    setMessages([{ role: 'model', content: initialMessage }]);
+    setInput('');
+    setIsLoading(false);
+    localStorage.removeItem('sage-chat-messages');
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus();
+    });
+  };
 
   const handleSend = async () => {
     const trimmed = input.trim();
@@ -165,26 +179,37 @@ CRITICAL RULES:
 
   return (
     <section className={`w-full ${className}`}>
-      <div className="mx-auto flex min-h-[72vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+      <div className="mx-auto flex h-full min-h-[60vh] w-full flex-col overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
         <div className="border-b border-zinc-100 bg-gradient-to-b from-zinc-50 to-white px-5 py-5 md:px-8">
-          <div className="flex items-start gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-zinc-950 text-white">
-              <Sparkles className="h-5 w-5" />
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-zinc-950 text-white">
+                <Sparkles className="h-5 w-5" />
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-[11px] font-black uppercase tracking-[0.28em] text-zinc-500">
+                  Sage Trip Builder
+                </p>
+                <h2 className="mt-1 text-xl font-black tracking-tight text-zinc-950 md:text-2xl">
+                  Tell Sage what kind of trip you want to build
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600 md:text-base">
+                  Start with your destination, dates, travelers, budget, and trip
+                  style. Sage will ask follow-up questions and help shape the
+                  itinerary with you.
+                </p>
+              </div>
             </div>
 
-            <div className="min-w-0">
-              <p className="text-[11px] font-black uppercase tracking-[0.28em] text-zinc-500">
-                Sage Trip Builder
-              </p>
-              <h2 className="mt-1 text-xl font-black tracking-tight text-zinc-950 md:text-2xl">
-                Tell Sage what kind of trip you want to build
-              </h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600 md:text-base">
-                Start with your destination, dates, travelers, budget, and trip
-                style. Sage will ask follow-up questions and help shape the
-                itinerary with you.
-              </p>
-            </div>
+            <button
+              type="button"
+              onClick={resetTrip}
+              className="inline-flex shrink-0 items-center gap-2 rounded-2xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Start New Trip
+            </button>
           </div>
         </div>
 
