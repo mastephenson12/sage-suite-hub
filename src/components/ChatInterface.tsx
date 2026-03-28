@@ -87,11 +87,11 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
         body: JSON.stringify({ messages: nextMessages }),
       });
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      const data: { text?: string; error?: string } = await response.json();
 
-      const data: { text?: string } = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || `Request failed with status ${response.status}`);
+      }
 
       setMessages((prev) => [
         ...prev,
@@ -99,16 +99,18 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
           role: 'model',
           content:
             data.text?.trim() ||
+            data.error ||
             'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.',
         },
       ]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Chat error:', error);
       setMessages((prev) => [
         ...prev,
         {
           role: 'model',
           content:
+            error?.message ||
             'I’m having trouble connecting right now. Please try again in a moment.',
         },
       ]);
