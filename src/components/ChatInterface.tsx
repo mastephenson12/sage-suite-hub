@@ -93,16 +93,19 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
 
       const ai = new GoogleGenAI({ apiKey });
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: trimmed }],
-          },
-        ],
-        config: {
-          systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
+      const conversationHistory = [
+  ...messages,
+  userMessage,
+].map((msg) => ({
+  role: msg.role,
+  parts: [{ text: msg.content }],
+}));
+
+const response = await ai.models.generateContent({
+  model: 'gemini-3-flash-preview',
+  contents: conversationHistory,
+  config: {
+    systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
 
 You help users plan trips anywhere in the world, with especially strong expertise in Arizona.
 
@@ -134,8 +137,8 @@ CRITICAL RULES:
 - For Arizona trips, emphasize heat safety, hydration, parking, trail timing, and family suitability.
 - When users are unsure, suggest 2 to 4 realistic options.
 - Organize answers in short sections with clear next steps.`,
-        },
-      });
+  },
+});
 
       const modelResponse =
         response.text ||
