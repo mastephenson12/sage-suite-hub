@@ -36,6 +36,7 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
   useEffect(() => {
     setMessages([{ role: 'model', content: initialMessage }]);
     setInput('');
+    setIsLoading(false);
   }, [initialMessage]);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
     if (shouldScroll) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -62,118 +63,44 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
     setMessages([{ role: 'model', content: initialMessage }]);
     setInput('');
     setIsLoading(false);
-    localStorage.removeItem('sage-chat-messages');
+
     requestAnimationFrame(() => {
       textareaRef.current?.focus();
     });
   };
 
   const handleSend = async () => {
-  const trimmed = input.trim();
-  if (!trimmed || isLoading) return;
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
 
-  const userMessage: Message = { role: 'user', content: trimmed };
+    const userMessage: Message = { role: 'user', content: trimmed };
+    const nextMessages = [...messages, userMessage];
 
-  setInput('');
-  setMessages((prev) => [...prev, userMessage]);
-  setIsLoading(true);
+    setInput('');
+    setMessages(nextMessages);
+    setIsLoading(true);
 
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [...messages, userMessage],
-      }),
-    });
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: nextMessages }),
+      });
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
 
-    const data = await response.json();
-
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: 'model',
-        content:
-          data.text ||
-          'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.',
-      },
-    ]);
-  } catch (error) {
-    console.error('Chat error:', error);
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: 'model',
-        content:
-          'I’m having trouble connecting right now. Please try again in a moment.',
-      },
-    ]);
-  } finally {
-    setIsLoading(false);
-    textareaRef.current?.focus();
-  }
-};
-
-      const ai = new GoogleGenAI({ apiKey });
-
-      const conversationHistory = [
-  ...messages,
-  userMessage,
-].map((msg) => ({
-  role: msg.role,
-  parts: [{ text: msg.content }],
-}));
-
-const response = await ai.models.generateContent({
-  model: 'gemini-3-flash-preview',
-  contents: conversationHistory,
-  config: {
-    systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
-
-You help users plan trips anywhere in the world, with especially strong expertise in Arizona.
-
-You support four modes:
-1. FlightSage – flights, routing ideas, airports
-2. CampSage – campsites, RV parks, national and state parks
-3. TravelSage – hotels, resorts, cabins, vacation rentals
-4. ArizonaSage – Arizona trails, scenic drives, towns, and seasonal tips
-
-Your tone:
-- warm
-- clear
-- practical
-- family-friendly
-- safety-aware
-- encouraging
-
-CRITICAL RULES:
-- Keep first responses under 120 words.
-- If the user only gives a destination, ask 3 to 5 short planning questions instead of giving a long guide.
-- Do not give a full itinerary until you know:
-  - travel dates
-  - number of travelers
-  - ages of children
-  - budget
-- Use bullet points instead of long paragraphs.
-- Only provide detailed activity lists after the user answers your questions.
-- Always consider budget, travel dates, drive time, weather, group size, and children’s ages.
-- For Arizona trips, emphasize heat safety, hydration, parking, trail timing, and family suitability.
-- When users are unsure, suggest 2 to 4 realistic options.
-- Organize answers in short sections with clear next steps.`,
-  },
-});
-
-      const modelResponse =
-        response.text ||
-        "I'm having trouble planning that right now. Please try again.";
+      const data: { text?: string } = await response.json();
 
       setMessages((prev) => [
         ...prev,
-        { role: 'model', content: modelResponse },
+        {
+          role: 'model',
+          content:
+            data.text?.trim() ||
+            'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.',
+        },
       ]);
     } catch (error) {
       console.error('Chat error:', error);
@@ -187,7 +114,9 @@ CRITICAL RULES:
       ]);
     } finally {
       setIsLoading(false);
-      textareaRef.current?.focus();
+      requestAnimationFrame(() => {
+        textareaRef.current?.focus();
+      });
     }
   };
 
@@ -295,7 +224,7 @@ CRITICAL RULES:
 
               <div className="inline-flex items-center gap-2 rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-700 shadow-sm">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Planning your trip...
+                Sage is building your trip...
               </div>
             </div>
           )}
