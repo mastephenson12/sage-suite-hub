@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Send, User, Bot, Loader2, Sparkles, RotateCcw } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
 
 interface Message {
   role: 'user' | 'model';
