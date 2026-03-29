@@ -58,11 +58,7 @@ export const chatWithGemini = async (
       throw new Error(data.error || `Request failed with status ${response.status}`);
     }
 
-    return (
-      data.text ||
-      data.error ||
-      "I’m having trouble planning that right now. Please try again."
-    );
+    return data.text || "I’m having trouble planning that right now. Please try again.";
   } catch (error: any) {
     console.error("Chat API Error:", error);
     return (
