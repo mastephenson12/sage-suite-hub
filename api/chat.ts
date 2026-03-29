@@ -40,9 +40,7 @@ export async function POST(req: Request) {
 
     if (!isValidMessageArray(messages)) {
       return Response.json(
-        {
-          error: "Messages are required and must be a valid non-empty array.",
-        },
+        { error: "Messages are required and must be a valid non-empty array." },
         { status: 400 }
       );
     }
@@ -53,7 +51,15 @@ export async function POST(req: Request) {
       .map((msg) => `${msg.role === "user" ? "User" : "Sage"}: ${msg.content}`)
       .join("\n\n");
 
-    const prompt = `You are Sage, a family travel planning assistant for Health & Travels.
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Conversation so far:
+
+${conversation}
+
+Respond as Sage to the latest user message only.`,
+      config: {
+        systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
 
 You help users plan trips anywhere in the world, with especially strong expertise in Arizona.
 
@@ -72,21 +78,8 @@ Critical rules:
 - Use bullet points instead of long paragraphs when helpful.
 - Suggest 2 to 4 realistic options when the user is unsure.
 - For Arizona trips, mention heat safety, hydration, parking, trail timing, and family suitability when relevant.
-- Organize answers in short sections with clear next steps.
-
-Conversation so far:
-${conversation}
-
-Respond as Sage to the latest user message only.`;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-      ],
+- Organize answers in short sections with clear next steps.`,
+      },
     });
 
     const text =
