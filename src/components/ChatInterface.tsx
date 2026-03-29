@@ -33,7 +33,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
-
     container.scrollTop = container.scrollHeight;
   }, [messages, isLoading]);
 
@@ -106,7 +105,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="mx-auto flex h-[78vh] max-h-[820px] min-h-[620px] w-full flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-lg">
+      <div className="mx-auto flex h-[78vh] min-h-[680px] w-full flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-lg">
         <div className="border-b border-zinc-200 bg-white px-5 py-4">
           <h2 className="text-xl font-bold text-zinc-900">Sage Trip Builder</h2>
           <p className="mt-1 text-sm text-zinc-600">
@@ -156,25 +155,33 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
         <div className="border-t border-zinc-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-3xl">
+            <label
+              htmlFor="sage-chat-input"
+              className="mb-2 block text-sm font-semibold text-zinc-800"
+            >
+              Your message
+            </label>
+
             <textarea
+              id="sage-chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              rows={3}
-              placeholder="Type your trip question here..."
-              className="w-full resize-none rounded-2xl border border-zinc-300 px-4 py-3 text-base text-zinc-900 outline-none transition focus:border-zinc-500"
+              rows={5}
+              placeholder="Example: Plan a Sedona trip in April for 2 adults and 2 kids with a moderate budget."
+              className="block w-full resize-none rounded-2xl border-2 border-zinc-400 bg-white px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-700 focus:outline-none"
             />
 
-            <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-zinc-500">
-                Press Enter to send, Shift+Enter for a new line.
+                Press Enter to send. Press Shift+Enter for a new line.
               </p>
 
               <button
                 type="button"
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
-                className="rounded-xl bg-zinc-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center rounded-xl bg-zinc-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading ? 'Sending...' : 'Send'}
               </button>
