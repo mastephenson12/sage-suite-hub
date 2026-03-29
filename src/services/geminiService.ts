@@ -52,20 +52,23 @@ export const chatWithGemini = async (
       body: JSON.stringify({ messages }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
     const data: { text?: string; error?: string } = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || `Request failed with status ${response.status}`);
+    }
 
     return (
       data.text ||
       data.error ||
       "I’m having trouble planning that right now. Please try again."
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Chat API Error:", error);
-    return "I’m having trouble connecting right now. Please try again in a moment.";
+    return (
+      error?.message ||
+      "I’m having trouble connecting right now. Please try again in a moment."
+    );
   }
 };
 
