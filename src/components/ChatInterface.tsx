@@ -24,14 +24,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMessages([{ role: 'model', content: initialMessage }]);
   }, [initialMessage]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    container.scrollTop = container.scrollHeight;
   }, [messages, isLoading]);
 
   const handleSend = async () => {
@@ -94,60 +97,89 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   return (
     <div className={`w-full ${className}`}>
-      <div className="mx-auto flex h-full min-h-[70vh] w-full flex-col rounded-2xl border border-zinc-300 bg-white">
-        <div className="border-b border-zinc-200 px-4 py-4">
-          <h2 className="text-xl font-bold text-black">Sage Trip Builder</h2>
+      <div className="mx-auto flex h-[78vh] max-h-[820px] min-h-[620px] w-full flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-lg">
+        <div className="border-b border-zinc-200 bg-white px-5 py-4">
+          <h2 className="text-xl font-bold text-zinc-900">Sage Trip Builder</h2>
           <p className="mt-1 text-sm text-zinc-600">
             Ask Sage to help plan your next trip.
           </p>
         </div>
 
-        <div className="flex-1 space-y-4 overflow-y-auto bg-zinc-50 px-4 py-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`rounded-xl px-4 py-3 text-sm leading-6 ${
-                msg.role === 'user'
-                  ? 'ml-auto max-w-[80%] bg-black text-white'
-                  : 'mr-auto max-w-[80%] border border-zinc-300 bg-white text-black'
-              }`}
-            >
-              <div className="mb-1 text-xs font-bold uppercase opacity-70">
-                {msg.role === 'user' ? 'You' : 'Sage'}
+        <div
+          ref={messagesContainerRef}
+          className="flex-1 overflow-y-auto bg-zinc-50 px-4 py-4"
+        >
+          <div className="mx-auto flex max-w-3xl flex-col gap-4">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  msg.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                <div
+                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm ${
+                    msg.role === 'user'
+                      ? 'bg-zinc-900 text-white'
+                      : 'border border-zinc-200 bg-white text-zinc-900'
+                  }`}
+                >
+                  <div className="mb-1 text-[11px] font-bold uppercase tracking-wide opacity-60">
+                    {msg.role === 'user' ? 'You' : 'Sage'}
+                  </div>
+                  <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                </div>
               </div>
-              <div className="whitespace-pre-wrap">{msg.content}</div>
-            </div>
-          ))}
+            ))}
 
-          {isLoading && (
-            <div className="mr-auto max-w-[80%] rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-black">
-              <div className="mb-1 text-xs font-bold uppercase opacity-70">Sage</div>
-              <div>Thinking...</div>
-            </div>
-          )}
-
-          <div ref={messagesEndRef} />
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="max-w-[85%] rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-700 shadow-sm">
+                  <div className="mb-1 text-[11px] font-bold uppercase tracking-wide opacity-60">
+                    Sage
+                  </div>
+                  <div>Thinking...</div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="border-t border-zinc-200 px-4 py-4">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            rows={4}
-            placeholder="Type your trip question here..."
-            className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-base text-black"
-          />
+        <div className="border-t border-zinc-200 bg-white px-4 py-4">
+          <div className="mx-auto max-w-3xl">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={3}
+              placeholder="Type your trip question here..."
+              className="w-full resize-none rounded-2xl border border-zinc-300 px-4 py-3 text-base text-zinc-900 outline-none transition focus:border-zinc-500"
+            />
 
-          <button
-            type="button"
-            onClick={handleSend}
-            disabled={isLoading || !input.trim()}
-            className="mt-3 rounded-xl bg-black px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
-          >
-            {isLoading ? 'Sending...' : 'Send'}
-          </button>
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <p className="text-xs text-zinc-500">
+                Press Enter to send, Shift+Enter for a new line.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={isLoading || !input.trim()}
+                className="rounded-xl bg-zinc-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isLoading ? 'Sending...' : 'Send'}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
