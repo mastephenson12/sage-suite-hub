@@ -11,15 +11,15 @@ interface ChatInterfaceProps {
   initialMessage?: string;
 }
 
+const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona.
+
+Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`;
+
 const STARTER_PROMPTS = [
   'Sedona in April, 2 adults and 2 kids, hotel, moderate budget',
   'Grand Canyon weekend for a family with young kids',
   'Best Arizona road trip with scenic stops and easy hikes',
 ];
-
-const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona.
-
-Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`;
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
@@ -62,8 +62,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     });
   };
 
-  const handleStarterPrompt = (prompt: string) => {
+  const applyStarterPrompt = (prompt: string) => {
     setInput(prompt);
+
     requestAnimationFrame(() => {
       textareaRef.current?.focus();
     });
@@ -94,12 +95,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         body: JSON.stringify({ messages: nextMessages }),
       });
 
+      const rawText = await response.text();
+      console.log('RAW /api/chat response:', rawText);
+
       let data: { text?: string; error?: string } = {};
 
       try {
-        data = await response.json();
+        data = rawText ? JSON.parse(rawText) : {};
       } catch {
-        throw new Error('The server returned an invalid response.');
+        throw new Error(`Server returned non-JSON: ${rawText || '(empty response)'}`);
       }
 
       if (!response.ok) {
@@ -108,7 +112,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
       const reply =
         data.text?.trim() ||
-        'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.';
+        'I received a response, but it did not include usable text.';
 
       const modelMessage: Message = {
         role: 'model',
@@ -251,7 +255,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
               <button
                 key={prompt}
                 type="button"
-                onClick={() => handleStarterPrompt(prompt)}
+                onClick={() => applyStarterPrompt(prompt)}
                 className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-100"
               >
                 {prompt}
