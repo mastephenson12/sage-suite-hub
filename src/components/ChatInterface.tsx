@@ -119,7 +119,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         content: reply,
       };
 
-      setMessages([...nextMessages, modelMessage]);
+      console.log('SETTING MODEL MESSAGE:', modelMessage);
+
+      setMessages((currentMessages) => {
+        const alreadyHasReply = currentMessages.some(
+          (msg) => msg.role === 'model' && msg.content === modelMessage.content
+        );
+
+        if (alreadyHasReply) {
+          return currentMessages;
+        }
+
+        return [...currentMessages, modelMessage];
+      });
     } catch (error: any) {
       console.error('Chat error:', error);
 
@@ -130,7 +142,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           'I’m having trouble connecting right now. Please try again in a moment.',
       };
 
-      setMessages([...nextMessages, errorMessage]);
+      console.log('SETTING ERROR MESSAGE:', errorMessage);
+
+      setMessages((currentMessages) => [...currentMessages, errorMessage]);
     } finally {
       setIsLoading(false);
 
@@ -188,7 +202,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
             return (
               <div
-                key={`${msg.role}-${index}-${msg.content.slice(0, 24)}`}
+                key={`${msg.role}-${index}-${msg.content.slice(0, 30)}`}
                 className={`flex items-start gap-3 ${
                   isUser ? 'justify-end' : 'justify-start'
                 }`}
