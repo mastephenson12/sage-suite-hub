@@ -49,16 +49,11 @@ export async function POST(req: Request) {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    const contents = messages.map((msg) => ({
-      role: msg.role,
-      parts: [{ text: msg.content.trim() }],
-    }));
+    const conversation = messages
+      .map((msg) => `${msg.role === "user" ? "User" : "Sage"}: ${msg.content}`)
+      .join("\n\n");
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents,
-      config: {
-        systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
+    const prompt = `You are Sage, a family travel planning assistant for Health & Travels.
 
 You help users plan trips anywhere in the world, with especially strong expertise in Arizona.
 
@@ -77,8 +72,21 @@ Critical rules:
 - Use bullet points instead of long paragraphs when helpful.
 - Suggest 2 to 4 realistic options when the user is unsure.
 - For Arizona trips, mention heat safety, hydration, parking, trail timing, and family suitability when relevant.
-- Organize answers in short sections with clear next steps.`,
-      },
+- Organize answers in short sections with clear next steps.
+
+Conversation so far:
+${conversation}
+
+Respond as Sage to the latest user message only.`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }],
+        },
+      ],
     });
 
     const text =
@@ -89,12 +97,11 @@ Critical rules:
   } catch (error: any) {
     console.error("API chat error:", error);
 
-    const errorMessage =
-      typeof error?.message === "string" &&
-      error.message.includes("reported as leaked")
-        ? "The Gemini API key on the server has been blocked and must be replaced."
+    const message =
+      typeof error?.message === "string" && error.message.trim().length > 0
+        ? error.message
         : "Failed to generate response";
 
-    return Response.json({ error: errorMessage }, { status: 500 });
+    return Response.json({ error: message }, { status: 500 });
   }
 }
