@@ -20,11 +20,11 @@ function isValidMessageArray(value: unknown): value is Message[] {
   );
 }
 
-export default async function handler(req: Request): Promise<Response> {
-  if (req.method !== "POST") {
-    return Response.json({ error: "Method not allowed" }, { status: 405 });
-  }
+export async function GET() {
+  return Response.json({ error: "Method not allowed" }, { status: 405 });
+}
 
+export async function POST(req: Request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
 
