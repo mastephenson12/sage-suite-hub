@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ChatInterface } from '../components/ChatInterface';
+import ChatInterface from '../components/ChatInterface';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -32,31 +32,49 @@ const MODES: { key: Mode; label: string }[] = [
   { key: 'arizona', label: 'Arizona' },
 ];
 
+const INITIAL_MESSAGES: Record<Mode, string> = {
+  general:
+    "Hi, I’m Sage. I help plan trips anywhere, with extra Arizona expertise.",
+  flights:
+    "Welcome to FlightSage. I’ll help you narrow down flights and next steps.",
+  camping:
+    "Welcome to CampSage. I can help with camping, cabins, RV trips, and parks.",
+  lodging:
+    "Welcome to TravelSage. I can help with hotels, rentals, and family-friendly stays.",
+  arizona:
+    "Welcome to ArizonaSage. I specialize in Arizona family adventures and road trips.",
+};
+
 const ChatPage: React.FC = () => {
   const [mode, setMode] = useState<Mode>('general');
   const [searchParams] = useSearchParams();
 
+  const isSedonaTrip = searchParams.get('trip') === 'sedona';
+
   useEffect(() => {
-    if (searchParams.get('trip') === 'sedona') {
+    if (isSedonaTrip) {
       setMode('arizona');
     }
-  }, [searchParams]);
-
-  const initialMessages: Record<Mode, string> = {
-    general: "Hi, I’m Sage. I help plan trips anywhere, with extra Arizona expertise.",
-    flights: "Welcome to FlightSage. I’ll help you narrow down flights and next steps.",
-    camping: "Welcome to CampSage. I can help with camping, cabins, RV trips, and parks.",
-    lodging: "Welcome to TravelSage. I can help with hotels, rentals, and family-friendly stays.",
-    arizona: "Welcome to ArizonaSage. I specialize in Arizona family adventures and road trips.",
-  };
+  }, [isSedonaTrip]);
 
   const headline = useMemo(() => {
-    if (mode === 'arizona') return 'Plan Your Arizona Adventure';
-    if (mode === 'flights') return 'Find Better Flights Faster';
-    if (mode === 'camping') return 'Plan Your Camping Trip';
-    if (mode === 'lodging') return 'Find the Right Stay';
-    return 'Plan Your Next Trip';
+    switch (mode) {
+      case 'arizona':
+        return 'Plan Your Arizona Adventure';
+      case 'flights':
+        return 'Find Better Flights Faster';
+      case 'camping':
+        return 'Plan Your Camping Trip';
+      case 'lodging':
+        return 'Find the Right Stay';
+      default:
+        return 'Plan Your Next Trip';
+    }
   }, [mode]);
+
+  const currentInitialMessage = isSedonaTrip
+    ? SEDONA_PROMPT
+    : INITIAL_MESSAGES[mode];
 
   return (
     <div className="min-h-screen bg-white">
@@ -73,13 +91,9 @@ const ChatPage: React.FC = () => {
 
         <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
           <ChatInterface
-            key={`${mode}-${searchParams.get('trip') || 'default'}`}
+            key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}`}
             className="h-[60vh] md:h-[65vh]"
-            initialMessage={
-              searchParams.get('trip') === 'sedona'
-                ? SEDONA_PROMPT
-                : initialMessages[mode]
-            }
+            initialMessage={currentInitialMessage}
           />
         </div>
 
@@ -105,11 +119,12 @@ const ChatPage: React.FC = () => {
             {MODES.map((item) => (
               <button
                 key={item.key}
+                type="button"
                 onClick={() => setMode(item.key)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold ${
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   mode === item.key
-                    ? 'border border-brand-primary/20 bg-brand-primary/10 text-brand-primary'
-                    : 'border border-zinc-200 bg-white text-zinc-700'
+                    ? 'border-brand-primary/20 bg-brand-primary/10 text-brand-primary'
+                    : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
                 }`}
               >
                 {item.label}
