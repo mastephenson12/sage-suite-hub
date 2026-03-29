@@ -17,11 +17,13 @@ const STARTER_PROMPTS = [
   'Grand Canyon weekend, family-friendly hikes, one night',
 ];
 
+const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona.
+
+Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`;
+
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
-  initialMessage = `Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona.
-
-Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`,
+  initialMessage = DEFAULT_INITIAL_MESSAGE,
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', content: initialMessage },
@@ -40,15 +42,7 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
   }, [initialMessage]);
 
   useEffect(() => {
-    const container = messagesContainerRef.current;
-    if (!container) return;
-
-    const shouldScroll =
-      container.scrollHeight > container.clientHeight || messages.length <= 2;
-
-    if (shouldScroll) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
   useEffect(() => {
@@ -73,47 +67,58 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
     const trimmed = input.trim();
     if (!trimmed || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: trimmed };
-    const nextMessages = [...messages, userMessage];
+    const userMessage: Message = {
+      role: 'user',
+      content: trimmed,
+    };
 
+    const updatedMessages = [...messages, userMessage];
+
+    setMessages(updatedMessages);
     setInput('');
-    setMessages(nextMessages);
     setIsLoading(true);
 
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ messages: updatedMessages }),
       });
 
-      const data: { text?: string; error?: string } = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || `Request failed with status ${response.status}`);
+      let data: { text?: string; error?: string } = {};
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error('The server returned an invalid response.');
       }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'model',
-          content:
-            data.text?.trim() ||
-            data.error ||
-            'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.',
-        },
-      ]);
+      if (!response.ok) {
+        throw new Error(
+          data.error || `Request failed with status ${response.status}`
+        );
+      }
+
+      const reply =
+        data.text?.trim() ||
+        'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.';
+
+      const modelMessage: Message = {
+        role: 'model',
+        content: reply,
+      };
+
+      setMessages([...updatedMessages, modelMessage]);
     } catch (error: any) {
       console.error('Chat error:', error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'model',
-          content:
-            error?.message ||
-            'I’m having trouble connecting right now. Please try again in a moment.',
-        },
-      ]);
+
+      const errorMessage: Message = {
+        role: 'model',
+        content:
+          error?.message ||
+          'I’m having trouble connecting right now. Please try again in a moment.',
+      };
+
+      setMessages([...updatedMessages, errorMessage]);
     } finally {
       setIsLoading(false);
       requestAnimationFrame(() => {
@@ -123,7 +128,7 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
   };
 
   const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLTextAreaElement>,
+    e: React.KeyboardEvent<HTMLTextAreaElement>
   ): void => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
@@ -183,7 +188,7 @@ Tell me where you want to go, your dates, how many adults and kids are traveling
 
             return (
               <div
-                key={`${msg.role}-${i}`}
+                key={`${msg.role}-${i}-${msg.content.slice(0, 20)}`}
                 className={`flex items-start gap-3 ${
                   isUser ? 'justify-end' : 'justify-start'
                 }`}
