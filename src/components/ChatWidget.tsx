@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { MessageSquare, X } from 'lucide-react';
-import { ChatInterface } from './ChatInterface';
+import React from 'react';
+import ChatInterface from './ChatInterface';
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
