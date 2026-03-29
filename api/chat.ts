@@ -1,8 +1,7 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI } from "@google/genai";
 
 type Message = {
-  role: 'user' | 'model';
+  role: "user" | "model";
   content: string;
 };
 
@@ -13,47 +12,39 @@ function isValidMessageArray(value: unknown): value is Message[] {
     value.every(
       (msg) =>
         msg &&
-        typeof msg === 'object' &&
-        (msg.role === 'user' || msg.role === 'model') &&
-        typeof msg.content === 'string' &&
-        msg.content.trim().length > 0,
+        typeof msg === "object" &&
+        (msg.role === "user" || msg.role === "model") &&
+        typeof msg.content === "string" &&
+        msg.content.trim().length > 0
     )
   );
 }
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse,
-) {
-  console.log('chat route hit', { method: req.method });
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method !== "POST") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
   }
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
 
-    console.log('has api key?', Boolean(apiKey));
-
     if (!apiKey) {
-      return res
-        .status(500)
-        .json({ error: 'Missing GEMINI_API_KEY on server' });
+      return Response.json(
+        { error: "Missing GEMINI_API_KEY on server" },
+        { status: 500 }
+      );
     }
 
-    const { messages } = req.body as { messages?: unknown };
-
-    console.log(
-      'messages received?',
-      Array.isArray(messages),
-      Array.isArray(messages) ? messages.length : 0,
-    );
+    const body = await req.json().catch(() => null);
+    const messages = body?.messages;
 
     if (!isValidMessageArray(messages)) {
-      return res.status(400).json({
-        error: 'Messages are required and must be a valid non-empty array.',
-      });
+      return Response.json(
+        {
+          error: "Messages are required and must be a valid non-empty array.",
+        },
+        { status: 400 }
+      );
     }
 
     const ai = new GoogleGenAI({ apiKey });
@@ -64,7 +55,7 @@ export default async function handler(
     }));
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: "gemini-2.5-flash",
       contents,
       config: {
         systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
@@ -92,20 +83,18 @@ Critical rules:
 
     const text =
       response.text?.trim() ||
-      'I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.';
+      "I need a little more information to help. Tell me your destination, dates, number of travelers, kids’ ages, and budget.";
 
-    console.log('response length', text.length);
-
-    return res.status(200).json({ text });
+    return Response.json({ text }, { status: 200 });
   } catch (error: any) {
-    console.error('API chat error:', error);
+    console.error("API chat error:", error);
 
     const errorMessage =
-      typeof error?.message === 'string' &&
-      error.message.includes('reported as leaked')
-        ? 'The Gemini API key on the server has been blocked and must be replaced.'
-        : 'Failed to generate response';
+      typeof error?.message === "string" &&
+      error.message.includes("reported as leaked")
+        ? "The Gemini API key on the server has been blocked and must be replaced."
+        : "Failed to generate response";
 
-    return res.status(500).json({ error: errorMessage });
+    return Response.json({ error: errorMessage }, { status: 500 });
   }
 }
