@@ -32,8 +32,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    console.log('RENDER MESSAGES:', messages);
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const handleSend = async () => {
     const trimmed = input.trim();
@@ -58,7 +57,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       });
 
       const rawText = await response.text();
-      console.log('RAW /api/chat response:', rawText);
 
       let data: { text?: string; error?: string } = {};
 
@@ -81,11 +79,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         content: reply,
       };
 
-      console.log('SETTING MODEL MESSAGE:', modelMessage);
       setMessages([...nextMessages, modelMessage]);
     } catch (error: any) {
-      console.error('Chat error:', error);
-
       const errorMessage: Message = {
         role: 'model',
         content:
@@ -109,7 +104,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </p>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-zinc-50">
+        <div className="flex-1 space-y-4 overflow-y-auto bg-zinc-50 px-4 py-4">
           {messages.map((msg, index) => (
             <div
               key={index}
