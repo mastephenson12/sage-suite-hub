@@ -1,5 +1,12 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Link,
+} from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
@@ -26,8 +33,9 @@ function AppContent() {
     return () => window.clearTimeout(id);
   }, [location.pathname]);
 
-  const hideSiteChrome =
-    location.pathname.startsWith('/suite') || location.pathname === '/chat';
+  const isChatPage = location.pathname === '/chat';
+  const isSuitePage = location.pathname.startsWith('/suite');
+  const hideSiteChrome = isChatPage || isSuitePage;
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -49,21 +57,28 @@ function AppContent() {
       </main>
 
       {!hideSiteChrome && (
-        <footer className="bg-white border-t border-zinc-100 py-16 mt-auto">
-          <div className="max-w-6xl mx-auto px-6 text-center md:text-left">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+        <footer className="mt-auto border-t border-zinc-100 bg-white py-16">
+          <div className="mx-auto max-w-6xl px-6 text-center md:text-left">
+            <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
               <div>
-                <p className="text-[10px] text-zinc-400 font-black uppercase tracking-[0.3em] mb-2">
+                <p className="mb-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
                   © {new Date().getFullYear()} Health & Travels Journal
                 </p>
-                <p className="text-[10px] text-zinc-300 font-medium uppercase tracking-[0.1em]">
+                <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-300">
                   Trip planning powered by Sage • Health & Travels
                 </p>
               </div>
-              <div className="flex gap-8 text-zinc-400 font-black uppercase tracking-widest text-[10px]">
-                <Link to="/archive" className="hover:text-black">Archive</Link>
-                <Link to="/trail-guides" className="hover:text-black">Trails</Link>
-                <Link to="/community" className="hover:text-black">Community</Link>
+
+              <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                <Link to="/archive" className="hover:text-black">
+                  Archive
+                </Link>
+                <Link to="/trail-guides" className="hover:text-black">
+                  Trails
+                </Link>
+                <Link to="/community" className="hover:text-black">
+                  Community
+                </Link>
               </div>
             </div>
           </div>
