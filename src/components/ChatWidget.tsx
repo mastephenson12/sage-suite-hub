@@ -1,27 +1,18 @@
 import React from 'react';
 import ChatInterface from './ChatInterface';
 
-const ChatWidget: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatWidgetProps {
+  className?: string;
+  initialMessage?: string;
+}
 
+const ChatWidget: React.FC<ChatWidgetProps> = ({
+  className = '',
+  initialMessage,
+}) => {
   return (
-    <div className="fixed bottom-8 right-8 md:bottom-12 md:right-12 z-[9999]">
-      {isOpen && (
-        <div className="mb-6 w-[360px] sm:w-[480px] h-[680px] max-h-[85vh] animate-in slide-in-from-bottom-10 fade-in duration-500 shadow-2xl">
-          <ChatInterface 
-            className="h-full border border-zinc-200 rounded-[32px] overflow-hidden bg-white" 
-            initialMessage="Scout Portal Active. Looking for Arizona trail reports or wellness protocols?" 
-          />
-        </div>
-      )}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all active:scale-90 shadow-2xl ${
-          isOpen ? 'bg-white text-brand-primary border border-zinc-200' : 'bg-brand-primary text-white'
-        }`}
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-      </button>
+    <div className={className}>
+      <ChatInterface initialMessage={initialMessage} />
     </div>
   );
 };
