@@ -75,6 +75,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       .join('\n\n');
   }, [messages]);
 
+  const showEmailCapture =
+    messages.filter((msg) => msg.role === 'model').length > 1;
+
   const applyPrompt = (prompt: string) => {
     setInput(prompt);
   };
@@ -258,33 +261,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
               Press Enter to send. Shift+Enter for a new line.
             </p>
 
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email for trip plans"
-              className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-700 focus:outline-none"
-            />
+            <button
+              type="button"
+              onClick={handleSend}
+              disabled={isLoading || !input.trim()}
+              className="rounded-xl bg-black px-5 py-3 font-bold text-white disabled:opacity-50"
+            >
+              {isLoading ? 'Sending...' : 'Send'}
+            </button>
 
-            <div className="grid grid-cols-1 gap-2">
-              <button
-                type="button"
-                onClick={handleSend}
-                disabled={isLoading || !input.trim()}
-                className="rounded-xl bg-black px-5 py-3 font-bold text-white disabled:opacity-50"
-              >
-                {isLoading ? 'Sending...' : 'Send'}
-              </button>
+            {showEmailCapture && (
+              <div className="mt-2 rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+                <p className="text-sm font-semibold text-zinc-900">
+                  Like this plan?
+                </p>
+                <p className="mt-1 text-xs text-zinc-600">
+                  Email it to yourself so you don’t lose it.
+                </p>
 
-              <button
-                type="button"
-                onClick={handleEmailPlan}
-                disabled={messages.length < 2}
-                className="rounded-xl border border-zinc-300 bg-white px-5 py-3 text-sm font-bold text-zinc-900 disabled:opacity-50"
-              >
-                Send to my email
-              </button>
-            </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="mt-3 w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-700 focus:outline-none"
+                />
+
+                <button
+                  type="button"
+                  onClick={handleEmailPlan}
+                  disabled={messages.length < 2}
+                  className="mt-3 w-full rounded-xl border border-zinc-300 bg-white px-5 py-3 text-sm font-bold text-zinc-900 disabled:opacity-50"
+                >
+                  Email me this plan
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
