@@ -8,9 +8,10 @@ type Message = {
 interface ChatInterfaceProps {
   className?: string;
   initialMessage?: string;
+  initialPrompt?: string;
 }
 
-const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Sage. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona.
+const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Scout. I help families and groups plan trips anywhere in the world, with extra expertise in Arizona.
 
 Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`;
 
@@ -49,19 +50,26 @@ function linkifyText(text: string) {
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = '',
   initialMessage = DEFAULT_INITIAL_MESSAGE,
+  initialPrompt = '',
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', content: initialMessage },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(initialPrompt);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const hasAutoSentPrompt = useRef(false);
 
   useEffect(() => {
     setMessages([{ role: 'model', content: initialMessage }]);
   }, [initialMessage]);
+
+  useEffect(() => {
+    setInput(initialPrompt || '');
+    hasAutoSentPrompt.current = false;
+  }, [initialPrompt]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -71,7 +79,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const transcript = useMemo(() => {
     return messages
-      .map((msg) => `${msg.role === 'user' ? 'You' : 'Sage'}:\n${msg.content}`)
+      .map((msg) => `${msg.role === 'user' ? 'You' : 'Scout'}:\n${msg.content}`)
       .join('\n\n');
   }, [messages]);
 
@@ -82,9 +90,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setInput(prompt);
   };
 
-  const handleSend = async () => {
-    const trimmed = input.trim();
-    if (!trimmed || isLoading) return;
+  const sendMessage = async (messageText: string) => {
+    const trimmed = messageText.trim();
+    if (!trimmed) return;
 
     const userMessage: Message = {
       role: 'user',
@@ -142,6 +150,21 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (!initialPrompt.trim()) return;
+    if (hasAutoSentPrompt.current) return;
+    if (isLoading) return;
+
+    hasAutoSentPrompt.current = true;
+    void sendMessage(initialPrompt);
+  }, [initialPrompt, isLoading]);
+
+  const handleSend = async () => {
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
+    await sendMessage(trimmed);
+  };
+
   const handleEmailPlan = () => {
     const cleanEmail = email.trim();
 
@@ -150,8 +173,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       return;
     }
 
-    const subject = encodeURIComponent('Your Sage Trip Plan');
-    const body = encodeURIComponent(`Here is your trip plan from Sage:\n\n${transcript}`);
+    const subject = encodeURIComponent('Your Scout Trip Plan');
+    const body = encodeURIComponent(`Here is your trip plan from Scout:\n\n${transcript}`);
 
     window.location.href = `mailto:${cleanEmail}?subject=${subject}&body=${body}`;
   };
@@ -159,7 +182,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      void handleSend();
     }
   };
 
@@ -169,10 +192,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         <div className="col-span-1 flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-lg md:col-span-2">
           <div className="border-b border-zinc-200 px-4 py-3">
             <h2 className="text-lg font-bold text-zinc-900 md:text-xl">
-              Sage Trip Builder
+              Scout Portal
             </h2>
             <p className="mt-1 text-sm text-zinc-600">
-              Ask Sage to help plan your next trip.
+              Full trip planning for Arizona and beyond.
             </p>
           </div>
 
@@ -196,7 +219,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     }`}
                   >
                     <div className="mb-1 text-xs font-bold uppercase tracking-wide opacity-60">
-                      {msg.role === 'user' ? 'You' : 'Sage'}
+                      {msg.role === 'user' ? 'You' : 'Scout'}
                     </div>
                     <div className="whitespace-pre-wrap break-words">
                       {linkifyText(msg.content)}
@@ -209,7 +232,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <div className="flex justify-start">
                   <div className="max-w-[88%] rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-700 shadow-sm">
                     <div className="mb-1 text-xs font-bold uppercase tracking-wide opacity-60">
-                      Sage
+                      Scout
                     </div>
                     <div>Thinking...</div>
                   </div>
@@ -225,7 +248,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
               Your message
             </h3>
             <p className="mt-1 text-sm text-zinc-500">
-              Example: Plan a Sedona trip in April for 2 adults and 2 kids with a moderate budget.
+              Ask Scout for a trip plan, route, stay ideas, or Arizona adventure.
             </p>
           </div>
 
@@ -263,7 +286,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
             <button
               type="button"
-              onClick={handleSend}
+              onClick={() => void handleSend()}
               disabled={isLoading || !input.trim()}
               className="rounded-xl bg-black px-5 py-3 font-bold text-white disabled:opacity-50"
             >
