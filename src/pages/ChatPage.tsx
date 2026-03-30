@@ -34,15 +34,15 @@ const MODES: { key: Mode; label: string }[] = [
 
 const INITIAL_MESSAGES: Record<Mode, string> = {
   general:
-    "Hi, I’m Sage. I help plan trips anywhere, with extra Arizona expertise.",
+    "Hi, I’m Scout. I help plan trips anywhere, with extra Arizona expertise.",
   flights:
-    "Welcome to FlightSage. I’ll help you narrow down flights and next steps.",
+    "Welcome to FlightScout. I’ll help you narrow down flights and next steps.",
   camping:
-    "Welcome to CampSage. I can help with camping, cabins, RV trips, and parks.",
+    "Welcome to CampScout. I can help with camping, cabins, RV trips, and parks.",
   lodging:
-    "Welcome to TravelSage. I can help with hotels, rentals, and family-friendly stays.",
+    "Welcome to StayScout. I can help with hotels, rentals, and family-friendly stays.",
   arizona:
-    "Welcome to ArizonaSage. I specialize in Arizona family adventures and road trips.",
+    "Welcome to ArizonaScout. I specialize in Arizona family adventures and road trips.",
 };
 
 const ChatPage: React.FC = () => {
@@ -50,17 +50,31 @@ const ChatPage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const isSedonaTrip = searchParams.get('trip') === 'sedona';
+  const promptFromWidget = searchParams.get('prompt')?.trim() || '';
 
   useEffect(() => {
     if (isSedonaTrip) {
       setMode('arizona');
+      return;
     }
-  }, [isSedonaTrip]);
+
+    const promptLower = promptFromWidget.toLowerCase();
+
+    if (
+      promptLower.includes('sedona') ||
+      promptLower.includes('grand canyon') ||
+      promptLower.includes('arizona') ||
+      promptLower.includes('flagstaff') ||
+      promptLower.includes('scottsdale')
+    ) {
+      setMode('arizona');
+    }
+  }, [isSedonaTrip, promptFromWidget]);
 
   const headline = useMemo(() => {
     switch (mode) {
       case 'arizona':
-        return 'Plan Your Arizona Adventure';
+        return 'Scout Portal for Arizona Adventures';
       case 'flights':
         return 'Find Better Flights Faster';
       case 'camping':
@@ -68,7 +82,7 @@ const ChatPage: React.FC = () => {
       case 'lodging':
         return 'Find the Right Stay';
       default:
-        return 'Plan Your Next Trip';
+        return 'Scout Portal for Better Trip Planning';
     }
   }, [mode]);
 
@@ -91,9 +105,10 @@ const ChatPage: React.FC = () => {
 
         <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
           <ChatInterface
-            key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}`}
+            key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}-${promptFromWidget || 'empty'}`}
             className="min-h-[500px]"
             initialMessage={currentInitialMessage}
+            initialPrompt={promptFromWidget}
           />
         </div>
 
@@ -102,7 +117,7 @@ const ChatPage: React.FC = () => {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
                 <Sparkles className="h-3 w-3" />
-                Travel Concierge
+                Scout Portal
               </div>
 
               <h1 className="mt-2 text-2xl font-black text-zinc-950 md:text-3xl">
@@ -110,7 +125,7 @@ const ChatPage: React.FC = () => {
               </h1>
 
               <p className="mt-1 text-sm text-zinc-600">
-                Fast trip planning without the clutter.
+                Full trip planning, cleaner suggestions, and better next steps.
               </p>
             </div>
           </div>
@@ -133,7 +148,7 @@ const ChatPage: React.FC = () => {
           </div>
 
           <div className="mt-5 border-t border-zinc-100 pt-4 text-xs text-zinc-500">
-            By using Sage and submitting your information, you agree to our{' '}
+            By using Scout and submitting your information, you agree to our{' '}
             <Link to="/privacy-policy" className="font-semibold text-zinc-700 hover:text-black">
               Privacy Policy
             </Link>{' '}
