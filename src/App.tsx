@@ -19,6 +19,8 @@ import SuiteDashboard from './pages/SuiteDashboard';
 import ArticlePage from './pages/ArticlePage';
 import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 function AppContent() {
   const location = useLocation();
@@ -53,6 +55,8 @@ function AppContent() {
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
         </Routes>
       </main>
 
@@ -69,7 +73,7 @@ function AppContent() {
                 </p>
               </div>
 
-              <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-zinc-400">
+              <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
                 <Link to="/archive" className="hover:text-black">
                   Archive
                 </Link>
@@ -78,6 +82,12 @@ function AppContent() {
                 </Link>
                 <Link to="/community" className="hover:text-black">
                   Community
+                </Link>
+                <Link to="/privacy-policy" className="hover:text-black">
+                  Privacy Policy
+                </Link>
+                <Link to="/terms-of-service" className="hover:text-black">
+                  Terms of Service
                 </Link>
               </div>
             </div>
