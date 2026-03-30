@@ -78,7 +78,7 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-4 md:px-5">
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-4 md:px-5">
         <div className="mb-4">
           <Link
             to="/"
@@ -92,12 +92,12 @@ const ChatPage: React.FC = () => {
         <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
           <ChatInterface
             key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}`}
-            className="min-h-[720px]"
+            className="min-h-[560px]"
             initialMessage={currentInitialMessage}
           />
         </div>
 
-        <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
+        <section className="mt-6 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
