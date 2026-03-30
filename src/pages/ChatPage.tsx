@@ -131,6 +131,18 @@ const ChatPage: React.FC = () => {
               </button>
             ))}
           </div>
+
+          <div className="mt-5 border-t border-zinc-100 pt-4 text-xs text-zinc-500">
+            By using Sage and submitting your information, you agree to our{' '}
+            <Link to="/privacy-policy" className="font-semibold text-zinc-700 hover:text-black">
+              Privacy Policy
+            </Link>{' '}
+            and{' '}
+            <Link to="/terms-of-service" className="font-semibold text-zinc-700 hover:text-black">
+              Terms of Service
+            </Link>
+            .
+          </div>
         </section>
       </div>
     </div>
