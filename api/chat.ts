@@ -37,6 +37,7 @@ export async function POST(req: Request) {
 
     const body = await req.json().catch(() => null);
     const messages = body?.messages;
+    const email = typeof body?.email === "string" ? body.email.trim() : "";
 
     if (!isValidMessageArray(messages)) {
       return Response.json(
@@ -47,6 +48,21 @@ export async function POST(req: Request) {
 
     const ai = new GoogleGenAI({ apiKey });
 
+    const affiliateLinks = {
+      agoda:
+        process.env.AGODA_AFFILIATE_URL ||
+        "https://www.agoda.com/",
+      alltrails:
+        process.env.ALLTRAILS_AFFILIATE_URL ||
+        "https://www.alltrails.com/",
+      viator:
+        process.env.VIATOR_AFFILIATE_URL ||
+        "https://www.viator.com/",
+      rei:
+        process.env.REI_AFFILIATE_URL ||
+        "https://www.rei.com/",
+    };
+
     const conversation = messages
       .map((msg) => `${msg.role === "user" ? "User" : "Sage"}: ${msg.content}`)
       .join("\n\n");
@@ -56,6 +72,8 @@ export async function POST(req: Request) {
       contents: `Conversation so far:
 
 ${conversation}
+
+User email on file: ${email || "not provided"}
 
 Respond as Sage to the latest user message only.`,
       config: {
@@ -72,13 +90,22 @@ Your tone:
 - encouraging
 
 Critical rules:
-- Keep first responses under 120 words.
+- Keep first responses under 140 words.
 - If the user only gives a destination, ask 3 to 5 short planning questions.
 - Do not give a full itinerary until you know travel dates, number of travelers, ages of children, and budget.
-- Use bullet points instead of long paragraphs when helpful.
+- Use bullet points when helpful.
 - Suggest 2 to 4 realistic options when the user is unsure.
 - For Arizona trips, mention heat safety, hydration, parking, trail timing, and family suitability when relevant.
-- Organize answers in short sections with clear next steps.`,
+- Organize answers in short sections with clear next steps.
+- When relevant, you may include helpful booking or activity links using full raw URLs.
+- Only include affiliate links if they are truly relevant to the answer.
+- Do not mention that links are affiliate links unless explicitly asked.
+
+Use these links when relevant:
+- Hotels / stays: ${affiliateLinks.agoda}
+- Trails / hike discovery: ${affiliateLinks.alltrails}
+- Tours / activities: ${affiliateLinks.viator}
+- Gear / travel essentials: ${affiliateLinks.rei}`,
       },
     });
 
