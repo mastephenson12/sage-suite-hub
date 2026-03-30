@@ -28,7 +28,7 @@ function linkifyText(text: string) {
   const parts = text.split(urlRegex);
 
   return parts.map((part, index) => {
-    if (urlRegex.test(part)) {
+    if (/^https?:\/\//.test(part)) {
       return (
         <a
           key={`${part}-${index}`}
@@ -98,10 +98,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: nextMessages,
-          email: email.trim() || undefined,
-        }),
+        body: JSON.stringify({ messages: nextMessages, email: email.trim() || undefined }),
       });
 
       const rawText = await response.text();
@@ -151,9 +148,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
 
     const subject = encodeURIComponent('Your Sage Trip Plan');
-    const body = encodeURIComponent(
-      `Here is your trip plan from Sage:\n\n${transcript}`
-    );
+    const body = encodeURIComponent(`Here is your trip plan from Sage:\n\n${transcript}`);
 
     window.location.href = `mailto:${cleanEmail}?subject=${subject}&body=${body}`;
   };
@@ -167,10 +162,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="mx-auto grid h-[68vh] min-h-[540px] max-h-[680px] w-full grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="mx-auto grid h-[62vh] min-h-[500px] max-h-[640px] w-full grid-cols-1 gap-3 md:grid-cols-3">
         <div className="col-span-1 flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-lg md:col-span-2">
-          <div className="border-b border-zinc-200 px-5 py-4">
-            <h2 className="text-xl font-bold text-zinc-900">Sage Trip Builder</h2>
+          <div className="border-b border-zinc-200 px-4 py-3">
+            <h2 className="text-lg font-bold text-zinc-900 md:text-xl">
+              Sage Trip Builder
+            </h2>
             <p className="mt-1 text-sm text-zinc-600">
               Ask Sage to help plan your next trip.
             </p>
@@ -178,9 +175,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
           <div
             ref={messagesContainerRef}
-            className="flex-1 overflow-y-auto bg-zinc-50 px-4 py-3"
+            className="flex-1 overflow-y-auto bg-zinc-50 px-3 py-2"
           >
-            <div className="mx-auto flex max-w-2xl flex-col gap-4">
+            <div className="mx-auto flex max-w-2xl flex-col gap-3">
               {messages.map((msg, index) => (
                 <div
                   key={index}
@@ -219,15 +216,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
         </div>
 
-        <div className="col-span-1 flex flex-col rounded-3xl border border-zinc-200 bg-white p-4 shadow-lg">
+        <div className="col-span-1 flex flex-col rounded-3xl border border-zinc-200 bg-white p-3 shadow-lg">
           <div>
-            <h3 className="text-lg font-bold text-zinc-900">Your message</h3>
+            <h3 className="text-base font-bold text-zinc-900 md:text-lg">
+              Your message
+            </h3>
             <p className="mt-1 text-sm text-zinc-500">
               Example: Plan a Sedona trip in April for 2 adults and 2 kids with a moderate budget.
             </p>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-3">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
               Quick ideas
             </p>
@@ -245,12 +244,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             </div>
           </div>
 
-          <div className="mt-4 flex flex-1 flex-col gap-3">
+          <div className="mt-3 flex flex-1 flex-col gap-3">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              rows={4}
+              rows={3}
               placeholder="Type your trip request..."
               className="w-full resize-none rounded-xl border-2 border-zinc-300 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-700 focus:outline-none"
             />
