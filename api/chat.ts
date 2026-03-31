@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       {
         topic: "tombstone",
         title: "Tombstone, Arizona Adventure Guide",
-        url: "https://healthandtravels.com/",
+        url: "https://healthandtravels.com/p/tombstone-arizona",
       },
       {
         topic: "ajo",
