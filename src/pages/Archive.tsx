@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar } from 'lucide-react';
+import { Calendar, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { articles } from '../data/articles';
 
@@ -34,39 +34,46 @@ const ArchiveCardImage: React.FC<{
   );
 };
 
+const buildScoutPrompt = (title: string, category?: string) => {
+  return `Help me plan a trip based on this ${category?.toLowerCase() || 'guide'}: ${title}`;
+};
+
 const Archive: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto px-6 py-24">
-      <header className="mb-20">
-        <h1 className="mb-6 text-6xl font-black uppercase tracking-tighter">
+    <div className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-8">
+      <header className="mb-8">
+        <h1 className="text-4xl font-black uppercase tracking-tighter text-zinc-950 md:text-5xl">
           Archive
         </h1>
 
-        <p className="max-w-3xl text-xl italic font-serif text-zinc-500">
+        <p className="mt-3 max-w-3xl text-base italic font-serif text-zinc-500 md:text-lg">
           Explore our growing collection of Arizona travel guides, trail notes,
           and family adventure ideas.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {articles.map((article) => (
-          <Link
+          <div
             key={article.id}
-            to={`/archive/${article.id}`}
-            className="group block overflow-hidden rounded-[32px] border border-zinc-100 bg-white transition-all hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50"
+            className="group overflow-hidden rounded-[28px] border border-zinc-100 bg-white transition-all hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50"
           >
-            <div className="aspect-[16/9] overflow-hidden bg-zinc-100">
-              <ArchiveCardImage src={article.image} alt={article.title} />
-            </div>
+            <Link to={`/archive/${article.id}`} className="block">
+              <div className="aspect-[16/10] overflow-hidden bg-zinc-100">
+                <ArchiveCardImage src={article.image} alt={article.title} />
+              </div>
+            </Link>
 
-            <div className="p-6">
+            <div className="p-5">
               <span className="mb-3 block text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">
                 {article.category}
               </span>
 
-              <h3 className="mb-3 text-xl font-black uppercase tracking-tight transition-colors group-hover:text-brand-primary">
-                {article.title}
-              </h3>
+              <Link to={`/archive/${article.id}`} className="block">
+                <h3 className="mb-3 text-lg font-black uppercase tracking-tight text-zinc-950 transition-colors group-hover:text-brand-primary md:text-xl">
+                  {article.title}
+                </h3>
+              </Link>
 
               <div className="mb-4 flex items-center gap-2 text-zinc-400">
                 <Calendar className="h-3 w-3" />
@@ -75,11 +82,26 @@ const Archive: React.FC = () => {
                 </span>
               </div>
 
-              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors group-hover:text-black">
-                Read Guide →
-              </span>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <Link
+                  to={`/archive/${article.id}`}
+                  className="text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors hover:text-black"
+                >
+                  Read Guide →
+                </Link>
+
+                <Link
+                  to={`/chat?prompt=${encodeURIComponent(
+                    buildScoutPrompt(article.title, article.category)
+                  )}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-zinc-50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-700 transition hover:border-zinc-400 hover:bg-zinc-100 hover:text-black"
+                >
+                  <Sparkles className="h-3 w-3" />
+                  Ask Scout about this trip
+                </Link>
+              </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>
