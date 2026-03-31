@@ -48,50 +48,69 @@ export async function POST(req: Request) {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    const affiliateLinks = {
-      agoda: process.env.AGODA_AFFILIATE_URL || "https://www.agoda.com/",
-      alltrails:
-        process.env.ALLTRAILS_AFFILIATE_URL || "https://www.alltrails.com/",
-      viator: process.env.VIATOR_AFFILIATE_URL || "https://www.viator.com/",
-      rei: process.env.REI_AFFILIATE_URL || "https://www.rei.com/",
+    const siteLinks = {
+      scoutPortal: "https://sage.healthandtravels.com/#/chat",
+      archive: "https://sage.healthandtravels.com/#/archive",
+      trails: "https://sage.healthandtravels.com/#/trail-guides",
+      arizona: "https://sage.healthandtravels.com/#/arizona",
     };
 
-    // Replace these with your real live article URLs as needed.
-    const helpfulReads = [
+    const affiliateLinks = {
+      stays: process.env.AGODA_AFFILIATE_URL || "https://www.agoda.com/",
+      tours: process.env.GETYOURGUIDE_AFFILIATE_URL || "https://www.getyourguide.com/",
+      hikes:
+        process.env.ALLTRAILS_AFFILIATE_URL || "https://www.alltrails.com/",
+      gear: process.env.REI_AFFILIATE_URL || "https://www.rei.com/",
+    };
+
+    const internalResources = [
       {
         topic: "sedona",
-        title: "Sedona Family Adventure Guide",
-        url: "https://healthandtravels.com/p/sedona-in-april",
+        label: "Archive",
+        title: "Browse Health & Travels destination guides",
+        url: siteLinks.archive,
+      },
+      {
+        topic: "flagstaff",
+        label: "Archive",
+        title: "Browse Health & Travels destination guides",
+        url: siteLinks.archive,
       },
       {
         topic: "grand canyon",
-        title: "Grand Canyon Family Travel Ideas",
-        url: "https://healthandtravels.com/",
-      },
-      {
-        topic: "williams",
-        title: "Williams, Arizona Family Getaway Guide",
-        url: "https://healthandtravels.com/p/williams-az",
-      },
-      {
-        topic: "tombstone",
-        title: "Tombstone, Arizona Adventure Guide",
-        url: "https://healthandtravels.com/p/tombstone-arizona",
-      },
-      {
-        topic: "ajo",
-        title: "Ajo Outdoor Adventure Guide",
-        url: "https://healthandtravels.com/p/discover-ajo-arizona-and-organ-pipe",
+        label: "Archive",
+        title: "Browse Health & Travels destination guides",
+        url: siteLinks.archive,
       },
       {
         topic: "arizona",
-        title: "Arizona Family Trip Ideas",
-        url: "https://healthandtravels.com/",
+        label: "Arizona",
+        title: "Explore Arizona trip ideas",
+        url: siteLinks.arizona,
       },
       {
-        topic: "hiking",
-        title: "Arizona Hiking and Outdoor Ideas",
-        url: "https://healthandtravels.com/",
+        topic: "hike",
+        label: "Trail Guides",
+        title: "Explore Arizona trail guides",
+        url: siteLinks.trails,
+      },
+      {
+        topic: "trail",
+        label: "Trail Guides",
+        title: "Explore Arizona trail guides",
+        url: siteLinks.trails,
+      },
+      {
+        topic: "camping",
+        label: "Trail Guides",
+        title: "Explore Arizona trail guides",
+        url: siteLinks.trails,
+      },
+      {
+        topic: "road trip",
+        label: "Archive",
+        title: "Browse trip inspiration and destination guides",
+        url: siteLinks.archive,
       },
     ];
 
@@ -104,22 +123,19 @@ export async function POST(req: Request) {
 
     const lowerContext = `${conversation}\n\n${latestUserMessage}`.toLowerCase();
 
-    const matchedReads = helpfulReads.filter((item) => {
-  return (
-    lowerContext.includes(item.topic) ||
-    (item.topic === "sedona" &&
-      (lowerContext.includes("red rock") || lowerContext.includes("oak creek"))) ||
-    (item.topic === "flagstaff" &&
-      (lowerContext.includes("snowbowl") || lowerContext.includes("northern arizona")))
-  );
-});
+    const matchedInternalResources = internalResources.filter((item) =>
+      lowerContext.includes(item.topic)
+    );
 
-    const readsText =
-      matchedReads.length > 0
-        ? matchedReads
-            .map((item) => `- ${item.title}: ${item.url}`)
+    const internalLinksText =
+      matchedInternalResources.length > 0
+        ? matchedInternalResources
+            .slice(0, 4)
+            .map((item) => `- ${item.label}: ${item.title} — ${item.url}`)
             .join("\n")
-        : "- Arizona Family Trip Ideas: https://healthandtravels.com/";
+        : `- Archive: Browse destination guides — ${siteLinks.archive}
+- Trail Guides: Explore Arizona trail guides — ${siteLinks.trails}
+- Arizona: Explore Arizona trip ideas — ${siteLinks.arizona}`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -129,14 +145,27 @@ ${conversation}
 
 User email on file: ${email || "not provided"}
 
-Relevant Health & Travels article links you may include when useful:
-${readsText}
+Internal Health & Travels destinations and resources:
+${internalLinksText}
+
+Main Scout portal:
+${siteLinks.scoutPortal}
+
+Use affiliate links only when genuinely relevant:
+- Stays: ${affiliateLinks.stays}
+- Tours and experiences: ${affiliateLinks.tours}
+- Trails and hike discovery: ${affiliateLinks.hikes}
+- Gear and essentials: ${affiliateLinks.gear}
 
 Respond as Scout to the latest user message only.`,
       config: {
         systemInstruction: `You are Scout, a family travel planning assistant for Health & Travels.
 
-You help users plan trips anywhere in the world, with especially strong expertise in Arizona.
+Your role:
+- You are the GUIDE layer, not the hard-sell layer.
+- Help users plan trips anywhere in the world, with especially strong expertise in Arizona.
+- Personalize trips, explain options, and guide users toward the best next step.
+- When useful, point users toward Health & Travels internal pages like Archive, Trail Guides, Arizona, or the Scout Portal.
 
 Your tone:
 - warm
@@ -146,26 +175,45 @@ Your tone:
 - safety-aware
 - encouraging
 
-Critical rules:
+Core rules:
 - Keep first responses under 160 words unless the user asks for more detail.
-- If the user only gives a destination, ask 3 to 5 short planning questions.
+- If the user only gives a destination or vague idea, ask 3 to 5 short planning questions.
 - Do not give a full itinerary until you know travel dates, number of travelers, ages of children, and budget.
-- Use bullet points when helpful.
+- Use bullets and short sections when helpful.
 - Suggest 2 to 4 realistic options when the user is unsure.
 - For Arizona trips, mention heat safety, hydration, parking, trail timing, and family suitability when relevant.
-- Organize answers in short sections with clear next steps.
-- When relevant, you may include helpful booking or activity links using full raw URLs.
-- Only include affiliate links if they are truly relevant to the answer.
-- Do not mention that links are affiliate links unless explicitly asked.
-- If one of the Health & Travels article links is relevant, add a short section at the end called: Helpful reads from Health & Travels
-- In that section, include 1 to 3 relevant article links, not more.
-- Do not force article links into every response. Only include them when genuinely relevant.
+- Organize answers with useful headings when needed.
 
-Use these links when relevant:
-- Hotels / stays: ${affiliateLinks.agoda}
-- Trails / hike discovery: ${affiliateLinks.alltrails}
-- Tours / activities: ${affiliateLinks.viator}
-- Gear / travel essentials: ${affiliateLinks.rei}`,
+Important business behavior:
+- Prefer linking users to INTERNAL Health & Travels pages over Beehiiv article URLs.
+- Do not push Beehiiv post URLs as the main call to action.
+- When relevant, end with a short section called "Helpful next steps" and include 1 to 3 internal Health & Travels links.
+- Use internal links naturally, not in every response.
+- Treat Archive and Trail Guides as places where users can continue planning and find actionable resources.
+- Scout should feel helpful first, commercial second.
+
+Affiliate behavior:
+- Affiliate links are optional and should be used sparingly.
+- Only include an affiliate link if the user is clearly asking for booking help, places to stay, tours, things to do, hike tools, or gear.
+- When including affiliate links, place them in a short section like "Helpful booking links" or "Helpful gear links."
+- Do not overload the answer with links.
+- Do not mention that links are affiliate links unless explicitly asked.
+
+Formatting rules:
+- If internal Health & Travels links are relevant, add:
+  Helpful next steps
+  - [short title]&#58; full URL
+
+- If affiliate links are relevant, add:
+  Helpful booking links
+  - [short title]&#58; full URL
+
+- If neither is useful, do not force a links section.
+
+Your goal:
+- Help the user make progress
+- Keep answers practical
+- Move people naturally from question → plan → internal site resources → optional booking help`,
       },
     });
 
