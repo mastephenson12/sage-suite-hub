@@ -1,167 +1,89 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import ChatInterface from '../components/ChatInterface';
-import { ArrowLeft, Sparkles } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { articles } from '../data/articles';
 
-type Mode = 'general' | 'flights' | 'camping' | 'lodging' | 'arizona';
+const ArchiveCardImage: React.FC<{
+  src?: string;
+  alt: string;
+}> = ({ src, alt }) => {
+  const [hasError, setHasError] = useState(false);
 
-const SEDONA_PROMPT = `Create a 3-day Sedona Arizona family adventure itinerary.
+  const fallbackSrc =
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=90';
 
-The trip should work for:
-• two adults
-• a 9-year-old daughter
-• a 5-year-old son
-
-Include:
-• kid friendly hikes
-• scenic viewpoints
-• a jeep tour
-• a swimming spot
-• family restaurants
-• hotel suggestions
-
-Organize the itinerary by day.
-
-Finish with a short packing list.`;
-
-const MODES: { key: Mode; label: string }[] = [
-  { key: 'general', label: 'Trips' },
-  { key: 'flights', label: 'Flights' },
-  { key: 'camping', label: 'Camping' },
-  { key: 'lodging', label: 'Stays' },
-  { key: 'arizona', label: 'Arizona' },
-];
-
-const INITIAL_MESSAGES: Record<Mode, string> = {
-  general:
-    "Hi, I’m Scout. I help plan trips anywhere, with extra Arizona expertise.",
-  flights:
-    "Welcome to FlightScout. I’ll help you narrow down flights and next steps.",
-  camping:
-    "Welcome to CampScout. I can help with camping, cabins, RV trips, and parks.",
-  lodging:
-    "Welcome to StayScout. I can help with hotels, rentals, and family-friendly stays.",
-  arizona:
-    "Welcome to ArizonaScout. I specialize in Arizona family adventures and road trips.",
-};
-
-const ChatPage: React.FC = () => {
-  const [mode, setMode] = useState<Mode>('general');
-  const [searchParams] = useSearchParams();
-
-  const isSedonaTrip = searchParams.get('trip') === 'sedona';
-  const promptFromWidget = searchParams.get('prompt')?.trim() || '';
-
-  useEffect(() => {
-    if (isSedonaTrip) {
-      setMode('arizona');
-      return;
-    }
-
-    const promptLower = promptFromWidget.toLowerCase();
-
-    if (
-      promptLower.includes('sedona') ||
-      promptLower.includes('grand canyon') ||
-      promptLower.includes('arizona') ||
-      promptLower.includes('flagstaff') ||
-      promptLower.includes('scottsdale')
-    ) {
-      setMode('arizona');
-    }
-  }, [isSedonaTrip, promptFromWidget]);
-
-  const headline = useMemo(() => {
-    switch (mode) {
-      case 'arizona':
-        return 'Scout Portal for Arizona Adventures';
-      case 'flights':
-        return 'Find Better Flights Faster';
-      case 'camping':
-        return 'Plan Your Camping Trip';
-      case 'lodging':
-        return 'Find the Right Stay';
-      default:
-        return 'Scout Portal for Better Trip Planning';
-    }
-  }, [mode]);
-
-  const currentInitialMessage = isSedonaTrip
-    ? SEDONA_PROMPT
-    : INITIAL_MESSAGES[mode];
+  if (hasError) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-zinc-100">
+        <div className="px-2 text-center text-[10px] font-black uppercase tracking-widest text-zinc-300">
+          Visual Missing
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-4 md:px-5">
-        <div className="mb-3">
+    <img
+      src={src || fallbackSrc}
+      alt={alt}
+      className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      onError={() => setHasError(true)}
+    />
+  );
+};
+
+const Archive: React.FC = () => {
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-8">
+      <header className="mb-8">
+        <h1 className="text-4xl font-black uppercase tracking-tighter text-zinc-950 md:text-5xl">
+          Archive
+        </h1>
+
+        <p className="mt-3 max-w-3xl text-base italic font-serif text-zinc-500 md:text-lg">
+          Explore our growing collection of Arizona travel guides, trail notes,
+          and family adventure ideas.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {articles.map((article) => (
           <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black"
+            key={article.id}
+            to={`/archive/${article.id}`}
+            className="group block overflow-hidden rounded-[28px] border border-zinc-100 bg-white transition-all hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Health & Travels
-          </Link>
-        </div>
+            <div className="aspect-[16/10] overflow-hidden bg-zinc-100">
+              <ArchiveCardImage src={article.image} alt={article.title} />
+            </div>
 
-        <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
-          <ChatInterface
-            key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}-${promptFromWidget || 'empty'}`}
-            className="min-h-[500px]"
-            initialMessage={currentInitialMessage}
-            initialPrompt={promptFromWidget}
-          />
-        </div>
+            <div className="p-5">
+              <span className="mb-3 block text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">
+                {article.category}
+              </span>
 
-        <section className="mt-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
-                <Sparkles className="h-3 w-3" />
-                Scout Portal
+              <h3 className="mb-3 text-lg font-black uppercase tracking-tight text-zinc-950 transition-colors group-hover:text-brand-primary md:text-xl">
+                {article.title}
+              </h3>
+
+              <div className="mb-4 flex items-center gap-2 text-zinc-400">
+                <Calendar className="h-3 w-3" />
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  {article.date}
+                </span>
               </div>
 
-              <h1 className="mt-2 text-2xl font-black text-zinc-950 md:text-3xl">
-                {headline}
-              </h1>
-
-              <p className="mt-1 text-sm text-zinc-600">
-                Full trip planning, cleaner suggestions, and better next steps.
-              </p>
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors group-hover:text-black">
+                Read Guide →
+              </span>
             </div>
-          </div>
-
-          <div className="mt-3 flex flex-wrap gap-2">
-            {MODES.map((item) => (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => setMode(item.key)}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                  mode === item.key
-                    ? 'border-brand-primary/20 bg-brand-primary/10 text-brand-primary'
-                    : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-5 border-t border-zinc-100 pt-4 text-xs text-zinc-500">
-            By using Scout and submitting your information, you agree to our{' '}
-            <Link to="/privacy-policy" className="font-semibold text-zinc-700 hover:text-black">
-              Privacy Policy
-            </Link>{' '}
-            and{' '}
-            <Link to="/terms-of-service" className="font-semibold text-zinc-700 hover:text-black">
-              Terms of Service
-            </Link>
-            .
-          </div>
-        </section>
+          </Link>
+        ))}
       </div>
     </div>
   );
 };
 
-export default ChatPage;
+export default Archive;
