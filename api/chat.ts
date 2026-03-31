@@ -49,23 +49,71 @@ export async function POST(req: Request) {
     const ai = new GoogleGenAI({ apiKey });
 
     const affiliateLinks = {
-      agoda:
-        process.env.AGODA_AFFILIATE_URL ||
-        "https://www.agoda.com/",
+      agoda: process.env.AGODA_AFFILIATE_URL || "https://www.agoda.com/",
       alltrails:
-        process.env.ALLTRAILS_AFFILIATE_URL ||
-        "https://www.alltrails.com/",
-      viator:
-        process.env.VIATOR_AFFILIATE_URL ||
-        "https://www.viator.com/",
-      rei:
-        process.env.REI_AFFILIATE_URL ||
-        "https://www.rei.com/",
+        process.env.ALLTRAILS_AFFILIATE_URL || "https://www.alltrails.com/",
+      viator: process.env.VIATOR_AFFILIATE_URL || "https://www.viator.com/",
+      rei: process.env.REI_AFFILIATE_URL || "https://www.rei.com/",
     };
 
+    // Replace these with your real live article URLs as needed.
+    const helpfulReads = [
+      {
+        topic: "sedona",
+        title: "Sedona Family Adventure Guide",
+        url: "https://healthandtravels.com/",
+      },
+      {
+        topic: "grand canyon",
+        title: "Grand Canyon Family Travel Ideas",
+        url: "https://healthandtravels.com/",
+      },
+      {
+        topic: "williams",
+        title: "Williams, Arizona Family Getaway Guide",
+        url: "https://healthandtravels.com/",
+      },
+      {
+        topic: "tombstone",
+        title: "Tombstone, Arizona Adventure Guide",
+        url: "https://healthandtravels.com/",
+      },
+      {
+        topic: "ajo",
+        title: "Ajo Outdoor Adventure Guide",
+        url: "https://healthandtravels.com/",
+      },
+      {
+        topic: "arizona",
+        title: "Arizona Family Trip Ideas",
+        url: "https://healthandtravels.com/",
+      },
+      {
+        topic: "hiking",
+        title: "Arizona Hiking and Outdoor Ideas",
+        url: "https://healthandtravels.com/",
+      },
+    ];
+
     const conversation = messages
-      .map((msg) => `${msg.role === "user" ? "User" : "Sage"}: ${msg.content}`)
+      .map((msg) => `${msg.role === "user" ? "User" : "Scout"}: ${msg.content}`)
       .join("\n\n");
+
+    const latestUserMessage =
+      [...messages].reverse().find((msg) => msg.role === "user")?.content || "";
+
+    const lowerContext = `${conversation}\n\n${latestUserMessage}`.toLowerCase();
+
+    const matchedReads = helpfulReads.filter((item) =>
+      lowerContext.includes(item.topic)
+    );
+
+    const readsText =
+      matchedReads.length > 0
+        ? matchedReads
+            .map((item) => `- ${item.title}: ${item.url}`)
+            .join("\n")
+        : "- Arizona Family Trip Ideas: https://healthandtravels.com/";
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -75,9 +123,12 @@ ${conversation}
 
 User email on file: ${email || "not provided"}
 
-Respond as Sage to the latest user message only.`,
+Relevant Health & Travels article links you may include when useful:
+${readsText}
+
+Respond as Scout to the latest user message only.`,
       config: {
-        systemInstruction: `You are Sage, a family travel planning assistant for Health & Travels.
+        systemInstruction: `You are Scout, a family travel planning assistant for Health & Travels.
 
 You help users plan trips anywhere in the world, with especially strong expertise in Arizona.
 
@@ -90,7 +141,7 @@ Your tone:
 - encouraging
 
 Critical rules:
-- Keep first responses under 140 words.
+- Keep first responses under 160 words unless the user asks for more detail.
 - If the user only gives a destination, ask 3 to 5 short planning questions.
 - Do not give a full itinerary until you know travel dates, number of travelers, ages of children, and budget.
 - Use bullet points when helpful.
@@ -100,6 +151,9 @@ Critical rules:
 - When relevant, you may include helpful booking or activity links using full raw URLs.
 - Only include affiliate links if they are truly relevant to the answer.
 - Do not mention that links are affiliate links unless explicitly asked.
+- If one of the Health & Travels article links is relevant, add a short section at the end called: Helpful reads from Health & Travels
+- In that section, include 1 to 3 relevant article links, not more.
+- Do not force article links into every response. Only include them when genuinely relevant.
 
 Use these links when relevant:
 - Hotels / stays: ${affiliateLinks.agoda}
