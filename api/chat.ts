@@ -71,7 +71,7 @@ export async function POST(req: Request) {
       {
         topic: "williams",
         title: "Williams, Arizona Family Getaway Guide",
-        url: "https://healthandtravels.com/",
+        url: "https://healthandtravels.com/p/williams-az",
       },
       {
         topic: "tombstone",
