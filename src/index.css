@@ -2,90 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --brand-primary: #0d47a1;
-  --brand-dark: #0a3a85;
-  --brand-accent: #3b82f6;
-  --brand-surface: #fafafa;
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
-  background-color: #ffffff;
-  color: #18181b;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  background: white;
+  color: #111827;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.serif-text {
-  font-family: 'Lora', 'Georgia', serif;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.mono-text {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-}
-
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Sidebar behavior */
-.ue-sidebar-container {
-  position: sticky !important;
-  top: 0;
-  height: 100vh;
-  z-index: 40;
-}
-
-/* Custom Scrollbars */
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #e4e4e7;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #0d47a1;
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #e4e4e7 transparent;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Tracking utility */
-.tracking-ultra {
-  letter-spacing: 0.4em;
+* {
+  box-sizing: border-box;
 }
