@@ -104,9 +104,15 @@ export async function POST(req: Request) {
 
     const lowerContext = `${conversation}\n\n${latestUserMessage}`.toLowerCase();
 
-    const matchedReads = helpfulReads.filter((item) =>
-      lowerContext.includes(item.topic)
-    );
+    const matchedReads = helpfulReads.filter((item) => {
+  return (
+    lowerContext.includes(item.topic) ||
+    (item.topic === "sedona" &&
+      (lowerContext.includes("red rock") || lowerContext.includes("oak creek"))) ||
+    (item.topic === "flagstaff" &&
+      (lowerContext.includes("snowbowl") || lowerContext.includes("northern arizona")))
+  );
+});
 
     const readsText =
       matchedReads.length > 0
