@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       {
         topic: "sedona",
         title: "Sedona Family Adventure Guide",
-        url: "https://healthandtravels.com/",
+        url: "https://healthandtravels.com/p/sedona-in-april",
       },
       {
         topic: "grand canyon",
