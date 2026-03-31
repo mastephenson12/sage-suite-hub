@@ -20,10 +20,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ className = '' }) => {
 
     if (finalPrompt) {
       navigate(`/chat?prompt=${encodeURIComponent(finalPrompt)}`);
-      return;
+    } else {
+      navigate('/chat');
     }
-
-    navigate('/chat');
   };
 
   return (
