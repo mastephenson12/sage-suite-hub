@@ -81,7 +81,7 @@ export async function POST(req: Request) {
       {
         topic: "ajo",
         title: "Ajo Outdoor Adventure Guide",
-        url: "https://healthandtravels.com/",
+        url: "https://healthandtravels.com/p/discover-ajo-arizona-and-organ-pipe",
       },
       {
         topic: "arizona",
