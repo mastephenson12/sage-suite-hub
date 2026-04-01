@@ -40,14 +40,14 @@ const Community: React.FC = () => {
     <div className="min-h-screen bg-white">
       {/* Top Banner */}
       <div className="bg-black text-white text-center text-xs py-3 px-4">
-        Arizona Hikers Association is now our main community home
+        Arizona Hikers Association is now our premium community home
         <a
           href="https://arizonahikersassociation.org"
           target="_blank"
           rel="noopener noreferrer"
           className="underline ml-2 font-bold"
         >
-          Join here
+          Learn more
         </a>
       </div>
 
@@ -66,19 +66,23 @@ const Community: React.FC = () => {
           </p>
 
           <p className="text-zinc-400 text-sm max-w-2xl mx-auto mt-6 leading-relaxed">
-            Use Sage to plan your next Arizona adventure, then join the Arizona Hikers
-            Association to connect with real hikers, share trail tips, and discover new
-            places across Arizona.
+            Use Sage to plan your next Arizona adventure, then get access to the Arizona
+            Hikers Association, a premium community with real guidance, trail insights,
+            and families actually out there exploring.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <p className="text-xs uppercase tracking-widest text-zinc-400 mt-8 mb-4">
+            Premium Community Access
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="https://arizonahikersassociation.org"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-8 py-4 bg-brand-primary text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:opacity-90 transition-opacity"
             >
-              Join the Community
+              Get Access
             </a>
 
             <a
@@ -112,14 +116,14 @@ const Community: React.FC = () => {
 
             <div className="p-8 bg-zinc-50 rounded-[32px] border border-zinc-100 shadow-sm">
               <p className="text-brand-primary font-black text-sm uppercase tracking-widest mb-3">
-                2. Connect
+                2. Upgrade
               </p>
               <h3 className="text-xl font-black uppercase tracking-tight mb-3">
-                Join the Community
+                Access the Association
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed">
-                Meet Arizona hikers, families, and explorers who are actually out there
-                doing it.
+                Join a premium community built for Arizona hikers and families who want
+                better guidance and better outings.
               </p>
             </div>
 
@@ -143,7 +147,7 @@ const Community: React.FC = () => {
           <div className="p-10 bg-zinc-50 rounded-[40px] border border-zinc-100 text-center shadow-sm">
             <Users className="w-8 h-8 text-brand-primary mx-auto mb-6" />
             <h3 className="text-xl font-black uppercase tracking-tight mb-4">
-              Arizona Community
+              Premium Arizona Community
             </h3>
             <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">
               Families, hikers &amp; explorers
@@ -211,28 +215,28 @@ const Community: React.FC = () => {
           </div>
 
           <div className="bg-brand-primary rounded-[48px] p-12 text-white text-center shadow-lg">
-  <h2 className="text-3xl font-black uppercase tracking-tighter mb-6">
-    Join Arizona Hikers Association
-  </h2>
+            <h2 className="text-3xl font-black uppercase tracking-tighter mb-6">
+              Access Arizona Hikers Association
+            </h2>
 
-  <p className="text-white/85 text-sm leading-relaxed mb-8 max-w-md mx-auto">
-    A premium community for Arizona hikers and families who want better trails,
-    real guidance, and easier adventures without the guesswork.
-  </p>
+            <p className="text-white/85 text-sm leading-relaxed mb-8 max-w-md mx-auto">
+              A premium community for Arizona hikers and families who want better
+              trails, real guidance, and easier adventures without the guesswork.
+            </p>
 
-  <a
-    href="https://arizonahikersassociation.org"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-block w-full py-4 bg-white text-brand-primary rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-zinc-100 transition-colors"
-  >
-    Get Access
-  </a>
+            <a
+              href="https://arizonahikersassociation.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block w-full py-4 bg-white text-brand-primary rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-zinc-100 transition-colors"
+            >
+              Get Access
+            </a>
 
-  <p className="text-white/60 text-xs mt-4">
-    Instant access • Guided hikes • Real community
-  </p>
-</div>
+            <p className="text-white/60 text-xs mt-4">
+              Premium access • Trail insights • Real community
+            </p>
+          </div>
         </section>
       </div>
     </div>
