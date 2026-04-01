@@ -8,7 +8,7 @@ export type AffiliateSet = {
 export const ARIZONA_DESTINATIONS: Record<string, AffiliateSet> = {
   sedona: {
     tours:
-      'https://www.viator.com/Sedona/d750-ttd?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=arizona-adventure',
+      'https://www.viator.com/partner-shop/healthandtravels/Sedona-2026?medium=link&medium_version=shop&campaign=Sedona',
     label: 'Best Sedona Tours',
   },
 
