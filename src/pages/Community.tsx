@@ -98,3 +98,146 @@ const Community: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="p-8 bg-zinc-50 rounded-[32px] border border-zinc-100 shadow-sm">
+              <p className="text-brand-primary font-black text-sm uppercase tracking-widest mb-3">
+                1. Plan
+              </p>
+              <h3 className="text-xl font-black uppercase tracking-tight mb-3">
+                Use Sage
+              </h3>
+              <p className="text-sm text-zinc-600 leading-relaxed">
+                Discover trail ideas, family adventures, and Arizona trip inspiration
+                faster.
+              </p>
+            </div>
+
+            <div className="p-8 bg-zinc-50 rounded-[32px] border border-zinc-100 shadow-sm">
+              <p className="text-brand-primary font-black text-sm uppercase tracking-widest mb-3">
+                2. Connect
+              </p>
+              <h3 className="text-xl font-black uppercase tracking-tight mb-3">
+                Join the Community
+              </h3>
+              <p className="text-sm text-zinc-600 leading-relaxed">
+                Meet Arizona hikers, families, and explorers who are actually out there
+                doing it.
+              </p>
+            </div>
+
+            <div className="p-8 bg-zinc-50 rounded-[32px] border border-zinc-100 shadow-sm">
+              <p className="text-brand-primary font-black text-sm uppercase tracking-widest mb-3">
+                3. Explore
+              </p>
+              <h3 className="text-xl font-black uppercase tracking-tight mb-3">
+                Share &amp; Discover
+              </h3>
+              <p className="text-sm text-zinc-600 leading-relaxed">
+                Learn from real adventures, swap trail tips, and find your next outing
+                faster.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Highlights */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+          <div className="p-10 bg-zinc-50 rounded-[40px] border border-zinc-100 text-center shadow-sm">
+            <Users className="w-8 h-8 text-brand-primary mx-auto mb-6" />
+            <h3 className="text-xl font-black uppercase tracking-tight mb-4">
+              Arizona Community
+            </h3>
+            <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">
+              Families, hikers &amp; explorers
+            </p>
+          </div>
+
+          <div className="p-10 bg-zinc-50 rounded-[40px] border border-zinc-100 text-center shadow-sm">
+            <MessageCircle className="w-8 h-8 text-emerald-500 mx-auto mb-6" />
+            <h3 className="text-xl font-black uppercase tracking-tight mb-4">
+              Trail Tips
+            </h3>
+            <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">
+              Shared hikes, advice &amp; ideas
+            </p>
+          </div>
+
+          <div className="p-10 bg-zinc-50 rounded-[40px] border border-zinc-100 text-center shadow-sm">
+            <Award className="w-8 h-8 text-purple-500 mx-auto mb-6" />
+            <h3 className="text-xl font-black uppercase tracking-tight mb-4">
+              Real Adventures
+            </h3>
+            <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">
+              Better memories outside
+            </p>
+          </div>
+        </section>
+
+        {/* Feed + CTA */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="space-y-8">
+            <h2 className="text-xs font-black uppercase tracking-[0.4em] text-zinc-400">
+              Recent Community Activity
+            </h2>
+
+            {activities.map((item, i) => (
+              <div
+                key={`${item.name}-${item.time}`}
+                className="p-8 bg-white border border-zinc-100 rounded-[32px] flex gap-5 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div
+                  className={`w-14 h-14 rounded-full bg-gradient-to-br ${
+                    avatarGradients[i % avatarGradients.length]
+                  } flex-shrink-0 flex items-center justify-center text-white font-black text-sm shadow-sm`}
+                  aria-hidden="true"
+                >
+                  {item.initials}
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <span className="text-sm font-black uppercase tracking-tight text-zinc-900">
+                      {item.name}
+                    </span>
+                    <span className="text-[10px] text-zinc-400 font-black uppercase tracking-widest">
+                      {item.time}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-zinc-600 leading-relaxed">
+                    {item.post}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-brand-primary rounded-[48px] p-12 text-white text-center shadow-lg">
+            <h2 className="text-3xl font-black uppercase tracking-tighter mb-6">
+              Join Arizona Hikers Association
+            </h2>
+
+            <p className="text-white/85 text-sm leading-relaxed mb-8 max-w-md mx-auto">
+              A free community for Arizona hikers and families. Discover better trails,
+              share your adventures, and learn from people who are actually out there
+              doing it.
+            </p>
+
+            <a
+              href="https://arizonahikersassociation.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block w-full py-4 bg-white text-brand-primary rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-zinc-100 transition-colors"
+            >
+              Join the Community
+            </a>
+
+            <p className="text-white/60 text-xs mt-4">
+              Free to join • Takes less than 30 seconds
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default Community;
