@@ -12,7 +12,17 @@ export const ARIZONA_DESTINATIONS: Record<string, AffiliateSet> = {
     label: 'Best Sedona Tours',
   },
 
-  // future expansion
-  // 'grand-canyon': { tours: 'LINK', label: 'Grand Canyon Tours' },
-  // 'williams': { tours: 'LINK', label: 'Williams Experiences' },
+  // Add more Arizona destinations here later:
+  // 'grand-canyon': {
+  //   tours: 'YOUR_GRAND_CANYON_VIATOR_LINK',
+  //   label: 'Grand Canyon Tours',
+  // },
+  // 'williams': {
+  //   tours: 'YOUR_WILLIAMS_VIATOR_LINK',
+  //   label: 'Williams Experiences',
+  // },
+  // 'tombstone': {
+  //   tours: 'YOUR_TOMBSTONE_VIATOR_LINK',
+  //   label: 'Tombstone Experiences',
+  // },
 };
