@@ -211,29 +211,28 @@ const Community: React.FC = () => {
           </div>
 
           <div className="bg-brand-primary rounded-[48px] p-12 text-white text-center shadow-lg">
-            <h2 className="text-3xl font-black uppercase tracking-tighter mb-6">
-              Join Arizona Hikers Association
-            </h2>
+  <h2 className="text-3xl font-black uppercase tracking-tighter mb-6">
+    Join Arizona Hikers Association
+  </h2>
 
-            <p className="text-white/85 text-sm leading-relaxed mb-8 max-w-md mx-auto">
-              A free community for Arizona hikers and families. Discover better trails,
-              share your adventures, and learn from people who are actually out there
-              doing it.
-            </p>
+  <p className="text-white/85 text-sm leading-relaxed mb-8 max-w-md mx-auto">
+    A premium community for Arizona hikers and families who want better trails,
+    real guidance, and easier adventures without the guesswork.
+  </p>
 
-            <a
-              href="https://arizonahikersassociation.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block w-full py-4 bg-white text-brand-primary rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-zinc-100 transition-colors"
-            >
-              Join the Community
-            </a>
+  <a
+    href="https://arizonahikersassociation.org"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-block w-full py-4 bg-white text-brand-primary rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-zinc-100 transition-colors"
+  >
+    Get Access
+  </a>
 
-            <p className="text-white/60 text-xs mt-4">
-              Free to join • Takes less than 30 seconds
-            </p>
-          </div>
+  <p className="text-white/60 text-xs mt-4">
+    Instant access • Guided hikes • Real community
+  </p>
+</div>
         </section>
       </div>
     </div>
