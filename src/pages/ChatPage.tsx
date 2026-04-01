@@ -45,17 +45,70 @@ const INITIAL_MESSAGES: Record<Mode, string> = {
     "Welcome to ArizonaSage. I specialize in Arizona family adventures and road trips.",
 };
 
+type AffiliateSet = {
+  tours: string;
+  stays: string;
+  gear: string;
+};
+
+const AFFILIATE_LINKS: Record<Mode, AffiliateSet> = {
+  general: {
+    tours: 'YOUR_GENERAL_TOURS_LINK',
+    stays: 'YOUR_GENERAL_STAYS_LINK',
+    gear: 'YOUR_GENERAL_GEAR_LINK',
+  },
+  flights: {
+    tours: 'YOUR_FLIGHT_DESTINATION_TOURS_LINK',
+    stays: 'YOUR_AIRPORT_OR_DESTINATION_STAYS_LINK',
+    gear: 'YOUR_TRAVEL_ACCESSORIES_LINK',
+  },
+  camping: {
+    tours: 'YOUR_OUTDOOR_EXPERIENCES_LINK',
+    stays: 'YOUR_CAMPGROUND_OR_CABIN_LINK',
+    gear: 'YOUR_CAMPING_GEAR_LINK',
+  },
+  lodging: {
+    tours: 'YOUR_LOCAL_EXPERIENCES_LINK',
+    stays: 'YOUR_HOTEL_OR_RENTAL_LINK',
+    gear: 'YOUR_TRAVEL_GEAR_LINK',
+  },
+  arizona: {
+    tours: 'YOUR_ARIZONA_TOURS_LINK',
+    stays: 'YOUR_ARIZONA_STAYS_LINK',
+    gear: 'YOUR_ARIZONA_HIKING_GEAR_LINK',
+  },
+};
+
+const SEDONA_AFFILIATE_LINKS: AffiliateSet = {
+  tours: 'YOUR_SEDONA_TOURS_LINK',
+  stays: 'YOUR_SEDONA_STAYS_LINK',
+  gear: 'YOUR_SEDONA_GEAR_LINK',
+};
+
 const ChatPage: React.FC = () => {
   const [mode, setMode] = useState<Mode>('general');
   const [searchParams] = useSearchParams();
 
-  const isSedonaTrip = searchParams.get('trip') === 'sedona';
+  const modeFromQuery = searchParams.get('mode');
+  const tripFromQuery = searchParams.get('trip');
+  const isSedonaTrip = tripFromQuery === 'sedona';
 
   useEffect(() => {
     if (isSedonaTrip) {
       setMode('arizona');
+      return;
     }
-  }, [isSedonaTrip]);
+
+    if (
+      modeFromQuery === 'general' ||
+      modeFromQuery === 'flights' ||
+      modeFromQuery === 'camping' ||
+      modeFromQuery === 'lodging' ||
+      modeFromQuery === 'arizona'
+    ) {
+      setMode(modeFromQuery);
+    }
+  }, [isSedonaTrip, modeFromQuery]);
 
   const headline = useMemo(() => {
     switch (mode) {
@@ -72,9 +125,30 @@ const ChatPage: React.FC = () => {
     }
   }, [mode]);
 
+  const subheadline = useMemo(() => {
+    switch (mode) {
+      case 'arizona':
+        return 'Arizona-focused planning with tours, stays, and family-friendly ideas.';
+      case 'flights':
+        return 'Narrow down routes, compare next steps, and plan the rest of the trip.';
+      case 'camping':
+        return 'Camping, cabins, RV trips, parks, and outdoor adventures made simpler.';
+      case 'lodging':
+        return 'Hotels, rentals, and family-friendly stays without the clutter.';
+      default:
+        return 'Fast trip planning without the clutter.';
+    }
+  }, [mode]);
+
   const currentInitialMessage = isSedonaTrip
     ? SEDONA_PROMPT
     : INITIAL_MESSAGES[mode];
+
+  const currentLinks = isSedonaTrip
+    ? SEDONA_AFFILIATE_LINKS
+    : AFFILIATE_LINKS[mode];
+
+  const bookingTitle = isSedonaTrip ? 'Book Your Sedona Trip' : 'Book This Trip';
 
   return (
     <div className="min-h-screen bg-white">
@@ -89,15 +163,7 @@ const ChatPage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
-          <ChatInterface
-            key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}`}
-            className="min-h-[500px]"
-            initialMessage={currentInitialMessage}
-          />
-        </div>
-
-        <section className="mt-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
+        <section className="mb-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
@@ -110,12 +176,12 @@ const ChatPage: React.FC = () => {
               </h1>
 
               <p className="mt-1 text-sm text-zinc-600">
-                Fast trip planning without the clutter.
+                {subheadline}
               </p>
             </div>
           </div>
 
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-2">
             {MODES.map((item) => (
               <button
                 key={item.key}
@@ -131,14 +197,87 @@ const ChatPage: React.FC = () => {
               </button>
             ))}
           </div>
+        </section>
 
-          <div className="mt-5 border-t border-zinc-100 pt-4 text-xs text-zinc-500">
+        <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
+          <ChatInterface
+            key={`${mode}-${isSedonaTrip ? 'sedona' : 'default'}`}
+            className="min-h-[500px]"
+            initialMessage={currentInitialMessage}
+          />
+        </div>
+
+        <section className="mt-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
+          <h2 className="text-lg font-black text-zinc-900">
+            {bookingTitle}
+          </h2>
+
+          <p className="mt-1 text-sm text-zinc-600">
+            Ready to take the next step? Here are some options to help book the trip faster.
+          </p>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            <a
+              href={currentLinks.tours}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-zinc-200 p-4 transition hover:shadow-md"
+            >
+              <h3 className="font-bold text-zinc-900">Top Tours & Experiences</h3>
+              <p className="mt-1 text-sm text-zinc-600">
+                Find family-friendly tours, activities, and local experiences.
+              </p>
+              <span className="mt-2 inline-block text-xs font-bold text-brand-primary">
+                Browse Tours →
+              </span>
+            </a>
+
+            <a
+              href={currentLinks.stays}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-zinc-200 p-4 transition hover:shadow-md"
+            >
+              <h3 className="font-bold text-zinc-900">Find Places to Stay</h3>
+              <p className="mt-1 text-sm text-zinc-600">
+                Hotels, rentals, cabins, and family-friendly stays.
+              </p>
+              <span className="mt-2 inline-block text-xs font-bold text-brand-primary">
+                View Stays →
+              </span>
+            </a>
+
+            <a
+              href={currentLinks.gear}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-zinc-200 p-4 transition hover:shadow-md"
+            >
+              <h3 className="font-bold text-zinc-900">Travel & Hiking Gear</h3>
+              <p className="mt-1 text-sm text-zinc-600">
+                Essentials for your trip, from daypacks to family travel gear.
+              </p>
+              <span className="mt-2 inline-block text-xs font-bold text-brand-primary">
+                See Gear →
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section className="mt-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">
+          <div className="border-t border-zinc-100 pt-1 text-xs text-zinc-500">
             By using Sage and submitting your information, you agree to our{' '}
-            <Link to="/privacy-policy" className="font-semibold text-zinc-700 hover:text-black">
+            <Link
+              to="/privacy-policy"
+              className="font-semibold text-zinc-700 hover:text-black"
+            >
               Privacy Policy
             </Link>{' '}
             and{' '}
-            <Link to="/terms-of-service" className="font-semibold text-zinc-700 hover:text-black">
+            <Link
+              to="/terms-of-service"
+              className="font-semibold text-zinc-700 hover:text-black"
+            >
               Terms of Service
             </Link>
             .
