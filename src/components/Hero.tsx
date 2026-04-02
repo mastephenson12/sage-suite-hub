@@ -27,7 +27,7 @@ const arizonaCards = [
 
 export const Hero: React.FC = () => {
   return (
-    <div className="relative min-h-[80vh] overflow-hidden border-b border-zinc-100 bg-white pt-20 pb-14 flex items-center">
+    <div className="relative min-h-[72vh] overflow-hidden border-b border-zinc-100 bg-white pt-16 pb-12 flex items-start">
       <div className="absolute inset-0 -z-10">
         <img
           src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
@@ -39,16 +39,12 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 animate-fade-in">
-        <div className="mb-12 max-w-3xl">
-          <p className="mb-3 text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500">
-            Health & Travels
-          </p>
-
-          <h1 className="mb-4 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-6xl">
+        <div className="mb-10 max-w-3xl">
+          <h1 className="mb-4 max-w-4xl text-3xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-5xl">
             Plan Your Next Arizona Adventure in Minutes
           </h1>
 
-          <p className="mb-8 max-w-2xl text-base italic leading-relaxed text-zinc-500 font-medium font-serif md:text-lg">
+          <p className="mb-6 max-w-2xl text-base italic leading-relaxed text-zinc-500 font-medium font-serif md:text-lg">
             Skip the endless searching. Tell Sage what you want and get a simple
             plan built for your family.
           </p>
