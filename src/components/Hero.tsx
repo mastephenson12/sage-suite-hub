@@ -28,6 +28,7 @@ const arizonaCards = [
 export const Hero: React.FC = () => {
   return (
     <div className="relative min-h-[72vh] overflow-hidden border-b border-zinc-100 bg-white pt-16 pb-12 flex items-start">
+      {/* Background */}
       <div className="absolute inset-0 -z-10">
         <img
           src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
@@ -38,7 +39,10 @@ export const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 to-white" />
       </div>
 
+      {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 animate-fade-in">
+        
+        {/* Hero Text */}
         <div className="mb-10 max-w-3xl">
           <h1 className="mb-4 max-w-4xl text-3xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-5xl">
             Plan Your Next Arizona Adventure in Minutes
@@ -49,10 +53,11 @@ export const Hero: React.FC = () => {
             plan built for your family.
           </p>
 
+          {/* Buttons */}
           <div className="flex flex-col gap-4 sm:flex-row">
             <Link
               to="/trip-builder"
-              className="inline-flex items-center justify-center rounded-2xl bg-black px-8 py-4 text-lg font-semibold text-white transition hover:opacity-90"
+              className="inline-flex items-center justify-center rounded-2xl bg-brand-primary hover:bg-brand-dark px-8 py-4 text-lg font-semibold text-white transition-all shadow-lg shadow-brand-primary/10 active:scale-95"
             >
               Build My Trip
             </Link>
@@ -66,6 +71,7 @@ export const Hero: React.FC = () => {
           </div>
         </div>
 
+        {/* Cards */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {arizonaCards.map((card) => (
             <Link
@@ -80,15 +86,18 @@ export const Hero: React.FC = () => {
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
+
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <h2 className="mb-2 text-2xl font-black text-white">
                     {card.title}
                   </h2>
+
                   <p className="mb-4 max-w-xs text-sm leading-relaxed text-white/90">
                     {card.description}
                   </p>
+
                   <span className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white backdrop-blur-sm">
                     {card.cta}
                   </span>
@@ -97,6 +106,7 @@ export const Hero: React.FC = () => {
             </Link>
           ))}
         </div>
+
       </div>
     </div>
   );
