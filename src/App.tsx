@@ -21,6 +21,7 @@ import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import TripBuilder from './pages/TripBuilder';
 
 function AppContent() {
   const location = useLocation();
@@ -46,6 +47,7 @@ function AppContent() {
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Hero />} />
+          <Route path="/trip-builder" element={<TripBuilder />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
           <Route path="/archive" element={<Archive />} />
@@ -74,19 +76,19 @@ function AppContent() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
-                <Link to="/archive" className="hover:text-black">
+                <Link to="/archive" className="hover:text-black transition-colors">
                   Archive
                 </Link>
-                <Link to="/trail-guides" className="hover:text-black">
+                <Link to="/trail-guides" className="hover:text-black transition-colors">
                   Trails
                 </Link>
-                <Link to="/community" className="hover:text-black">
+                <Link to="/community" className="hover:text-black transition-colors">
                   Community
                 </Link>
-                <Link to="/privacy-policy" className="hover:text-black">
+                <Link to="/privacy-policy" className="hover:text-black transition-colors">
                   Privacy Policy
                 </Link>
-                <Link to="/terms-of-service" className="hover:text-black">
+                <Link to="/terms-of-service" className="hover:text-black transition-colors">
                   Terms of Service
                 </Link>
               </div>
