@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
             rel="noopener noreferrer"
             className="bg-brand-primary hover:bg-brand-dark text-white px-6 py-2.5 rounded-lg text-[13px] font-black uppercase tracking-wider transition-all shadow-lg shadow-brand-primary/10 active:scale-95"
           >
-            Subscribe
+            Send Me Trip Ideas
           </a>
         </div>
       </div>
