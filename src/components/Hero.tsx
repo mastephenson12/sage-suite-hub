@@ -5,24 +5,21 @@ const arizonaCards = [
   {
     title: 'Sedona',
     description: 'Red rock hikes, jeep tours, and family adventures.',
-    image:
-      '/images/sedona-family.avif',
+    image: '/images/sedona-family.avif',
     to: '/archive/sedona-family-adventure',
     cta: 'View Sedona Guide',
   },
   {
     title: 'Grand Canyon',
     description: 'Scenic overlooks, rim walks, and unforgettable family views.',
-    image:
-      '/images/grand-canyon.avif',
+    image: '/images/grand-canyon.avif',
     to: '/archive/grand-canyon-family-adventure',
     cta: 'View Grand Canyon Guide',
   },
   {
     title: 'Flagstaff',
     description: 'Pine forests, lava caves, scenic drives, and cool mountain air.',
-    image:
-      '/images/flagstaff-family-adventure.avif',
+    image: '/images/flagstaff-family-adventure.avif',
     to: '/archive/flagstaff-family-escape',
     cta: 'View Flagstaff Guide',
   },
@@ -30,34 +27,50 @@ const arizonaCards = [
 
 export const Hero: React.FC = () => {
   return (
-    <div className="bg-white pt-20 pb-14 border-b border-zinc-100 overflow-hidden relative min-h-[80vh] flex items-center">
+    <div className="relative min-h-[80vh] overflow-hidden border-b border-zinc-100 bg-white pt-20 pb-14 flex items-center">
       <div className="absolute inset-0 -z-10">
         <img
           src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
-          alt="Arizona"
-          className="w-full h-full object-cover opacity-10"
+          alt="Arizona desert road"
+          className="h-full w-full object-cover opacity-10"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/80 to-white" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 to-white" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 text-left relative z-10 animate-fade-in w-full">
-        <div className="mb-8">
-          <p className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-3">
-            Arizona Adventures
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 animate-fade-in">
+        <div className="mb-12 max-w-3xl">
+          <p className="mb-3 text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500">
+            Health & Travels
           </p>
 
-          <h1 className="text-3xl md:text-5xl font-black text-black mb-4 leading-[0.92] tracking-tight uppercase max-w-4xl">
-            Health, Trails, and <br /> Arizona Skies.
+          <h1 className="mb-4 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-6xl">
+            Plan Your Next Arizona Adventure in Minutes
           </h1>
 
-          <p className="text-base md:text-lg text-zinc-500 italic max-w-2xl leading-relaxed font-medium font-serif">
-            Exploring the High Desert’s most breathtaking trails and hidden
-            wellness retreats for the modern explorer.
+          <p className="mb-8 max-w-2xl text-base italic leading-relaxed text-zinc-500 font-medium font-serif md:text-lg">
+            Skip the endless searching. Tell Sage what you want and get a simple
+            plan built for your family.
           </p>
+
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Link
+              to="/trip-builder"
+              className="inline-flex items-center justify-center rounded-2xl bg-black px-8 py-4 text-lg font-semibold text-white transition hover:opacity-90"
+            >
+              Build My Trip
+            </Link>
+
+            <Link
+              to="/arizona"
+              className="inline-flex items-center justify-center rounded-2xl border border-zinc-300 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-50"
+            >
+              Explore Arizona
+            </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {arizonaCards.map((card) => (
             <Link
               key={card.title}
@@ -68,19 +81,19 @@ export const Hero: React.FC = () => {
                 <img
                   src={card.image}
                   alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h2 className="font-black text-2xl text-white mb-2">
+                  <h2 className="mb-2 text-2xl font-black text-white">
                     {card.title}
                   </h2>
-                  <p className="text-sm text-white/90 mb-4 max-w-xs leading-relaxed">
+                  <p className="mb-4 max-w-xs text-sm leading-relaxed text-white/90">
                     {card.description}
                   </p>
-                  <span className="inline-flex items-center justify-center bg-white/15 backdrop-blur-sm text-white px-4 py-2 rounded-xl font-black text-[11px] uppercase tracking-[0.15em] border border-white/20">
+                  <span className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white backdrop-blur-sm">
                     {card.cta}
                   </span>
                 </div>
