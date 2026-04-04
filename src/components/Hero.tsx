@@ -4,21 +4,21 @@ import { Link } from 'react-router-dom';
 const arizonaCards = [
   {
     title: 'Sedona',
-    description: 'Red rock hikes, jeep tours, and family adventures.',
+    description: 'Red rock hikes, jeep tours, and easy family adventure ideas.',
     image: '/images/sedona-family.avif',
     to: '/archive/sedona-family-adventure',
     cta: 'View Sedona Guide',
   },
   {
     title: 'Grand Canyon',
-    description: 'Scenic overlooks, rim walks, and unforgettable family views.',
+    description: 'Scenic overlooks, simple rim walks, and unforgettable family views.',
     image: '/images/grand-canyon.avif',
     to: '/archive/grand-canyon-family-adventure',
     cta: 'View Grand Canyon Guide',
   },
   {
     title: 'Flagstaff',
-    description: 'Pine forests, lava caves, scenic drives, and cool mountain air.',
+    description: 'Cool mountain air, pine forests, lava caves, and weekend escape ideas.',
     image: '/images/flagstaff-family-adventure.avif',
     to: '/archive/flagstaff-family-escape',
     cta: 'View Flagstaff Guide',
@@ -27,8 +27,7 @@ const arizonaCards = [
 
 export const Hero: React.FC = () => {
   return (
-    <div className="relative min-h-[72vh] overflow-hidden border-b border-zinc-100 bg-white pt-16 pb-12 flex items-start">
-      {/* Background */}
+    <section className="relative overflow-hidden border-b border-zinc-100 bg-white">
       <div className="absolute inset-0 -z-10">
         <img
           src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
@@ -36,78 +35,128 @@ export const Hero: React.FC = () => {
           className="h-full w-full object-cover opacity-10"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 to-white" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 animate-fade-in">
-        
-        {/* Hero Text */}
-        <div className="mb-10 max-w-3xl">
-          <h1 className="mb-4 max-w-4xl text-3xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-5xl">
-            Plan Your Next Arizona Adventure in Minutes
-          </h1>
+      <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-16 md:pb-20 md:pt-24">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="max-w-3xl">
+            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
+              Health & Travels + Sage
+            </p>
 
-          <p className="mb-6 max-w-2xl text-base italic leading-relaxed text-zinc-500 font-medium font-serif md:text-lg">
-            Skip the endless searching. Tell Sage what you want and get a simple
-            plan built for your family.
-          </p>
+            <h1 className="max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-6xl">
+              Plan Better Arizona Trips With Your Family
+            </h1>
 
-          {/* Buttons */}
-          <div className="flex flex-col gap-4 sm:flex-row">
+            <p className="mt-6 max-w-2xl font-serif text-lg italic leading-relaxed text-zinc-500 md:text-xl">
+              Skip the endless tabs and wasted research. Tell Sage what kind of
+              trip you want and get simple Arizona ideas built for real family life.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <Link
+                to="/trip-builder"
+                className="inline-flex items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95"
+              >
+                Start Planning
+              </Link>
+
+              <Link
+                to="/arizona"
+                className="inline-flex items-center justify-center rounded-2xl border border-zinc-300 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-50"
+              >
+                Explore Arizona
+              </Link>
+            </div>
+
+            <div className="mt-8 grid gap-3 text-sm text-zinc-600 sm:grid-cols-3">
+              <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
+                Family-friendly ideas
+              </div>
+              <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
+                Hikes, towns, and day trips
+              </div>
+              <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
+                Less planning stress
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-zinc-200 bg-white/90 p-6 shadow-sm backdrop-blur">
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
+              Built for busy parents
+            </p>
+
+            <h2 className="mt-3 text-2xl font-black tracking-tight text-black md:text-3xl">
+              Less time researching.
+              <br />
+              More time making memories.
+            </h2>
+
+            <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-600">
+              <p>No bouncing between 15 tabs trying to figure out what is worth doing.</p>
+              <p>No overcomplicated planning for a weekend trip your kids may melt down halfway through anyway.</p>
+              <p>Just simple ideas, helpful guides, and an easier way to choose your next Arizona adventure.</p>
+            </div>
+
             <Link
               to="/trip-builder"
-              className="inline-flex items-center justify-center rounded-2xl bg-brand-primary hover:bg-brand-dark px-8 py-4 text-lg font-semibold text-white transition-all shadow-lg shadow-brand-primary/10 active:scale-95"
+              className="mt-6 inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-6 py-3 text-sm font-black uppercase tracking-[0.15em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
             >
               Build My Trip
-            </Link>
-
-            <Link
-              to="/arizona"
-              className="inline-flex items-center justify-center rounded-2xl border border-zinc-300 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-50"
-            >
-              Explore Arizona
             </Link>
           </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {arizonaCards.map((card) => (
-            <Link
-              key={card.title}
-              to={card.to}
-              className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative h-[320px] overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
+        <div className="mt-14">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
+                Start with a proven favorite
+              </p>
+              <h2 className="mt-2 text-2xl font-black tracking-tight text-black md:text-3xl">
+                Popular Arizona family trips
+              </h2>
+            </div>
+          </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {arizonaCards.map((card) => (
+              <Link
+                key={card.title}
+                to={card.to}
+                className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+              >
+                <div className="relative h-[320px] overflow-hidden">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
 
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h2 className="mb-2 text-2xl font-black text-white">
-                    {card.title}
-                  </h2>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-                  <p className="mb-4 max-w-xs text-sm leading-relaxed text-white/90">
-                    {card.description}
-                  </p>
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="mb-2 text-2xl font-black text-white">
+                      {card.title}
+                    </h3>
 
-                  <span className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white backdrop-blur-sm">
-                    {card.cta}
-                  </span>
+                    <p className="mb-4 max-w-xs text-sm leading-relaxed text-white/90">
+                      {card.description}
+                    </p>
+
+                    <span className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white backdrop-blur-sm">
+                      {card.cta}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
-
       </div>
-    </div>
+    </section>
   );
 };
