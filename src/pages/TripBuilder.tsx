@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 type ActivityType = 'hike' | 'relax' | 'explore';
 type TripLength = 'half-day' | 'full-day' | 'weekend';
@@ -23,6 +24,15 @@ const tripLengthLabels: Record<TripLength, string> = {
   'full-day': 'Full day',
   weekend: 'Weekend',
 };
+
+function toTripSlug(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
 
 function buildTripPlan(
   location: string,
@@ -108,6 +118,8 @@ const TripBuilder: React.FC = () => {
   const plan = useMemo(() => {
     return buildTripPlan(location, hasKids, activity, length);
   }, [location, hasKids, activity, length]);
+
+  const tripSlug = toTripSlug(location);
 
   const handleBuildTrip = (e: React.FormEvent) => {
     e.preventDefault();
@@ -272,14 +284,27 @@ const TripBuilder: React.FC = () => {
                     ideas, and planning inspiration from Health & Travels.
                   </p>
 
-                  <a
-                    href="https://healthandtravels.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-3 font-semibold text-white transition hover:opacity-90"
-                  >
-                    Get Trip Ideas by Email
-                  </a>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <a
+                      href="https://healthandtravels.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-3 font-semibold text-white transition hover:opacity-90"
+                    >
+                      Get Trip Ideas by Email
+                    </a>
+
+                    <Link
+                      to={
+                        tripSlug
+                          ? `/chat?mode=arizona&trip=${tripSlug}`
+                          : '/chat?mode=arizona'
+                      }
+                      className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-6 py-3 font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+                    >
+                      Refine This Trip With Sage AI
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}
