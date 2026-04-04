@@ -44,9 +44,15 @@ function AppContent() {
     <div className="min-h-screen flex flex-col bg-white">
       {!hideSiteChrome && <Navbar />}
 
-      <main className="flex-grow pb-24">
-        <Routes>
-          <Route path="/" element={<Hero />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero />
+                <HowItWorks />
+              </>
+            }
+          />
           <Route path="/trip-builder" element={<TripBuilder />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
