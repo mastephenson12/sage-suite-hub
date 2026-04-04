@@ -7,10 +7,10 @@ import {
   Link,
 } from 'react-router-dom';
 
-import HowItWorks from './components/HowItWorks';
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
+import HowItWorks from './components/HowItWorks';
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
@@ -23,6 +23,15 @@ import Arizona from './pages/Arizona';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
+
+function HomePage() {
+  return (
+    <>
+      <Hero />
+      <HowItWorks />
+    </>
+  );
+}
 
 function AppContent() {
   const location = useLocation();
@@ -45,15 +54,9 @@ function AppContent() {
     <div className="min-h-screen flex flex-col bg-white">
       {!hideSiteChrome && <Navbar />}
 
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <HowItWorks />
-              </>
-            }
-          />
+      <main className="flex-grow pb-24">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/trip-builder" element={<TripBuilder />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
@@ -83,19 +86,19 @@ function AppContent() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
-                <Link to="/archive" className="hover:text-black transition-colors">
+                <Link to="/archive" className="transition-colors hover:text-black">
                   Archive
                 </Link>
-                <Link to="/trail-guides" className="hover:text-black transition-colors">
+                <Link to="/trail-guides" className="transition-colors hover:text-black">
                   Trails
                 </Link>
-                <Link to="/community" className="hover:text-black transition-colors">
+                <Link to="/community" className="transition-colors hover:text-black">
                   Community
                 </Link>
-                <Link to="/privacy-policy" className="hover:text-black transition-colors">
+                <Link to="/privacy-policy" className="transition-colors hover:text-black">
                   Privacy Policy
                 </Link>
-                <Link to="/terms-of-service" className="hover:text-black transition-colors">
+                <Link to="/terms-of-service" className="transition-colors hover:text-black">
                   Terms of Service
                 </Link>
               </div>
