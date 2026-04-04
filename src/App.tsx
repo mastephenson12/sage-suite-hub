@@ -7,6 +7,7 @@ import {
   Link,
 } from 'react-router-dom';
 
+import HowItWorks from './components/HowItWorks';
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
