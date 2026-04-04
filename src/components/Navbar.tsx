@@ -36,10 +36,10 @@ const Navbar: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <Link
-            to="/trip-builder"
+            to="/chat"
             className="hidden rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-zinc-800 transition-colors hover:bg-zinc-100 md:block"
           >
-            Trip Planner
+            Sage AI Planner
           </Link>
 
           <a
