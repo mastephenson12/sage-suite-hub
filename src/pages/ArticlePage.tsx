@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { articles } from '../data/articles';
+import { ARIZONA_DESTINATIONS } from '../data/viatorLinks';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
@@ -46,18 +47,22 @@ type AffiliateData = {
   buttonText: string;
 };
 
-const getAffiliateForArticle = (article: (typeof articles)[number]): AffiliateData | null => {
-  if (article.affiliate) {
-    return article.affiliate;
-  }
+const getAffiliateForArticle = (
+  article: (typeof articles)[number]
+): AffiliateData | null => {
+  // If article has custom affiliate, use it
+  if (article.affiliate) return article.affiliate;
 
+  // Pull from centralized Viator file
   if (article.id === 'sedona-family-adventure') {
+    const sedona = ARIZONA_DESTINATIONS.sedona;
+
     return {
-      title: 'Book the Antelope Canyon + Horseshoe Bend Tour',
+      title: sedona.label || 'Best Sedona Tours',
       description:
-        'Want an easier way to add an unforgettable experience to your Sedona adventure? This guided Viator tour helps you visit Antelope Canyon and Horseshoe Bend without piecing the whole thing together yourself.',
-      url: 'https://www.viator.com/tours/Sedona/Antelope-Canyon-and-Horseshoe-Bend-Tour/d750-3272P13?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=antelope-canyon-horseshoe-bend-sedona',
-      buttonText: 'View Tour on Viator',
+        'Skip the guesswork and book a top-rated Sedona experience. This helps you plug a proven adventure straight into your trip.',
+      url: sedona.tours,
+      buttonText: 'View Tour',
     };
   }
 
@@ -101,9 +106,9 @@ const ArticlePage: React.FC = () => {
           <div className="mx-auto max-w-4xl">
             <Link
               to="/archive"
-              className="group mb-6 inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"
+              className="group mb-6 inline-flex items-center gap-2 text-white/70 hover:text-white"
             >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               <span className="text-[10px] font-black uppercase tracking-[0.3em]">
                 Back to Archive
               </span>
@@ -113,7 +118,7 @@ const ArticlePage: React.FC = () => {
               {article.category}
             </span>
 
-            <h1 className="text-4xl font-black leading-[0.9] tracking-tighter text-white uppercase md:text-6xl">
+            <h1 className="text-4xl font-black tracking-tighter text-white uppercase md:text-6xl">
               {article.title}
             </h1>
           </div>
@@ -145,14 +150,14 @@ const ArticlePage: React.FC = () => {
 
           <button
             type="button"
-            className="ml-auto p-2 transition-colors hover:text-black"
+            className="ml-auto p-2 hover:text-black"
             aria-label="Share article"
           >
             <Share2 className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="markdown-body prose prose-zinc prose-lg max-w-none">
+        <div className="prose prose-zinc prose-lg max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {article.content}
           </ReactMarkdown>
@@ -164,11 +169,11 @@ const ArticlePage: React.FC = () => {
               Make It Easy
             </p>
 
-            <h3 className="text-2xl font-black tracking-tight text-zinc-900">
+            <h3 className="text-2xl font-black text-zinc-900">
               {affiliate.title}
             </h3>
 
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-700 md:text-base">
+            <p className="mt-3 text-sm text-zinc-700 md:text-base">
               {affiliate.description}
             </p>
 
@@ -176,7 +181,7 @@ const ArticlePage: React.FC = () => {
               href={affiliate.url}
               target="_blank"
               rel="noopener noreferrer sponsored"
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black"
+              className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-zinc-950 px-6 py-3 text-xs font-black uppercase tracking-widest text-white hover:bg-black"
             >
               {affiliate.buttonText}
               <ExternalLink className="h-4 w-4" />
@@ -188,34 +193,13 @@ const ArticlePage: React.FC = () => {
           </div>
         )}
 
-        <div className="mt-16 rounded-3xl border border-brand-primary/20 bg-brand-primary/5 p-10 text-center">
-          <h3 className="mb-4 text-lg font-black uppercase tracking-wider md:text-xl">
-            Let Sage Plan This Trip For You
-          </h3>
-
-          <p className="mx-auto mb-6 max-w-xl text-zinc-600">
-            Sage can build a complete adventure itinerary with hikes, restaurants,
-            scenic viewpoints, and local hidden spots.
-          </p>
-
+        <div className="mt-16 text-center">
           <Link
             to="/chat"
-            className="inline-flex items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-brand-dark"
+            className="inline-flex rounded-2xl bg-brand-primary px-8 py-4 text-xs font-black uppercase tracking-widest text-white"
           >
             Plan My Trip With Sage
           </Link>
-        </div>
-
-        <div className="relative mt-24 overflow-hidden rounded-[48px] border border-zinc-100 bg-zinc-50 p-12">
-          <div className="relative z-10">
-            <h3 className="mb-4 text-xs font-black uppercase tracking-[0.3em]">
-              Helpful Note
-            </h3>
-            <p className="font-serif text-sm italic leading-relaxed text-zinc-500">
-              Travel information can change with weather, seasonal conditions,
-              closures, and local updates. Always double-check details before your trip.
-            </p>
-          </div>
         </div>
       </div>
     </article>
