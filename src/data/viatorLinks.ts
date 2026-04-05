@@ -8,8 +8,8 @@ export type AffiliateSet = {
 export const ARIZONA_DESTINATIONS: Record<string, AffiliateSet> = {
   sedona: {
     tours:
-      'https://www.viator.com/partner-shop/healthandtravels/Sedona-2026?medium=link&medium_version=shop&campaign=Sedona',
-    label: 'Best Sedona Tours',
+      'https://www.viator.com/tours/Sedona/Antelope-Canyon-and-Horseshoe-Bend-Tour/d750-3272P13?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=antelope-canyon-horseshoe-bend-sedona',
+    label: 'Antelope Canyon + Horseshoe Bend Tour',
   },
 
   // Add more Arizona destinations here later:
