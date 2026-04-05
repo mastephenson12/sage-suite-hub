@@ -39,6 +39,31 @@ const ArticleHeroImage: React.FC<{ src?: string; alt: string }> = ({ src, alt })
   );
 };
 
+type AffiliateData = {
+  title: string;
+  description: string;
+  url: string;
+  buttonText: string;
+};
+
+const getAffiliateForArticle = (article: (typeof articles)[number]): AffiliateData | null => {
+  if (article.affiliate) {
+    return article.affiliate;
+  }
+
+  if (article.id === 'sedona-family-adventure') {
+    return {
+      title: 'Book the Antelope Canyon + Horseshoe Bend Tour',
+      description:
+        'Want an easier way to add an unforgettable experience to your Sedona adventure? This guided Viator tour helps you visit Antelope Canyon and Horseshoe Bend without piecing the whole thing together yourself.',
+      url: 'https://www.viator.com/tours/Sedona/Antelope-Canyon-and-Horseshoe-Bend-Tour/d750-3272P13?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=antelope-canyon-horseshoe-bend-sedona',
+      buttonText: 'View Tour on Viator',
+    };
+  }
+
+  return null;
+};
+
 const ArticlePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const article = articles.find((a) => a.id === id);
@@ -63,6 +88,8 @@ const ArticlePage: React.FC = () => {
       </div>
     );
   }
+
+  const affiliate = getAffiliateForArticle(article);
 
   return (
     <article className="min-h-screen bg-white pb-24">
@@ -131,27 +158,27 @@ const ArticlePage: React.FC = () => {
           </ReactMarkdown>
         </div>
 
-        {article.affiliate && (
+        {affiliate && (
           <div className="mt-14 rounded-[32px] border border-amber-200 bg-amber-50/70 p-8 md:p-10">
             <p className="mb-3 text-[11px] font-black uppercase tracking-[0.25em] text-amber-700">
               Make It Easy
             </p>
 
             <h3 className="text-2xl font-black tracking-tight text-zinc-900">
-              {article.affiliate.title}
+              {affiliate.title}
             </h3>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-700 md:text-base">
-              {article.affiliate.description}
+              {affiliate.description}
             </p>
 
             <a
-              href={article.affiliate.url}
+              href={affiliate.url}
               target="_blank"
               rel="noopener noreferrer sponsored"
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black"
             >
-              {article.affiliate.buttonText}
+              {affiliate.buttonText}
               <ExternalLink className="h-4 w-4" />
             </a>
 
