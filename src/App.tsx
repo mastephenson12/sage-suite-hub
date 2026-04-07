@@ -29,6 +29,7 @@ function HomePage() {
   return (
     <>
       <Hero />
+      <StartHere />
       <HowItWorks />
     </>
   );
