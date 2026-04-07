@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
 import HowItWorks from './components/HowItWorks';
+import StartHere from './components/StartHere';
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
