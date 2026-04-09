@@ -12,6 +12,7 @@ import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
 import HowItWorks from './components/HowItWorks';
 import StartHere from './components/StartHere';
+import FreedomBridge from './components/FreedomBridge';
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
@@ -30,6 +31,7 @@ function HomePage() {
     <>
       <Hero />
       <StartHere />
+      <FreedomBridge />
       <HowItWorks />
     </>
   );
