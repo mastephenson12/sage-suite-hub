@@ -31,8 +31,8 @@ function HomePage() {
     <>
       <Hero />
       <StartHere />
-      <FreedomBridge />
       <HowItWorks />
+      <FreedomBridge />
     </>
   );
 }
@@ -48,7 +48,7 @@ function AppContent() {
     }, 0);
 
     return () => window.clearTimeout(id);
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   const isChatPage = location.pathname === '/chat';
   const isSuitePage = location.pathname.startsWith('/suite');
