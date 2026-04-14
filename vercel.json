@@ -3,7 +3,7 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|vite\\.svg|assets/).*)",
       "destination": "/index.html"
     }
   ]
