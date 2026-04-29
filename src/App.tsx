@@ -13,6 +13,7 @@ import { Hero } from './components/Hero';
 import HowItWorks from './components/HowItWorks';
 import StartHere from './components/StartHere';
 import FreedomBridge from './components/FreedomBridge';
+
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
@@ -43,36 +44,42 @@ function AppContent() {
   React.useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 
-    const id = window.setTimeout(() => {
+    const timeoutId = window.setTimeout(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }, 0);
 
-    return () => window.clearTimeout(id);
+    return () => window.clearTimeout(timeoutId);
   }, [location.pathname, location.hash]);
 
-  const isChatPage = location.pathname === '/chat';
-  const isSuitePage = location.pathname.startsWith('/suite');
-  const hideSiteChrome = isChatPage || isSuitePage;
+  const hideSiteChrome =
+    location.pathname === '/chat' || location.pathname.startsWith('/suite');
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       {!hideSiteChrome && <Navbar />}
 
       <main className="flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />
+
           <Route path="/trip-builder" element={<TripBuilder />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
+
           <Route path="/archive" element={<Archive />} />
           <Route path="/archive/:id" element={<ArticlePage />} />
+
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
+
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
+
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+
+          <Route path="*" element={<HomePage />} />
         </Routes>
       </main>
 
@@ -84,6 +91,7 @@ function AppContent() {
                 <p className="mb-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
                   © {new Date().getFullYear()} Health & Travels Journal
                 </p>
+
                 <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-300">
                   Trip planning powered by Sage • Health & Travels
                 </p>
@@ -93,16 +101,32 @@ function AppContent() {
                 <Link to="/archive" className="transition-colors hover:text-black">
                   Archive
                 </Link>
-                <Link to="/trail-guides" className="transition-colors hover:text-black">
+
+                <Link
+                  to="/trail-guides"
+                  className="transition-colors hover:text-black"
+                >
                   Trails
                 </Link>
-                <Link to="/community" className="transition-colors hover:text-black">
+
+                <Link
+                  to="/community"
+                  className="transition-colors hover:text-black"
+                >
                   Community
                 </Link>
-                <Link to="/privacy-policy" className="transition-colors hover:text-black">
+
+                <Link
+                  to="/privacy-policy"
+                  className="transition-colors hover:text-black"
+                >
                   Privacy Policy
                 </Link>
-                <Link to="/terms-of-service" className="transition-colors hover:text-black">
+
+                <Link
+                  to="/terms-of-service"
+                  className="transition-colors hover:text-black"
+                >
                   Terms of Service
                 </Link>
               </div>
