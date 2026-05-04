@@ -31,6 +31,36 @@ import TripBuilder from './pages/TripBuilder';
 function HomePage() {
   return (
     <>
+      <SEOJsonLd
+        faqs={[
+          {
+            question: "What is Sage Health and Travels?",
+            answer:
+              "Sage Health and Travels is a family adventure planning tool that helps people explore Arizona hikes, road trips, outdoor destinations, and healthy travel ideas.",
+          },
+          {
+            question: "Who is Sage for?",
+            answer:
+              "Sage is built for families, friends, parents, and beginner adventurers who want easier ways to plan meaningful Arizona trips.",
+          },
+          {
+            question: "Can Sage help plan Arizona hikes with kids?",
+            answer:
+              "Yes. Sage focuses on family-friendly Arizona adventures, including beginner hikes, scenic stops, and road trip ideas that work well for kids and groups.",
+          },
+          {
+            question: "Does Sage only cover Arizona?",
+            answer:
+              "Sage currently focuses heavily on Arizona family adventures while also supporting broader healthy travel and trip planning ideas.",
+          },
+          {
+            question: "How does Sage connect with Health and Travels?",
+            answer:
+              "Sage is part of Health and Travels, a family-focused travel brand that helps people plan healthier adventures and discover outdoor destinations.",
+          },
+        ]}
+      />
+
       <Hero />
       <StartHere />
       <HowItWorks />
