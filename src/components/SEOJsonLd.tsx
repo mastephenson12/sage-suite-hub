@@ -27,21 +27,6 @@ export default function SEOJsonLd({
       name: "Health and Travels",
       url: "https://healthandtravels.com/",
     },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://sage.healthandtravels.com/#/search?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Health and Travels",
-    url: "https://healthandtravels.com/",
-    sameAs: [
-      "https://sage.healthandtravels.com/"
-    ],
   };
 
   const webPageSchema = {
@@ -75,6 +60,14 @@ export default function SEOJsonLd({
     ],
   };
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Health and Travels",
+    url: "https://healthandtravels.com/",
+    sameAs: ["https://sage.healthandtravels.com/"],
+  };
+
   const faqSchema =
     faqs.length > 0
       ? {
@@ -92,8 +85,8 @@ export default function SEOJsonLd({
       : null;
 
   const schemas = faqSchema
-    ? [websiteSchema, organizationSchema, webPageSchema, faqSchema]
-    : [websiteSchema, organizationSchema, webPageSchema];
+    ? [websiteSchema, webPageSchema, organizationSchema, faqSchema]
+    : [websiteSchema, webPageSchema, organizationSchema];
 
   return (
     <>
