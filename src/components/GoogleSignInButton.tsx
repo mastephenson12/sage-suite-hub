@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 
 import React from 'react';
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { auth } from "../firebase";
 
 declare global {
   interface Window {
