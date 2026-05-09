@@ -1,8 +1,7 @@
 /// <reference types="vite/client" />
 
 import React from "react";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import { auth, isFirebaseConfigured } from "../firebase";
+
 type GoogleCredentialResponse = {
   credential?: string;
   select_by?: string;
@@ -52,6 +51,7 @@ export default function GoogleSignInButton({
 }: GoogleSignInButtonProps) {
   const buttonRef = React.useRef<HTMLDivElement | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [isReady, setIsReady] = React.useState(false);
 
   React.useEffect(() => {
     if (!GOOGLE_CLIENT_ID) {
@@ -60,10 +60,6 @@ export default function GoogleSignInButton({
       onError?.(message);
       return;
     }
-
-    const existingScript = document.querySelector(
-      'script[src="https://accounts.google.com/gsi/client"]'
-    );
 
     const initializeGoogleButton = () => {
       if (!window.google || !buttonRef.current) {
@@ -84,6 +80,12 @@ export default function GoogleSignInButton({
           }
 
           try {
+            const [{ GoogleAuthProvider, signInWithCredential }, { auth }] =
+              await Promise.all([
+                import("firebase/auth"),
+                import("../firebase"),
+              ]);
+
             const firebaseCredential = GoogleAuthProvider.credential(
               response.credential
             );
@@ -101,7 +103,7 @@ export default function GoogleSignInButton({
             console.error("Firebase sign-in failed:", firebaseError);
 
             const message =
-              "Google sign-in worked, but Firebase login failed.";
+              "Google sign-in worked, but Firebase login failed. Check Firebase env variables and authorized domains.";
             setError(message);
             onError?.(message);
           }
@@ -118,7 +120,13 @@ export default function GoogleSignInButton({
         shape: "pill",
         logo_alignment: "left",
       });
+
+      setIsReady(true);
     };
+
+    const existingScript = document.querySelector(
+      'script[src="https://accounts.google.com/gsi/client"]'
+    );
 
     if (existingScript) {
       initializeGoogleButton();
@@ -140,8 +148,14 @@ export default function GoogleSignInButton({
   }, [onError, onSuccess]);
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-2">
       <div ref={buttonRef} />
+
+      {!isReady && !error && (
+        <p className="text-xs font-medium text-zinc-500">
+          Loading Google sign-in...
+        </p>
+      )}
 
       {error && (
         <p className="max-w-sm text-center text-xs font-medium text-red-600">
