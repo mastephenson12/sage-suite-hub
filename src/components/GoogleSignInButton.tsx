@@ -2,8 +2,7 @@
 
 import React from "react";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import { auth } from "../firebase";
-
+import { auth, isFirebaseConfigured } from "../firebase";
 type GoogleCredentialResponse = {
   credential?: string;
   select_by?: string;
