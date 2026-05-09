@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from '../constants';
+import React from "react";
+import { Link } from "react-router-dom";
+import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from "../constants";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 const Navbar: React.FC = () => {
   return (
@@ -25,9 +26,14 @@ const Navbar: React.FC = () => {
             <Link to="/archive" className="transition-colors hover:text-black">
               Archive
             </Link>
-            <Link to="/trail-guides" className="transition-colors hover:text-black">
+
+            <Link
+              to="/trail-guides"
+              className="transition-colors hover:text-black"
+            >
               Trail Guides
             </Link>
+
             <Link to="/community" className="transition-colors hover:text-black">
               Community
             </Link>
@@ -42,6 +48,10 @@ const Navbar: React.FC = () => {
             Sage AI Planner
           </Link>
 
+          <div className="hidden md:block">
+            <GoogleSignInButton />
+          </div>
+
           <a
             href={SUBSCRIBE_URL}
             target="_blank"
@@ -51,6 +61,10 @@ const Navbar: React.FC = () => {
             Get Trip Ideas
           </a>
         </div>
+      </div>
+
+      <div className="mt-3 flex justify-center px-6 md:hidden">
+        <GoogleSignInButton />
       </div>
     </nav>
   );
