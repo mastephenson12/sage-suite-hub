@@ -80,8 +80,21 @@ export default function GoogleSignInButton({
             return;
           }
 
-          setError(null);
-          onSuccess?.(response.credential);
+          try {
+  const firebaseCredential = GoogleAuthProvider.credential(response.credential);
+  const userCredential = await signInWithCredential(auth, firebaseCredential);
+
+  setError(null);
+  onSuccess?.(response.credential);
+
+  console.log("Signed into Firebase as:", userCredential.user.email);
+} catch (firebaseError) {
+  console.error("Firebase sign-in failed:", firebaseError);
+
+  const message = "Google sign-in worked, but Firebase login failed.";
+  setError(message);
+  onError?.(message);
+}
         },
       });
 
