@@ -72,7 +72,7 @@ export default function GoogleSignInButton({
 
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
-        callback: (response: GoogleCredentialResponse) => {
+        callback: async (response: GoogleCredentialResponse) => {
           if (!response.credential) {
             const message = 'No Google credential returned.';
             setError(message);
