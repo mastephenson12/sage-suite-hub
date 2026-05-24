@@ -76,6 +76,57 @@ function HomePage() {
   );
 }
 
+function LoginPage() {
+  return (
+    <section className="min-h-[70vh] bg-gradient-to-b from-emerald-50 to-white px-6 py-20">
+      <div className="mx-auto max-w-3xl rounded-3xl border border-emerald-100 bg-white p-8 text-center shadow-sm md:p-12">
+        <p className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-emerald-600">
+          Sage Account
+        </p>
+
+        <h1 className="mb-5 text-3xl font-black tracking-tight text-zinc-950 md:text-5xl">
+          Save your Arizona adventure plans soon.
+        </h1>
+
+        <p className="mx-auto mb-8 max-w-2xl text-base leading-8 text-zinc-600 md:text-lg">
+          Sage accounts will let you save trip ideas, favorite hikes, build
+          weekend plans, and come back later without starting over like a poor
+          soul trapped in tab chaos.
+        </p>
+
+        <div className="mb-8 rounded-2xl border border-zinc-100 bg-zinc-50 p-5 text-left">
+          <p className="mb-3 text-sm font-black uppercase tracking-widest text-zinc-500">
+            Coming next
+          </p>
+
+          <ul className="space-y-3 text-sm font-medium leading-6 text-zinc-700">
+            <li>• Save trip plans</li>
+            <li>• Favorite Arizona hikes</li>
+            <li>• Build family-friendly weekend ideas</li>
+            <li>• Connect free Sage accounts to Arizona Hikers Association later</li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col justify-center gap-4 sm:flex-row">
+          <Link
+            to="/trip-builder"
+            className="rounded-full bg-emerald-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:bg-emerald-700"
+          >
+            Use Trip Builder
+          </Link>
+
+          <Link
+            to="/community"
+            className="rounded-full border border-zinc-200 px-6 py-3 text-sm font-black uppercase tracking-widest text-zinc-700 transition hover:border-zinc-400 hover:text-black"
+          >
+            See Community
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function AppContent() {
   const location = useLocation();
 
@@ -100,7 +151,12 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
 
+          {/* Keep this public until Google/Firebase login works */}
           <Route path="/trip-builder" element={<TripBuilder />} />
+
+          {/* Temporary login page. No Firebase protection yet. */}
+          <Route path="/login" element={<LoginPage />} />
+
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
 
@@ -152,6 +208,13 @@ function AppContent() {
                   className="transition-colors hover:text-black"
                 >
                   Community
+                </Link>
+
+                <Link
+                  to="/login"
+                  className="transition-colors hover:text-black"
+                >
+                  My Sage
                 </Link>
 
                 <Link
