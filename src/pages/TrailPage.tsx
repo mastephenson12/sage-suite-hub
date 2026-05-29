@@ -19,7 +19,7 @@ import {
   getSafetyCardClasses,
   getTrailPageSafety,
   toTripSlug,
-} from '../utils/sage/tripFlow';
+} from '../utils/sage';
 
 const TrailHeroImage: React.FC<{ src?: string; alt: string }> = ({
   src,
