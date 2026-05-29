@@ -19,7 +19,7 @@ import {
   seasonLabels,
   toTripSlug,
   tripLengthLabels,
-} from '../utils/sage/tripFlow';
+} from '../utils/sage';
 
 function fromSlug(value: string | null): string {
   if (!value) return '';
