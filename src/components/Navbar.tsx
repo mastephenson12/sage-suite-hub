@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from "../constants";
-import GoogleSignInButton from "./GoogleSignInButton";
 
 const Navbar: React.FC = () => {
   return (
@@ -48,9 +47,12 @@ const Navbar: React.FC = () => {
             Sage AI Planner
           </Link>
 
-          <div className="hidden md:block">
-            <GoogleSignInButton />
-          </div>
+          <Link
+            to="/trip-builder"
+            className="hidden rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-emerald-800 transition-colors hover:bg-emerald-100 sm:block"
+          >
+            Build My Trip
+          </Link>
 
           <a
             href={SUBSCRIBE_URL}
@@ -61,10 +63,6 @@ const Navbar: React.FC = () => {
             Get Trip Ideas
           </a>
         </div>
-      </div>
-
-      <div className="mt-3 flex justify-center px-6 md:hidden">
-        <GoogleSignInButton />
       </div>
     </nav>
   );
