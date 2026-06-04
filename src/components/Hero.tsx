@@ -4,21 +4,21 @@ import { Link } from 'react-router-dom';
 const arizonaCards = [
   {
     title: 'Sedona',
-    description: 'Red rock hikes, jeep tours, and easy family adventure ideas.',
+    description: 'Red rock hikes, scenic stops, and family-friendly day plans.',
     image: '/images/sedona-family.avif',
     to: '/archive/sedona-family-adventure',
     cta: 'View Sedona Guide',
   },
   {
     title: 'Grand Canyon',
-    description: 'Scenic overlooks, simple rim walks, and unforgettable family views.',
+    description: 'Simple rim walks, overlook strategy, and safer family timing.',
     image: '/images/grand-canyon.avif',
     to: '/archive/grand-canyon-family-adventure',
     cta: 'View Grand Canyon Guide',
   },
   {
     title: 'Flagstaff',
-    description: 'Cool mountain air, pine forests, lava caves, and weekend escape ideas.',
+    description: 'Cool mountain air, pine forests, lava caves, and weekend ideas.',
     image: '/images/flagstaff-family-adventure.avif',
     to: '/archive/flagstaff-family-escape',
     cta: 'View Flagstaff Guide',
@@ -38,20 +38,22 @@ export const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
       </div>
 
-      <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-16 md:pb-20 md:pt-24">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-14 md:pb-20 md:pt-20">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="max-w-3xl">
-            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
-              Health & Travels + Sage
+            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
+              Sage Arizona Trip Planner
             </p>
 
             <h1 className="max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-6xl">
-              Plan Better Arizona Trips With Your Family
+              Plan a Safer, Easier Arizona Adventure With Your Family
             </h1>
 
-            <p className="mt-6 max-w-2xl font-serif text-lg italic leading-relaxed text-zinc-500 md:text-xl">
-              Skip the endless tabs and wasted research. Tell Sage what kind of
-              trip you want and get simple Arizona ideas built for real family life.
+            <p className="mt-6 max-w-2xl font-serif text-lg italic leading-relaxed text-zinc-600 md:text-xl">
+              Tell Sage where you want to go, who is coming, and how adventurous
+              you feel. Sage helps you choose trails, towns, food stops, lodging
+              ideas, and safety tips without making you open 47 tabs like a
+              doomed vacation detective.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -59,45 +61,56 @@ export const Hero: React.FC = () => {
                 to="/trip-builder"
                 className="inline-flex items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95"
               >
-                Start Planning
+                Build My Trip
+              </Link>
+
+              <Link
+                to="/chat"
+                className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+              >
+                Ask Sage AI
               </Link>
 
               <Link
                 to="/arizona"
                 className="inline-flex items-center justify-center rounded-2xl border border-zinc-300 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-50"
               >
-                Explore Arizona
+                Explore Guides
               </Link>
             </div>
 
             <div className="mt-8 grid gap-3 text-sm text-zinc-600 sm:grid-cols-3">
               <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
-                Family-friendly ideas
+                Family-friendly trail ideas
               </div>
               <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
-                Hikes, towns, and day trips
+                Food, lodging, and timing
               </div>
               <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
-                Less planning stress
+                Heat and safety reminders
               </div>
             </div>
           </div>
 
           <div className="rounded-[2rem] border border-zinc-200 bg-white/90 p-6 shadow-sm backdrop-blur">
             <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
-              Built for busy parents
+              Start with one simple flow
             </p>
 
             <h2 className="mt-3 text-2xl font-black tracking-tight text-black md:text-3xl">
-              Less time researching.
-              <br />
-              More time making memories.
+              Your Arizona plan should answer the basics first.
             </h2>
 
             <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-600">
-              <p>No bouncing between 15 tabs trying to figure out what is worth doing.</p>
-              <p>No overcomplicated planning for a weekend trip your kids may melt down halfway through anyway.</p>
-              <p>Just simple ideas, helpful guides, and an easier way to choose your next Arizona adventure.</p>
+              <p>
+                Where are we going? What can the kids handle? When is it too hot?
+                Where do we eat? Where should we stay?
+              </p>
+              <p>
+                Sage turns those normal questions into a starter plan instead of a
+                research spiral, because apparently family trips should not require
+                a project manager and three weather apps.
+              </p>
             </div>
 
             <Link
