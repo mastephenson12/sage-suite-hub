@@ -49,10 +49,12 @@ export async function POST(req: Request) {
     const ai = new GoogleGenAI({ apiKey });
 
     const siteLinks = {
-      scoutPortal: "https://sage.healthandtravels.com/#/chat",
-      archive: "https://sage.healthandtravels.com/#/archive",
-      trails: "https://sage.healthandtravels.com/#/trail-guides",
-      arizona: "https://sage.healthandtravels.com/#/arizona",
+      scoutPortal: "https://sage.healthandtravels.com/chat",
+      archive: "https://sage.healthandtravels.com/archive",
+      trails: "https://sage.healthandtravels.com/trail-guides",
+      arizona: "https://sage.healthandtravels.com/arizona",
+      tripBuilder: "https://sage.healthandtravels.com/trip-builder",
+      community: "https://sage.healthandtravels.com/community",
     };
 
     const affiliateLinks = {
@@ -108,9 +110,15 @@ export async function POST(req: Request) {
       },
       {
         topic: "road trip",
-        label: "Archive",
-        title: "Browse trip inspiration and destination guides",
-        url: siteLinks.archive,
+        label: "Trip Builder",
+        title: "Build a custom Arizona trip plan",
+        url: siteLinks.tripBuilder,
+      },
+      {
+        topic: "community",
+        label: "Community",
+        title: "Join the Arizona adventure community",
+        url: siteLinks.community,
       },
     ];
 
@@ -133,7 +141,8 @@ export async function POST(req: Request) {
             .slice(0, 4)
             .map((item) => `- ${item.label}: ${item.title} — ${item.url}`)
             .join("\n")
-        : `- Archive: Browse destination guides — ${siteLinks.archive}
+        : `- Trip Builder: Build a custom Arizona trip plan — ${siteLinks.tripBuilder}
+- Archive: Browse destination guides — ${siteLinks.archive}
 - Trail Guides: Explore Arizona trail guides — ${siteLinks.trails}
 - Arizona: Explore Arizona trip ideas — ${siteLinks.arizona}`;
 
@@ -165,7 +174,7 @@ Your role:
 - You are the GUIDE layer, not the hard-sell layer.
 - Help users plan trips anywhere in the world, with especially strong expertise in Arizona.
 - Personalize trips, explain options, and guide users toward the best next step.
-- When useful, point users toward Health & Travels internal pages like Archive, Trail Guides, Arizona, or the Scout Portal.
+- When useful, point users toward Health & Travels internal pages like Archive, Trail Guides, Arizona, Trip Builder, or the Scout Portal.
 
 Your tone:
 - warm
@@ -189,7 +198,7 @@ Important business behavior:
 - Do not push Beehiiv post URLs as the main call to action.
 - When relevant, end with a short section called "Helpful next steps" and include 1 to 3 internal Health & Travels links.
 - Use internal links naturally, not in every response.
-- Treat Archive and Trail Guides as places where users can continue planning and find actionable resources.
+- Treat Archive, Trail Guides, Trip Builder, and Arizona as places where users can continue planning and find actionable resources.
 - Scout should feel helpful first, commercial second.
 
 Affiliate behavior:
