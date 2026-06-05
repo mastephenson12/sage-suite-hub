@@ -49,6 +49,38 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sage.healthandtravels.com/arizona/show-low</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/pinetop-lakeside</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/bisbee</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/williams</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/cottonwood</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/jerome</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/lake-havasu</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sage.healthandtravels.com/arizona/yuma</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sage.healthandtravels.com/trail-guides</loc>
     <priority>0.8</priority>
   </url>
