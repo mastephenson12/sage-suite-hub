@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOJsonLd from '../components/SEOJsonLd';
-import { arizonaDestinations } from '../data/arizonaDestinations';
+import { allArizonaDestinations } from '../data/allArizonaDestinations';
 
 const arizonaFaqs = [
   {
@@ -17,7 +17,7 @@ const arizonaFaqs = [
   {
     question: 'Which Arizona destinations are good for families?',
     answer:
-      'Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and the Grand Canyon all work well for families when the plan matches the season and hiking level.',
+      'Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, Grand Canyon, Show Low, Pinetop-Lakeside, Bisbee, Williams, Cottonwood, Jerome, Lake Havasu, and Yuma can all work well when the plan matches the season and hiking level.',
   },
 ];
 
@@ -26,7 +26,7 @@ const Arizona: React.FC = () => {
     <main className="min-h-screen bg-white text-zinc-900">
       <SEOJsonLd
         title="Arizona Family Adventure Guides | Sage Health and Travels"
-        description="Explore Arizona family adventure guides for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and Grand Canyon with trails, food, stays, and safety tips."
+        description="Explore Arizona family adventure guides for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, Grand Canyon, Show Low, Pinetop-Lakeside, Bisbee, Williams, Cottonwood, Jerome, Lake Havasu, and Yuma."
         url="https://sage.healthandtravels.com/arizona"
         faqs={arizonaFaqs}
       />
@@ -76,7 +76,7 @@ const Arizona: React.FC = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {arizonaDestinations.map((destination) => (
+          {allArizonaDestinations.map((destination) => (
             <Link
               key={destination.slug}
               to={`/arizona/${destination.slug}`}
