@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { arizonaDestinations } from '../data/arizonaDestinations';
+import { allArizonaDestinations } from '../data/allArizonaDestinations';
 
 type PopularArizonaGuidesProps = {
   compact?: boolean;
@@ -25,7 +25,7 @@ export default function PopularArizonaGuides({ compact = false }: PopularArizona
         </div>
 
         <div className={compact ? 'grid gap-3 sm:grid-cols-2' : 'grid gap-4 sm:grid-cols-2 lg:grid-cols-4'}>
-          {arizonaDestinations.map((destination) => (
+          {allArizonaDestinations.map((destination) => (
             <Link
               key={destination.slug}
               to={`/arizona/${destination.slug}`}
