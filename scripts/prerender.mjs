@@ -134,6 +134,134 @@ const destinations = [
       },
     ],
   },
+  {
+    slug: 'show-low',
+    name: 'Show Low',
+    faqs: [
+      {
+        question: 'Is Show Low good for a family summer trip?',
+        answer:
+          'Yes. Show Low is a good summer escape because it offers cooler mountain air, lakes, and pine-country activities.',
+      },
+      {
+        question: 'What is a simple Show Low family plan?',
+        answer:
+          'Start with a lake or forest walk, add lunch in town, then keep the afternoon flexible for weather and tired humans.',
+      },
+    ],
+  },
+  {
+    slug: 'pinetop-lakeside',
+    name: 'Pinetop-Lakeside',
+    faqs: [
+      {
+        question: 'Is Pinetop-Lakeside good for kids?',
+        answer:
+          'Yes. It is especially useful for easy lake days, cabin stays, short walks, and cooler family weekends.',
+      },
+      {
+        question: 'What should families do first in Pinetop-Lakeside?',
+        answer:
+          'Start with Woodland Lake Park or an easy forest walk, then build the day around food, rest, and weather.',
+      },
+    ],
+  },
+  {
+    slug: 'bisbee',
+    name: 'Bisbee',
+    faqs: [
+      {
+        question: 'Is Bisbee good for a family weekend?',
+        answer:
+          'Yes, especially for families who like walkable towns, history, cafes, and quirky Arizona scenery.',
+      },
+      {
+        question: 'Is Bisbee more hiking or town exploring?',
+        answer:
+          'Bisbee is mostly town exploring, stairs, overlooks, and historic wandering rather than a classic trail-focused destination.',
+      },
+    ],
+  },
+  {
+    slug: 'williams',
+    name: 'Williams',
+    faqs: [
+      {
+        question: 'Is Williams a good place to stay for Grand Canyon trips?',
+        answer:
+          'Yes. Williams is a practical family base for Grand Canyon visits, especially if lodging near the rim is limited or expensive.',
+      },
+      {
+        question: 'What can families do in Williams besides Grand Canyon?',
+        answer:
+          'Families can explore Route 66, forest areas, short walks, casual restaurants, and scenic drives around town.',
+      },
+    ],
+  },
+  {
+    slug: 'cottonwood',
+    name: 'Cottonwood',
+    faqs: [
+      {
+        question: 'Is Cottonwood a good base for Sedona?',
+        answer:
+          'Yes. Cottonwood can be a practical base for families who want Verde Valley lodging, food, and easier access to several nearby towns.',
+      },
+      {
+        question: 'What should families do first in Cottonwood?',
+        answer:
+          'Start with Dead Horse Ranch State Park or a Verde River area, then visit Old Town for food and an easy walk.',
+      },
+    ],
+  },
+  {
+    slug: 'jerome',
+    name: 'Jerome',
+    faqs: [
+      {
+        question: 'Is Jerome good for families?',
+        answer:
+          'Yes, if your family likes historic towns, views, shops, and short walks more than long hikes.',
+      },
+      {
+        question: 'How long should families spend in Jerome?',
+        answer:
+          'A half-day works well for most families, especially when paired with Cottonwood or another Verde Valley stop.',
+      },
+    ],
+  },
+  {
+    slug: 'lake-havasu',
+    name: 'Lake Havasu',
+    faqs: [
+      {
+        question: 'Is Lake Havasu good for a family trip?',
+        answer:
+          'Yes, especially for families who want lake time, water activities, parks, and warm-weather fun with careful heat planning.',
+      },
+      {
+        question: 'What is the easiest Lake Havasu family activity?',
+        answer:
+          'A waterfront walk near London Bridge plus park time or a simple lake activity is an easy starter plan.',
+      },
+    ],
+  },
+  {
+    slug: 'yuma',
+    name: 'Yuma',
+    faqs: [
+      {
+        question: 'Is Yuma good for beginner outdoor trips?',
+        answer:
+          'Yes, especially in cooler months when families can enjoy riverfront walks, parks, and short desert outings.',
+      },
+      {
+        question: 'When is the best time for a family trip to Yuma?',
+        answer:
+          'Fall, winter, and spring are usually better for outdoor family plans because summer heat can be intense.',
+      },
+    ],
+  },
 ];
 
 const arizonaFaqs = [
@@ -150,7 +278,7 @@ const arizonaFaqs = [
   {
     question: 'Which Arizona destinations are good for families?',
     answer:
-      'Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and the Grand Canyon all work well for families when the plan matches the season and hiking level.',
+      'Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, Grand Canyon, Show Low, Pinetop-Lakeside, Bisbee, Williams, Cottonwood, Jerome, Lake Havasu, and Yuma can all work well when the plan matches the season and hiking level.',
   },
 ];
 
@@ -270,7 +398,7 @@ const baseHtml = await readFile(indexPath, 'utf8');
 const arizonaHtml = applySeo(baseHtml, {
   title: 'Arizona Family Adventure Guides | Sage Health and Travels',
   description:
-    'Explore Arizona family adventure guides for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and Grand Canyon with trails, food, stays, and safety tips.',
+    'Explore Arizona family adventure guides for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, Grand Canyon, Show Low, Pinetop-Lakeside, Bisbee, Williams, Cottonwood, Jerome, Lake Havasu, and Yuma with trails, food, stays, and safety tips.',
   url: `${siteUrl}/arizona`,
   faqs: arizonaFaqs,
 });
