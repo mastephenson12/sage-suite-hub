@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SEOJsonLd from '../components/SEOJsonLd';
-import { getArizonaDestination } from '../data/arizonaDestinations';
+import { getAllArizonaDestination } from '../data/allArizonaDestinations';
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -18,7 +18,7 @@ function BulletList({ items }: { items: string[] }) {
 
 export default function ArizonaDestinationPage() {
   const { slug } = useParams();
-  const destination = getArizonaDestination(slug);
+  const destination = getAllArizonaDestination(slug);
 
   if (!destination) {
     return (
