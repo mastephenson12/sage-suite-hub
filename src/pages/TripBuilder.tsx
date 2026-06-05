@@ -58,17 +58,18 @@ const TripBuilder: React.FC = () => {
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <div className="mb-10 max-w-3xl">
           <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
-            Sage Trip Planner
+            Sage Trip Builder
           </p>
 
           <h1 className="mb-4 text-4xl font-black tracking-tight md:text-6xl">
-            Build a smarter Arizona trip in a few clicks
+            Build a safer Arizona adventure plan in a few clicks
           </h1>
 
           <p className="text-lg leading-relaxed text-zinc-600 md:text-xl">
             Tell Sage where you want to go, who is coming, and what kind of day
-            you want. You will get a simple Arizona plan with outdoor flow, food
-            timing, safety notes, and room for real humans to get tired.
+            you want. You will get a simple starter plan with outdoor flow, food
+            timing, safety notes, and next steps that do not require a travel
+            committee, because civilization has suffered enough.
           </p>
         </div>
 
@@ -87,7 +88,7 @@ const TripBuilder: React.FC = () => {
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Sedona, Flagstaff, Phoenix..."
+                  placeholder="Sedona, Flagstaff, Phoenix, Payson..."
                   className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                 />
               </div>
@@ -182,9 +183,9 @@ const TripBuilder: React.FC = () => {
 
             {!submitted && (
               <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm leading-relaxed text-zinc-500">
-                This is where your morning, midday, afternoon, and Arizona safety
-                flow will appear. Tiny miracle: it will not suggest seven stops
-                before lunch like a deranged itinerary robot.
+                Your plan will include a morning flow, midday reset, afternoon
+                idea, safety notes, helpful extras, and a next step for refining
+                the trip.
               </div>
             )}
 
@@ -227,21 +228,21 @@ const TripBuilder: React.FC = () => {
 
                 <div className="rounded-2xl bg-zinc-50 p-5">
                   <h3 className="mb-2 text-sm font-black uppercase tracking-[0.15em] text-zinc-500">
-                    Morning
+                    Morning outdoor flow
                   </h3>
                   <p className="leading-relaxed text-zinc-700">{plan.morning}</p>
                 </div>
 
                 <div className="rounded-2xl bg-zinc-50 p-5">
                   <h3 className="mb-2 text-sm font-black uppercase tracking-[0.15em] text-zinc-500">
-                    Midday
+                    Midday food and reset
                   </h3>
                   <p className="leading-relaxed text-zinc-700">{plan.midday}</p>
                 </div>
 
                 <div className="rounded-2xl bg-zinc-50 p-5">
                   <h3 className="mb-2 text-sm font-black uppercase tracking-[0.15em] text-zinc-500">
-                    Afternoon
+                    Afternoon option
                   </h3>
                   <p className="leading-relaxed text-zinc-700">
                     {plan.afternoon}
@@ -265,33 +266,40 @@ const TripBuilder: React.FC = () => {
 
                 <div className="rounded-3xl border border-zinc-200 bg-white p-6">
                   <h3 className="mb-2 text-xl font-black">
-                    Want the full version?
+                    Make this trip easier to finish
                   </h3>
                   <p className="mb-4 leading-relaxed text-zinc-700">
-                    Get the fuller trip version with extra stops, food ideas,
-                    family-friendly options, and planning inspiration from Health
-                    & Travels.
+                    Use Sage AI to refine the plan, get more Health & Travels trip
+                    ideas by email, or join the Arizona Hikers Association if you
+                    want monthly ideas, community, and more reasons to get outside.
                   </p>
 
-                  <div className="flex flex-col gap-3 sm:flex-row">
-                    <a
-                      href="https://healthandtravels.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-3 font-semibold text-white transition hover:opacity-90"
-                    >
-                      Get Trip Ideas by Email
-                    </a>
-
+                  <div className="grid gap-3 sm:grid-cols-3">
                     <Link
                       to={
                         tripSlug
                           ? `/chat?mode=arizona&trip=${tripSlug}`
                           : '/chat?mode=arizona'
                       }
-                      className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-6 py-3 font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+                      className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-5 py-3 text-center text-sm font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
                     >
-                      Refine This Trip With Sage AI
+                      Refine With Sage AI
+                    </Link>
+
+                    <a
+                      href="https://healthandtravels.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
+                    >
+                      Get Trip Ideas by Email
+                    </a>
+
+                    <Link
+                      to="/community"
+                      className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
+                    >
+                      Join Arizona Hikers
                     </Link>
                   </div>
                 </div>
