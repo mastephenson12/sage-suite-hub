@@ -1,10 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SEOJsonLd from '../components/SEOJsonLd';
 import { arizonaDestinations } from '../data/arizonaDestinations';
+
+const arizonaFaqs = [
+  {
+    question: 'What is the best way to plan an Arizona family adventure?',
+    answer:
+      'Start with the destination, choose outdoor activities first, add food and lodging nearby, and check heat, elevation, and trail difficulty before you go.',
+  },
+  {
+    question: 'Can Sage help me choose beginner-friendly Arizona hikes?',
+    answer:
+      'Yes. Sage is built to help families and beginner adventurers compare destinations, easy trails, timing, food stops, and safety notes.',
+  },
+  {
+    question: 'Which Arizona destinations are good for families?',
+    answer:
+      'Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and the Grand Canyon all work well for families when the plan matches the season and hiking level.',
+  },
+];
 
 const Arizona: React.FC = () => {
   return (
     <main className="min-h-screen bg-white text-zinc-900">
+      <SEOJsonLd
+        title="Arizona Family Adventure Guides | Sage Health and Travels"
+        description="Explore Arizona family adventure guides for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and Grand Canyon with trails, food, stays, and safety tips."
+        url="https://sage.healthandtravels.com/arizona"
+        faqs={arizonaFaqs}
+      />
+
       <section className="bg-gradient-to-b from-orange-50 to-white px-6 py-16 md:py-24">
         <div className="mx-auto max-w-6xl">
           <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-orange-600">
