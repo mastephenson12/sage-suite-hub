@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SEOJsonLd from '../components/SEOJsonLd';
+import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
 
 function BulletList({ items }: { items: string[] }) {
@@ -172,6 +173,8 @@ export default function ArizonaDestinationPage() {
           </div>
         </div>
       </section>
+
+      <RelatedArizonaGuides currentSlug={destination.slug} />
 
       <section className="px-6 py-16">
         <div className="mx-auto max-w-4xl rounded-[2rem] border border-zinc-200 bg-white p-8 text-center shadow-sm md:p-12">
