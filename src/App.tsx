@@ -27,6 +27,7 @@ import ArticlePage from './pages/ArticlePage';
 import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
 import ArizonaDestinationPage from './pages/ArizonaDestinationPage';
+import DesertHikingSafety from './pages/DesertHikingSafety';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
@@ -116,6 +117,7 @@ function AppContent() {
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
+          <Route path="/arizona/desert-hiking-safety" element={<DesertHikingSafety />} />
           <Route path="/arizona/:slug" element={<ArizonaDestinationPage />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
