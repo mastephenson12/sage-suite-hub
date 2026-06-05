@@ -15,6 +15,7 @@ import StartHere from './components/StartHere';
 import FreedomBridge from './components/FreedomBridge';
 import SEOJsonLd from './components/SEOJsonLd';
 import HomeFAQ from './components/HomeFAQ';
+import PopularArizonaGuides from './components/PopularArizonaGuides';
 
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
@@ -70,6 +71,7 @@ function HomePage() {
 
       <Hero />
       <StartHere />
+      <PopularArizonaGuides />
       <HowItWorks />
       <FreedomBridge />
       <HomeFAQ />
@@ -147,6 +149,13 @@ function AppContent() {
                   className="transition-colors hover:text-black"
                 >
                   Trails
+                </Link>
+
+                <Link
+                  to="/arizona"
+                  className="transition-colors hover:text-black"
+                >
+                  Arizona Guides
                 </Link>
 
                 <Link
