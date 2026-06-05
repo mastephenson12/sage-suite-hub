@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 type FAQItem = {
   question: string;
   answer: string;
@@ -10,12 +12,65 @@ type SEOJsonLdProps = {
   faqs?: FAQItem[];
 };
 
+function setMetaTag(name: string, content: string) {
+  let tag = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
+
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.setAttribute('name', name);
+    document.head.appendChild(tag);
+  }
+
+  tag.setAttribute('content', content);
+}
+
+function setPropertyMetaTag(property: string, content: string) {
+  let tag = document.querySelector<HTMLMetaElement>(
+    `meta[property="${property}"]`
+  );
+
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.setAttribute('property', property);
+    document.head.appendChild(tag);
+  }
+
+  tag.setAttribute('content', content);
+}
+
+function setCanonical(url: string) {
+  let link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    document.head.appendChild(link);
+  }
+
+  link.setAttribute('href', url);
+}
+
 export default function SEOJsonLd({
   title = 'Sage | Family Trip Planning for Arizona and Beyond',
   description = 'Sage helps families and friends plan Arizona adventures, discover beginner-friendly hikes, explore road trip ideas, and build healthier travel memories together.',
   url = 'https://sage.healthandtravels.com/',
   faqs = [],
 }: SEOJsonLdProps) {
+  useEffect(() => {
+    document.title = title;
+    setMetaTag('description', description);
+    setCanonical(url);
+
+    setPropertyMetaTag('og:title', title);
+    setPropertyMetaTag('og:description', description);
+    setPropertyMetaTag('og:url', url);
+    setPropertyMetaTag('og:type', 'website');
+
+    setMetaTag('twitter:card', 'summary_large_image');
+    setMetaTag('twitter:title', title);
+    setMetaTag('twitter:description', description);
+  }, [title, description, url]);
+
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
