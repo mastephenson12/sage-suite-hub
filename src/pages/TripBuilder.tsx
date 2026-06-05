@@ -8,6 +8,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react';
+import PopularArizonaGuides from '../components/PopularArizonaGuides';
 import {
   ActivityType,
   TripLength,
@@ -306,6 +307,10 @@ const TripBuilder: React.FC = () => {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="mt-14 rounded-[2rem] border border-zinc-200 bg-zinc-50 p-6 md:p-8">
+          <PopularArizonaGuides compact />
         </div>
       </section>
     </main>
