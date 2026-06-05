@@ -1,63 +1,100 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-const destinations = [
-  {
-    title: 'Sedona',
-    description: 'Red rock hikes, jeep tours, and family adventures.',
-    to: '/archive/sedona-family-adventure',
-    cta: 'View Sedona Guide',
-  },
-  {
-    title: 'Grand Canyon',
-    description: 'Scenic overlooks, rim walks, and unforgettable family views.',
-    to: '/archive/grand-canyon-family-adventure',
-    cta: 'View Grand Canyon Guide',
-  },
-  {
-    title: 'Flagstaff',
-    description: 'Pine forests, lava caves, scenic drives, and cool mountain air.',
-    to: '/archive/flagstaff-family-escape',
-    cta: 'View Flagstaff Guide',
-  },
-];
+import { arizonaDestinations } from '../data/arizonaDestinations';
 
 const Arizona: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white py-20">
-      <div className="max-w-5xl mx-auto px-6">
-        <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500">
-          Arizona Adventures
-        </p>
+    <main className="min-h-screen bg-white text-zinc-900">
+      <section className="bg-gradient-to-b from-orange-50 to-white px-6 py-16 md:py-24">
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-orange-600">
+            Arizona Adventure Guide Hub
+          </p>
 
-        <h1 className="mb-6 text-4xl font-black uppercase tracking-tight md:text-6xl">
-          Explore Arizona
-        </h1>
+          <h1 className="mb-6 max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">
+            Choose Your Arizona Trailhead
+          </h1>
 
-        <p className="mb-12 max-w-2xl text-lg text-zinc-500">
-          Choose a destination and let Sage help you plan the perfect trip.
-        </p>
+          <p className="mb-8 max-w-3xl text-lg leading-8 text-zinc-600 md:text-xl">
+            Start with a destination, then let Sage help you build the day: outdoor
+            activities first, food nearby, places to stay, and safety notes for
+            real families who do not want their weekend trip to become a cautionary
+            tale in cargo shorts.
+          </p>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {destinations.map((destination) => (
-            <div key={destination.title} className="rounded-3xl border p-6">
-              <h2 className="mb-3 text-xl font-black">{destination.title}</h2>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              to="/trip-builder"
+              className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
+            >
+              Build a Custom Trip
+            </Link>
+            <Link
+              to="/chat?mode=arizona"
+              className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-7 py-4 text-sm font-black uppercase tracking-widest text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+            >
+              Ask Sage AI
+            </Link>
+          </div>
+        </div>
+      </section>
 
-              <p className="mb-4 text-sm text-zinc-500">
-                {destination.description}
+      <section className="mx-auto max-w-6xl px-6 py-14">
+        <div className="mb-8">
+          <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-zinc-400">
+            Destination Landing Pages
+          </p>
+          <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+            Arizona places to explore first
+          </h2>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {arizonaDestinations.map((destination) => (
+            <Link
+              key={destination.slug}
+              to={`/arizona/${destination.slug}`}
+              className="group flex h-full flex-col rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-orange-200 hover:shadow-lg"
+            >
+              <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
+                {destination.bestFor[0]}
               </p>
-
-              <Link
-                to={destination.to}
-                className="inline-flex items-center justify-center rounded-xl bg-brand-primary px-5 py-3 text-xs font-black uppercase text-white"
-              >
-                {destination.cta}
-              </Link>
-            </div>
+              <h3 className="mb-3 text-2xl font-black tracking-tight text-zinc-950">
+                {destination.name}
+              </h3>
+              <p className="mb-5 flex-grow text-sm leading-7 text-zinc-600">
+                {destination.tagline}
+              </p>
+              <span className="inline-flex text-sm font-black uppercase tracking-widest text-zinc-900 transition group-hover:text-orange-600">
+                Open Guide →
+              </span>
+            </Link>
           ))}
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section className="bg-zinc-50 px-6 py-16">
+        <div className="mx-auto max-w-5xl rounded-[2rem] bg-white p-8 text-center shadow-sm md:p-12">
+          <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-zinc-400">
+            Keep Going
+          </p>
+          <h2 className="mb-4 text-3xl font-black tracking-tight md:text-4xl">
+            Want monthly Arizona ideas and a community nudge?
+          </h2>
+          <p className="mx-auto mb-8 max-w-2xl text-base leading-8 text-zinc-600">
+            Join Arizona Hikers Association for beginner-friendly ideas, local
+            inspiration, and more reasons to get outside instead of letting another
+            weekend disappear into chores and screen sludge.
+          </p>
+          <Link
+            to="/community"
+            className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-emerald-700"
+          >
+            Join Arizona Hikers
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 };
 
