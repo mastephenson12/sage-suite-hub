@@ -149,6 +149,26 @@ export default function ArizonaDestinationPage() {
             Family safety notes for {destination.name}
           </h2>
           <BulletList items={destination.safetyTips} />
+
+          <div className="mt-6 rounded-2xl border border-orange-200 bg-white p-5">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-orange-600">
+              Desert Safety First
+            </p>
+            <h3 className="mb-2 text-xl font-black tracking-tight text-zinc-950">
+              New to Arizona desert hiking?
+            </h3>
+            <p className="mb-4 text-sm leading-7 text-zinc-700">
+              Review the Arizona Desert Hiking Safety Guide before you go. It covers
+              water planning, heat warning signs, timing, kid rules, and essential
+              gear so the desert does not become the trip planner.
+            </p>
+            <Link
+              to="/arizona/desert-hiking-safety"
+              className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-5 py-3 text-xs font-black uppercase tracking-widest text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+            >
+              Read the Safety Guide
+            </Link>
+          </div>
         </div>
       </section>
 
