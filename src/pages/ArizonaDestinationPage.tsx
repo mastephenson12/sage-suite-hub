@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import SEOJsonLd from '../components/SEOJsonLd';
 import { getArizonaDestination } from '../data/arizonaDestinations';
 
 function BulletList({ items }: { items: string[] }) {
@@ -22,6 +23,11 @@ export default function ArizonaDestinationPage() {
   if (!destination) {
     return (
       <main className="min-h-screen bg-white px-6 py-20">
+        <SEOJsonLd
+          title="Arizona Guide Not Found | Sage Health and Travels"
+          description="This Arizona destination guide is not available yet. Browse Sage Arizona guides or build a custom family trip plan."
+          url="https://sage.healthandtravels.com/arizona"
+        />
         <section className="mx-auto max-w-3xl text-center">
           <p className="mb-4 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
             Trail marker missing
@@ -43,8 +49,19 @@ export default function ArizonaDestinationPage() {
     );
   }
 
+  const pageTitle = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
+  const pageDescription = `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
+  const pageUrl = `https://sage.healthandtravels.com/arizona/${destination.slug}`;
+
   return (
     <main className="min-h-screen bg-white text-zinc-900">
+      <SEOJsonLd
+        title={pageTitle}
+        description={pageDescription}
+        url={pageUrl}
+        faqs={destination.faqs}
+      />
+
       <section className="bg-gradient-to-b from-orange-50 to-white px-6 py-16 md:py-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
