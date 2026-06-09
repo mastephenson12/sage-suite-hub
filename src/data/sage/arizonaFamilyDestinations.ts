@@ -1,4 +1,4 @@
-import { SageDestination } from '../../utils/sage/familyAdventureScoring';
+import type { SageDestination } from '../../utils/sage/familyAdventureScoring';
 
 export const arizonaFamilyDestinations: SageDestination[] = [
   {
