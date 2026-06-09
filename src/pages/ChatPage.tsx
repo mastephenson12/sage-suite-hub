@@ -3,6 +3,7 @@ import ChatInterface from '../components/ChatInterface';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ARIZONA_DESTINATIONS, type AffiliateSet } from '../data/viatorLinks';
+import { chatTripPrompts } from '../data/sage/chatTripPrompts';
 
 type Mode = 'general' | 'flights' | 'camping' | 'lodging' | 'arizona';
 
@@ -160,7 +161,8 @@ const ChatPage: React.FC = () => {
   }, [mode, tripFromQuery]);
 
   const currentInitialMessage =
-    (tripFromQuery && TRIP_PROMPTS[tripFromQuery]) || INITIAL_MESSAGES[mode];
+    (tripFromQuery && (chatTripPrompts[tripFromQuery] || TRIP_PROMPTS[tripFromQuery])) ||
+    INITIAL_MESSAGES[mode];
 
   const currentLinks = destinationAffiliate || AFFILIATE_LINKS[mode];
 
