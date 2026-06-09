@@ -4,6 +4,8 @@ import {
   Baby,
   CalendarDays,
   Car,
+  CheckCircle2,
+  Copy,
   MapPin,
   Mountain,
   ShieldCheck,
@@ -44,22 +46,101 @@ const kidAgeGroupLabels: Record<KidAgeGroup, string> = {
 
 const driveTimeOptions = [30, 60, 90, 120, 180, 240];
 
+const activityOptions: ActivityType[] = ['hike', 'explore', 'relax'];
+const tripLengthOptions: TripLength[] = ['half-day', 'full-day', 'weekend'];
+const seasonOptions: TripSeason[] = ['spring', 'summer', 'fall', 'winter'];
+const kidAgeGroupOptions: KidAgeGroup[] = [
+  'toddlers',
+  'elementary',
+  'mixed',
+  'teens',
+];
+
+const destinationPresets = [
+  {
+    label: 'Sedona with kids',
+    location: 'Sedona',
+    activity: 'explore' as ActivityType,
+    season: 'spring' as TripSeason,
+  },
+  {
+    label: 'Cool Flagstaff day',
+    location: 'Flagstaff',
+    activity: 'hike' as ActivityType,
+    season: 'summer' as TripSeason,
+  },
+  {
+    label: 'Phoenix easy morning',
+    location: 'Phoenix',
+    activity: 'relax' as ActivityType,
+    season: 'winter' as TripSeason,
+  },
+  {
+    label: 'Payson weekend',
+    location: 'Payson',
+    activity: 'explore' as ActivityType,
+    season: 'summer' as TripSeason,
+  },
+];
+
+function readChoice<T extends string>(
+  value: string | null,
+  options: readonly T[],
+  fallback: T
+): T {
+  return value && options.includes(value as T) ? (value as T) : fallback;
+}
+
+function readBoolean(value: string | null, fallback: boolean): boolean {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+
+  return fallback;
+}
+
+function readDriveMinutes(value: string | null): number {
+  const parsed = Number(value);
+
+  return driveTimeOptions.includes(parsed) ? parsed : 90;
+}
+
 const TripBuilder: React.FC = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const initialLocation = fromSlug(searchParams.get('location'));
 
   const [location, setLocation] = useState(initialLocation);
-  const [hasKids, setHasKids] = useState('yes');
-  const [activity, setActivity] = useState<ActivityType>('explore');
-  const [length, setLength] = useState<TripLength>('full-day');
-  const [season, setSeason] = useState<TripSeason>('spring');
-  const [kidAgeGroup, setKidAgeGroup] = useState<KidAgeGroup>('elementary');
-  const [wantsShade, setWantsShade] = useState(true);
-  const [needsBathrooms, setNeedsBathrooms] = useState(true);
-  const [needsStrollerAccess, setNeedsStrollerAccess] = useState(false);
-  const [maxDriveMinutes, setMaxDriveMinutes] = useState(90);
-  const [submitted, setSubmitted] = useState(false);
+  const [hasKids, setHasKids] = useState(
+    readChoice(searchParams.get('kids'), ['yes', 'no'], 'yes')
+  );
+  const [activity, setActivity] = useState<ActivityType>(
+    readChoice(searchParams.get('activity'), activityOptions, 'explore')
+  );
+  const [length, setLength] = useState<TripLength>(
+    readChoice(searchParams.get('length'), tripLengthOptions, 'full-day')
+  );
+  const [season, setSeason] = useState<TripSeason>(
+    readChoice(searchParams.get('season'), seasonOptions, 'spring')
+  );
+  const [kidAgeGroup, setKidAgeGroup] = useState<KidAgeGroup>(
+    readChoice(searchParams.get('ages'), kidAgeGroupOptions, 'elementary')
+  );
+  const [wantsShade, setWantsShade] = useState(
+    readBoolean(searchParams.get('shade'), true)
+  );
+  const [needsBathrooms, setNeedsBathrooms] = useState(
+    readBoolean(searchParams.get('bathrooms'), true)
+  );
+  const [needsStrollerAccess, setNeedsStrollerAccess] = useState(
+    readBoolean(searchParams.get('stroller'), false)
+  );
+  const [maxDriveMinutes, setMaxDriveMinutes] = useState(
+    readDriveMinutes(searchParams.get('drive'))
+  );
+  const [submitted, setSubmitted] = useState(
+    searchParams.get('plan') === 'ready'
+  );
+  const [copied, setCopied] = useState(false);
 
   const plan = useMemo(() => {
     return buildTripPlan(location, hasKids, activity, length, season);
@@ -93,10 +174,72 @@ const TripBuilder: React.FC = () => {
 
   const tripSlug = toTripSlug(location);
 
+  const shareParams = useMemo(() => {
+    const params = new URLSearchParams();
+
+    params.set('plan', 'ready');
+    if (tripSlug) params.set('location', tripSlug);
+    params.set('kids', hasKids);
+    params.set('activity', activity);
+    params.set('length', length);
+    params.set('season', season);
+    params.set('ages', kidAgeGroup);
+    params.set('shade', String(wantsShade));
+    params.set('bathrooms', String(needsBathrooms));
+    params.set('stroller', String(needsStrollerAccess));
+    params.set('drive', String(maxDriveMinutes));
+
+    return params;
+  }, [
+    activity,
+    hasKids,
+    kidAgeGroup,
+    length,
+    maxDriveMinutes,
+    needsBathrooms,
+    needsStrollerAccess,
+    season,
+    tripSlug,
+    wantsShade,
+  ]);
+
+  const sharePath = `/trip-builder?${shareParams.toString()}`;
+
+  const tripBrief = useMemo(() => {
+    const topMatches = familyMatches
+      .map(
+        (match, index) =>
+          `${index + 1}. ${match.name} (${match.score}%): ${match.parentTip}`
+      )
+      .join('\n');
+
+    return [
+      plan.title,
+      plan.intro,
+      `Safety: ${plan.safety.title} — ${plan.safety.suggestion}`,
+      `Morning: ${plan.morning}`,
+      `Midday: ${plan.midday}`,
+      `Afternoon: ${plan.afternoon}`,
+      `Top Sage matches:\n${topMatches}`,
+      `Helpful extras: ${plan.extras.join(' | ')}`,
+    ].join('\n\n');
+  }, [familyMatches, plan]);
+
   const handleBuildTrip = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    setSearchParams(shareParams, { replace: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCopyTripBrief = async () => {
+    const url = `${window.location.origin}${sharePath}`;
+
+    await navigator.clipboard.writeText(
+      `${tripBrief}\n\nOpen this Sage plan: ${url}`
+    );
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -137,6 +280,23 @@ const TripBuilder: React.FC = () => {
                   placeholder="Sedona, Flagstaff, Phoenix, Payson..."
                   className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                 />
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {destinationPresets.map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => {
+                        setLocation(preset.location);
+                        setActivity(preset.activity);
+                        setSeason(preset.season);
+                      }}
+                      className="rounded-full border border-zinc-200 bg-white px-3 py-2 text-xs font-bold text-zinc-600 transition hover:border-orange-300 hover:text-orange-600"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -147,7 +307,7 @@ const TripBuilder: React.FC = () => {
                   </label>
                   <select
                     value={hasKids}
-                    onChange={(e) => setHasKids(e.target.value)}
+                    onChange={(e) => setHasKids(e.target.value as 'yes' | 'no')}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                   >
                     <option value="yes">Family with kids</option>
@@ -318,6 +478,41 @@ const TripBuilder: React.FC = () => {
 
             {submitted && (
               <div className="mt-8 space-y-5">
+                <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5">
+                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+                        Shareable plan
+                      </p>
+                      <p className="text-sm font-semibold text-zinc-600">
+                        Save the link or copy the trip brief for your group chat.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleCopyTripBrief}
+                      className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-white transition hover:bg-zinc-700"
+                    >
+                      {copied ? (
+                        <>
+                          <CheckCircle2 className="h-4 w-4" />
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-4 w-4" />
+                          Copy brief
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-3 text-sm font-semibold text-zinc-600">
+                    {sharePath}
+                  </div>
+                </div>
+
                 <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                     <div>
