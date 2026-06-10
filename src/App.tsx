@@ -10,6 +10,7 @@ import {
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
+import FamilyConfidencePanel from './components/FamilyConfidencePanel';
 import HowItWorks from './components/HowItWorks';
 import StartHere from './components/StartHere';
 import FreedomBridge from './components/FreedomBridge';
@@ -72,6 +73,7 @@ function HomePage() {
       />
 
       <Hero />
+      <FamilyConfidencePanel />
       <StartHere />
       <PopularArizonaGuides />
       <SeasonalPlanningPanel />
