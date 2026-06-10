@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const arizonaCards = [
   {
@@ -25,7 +25,56 @@ const arizonaCards = [
   },
 ];
 
+const destinationOptions = [
+  { label: 'Sedona', value: 'sedona', activity: 'explore', season: 'spring' },
+  { label: 'Flagstaff', value: 'flagstaff', activity: 'hike', season: 'summer' },
+  { label: 'Payson', value: 'payson', activity: 'explore', season: 'summer' },
+  { label: 'Phoenix', value: 'phoenix', activity: 'relax', season: 'winter' },
+  { label: 'Tucson', value: 'tucson', activity: 'explore', season: 'winter' },
+  { label: 'Not sure yet', value: '', activity: 'explore', season: 'spring' },
+];
+
+const groupOptions = [
+  { label: 'Toddlers / preschoolers', value: 'toddlers' },
+  { label: 'Elementary-age kids', value: 'elementary' },
+  { label: 'Mixed family group', value: 'mixed' },
+  { label: 'Tweens / teens', value: 'teens' },
+  { label: 'Adults only', value: 'adults' },
+];
+
+const priorityOptions = [
+  { label: 'Easy trail + bathrooms', value: 'bathrooms', shade: true, bathrooms: true, stroller: false, length: 'half-day' },
+  { label: 'Shade + low stress', value: 'shade', shade: true, bathrooms: true, stroller: false, length: 'full-day' },
+  { label: 'Stroller-friendly', value: 'stroller', shade: true, bathrooms: true, stroller: true, length: 'half-day' },
+  { label: 'Cool-weather escape', value: 'cool', shade: true, bathrooms: false, stroller: false, length: 'full-day' },
+  { label: 'Weekend adventure', value: 'weekend', shade: true, bathrooms: true, stroller: false, length: 'weekend' },
+];
+
 export const Hero: React.FC = () => {
+  const navigate = useNavigate();
+  const [destination, setDestination] = useState(destinationOptions[0]);
+  const [group, setGroup] = useState(groupOptions[1]);
+  const [priority, setPriority] = useState(priorityOptions[0]);
+
+  const handleQuickPlan = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const params = new URLSearchParams();
+    params.set('plan', 'ready');
+    if (destination.value) params.set('location', destination.value);
+    params.set('kids', group.value === 'adults' ? 'no' : 'yes');
+    params.set('activity', destination.activity);
+    params.set('length', priority.length);
+    params.set('season', destination.season);
+    params.set('ages', group.value === 'adults' ? 'mixed' : group.value);
+    params.set('shade', String(priority.shade));
+    params.set('bathrooms', String(priority.bathrooms));
+    params.set('stroller', String(priority.stroller));
+    params.set('drive', destination.value === 'flagstaff' || destination.value === 'tucson' ? '180' : '120');
+
+    navigate(`/trip-builder?${params.toString()}`);
+  };
+
   return (
     <section className="relative overflow-hidden border-b border-zinc-100 bg-white">
       <div className="absolute inset-0 -z-10">
@@ -39,87 +88,152 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-14 md:pb-20 md:pt-20">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
             <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
               Sage Arizona Trip Planner
             </p>
 
             <h1 className="max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-6xl">
-              Plan a Safer, Easier Arizona Adventure With Your Family
+              Plan a Safer Arizona Family Adventure in Minutes
             </h1>
 
             <p className="mt-6 max-w-2xl font-serif text-lg italic leading-relaxed text-zinc-600 md:text-xl">
-              Tell Sage where you want to go, who is coming, and how adventurous
-              you feel. Sage helps you choose trails, towns, food stops, lodging
-              ideas, and safety tips without making you open 47 tabs like a
-              doomed vacation detective.
+              Pick where you want to go, who is coming, and what matters most.
+              Sage turns that into a starter plan with outdoor ideas, food stops,
+              lodging direction, bathroom notes, shade warnings, and timing help,
+              because family trips should not require 47 tabs and a tactical binder.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link
-                to="/trip-builder"
+              <a
+                href="#quick-plan"
                 className="inline-flex items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95"
               >
-                Build My Trip
-              </Link>
-
-              <Link
-                to="/chat"
-                className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
-              >
-                Ask Sage AI
-              </Link>
+                Plan My Arizona Trip
+              </a>
 
               <Link
                 to="/arizona"
-                className="inline-flex items-center justify-center rounded-2xl border border-zinc-300 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-50"
+                className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
               >
-                Explore Guides
+                Explore Family Guides
               </Link>
             </div>
 
             <div className="mt-8 grid gap-3 text-sm text-zinc-600 sm:grid-cols-3">
               <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
-                Family-friendly trail ideas
+                ✅ Kid-fit trail ideas
               </div>
               <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
-                Food, lodging, and timing
+                🚻 Bathroom + shade notes
               </div>
               <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
-                Heat and safety reminders
+                🍽️ Food and backup plans
               </div>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-zinc-200 bg-white/90 p-6 shadow-sm backdrop-blur">
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
-              Start with one simple flow
+          <form
+            id="quick-plan"
+            onSubmit={handleQuickPlan}
+            className="rounded-[2rem] border border-zinc-200 bg-white/95 p-6 shadow-sm backdrop-blur md:p-8"
+          >
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
+              Start here
             </p>
 
             <h2 className="mt-3 text-2xl font-black tracking-tight text-black md:text-3xl">
-              Your Arizona plan should answer the basics first.
+              Get a starter plan in 3 quick choices.
             </h2>
 
-            <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-600">
-              <p>
-                Where are we going? What can the kids handle? When is it too hot?
-                Where do we eat? Where should we stay?
-              </p>
-              <p>
-                Sage turns those normal questions into a starter plan instead of a
-                research spiral, because apparently family trips should not require
-                a project manager and three weather apps.
-              </p>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-600">
+              This sends you to the full Sage Trip Builder with your answers already
+              loaded. Fancy? No. Useful? Tragically, yes.
+            </p>
+
+            <div className="mt-6 space-y-5">
+              <label className="block">
+                <span className="mb-2 block text-sm font-black text-zinc-900">
+                  1. Where are you headed?
+                </span>
+                <select
+                  value={destination.value}
+                  onChange={(event) => {
+                    const nextDestination = destinationOptions.find(
+                      (option) => option.value === event.target.value
+                    );
+                    if (nextDestination) setDestination(nextDestination);
+                  }}
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                >
+                  {destinationOptions.map((option) => (
+                    <option key={option.label} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-black text-zinc-900">
+                  2. Who is coming?
+                </span>
+                <select
+                  value={group.value}
+                  onChange={(event) => {
+                    const nextGroup = groupOptions.find(
+                      (option) => option.value === event.target.value
+                    );
+                    if (nextGroup) setGroup(nextGroup);
+                  }}
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                >
+                  {groupOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-black text-zinc-900">
+                  3. What matters most?
+                </span>
+                <select
+                  value={priority.value}
+                  onChange={(event) => {
+                    const nextPriority = priorityOptions.find(
+                      (option) => option.value === event.target.value
+                    );
+                    if (nextPriority) setPriority(nextPriority);
+                  }}
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                >
+                  {priorityOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <button
+                type="submit"
+                className="inline-flex w-full items-center justify-center rounded-2xl bg-black px-8 py-4 text-base font-black uppercase tracking-[0.12em] text-white transition hover:bg-zinc-800 active:scale-[0.99]"
+              >
+                Build My Starter Plan
+              </button>
             </div>
 
-            <Link
-              to="/trip-builder"
-              className="mt-6 inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-6 py-3 text-sm font-black uppercase tracking-[0.15em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
-            >
-              Build My Trip
-            </Link>
-          </div>
+            <div className="mt-6 grid gap-2 text-xs font-bold text-zinc-600 sm:grid-cols-2">
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🌤 Best time notes</span>
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🚗 Drive fit</span>
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🥪 Food nearby</span>
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🧯 Safety reminders</span>
+            </div>
+          </form>
         </div>
 
         <div className="mt-14">
