@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
 import FamilyConfidencePanel from './components/FamilyConfidencePanel';
+import TripBuilderResultEnhancer from './components/TripBuilderResultEnhancer';
 import HowItWorks from './components/HowItWorks';
 import StartHere from './components/StartHere';
 import FreedomBridge from './components/FreedomBridge';
@@ -84,6 +85,15 @@ function HomePage() {
   );
 }
 
+function TripBuilderPage() {
+  return (
+    <>
+      <TripBuilder />
+      <TripBuilderResultEnhancer />
+    </>
+  );
+}
+
 function AppContent() {
   const location = useLocation();
 
@@ -107,7 +117,7 @@ function AppContent() {
       <main className="flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/trip-builder" element={<TripBuilder />} />
+          <Route path="/trip-builder" element={<TripBuilderPage />} />
 
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
