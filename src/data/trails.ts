@@ -10,6 +10,8 @@ export interface Trail {
   image?: string;
   description: string;
   intel: string;
+  allTrailsUrl?: string;
+  allTrailsTrailId?: number;
 }
 
 export const trails: Trail[] = [
@@ -23,6 +25,8 @@ export const trails: Trail[] = [
     time: '2-3 hours',
     rating: 4.8,
     image: '/images/devils-bridge.avif',
+    allTrailsUrl: 'https://www.alltrails.com/trail/us/arizona/devils-bridge-trail',
+    allTrailsTrailId: 10031989,
     description: 'The largest natural sandstone arch in the Sedona area. A must-see for any explorer visiting the Red Rock Country.',
     intel: `
 # Devil's Bridge Intel Report
@@ -47,6 +51,8 @@ The energy at the bridge is intense. Spend 5 minutes at the base of the arch bef
     time: '2-4 hours',
     rating: 4.7,
     image: '/images/camelback-mountain.avif',
+    allTrailsUrl: 'https://www.alltrails.com/trail/us/arizona/camelback-mountain-via-echo-canyon-trail',
+    allTrailsTrailId: 10027407,
     description: 'A challenging climb to the highest point in Phoenix. Offers 360-degree views of the Valley of the Sun.',
     intel: `
 # Camelback Mountain Intel Report
@@ -71,6 +77,8 @@ The summit is a perfect place for "horizon scanning"—a technique used to reduc
     time: '6-8 hours',
     rating: 4.9,
     image: '/images/humphreys-peak.avif',
+    allTrailsUrl: 'https://www.alltrails.com/trail/us/arizona/humphreys-peak',
+    allTrailsTrailId: 10028575,
     description: 'The highest point in Arizona. An alpine adventure that takes you above the tree line into a different world.',
     intel: `
 # Humphreys Peak Intel Report
@@ -95,6 +103,8 @@ The alpine tundra at the top is one of the few places in the Southwest where you
     time: '4-6 hours',
     rating: 4.9,
     image: '/images/flatiron.avif',
+    allTrailsUrl: 'https://www.alltrails.com/trail/us/arizona/flatiron-via-siphon-draw-trail',
+    allTrailsTrailId: 10244443,
     description: 'A legendary climb in the Superstition Mountains. A sheer rock face that rewards you with the best views in the state.',
     intel: `
 # Flatiron Intel Report
