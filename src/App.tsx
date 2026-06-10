@@ -16,6 +16,7 @@ import FreedomBridge from './components/FreedomBridge';
 import SEOJsonLd from './components/SEOJsonLd';
 import HomeFAQ from './components/HomeFAQ';
 import PopularArizonaGuides from './components/PopularArizonaGuides';
+import SeasonalPlanningPanel from './components/SeasonalPlanningPanel';
 
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
@@ -73,6 +74,7 @@ function HomePage() {
       <Hero />
       <StartHere />
       <PopularArizonaGuides />
+      <SeasonalPlanningPanel />
       <HowItWorks />
       <FreedomBridge />
       <HomeFAQ />
