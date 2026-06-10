@@ -4,7 +4,7 @@ import {
   Car,
   Clock,
   CloudSun,
-  MapPinned,
+  MapPin,
   ShieldCheck,
   Soup,
   Trees,
@@ -79,7 +79,7 @@ const FamilyConfidencePanel: React.FC = () => {
 
             <div className="mt-7 rounded-3xl border border-orange-200 bg-white p-5 shadow-sm">
               <div className="mb-3 flex items-center gap-3">
-                <MapPinned className="h-5 w-5 text-orange-500" />
+                <MapPin className="h-5 w-5 text-orange-500" />
                 <h3 className="text-lg font-black text-zinc-900">
                   Not sure where to go?
                 </h3>
