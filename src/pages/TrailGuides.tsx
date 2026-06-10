@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { trails, Trail } from '../data/trails';
-import { MapPin, Star, Clock, Mountain, Sparkles } from 'lucide-react';
+import { MapPin, Star, Clock, Mountain, Sparkles, ExternalLink } from 'lucide-react';
 import { getTrailImage } from '../utils/getTrailImage';
 
 const TrailCardImage: React.FC<{ trail: Trail }> = ({ trail }) => {
@@ -36,7 +36,7 @@ const difficultyClasses: Record<Trail['difficulty'], string> = {
 };
 
 const buildTrailScoutPrompt = (trail: Trail) => {
-  return `Help me plan a trip around this Arizona trail: ${trail.name} in ${trail.location}. Include best timing, family-friendliness, parking, what to pack, and nearby places to eat or stay.`;
+  return `Help me plan a trip around this Arizona trail: ${trail.name} in ${trail.location}. Include best timing, family-friendliness, parking, what to pack, nearby places to eat or stay, and remind me to check the AllTrails route page before I go.`;
 };
 
 const TrailGuides: React.FC = () => {
@@ -55,7 +55,7 @@ const TrailGuides: React.FC = () => {
         </h1>
 
         <p className="mx-auto max-w-xl text-sm italic font-serif text-zinc-500 md:text-base">
-          Verified routes, elevation data, and family-ready Arizona hiking ideas.
+          Verified routes, elevation data, family-ready Arizona hiking ideas, and quick AllTrails links for map and review checks.
         </p>
       </header>
 
@@ -131,12 +131,26 @@ const TrailGuides: React.FC = () => {
                 </div>
 
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <Link
-                    to={`/trail-guides/${trail.id}`}
-                    className="text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors hover:text-black"
-                  >
-                    Read Trail Guide →
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                      to={`/trail-guides/${trail.id}`}
+                      className="text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors hover:text-black"
+                    >
+                      Read Trail Guide →
+                    </Link>
+
+                    {trail.allTrailsUrl && (
+                      <a
+                        href={trail.allTrailsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 transition-colors hover:text-emerald-800"
+                      >
+                        Map & Reviews
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
 
                   <Link
                     to={`/chat?prompt=${encodeURIComponent(
