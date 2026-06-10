@@ -57,7 +57,7 @@ Then open http://localhost:5173 in your browser to see SageSuite!
 You must provide a Gemini API Key to power the AI features. Create a `.env` file or add this to your deployment settings:
 
 ```env
-API_KEY=your_google_gemini_api_key_here
+GEMINI_API_KEY=your_google_gemini_api_key_here
 ```
 
 ### 5. Deploy to the Web
