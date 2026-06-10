@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import {
   ArrowLeft,
   Clock,
+  ExternalLink,
   Info,
   MapPin,
   Mountain,
@@ -327,20 +328,55 @@ const TrailPage: React.FC = () => {
                     </li>
                   </ul>
 
-                  <Link
-                    to={
-                      tripSlug
-                        ? `/trip-builder?location=${tripSlug}`
-                        : '/trip-builder'
-                    }
-                    className="mt-12 inline-flex w-full items-center justify-center rounded-2xl bg-white py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black transition-colors hover:bg-zinc-200"
-                  >
-                    Build A Trip Around This
-                  </Link>
+                  <div className="mt-12 space-y-3">
+                    <Link
+                      to={
+                        tripSlug
+                          ? `/trip-builder?location=${tripSlug}`
+                          : '/trip-builder'
+                      }
+                      className="inline-flex w-full items-center justify-center rounded-2xl bg-white py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black transition-colors hover:bg-zinc-200"
+                    >
+                      Build A Trip Around This
+                    </Link>
+
+                    {trail.allTrailsUrl && (
+                      <a
+                        href={trail.allTrailsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+                      >
+                        View Map & Reviews
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
                 </div>
 
                 <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-accent/10 blur-3xl" />
               </div>
+
+              {trail.allTrailsUrl && (
+                <div className="rounded-[32px] border border-emerald-200 bg-emerald-50 p-6">
+                  <h3 className="mb-2 text-xl font-black tracking-tight text-zinc-950">
+                    Check live trail details
+                  </h3>
+                  <p className="mb-5 text-sm leading-relaxed text-zinc-700">
+                    Sage gives the family-first plan. AllTrails helps confirm recent reviews, route notes, and navigation before everyone starts negotiating snack terms.
+                  </p>
+
+                  <a
+                    href={trail.allTrailsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white transition hover:opacity-90"
+                  >
+                    Open on AllTrails
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </div>
+              )}
 
               <div className="rounded-[32px] border border-orange-200 bg-orange-50 p-6">
                 <h3 className="mb-2 text-xl font-black tracking-tight text-zinc-950">
