@@ -5,7 +5,7 @@ import {
   CalendarCheck,
   CheckCircle2,
   Clock3,
-  MapPinned,
+  MapPin,
   MessageCircle,
   ShieldCheck,
   Sparkles,
@@ -133,7 +133,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-white hover:text-zinc-950"
               >
-                <MapPinned className="h-4 w-4" />
+                <MapPin className="h-4 w-4" />
                 More Trip Ideas
               </a>
             </div>
