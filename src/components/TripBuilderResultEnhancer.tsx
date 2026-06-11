@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
+import SaveTripPlanCard from './SaveTripPlanCard';
 import { trackEvent } from '../utils/analytics';
 
 function prettify(value: string | null, fallback: string): string {
@@ -86,6 +87,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
   const tripLength = prettify(searchParams.get('length'), 'Family Outing');
   const hasKids = searchParams.get('kids') !== 'no';
   const ageGroup = prettify(searchParams.get('ages'), 'Mixed Ages');
+  const groupLabel = hasKids ? ageGroup : 'Adults only';
   const wantsShade = searchParams.get('shade') !== 'false';
   const needsBathrooms = searchParams.get('bathrooms') !== 'false';
   const currentTripUrl =
@@ -134,7 +136,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
     `${location} family adventure plan`,
     `Timing: ${season}`,
     `Trip style: ${tripLength}`,
-    `Group: ${hasKids ? ageGroup : 'Adults only'}`,
+    `Group: ${groupLabel}`,
     `Confidence score: ${safeConfidenceScore}%`,
     wantsShade ? 'Shade: prioritized' : 'Shade: flexible',
     needsBathrooms ? 'Bathrooms: prioritized' : 'Bathrooms: optional',
@@ -319,6 +321,17 @@ const TripBuilderResultEnhancer: React.FC = () => {
                 {copied ? 'Trip Summary Copied' : 'Copy Trip Summary'}
               </button>
             </article>
+
+            <SaveTripPlanCard
+              destination={location}
+              season={season}
+              tripLength={tripLength}
+              groupLabel={groupLabel}
+              confidenceScore={safeConfidenceScore}
+              wantsShade={wantsShade}
+              needsBathrooms={needsBathrooms}
+              tripUrl={currentTripUrl}
+            />
 
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
               <div className="mb-4 flex items-center gap-3">
