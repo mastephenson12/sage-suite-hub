@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
+import { trackEvent } from '../utils/analytics';
 
 function prettify(value: string | null, fallback: string): string {
   if (!value) return fallback;
@@ -121,6 +122,13 @@ const TripBuilderResultEnhancer: React.FC = () => {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 to="/chat?mode=arizona"
+                onClick={() =>
+                  trackEvent('sage_ai_refine_click', {
+                    label: 'Refine With Sage AI',
+                    destination: location,
+                    location: 'trip_result_enhancer',
+                  })
+                }
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-orange-600"
               >
                 <MessageCircle className="h-4 w-4" />
@@ -131,6 +139,13 @@ const TripBuilderResultEnhancer: React.FC = () => {
                 href="https://healthandtravels.com/"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('health_travels_ideas_click', {
+                    label: 'More Trip Ideas',
+                    destination: location,
+                    location: 'trip_result_enhancer',
+                  })
+                }
                 className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-white hover:text-zinc-950"
               >
                 <MapPin className="h-4 w-4" />
