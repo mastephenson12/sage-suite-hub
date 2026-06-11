@@ -5,6 +5,7 @@ import {
   CalendarCheck,
   CheckCircle2,
   Clock3,
+  Copy,
   MapPin,
   MessageCircle,
   ShieldCheck,
@@ -18,6 +19,16 @@ function prettify(value: string | null, fallback: string): string {
   return value
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function buildChatLink(location: string, prompt: string): string {
+  const params = new URLSearchParams();
+
+  params.set('mode', 'arizona');
+  params.set('trip', location.toLowerCase().replace(/\s+/g, '-'));
+  params.set('prompt', prompt);
+
+  return `/chat?${params.toString()}`;
 }
 
 const packingItems = [
@@ -59,6 +70,7 @@ const confidenceItems = [
 
 const TripBuilderResultEnhancer: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const [copied, setCopied] = React.useState(false);
   const isReady = searchParams.get('plan') === 'ready';
 
   if (!isReady) return null;
@@ -77,6 +89,58 @@ const TripBuilderResultEnhancer: React.FC = () => {
     (wantsShade ? 7 : 0) +
     (needsBathrooms ? 7 : 0) +
     (tripLength === 'Half Day' ? 4 : 0);
+
+  const safeConfidenceScore = Math.min(confidenceScore, 96);
+
+  const nextActions = [
+    {
+      label: 'Simplify This Plan',
+      description: 'Ask Sage to make the day easier and lower-stress.',
+      prompt: `Simplify this ${location} family adventure plan. Make it easier, lower-stress, and realistic for ${ageGroup}.`,
+    },
+    {
+      label: 'Make It Safer for Kids',
+      description: 'Focus on heat, timing, shade, water, and kid-fit risks.',
+      prompt: `Make this ${location} plan safer for kids. Give me heat, timing, shade, water, parking, bathroom, and backup safety changes.`,
+    },
+    {
+      label: 'Find Food Nearby',
+      description: 'Ask for nearby food stops that fit the plan.',
+      prompt: `Find family-friendly food options near this ${location} adventure plan, including easy kid-friendly choices and good timing for lunch or snacks.`,
+    },
+    {
+      label: 'Add Backup Ideas',
+      description: 'Get easier, indoor, or weather-friendly alternatives.',
+      prompt: `Give me backup ideas for this ${location} family plan if the weather, heat, parking, or kid energy does not cooperate.`,
+    },
+    {
+      label: 'Turn Into Weekend Plan',
+      description: 'Expand the outing into a fuller weekend itinerary.',
+      prompt: `Turn this ${location} family adventure into a simple weekend itinerary with outdoor activities first, then places to eat, then places to stay.`,
+    },
+  ];
+
+  const tripSummary = [
+    `${location} family adventure plan`,
+    `Timing: ${season}`,
+    `Trip style: ${tripLength}`,
+    `Group: ${hasKids ? ageGroup : 'Adults only'}`,
+    `Confidence score: ${safeConfidenceScore}%`,
+    wantsShade ? 'Shade: prioritized' : 'Shade: flexible',
+    needsBathrooms ? 'Bathrooms: prioritized' : 'Bathrooms: optional',
+    `Open plan: ${window.location.href}`,
+  ].join('\n');
+
+  const handleCopySummary = async () => {
+    await navigator.clipboard.writeText(tripSummary);
+    setCopied(true);
+    trackEvent('plan_another_trip_click', {
+      label: 'Copy Trip Summary',
+      destination: location,
+      location: 'trip_result_next_actions',
+    });
+    window.setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section className="bg-white px-6 pb-20">
@@ -115,13 +179,16 @@ const TripBuilderResultEnhancer: React.FC = () => {
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-orange-200">
                   Confidence
                 </p>
-                <p className="mt-2 text-3xl font-black">{Math.min(confidenceScore, 96)}%</p>
+                <p className="mt-2 text-3xl font-black">{safeConfidenceScore}%</p>
               </div>
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/chat?mode=arizona"
+                to={buildChatLink(
+                  location,
+                  `Help me refine this ${location} Arizona family adventure plan and make it more practical.`
+                )}
                 onClick={() =>
                   trackEvent('sage_ai_refine_click', {
                     label: 'Refine With Sage AI',
@@ -175,6 +242,49 @@ const TripBuilderResultEnhancer: React.FC = () => {
                 {wantsShade ? ' shade preferences' : ' flexible shade preferences'} and
                 {needsBathrooms ? ' bathroom access prioritized.' : ' bathroom access treated as optional.'}
               </p>
+            </article>
+
+            <article className="rounded-3xl border border-orange-300/30 bg-orange-50 p-5 text-zinc-950">
+              <div className="mb-4 flex items-center gap-3">
+                <Sparkles className="h-5 w-5 text-orange-600" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-orange-700">
+                    Next best actions
+                  </p>
+                  <h3 className="text-xl font-black">Tell Sage what to improve next</h3>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {nextActions.map((action) => (
+                  <Link
+                    key={action.label}
+                    to={buildChatLink(location, action.prompt)}
+                    onClick={() =>
+                      trackEvent('sage_ai_refine_click', {
+                        label: action.label,
+                        destination: location,
+                        location: 'trip_result_next_actions',
+                      })
+                    }
+                    className="rounded-2xl border border-orange-200 bg-white p-4 transition hover:-translate-y-1 hover:border-orange-400 hover:shadow-md"
+                  >
+                    <p className="font-black text-zinc-950">{action.label}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-zinc-600">
+                      {action.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleCopySummary}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-950 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-zinc-800"
+              >
+                {copied ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copied ? 'Trip Summary Copied' : 'Copy Trip Summary'}
+              </button>
             </article>
 
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
