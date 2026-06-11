@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ChatInterface from '../components/ChatInterface';
+import ChatPromptHandoffBanner from '../components/ChatPromptHandoffBanner';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ARIZONA_DESTINATIONS, type AffiliateSet } from '../data/viatorLinks';
@@ -209,6 +210,8 @@ const ChatPage: React.FC = () => {
               <p className="mt-1 text-sm text-zinc-600">{subheadline}</p>
             </div>
           </div>
+
+          <ChatPromptHandoffBanner prompt={promptFromQuery} tripSlug={tripFromQuery} />
 
           <div className="mt-4 flex flex-wrap gap-2">
             {MODES.map((item) => (
