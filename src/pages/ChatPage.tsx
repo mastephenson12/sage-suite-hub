@@ -96,6 +96,7 @@ const ChatPage: React.FC = () => {
 
   const tripFromQuery = (searchParams.get('trip') || '').trim().toLowerCase();
   const modeFromQuery = (searchParams.get('mode') || '').trim().toLowerCase();
+  const promptFromQuery = (searchParams.get('prompt') || '').trim();
 
   const destinationAffiliate = tripFromQuery
     ? ARIZONA_DESTINATIONS[tripFromQuery]
@@ -104,7 +105,7 @@ const ChatPage: React.FC = () => {
   const isArizonaDestinationTrip = Boolean(destinationAffiliate);
 
   useEffect(() => {
-    if (isArizonaDestinationTrip) {
+    if (isArizonaDestinationTrip || promptFromQuery) {
       setMode('arizona');
       return;
     }
@@ -118,7 +119,7 @@ const ChatPage: React.FC = () => {
     ) {
       setMode(modeFromQuery);
     }
-  }, [isArizonaDestinationTrip, modeFromQuery]);
+  }, [isArizonaDestinationTrip, modeFromQuery, promptFromQuery]);
 
   const headline = useMemo(() => {
     if (tripFromQuery) {
@@ -140,6 +141,10 @@ const ChatPage: React.FC = () => {
   }, [mode, tripFromQuery]);
 
   const subheadline = useMemo(() => {
+    if (promptFromQuery) {
+      return 'Sage is starting with your selected next-step prompt so you do not have to explain the whole thing again.';
+    }
+
     if (tripFromQuery) {
       return `Smart trip planning for ${toTitleCaseFromSlug(
         tripFromQuery
@@ -158,7 +163,7 @@ const ChatPage: React.FC = () => {
       default:
         return 'Fast trip planning without the clutter.';
     }
-  }, [mode, tripFromQuery]);
+  }, [mode, promptFromQuery, tripFromQuery]);
 
   const currentInitialMessage =
     (tripFromQuery && (chatTripPrompts[tripFromQuery] || TRIP_PROMPTS[tripFromQuery])) ||
@@ -225,9 +230,10 @@ const ChatPage: React.FC = () => {
 
         <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm">
           <ChatInterface
-            key={`${mode}-${tripFromQuery || 'default'}`}
+            key={`${mode}-${tripFromQuery || 'default'}-${promptFromQuery || 'no-prompt'}`}
             className="min-h-[500px]"
             initialMessage={currentInitialMessage}
+            initialPrompt={promptFromQuery}
           />
         </div>
 
