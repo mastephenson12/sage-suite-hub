@@ -68,6 +68,12 @@ const confidenceItems = [
   'Season and Arizona heat context included',
 ];
 
+const guidedSteps = [
+  'Review the confidence score',
+  'Choose one next action',
+  'Copy or share the plan',
+];
+
 const TripBuilderResultEnhancer: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [copied, setCopied] = React.useState(false);
@@ -82,6 +88,10 @@ const TripBuilderResultEnhancer: React.FC = () => {
   const ageGroup = prettify(searchParams.get('ages'), 'Mixed Ages');
   const wantsShade = searchParams.get('shade') !== 'false';
   const needsBathrooms = searchParams.get('bathrooms') !== 'false';
+  const currentTripUrl =
+    typeof window !== 'undefined'
+      ? window.location.href
+      : `/trip-builder?${searchParams.toString()}`;
 
   const confidenceScore =
     72 +
@@ -128,7 +138,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
     `Confidence score: ${safeConfidenceScore}%`,
     wantsShade ? 'Shade: prioritized' : 'Shade: flexible',
     needsBathrooms ? 'Bathrooms: prioritized' : 'Bathrooms: optional',
-    `Open plan: ${window.location.href}`,
+    `Open plan: ${currentTripUrl}`,
   ].join('\n');
 
   const handleCopySummary = async () => {
@@ -161,6 +171,22 @@ const TripBuilderResultEnhancer: React.FC = () => {
               buried in cards is still technically a plan, the same way a junk drawer
               is technically storage.
             </p>
+
+            <div className="mt-6 rounded-3xl border border-white/10 bg-white/10 p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-orange-200">
+                Recommended path
+              </p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                {guidedSteps.map((step, index) => (
+                  <div key={step} className="rounded-2xl bg-white/10 p-3">
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-zinc-400">
+                      Step {index + 1}
+                    </p>
+                    <p className="mt-1 text-sm font-bold text-white">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
               <div className="rounded-3xl border border-white/10 bg-white/10 p-4">
@@ -253,6 +279,13 @@ const TripBuilderResultEnhancer: React.FC = () => {
                   </p>
                   <h3 className="text-xl font-black">Tell Sage what to improve next</h3>
                 </div>
+              </div>
+
+              <div className="mb-4 rounded-2xl border border-orange-200 bg-white p-4">
+                <p className="text-sm font-bold leading-relaxed text-zinc-700">
+                  Start with <span className="text-orange-700">Make It Safer for Kids</span> if children are coming.
+                  Start with <span className="text-orange-700">Find Food Nearby</span> if the route already looks good.
+                </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
