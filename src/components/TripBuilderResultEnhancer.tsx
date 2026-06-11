@@ -11,7 +11,9 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
+import ParentRealityCheckCard from './ParentRealityCheckCard';
 import SaveTripPlanCard from './SaveTripPlanCard';
+import TripConfidenceBreakdownCard from './TripConfidenceBreakdownCard';
 import { trackEvent } from '../utils/analytics';
 
 function prettify(value: string | null, fallback: string): string {
@@ -250,6 +252,22 @@ const TripBuilderResultEnhancer: React.FC = () => {
           </div>
 
           <div className="space-y-5">
+            <ParentRealityCheckCard
+              hasKids={hasKids}
+              season={season}
+              tripLength={tripLength}
+              wantsShade={wantsShade}
+              needsBathrooms={needsBathrooms}
+            />
+
+            <TripConfidenceBreakdownCard
+              hasKids={hasKids}
+              wantsShade={wantsShade}
+              needsBathrooms={needsBathrooms}
+              tripLength={tripLength}
+              season={season}
+            />
+
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
               <div className="mb-4 flex items-center gap-3">
                 <ShieldCheck className="h-5 w-5 text-emerald-600" />
