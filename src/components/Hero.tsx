@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { trackEvent } from '../utils/analytics';
 
 const arizonaCards = [
   {
@@ -59,6 +60,12 @@ export const Hero: React.FC = () => {
   const handleQuickPlan = (event: React.FormEvent) => {
     event.preventDefault();
 
+    trackEvent('homepage_quick_plan_submit', {
+      destination: destination.label,
+      group: group.label,
+      priority: priority.label,
+    });
+
     const params = new URLSearchParams();
     params.set('plan', 'ready');
     if (destination.value) params.set('location', destination.value);
@@ -108,6 +115,12 @@ export const Hero: React.FC = () => {
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a
                 href="#quick-plan"
+                onClick={() =>
+                  trackEvent('homepage_plan_trip_click', {
+                    label: 'Plan My Arizona Trip',
+                    location: 'hero_primary_cta',
+                  })
+                }
                 className="inline-flex items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95"
               >
                 Plan My Arizona Trip
@@ -115,6 +128,12 @@ export const Hero: React.FC = () => {
 
               <Link
                 to="/arizona"
+                onClick={() =>
+                  trackEvent('arizona_guides_click', {
+                    label: 'Explore Family Guides',
+                    location: 'hero_secondary_cta',
+                  })
+                }
                 className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
               >
                 Explore Family Guides
@@ -253,6 +272,13 @@ export const Hero: React.FC = () => {
               <Link
                 key={card.title}
                 to={card.to}
+                onClick={() =>
+                  trackEvent('popular_trip_card_click', {
+                    label: card.cta,
+                    destination: card.title,
+                    location: 'homepage_popular_trips',
+                  })
+                }
                 className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="relative h-[320px] overflow-hidden">
