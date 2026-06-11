@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Mail, Map, ShieldCheck, Sparkles, Users } from 'lucide-react';
+import { trackEvent } from '../utils/analytics';
 
 const benefits = [
   {
@@ -45,6 +46,12 @@ const NewsletterConversionPanel: React.FC = () => {
                 href="https://healthandtravels.com/"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('health_travels_ideas_click', {
+                    label: 'Get Free Trip Ideas',
+                    location: 'newsletter_conversion_panel',
+                  })
+                }
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-black px-6 py-4 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:bg-zinc-800"
               >
                 <Mail className="h-4 w-4" />
@@ -53,6 +60,12 @@ const NewsletterConversionPanel: React.FC = () => {
 
               <Link
                 to="/trip-builder"
+                onClick={() =>
+                  trackEvent('plan_another_trip_click', {
+                    label: 'Plan Another Trip',
+                    location: 'newsletter_conversion_panel',
+                  })
+                }
                 className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-900 px-6 py-4 text-sm font-black uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
               >
                 Plan Another Trip
