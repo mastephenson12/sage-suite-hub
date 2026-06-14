@@ -7,7 +7,7 @@ const benefits = [
   {
     icon: Map,
     title: 'Fresh Arizona ideas',
-    description: 'Get family-friendly places, easy trails, and weekend trip ideas without digging through the internet swamp.',
+    description: 'Get family-friendly places, easy trails, and weekend trip ideas without starting from scratch.',
   },
   {
     icon: ShieldCheck,
@@ -33,7 +33,7 @@ const NewsletterConversionPanel: React.FC = () => {
             </div>
 
             <h2 className="text-3xl font-black tracking-tight text-zinc-950 md:text-5xl">
-              Get Arizona family trip ideas before the weekend sneaks up like a tiny scheduling criminal.
+              Get Arizona family trip ideas before the weekend fills up.
             </h2>
 
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-zinc-600">
@@ -93,12 +93,6 @@ const NewsletterConversionPanel: React.FC = () => {
                 </article>
               );
             })}
-
-            <div className="rounded-3xl bg-zinc-950 p-5 text-white">
-              <p className="text-sm font-semibold leading-relaxed text-zinc-200">
-                Best placement: after someone understands Sage, not before. Asking too early is how websites become digital mall kiosks with a clipboard.
-              </p>
-            </div>
           </div>
         </div>
       </div>
