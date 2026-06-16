@@ -10,6 +10,7 @@ import {
   Users,
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
+import SharePlanPanel from '../components/SharePlanPanel';
 
 const phoenixDayTripFaqs = [
   {
@@ -110,6 +111,33 @@ const groupStyles = [
     to: '/trip-builder?plan=ready&location=flagstaff&kids=yes&group=family&activity=explore&length=full-day&season=summer&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=180',
   },
 ];
+
+const phoenixQuickPlanText = [
+  'Arizona day trip idea from Sage:',
+  'Start from Phoenix and choose by drive time.',
+  '',
+  'Best easy options:',
+  '- Under 1 hour: Cave Creek or a Phoenix-area preserve',
+  '- 1 to 2 hours: Payson, Prescott, or Cottonwood',
+  '- 2 to 3 hours: Sedona, Flagstaff, or Tucson',
+  '',
+  'Simple plan:',
+  'Pick one outdoor anchor, one food/reset stop, and one backup if the group gets tired or the weather changes.',
+  '',
+  'Sage guide: https://sage.healthandtravels.com/arizona/day-trips-from-phoenix',
+].join('\n');
+
+const phoenixVoteText = [
+  'Which Arizona day trip from Phoenix should we do?',
+  '',
+  '1. Cave Creek or Phoenix-area preserve - easiest short morning',
+  '2. Payson or Prescott - cooler air and food nearby',
+  '3. Sedona, Flagstaff, or Tucson - bigger full-day scenery',
+  '',
+  'Reply with 1, 2, or 3 and I will build the plan.',
+  '',
+  'Sage guide: https://sage.healthandtravels.com/arizona/day-trips-from-phoenix',
+].join('\n');
 
 export default function ArizonaDayTripsFromPhoenix() {
   return (
@@ -255,6 +283,14 @@ export default function ArizonaDayTripsFromPhoenix() {
           </div>
         </div>
       </section>
+
+      <SharePlanPanel
+        title="Make the group decision easier"
+        description="Copy a clean Phoenix day-trip summary, send a quick vote, or share this guide so everyone can choose from the same realistic options."
+        quickPlanText={phoenixQuickPlanText}
+        voteText={phoenixVoteText}
+        eventContext="phoenix_day_trips"
+      />
 
       <section className="px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-8 rounded-[2rem] border border-zinc-200 bg-zinc-50 p-6 md:grid-cols-[1fr_0.8fr] md:p-8">
