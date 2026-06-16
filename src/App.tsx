@@ -31,6 +31,7 @@ import ArticlePage from './pages/ArticlePage';
 import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
 import ArizonaDestinationPage from './pages/ArizonaDestinationPage';
+import ArizonaSeasonalFamilyAdventures from './pages/ArizonaSeasonalFamilyAdventures';
 import DesertHikingSafety from './pages/DesertHikingSafety';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -134,6 +135,7 @@ function AppContent() {
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
+          <Route path="/arizona/family-adventures-by-season" element={<ArizonaSeasonalFamilyAdventures />} />
           <Route path="/arizona/desert-hiking-safety" element={<DesertHikingSafety />} />
           <Route path="/arizona/:slug" element={<ArizonaDestinationPage />} />
 
@@ -175,6 +177,13 @@ function AppContent() {
                   className="transition-colors hover:text-black"
                 >
                   Arizona Guides
+                </Link>
+
+                <Link
+                  to="/arizona/family-adventures-by-season"
+                  className="transition-colors hover:text-black"
+                >
+                  Seasons
                 </Link>
 
                 <Link
