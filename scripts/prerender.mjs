@@ -55,6 +55,24 @@ const arizonaFaqs = [
   },
 ];
 
+const seasonalFamilyAdventureFaqs = [
+  {
+    question: 'What is the best season for family adventures in Arizona?',
+    answer:
+      'Spring and fall are usually the easiest seasons for Arizona family adventures because temperatures are more forgiving, trails are more comfortable, and road trips are easier to pace.',
+  },
+  {
+    question: 'Where should families go in Arizona during summer?',
+    answer:
+      'In summer, families should prioritize higher elevation, shade, water, and early starts. Flagstaff, Prescott, Payson, Show Low, and Pinetop-Lakeside are usually better choices than exposed desert hikes.',
+  },
+  {
+    question: 'Can families hike in Arizona during winter?',
+    answer:
+      'Yes. Winter is one of the best times for lower desert destinations like Tucson, Cave Creek, Yuma, and Phoenix-area trails, while higher-elevation trips need weather and road checks.',
+  },
+];
+
 const safetyFaqs = [
   {
     question: 'How much water should I bring for an Arizona desert hike?',
@@ -200,6 +218,18 @@ const arizonaHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona', arizonaHtml);
 
+const seasonalFamilyAdventureHtml = applySeo(baseHtml, {
+  title: 'Best Arizona Family Adventures by Season | Sage',
+  description:
+    'Find the best Arizona family adventures by season, including spring red rock trips, summer cool-weather escapes, fall weekend bases, and winter desert hikes.',
+  url: `${siteUrl}/arizona/family-adventures-by-season`,
+  faqs: seasonalFamilyAdventureFaqs,
+});
+await writeRoute(
+  'arizona/family-adventures-by-season',
+  seasonalFamilyAdventureHtml
+);
+
 const safetyHtml = applySeo(baseHtml, {
   title: 'Arizona Desert Hiking Safety Guide | Hydration, Heat & Gear',
   description:
@@ -223,4 +253,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 2} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 3} Arizona SEO pages.`);
