@@ -9,6 +9,7 @@ import {
   Trees,
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
+import SharePlanPanel from '../components/SharePlanPanel';
 
 const seasonalFaqs = [
   {
@@ -113,6 +114,34 @@ const quickRules = [
     text: 'For guests, choose memorable scenery and easy logistics before chasing the hardest hike in the region.',
   },
 ];
+
+const seasonalQuickPlanText = [
+  'Arizona seasonal trip idea from Sage:',
+  '',
+  'Best timing:',
+  '- Spring: Sedona, Tucson, Cave Creek, Payson, or Prescott',
+  '- Summer: Flagstaff, Show Low, Pinetop-Lakeside, Prescott, or Payson',
+  '- Fall: Prescott, Cottonwood, Jerome, Williams, or Sedona',
+  '- Winter: Tucson, Yuma, Cave Creek, Lake Havasu, or Bisbee',
+  '',
+  'Simple rule:',
+  'Match the adventure to heat, elevation, daylight, and group energy before choosing the trail.',
+  '',
+  'Sage guide: https://sage.healthandtravels.com/arizona/family-adventures-by-season',
+].join('\n');
+
+const seasonalVoteText = [
+  'Which Arizona season plan should we do?',
+  '',
+  '1. Spring red rocks or desert trails',
+  '2. Summer cooler-air escape',
+  '3. Fall road trip or friend weekend',
+  '4. Winter desert hiking or sunny easy walk',
+  '',
+  'Reply with 1, 2, 3, or 4 and I will build the plan.',
+  '',
+  'Sage guide: https://sage.healthandtravels.com/arizona/family-adventures-by-season',
+].join('\n');
 
 export default function ArizonaSeasonalFamilyAdventures() {
   return (
@@ -259,6 +288,14 @@ export default function ArizonaSeasonalFamilyAdventures() {
           </div>
         </div>
       </section>
+
+      <SharePlanPanel
+        title="Help everyone pick the season"
+        description="Copy a seasonal summary, send a quick group vote, or share this guide before the text thread turns into twelve half-plans."
+        quickPlanText={seasonalQuickPlanText}
+        voteText={seasonalVoteText}
+        eventContext="seasonal_family_adventures"
+      />
 
       <section className="bg-zinc-950 px-6 py-14 text-white">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-center">
