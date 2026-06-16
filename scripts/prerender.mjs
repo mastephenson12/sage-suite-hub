@@ -55,6 +55,24 @@ const arizonaFaqs = [
   },
 ];
 
+const phoenixDayTripFaqs = [
+  {
+    question: 'What are the best family day trips from Phoenix?',
+    answer:
+      'Good family day trips from Phoenix include Cave Creek, Prescott, Payson, Sedona, Tucson, Flagstaff, and Cottonwood when the drive time, season, heat, and group energy match the plan.',
+  },
+  {
+    question: 'Where can families escape the Phoenix heat for a day?',
+    answer:
+      'For summer heat relief, families should look toward higher elevation and shade, including Flagstaff, Prescott, Payson, Show Low, and Pinetop-Lakeside when the drive time works.',
+  },
+  {
+    question: 'What is an easy Arizona day trip from Phoenix with visitors?',
+    answer:
+      'Sedona, Cave Creek, Prescott, and Tucson can be strong visitor-friendly choices because they offer memorable scenery, food stops, and flexible ways to keep the day simple.',
+  },
+];
+
 const seasonalFamilyAdventureFaqs = [
   {
     question: 'What is the best season for family adventures in Arizona?',
@@ -218,6 +236,15 @@ const arizonaHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona', arizonaHtml);
 
+const phoenixDayTripsHtml = applySeo(baseHtml, {
+  title: 'Best Arizona Day Trips from Phoenix | Sage',
+  description:
+    'Find family-friendly Arizona day trips from Phoenix by drive time, season, heat, kids, visitors, easy hikes, food stops, and weekend range.',
+  url: `${siteUrl}/arizona/day-trips-from-phoenix`,
+  faqs: phoenixDayTripFaqs,
+});
+await writeRoute('arizona/day-trips-from-phoenix', phoenixDayTripsHtml);
+
 const seasonalFamilyAdventureHtml = applySeo(baseHtml, {
   title: 'Best Arizona Family Adventures by Season | Sage',
   description:
@@ -253,4 +280,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 3} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 4} Arizona SEO pages.`);
