@@ -72,6 +72,13 @@ const SeasonalPlanningPanel: React.FC = () => {
               the plan starts with the conditions that matter most.
             </p>
 
+            <Link
+              to="/arizona/family-adventures-by-season"
+              className="mt-6 inline-flex items-center justify-center rounded-2xl bg-zinc-950 px-5 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
+            >
+              See Best Seasons
+            </Link>
+
             <div className="mt-8 rounded-3xl border border-zinc-200 bg-zinc-50 p-6">
               <div className="mb-4 flex items-center gap-3">
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-zinc-900 text-white">
