@@ -71,6 +71,61 @@ const quickChoosers = [
   },
 ];
 
+const starterItineraries = [
+  {
+    label: 'Easy morning',
+    title: 'Desert views, breakfast, home before the heat',
+    bestFor: 'Families with younger kids, visitors on a short schedule',
+    route: 'Phoenix preserve or Cave Creek',
+    to: '/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=relax&length=half-day&season=winter&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=60',
+    steps: [
+      'Start with a sunrise or early shaded walk.',
+      'Keep the outdoor stop short enough that everyone leaves happy.',
+      'Add breakfast, coffee, or an early lunch before heading home.',
+    ],
+    backup: 'Swap the walk for a scenic drive or patio meal if heat, naps, or timing gets tight.',
+  },
+  {
+    label: 'Cooler full day',
+    title: 'Higher elevation, one outdoor anchor, one easy reset',
+    bestFor: 'Summer planning, mixed-age families, relaxed friend groups',
+    route: 'Payson, Prescott, or Flagstaff',
+    to: '/trip-builder?plan=ready&location=payson&kids=yes&group=family&activity=explore&length=full-day&season=summer&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=120',
+    steps: [
+      'Leave after breakfast or earlier if summer heat is building.',
+      'Choose one creek, lake, trail, downtown, or overlook as the main plan.',
+      'Use lunch as the reset before deciding whether to add one more stop.',
+    ],
+    backup: 'If weather rolls in, shift to a town walk, visitor center, cafe, or scenic route home.',
+  },
+  {
+    label: 'Visitor showpiece',
+    title: 'Big Arizona scenery without overloading the day',
+    bestFor: 'Out-of-town guests, adults, teens, photo-friendly plans',
+    route: 'Sedona, Tucson, or Prescott',
+    to: '/trip-builder?plan=ready&location=sedona&kids=no&group=visitors&activity=explore&length=full-day&season=spring&ages=adults&shade=true&bathrooms=true&stroller=false&drive=180',
+    steps: [
+      'Pick the one view, walk, museum, or scenic district that matters most.',
+      'Build the day around that anchor instead of stacking too many stops.',
+      'Add a memorable lunch or sunset-adjacent stop before the drive back.',
+    ],
+    backup: 'Keep a low-effort scenic pullout or walkable downtown ready if the group fades.',
+  },
+  {
+    label: 'Low-stress group day',
+    title: 'Walkable, flexible, and easy to keep together',
+    bestFor: 'Friend groups, grandparents, mixed mobility, food-first days',
+    route: 'Cottonwood or Prescott',
+    to: '/trip-builder?plan=ready&location=prescott&kids=yes&group=low-stress&activity=relax&length=full-day&season=fall&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=120',
+    steps: [
+      'Choose a walkable base where food, bathrooms, and shade are close.',
+      'Plan one light outdoor stop before or after lunch.',
+      'Let the group split between strolling, shopping, snacks, or a scenic pause.',
+    ],
+    backup: 'If the group gets divided, regroup around a food stop instead of forcing another activity.',
+  },
+];
+
 const driveBands = [
   {
     label: 'Under 1 hour',
@@ -79,10 +134,7 @@ const driveBands = [
     bestFor: 'Short mornings, visitors, kids with limited patience',
     destinations: [
       ['Cave Creek', '/arizona/cave-creek'],
-      [
-        'Phoenix area preserves',
-        '/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=relax&length=half-day&season=winter&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=60',
-      ],
+      ['Phoenix area preserves', '/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=relax&length=half-day&season=winter&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=60'],
     ],
     plan:
       'Pick a sunrise walk, a scenic lunch stop, and an easy backup. This is the best range when your group wants Arizona scenery without turning the day into a road marathon.',
@@ -252,6 +304,77 @@ export default function ArizonaDayTripsFromPhoenix() {
                   Build this day
                 </span>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white px-6 py-14">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 max-w-3xl">
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
+              Starter itineraries
+            </p>
+            <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+              Phoenix day-trip plans your group can picture right away
+            </h2>
+            <p className="mt-4 text-base leading-8 text-zinc-600">
+              Use these as simple one-day itinerary frames. Pick the version
+              that fits the group, then let Sage turn it into a fuller plan.
+            </p>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-2">
+            {starterItineraries.map((plan) => (
+              <article
+                key={plan.label}
+                className="rounded-[1.75rem] border border-zinc-200 bg-zinc-50 p-5 shadow-sm md:p-6"
+              >
+                <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-[0.18em] text-orange-600">
+                      {plan.label}
+                    </p>
+                    <h3 className="mt-2 text-2xl font-black tracking-tight">
+                      {plan.title}
+                    </h3>
+                  </div>
+                  <span className="rounded-full border border-orange-200 bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-orange-700">
+                    {plan.route}
+                  </span>
+                </div>
+
+                <p className="mb-5 rounded-2xl bg-white p-4 text-sm font-semibold leading-6 text-zinc-700">
+                  {plan.bestFor}
+                </p>
+
+                <ol className="space-y-3">
+                  {plan.steps.map((step, index) => (
+                    <li key={step} className="flex gap-3 text-sm leading-7 text-zinc-700">
+                      <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-[11px] font-black text-white">
+                        {index + 1}
+                      </span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+
+                <div className="mt-5 rounded-2xl border border-zinc-200 bg-white p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-400">
+                    Backup move
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-zinc-600">
+                    {plan.backup}
+                  </p>
+                </div>
+
+                <Link
+                  to={plan.to}
+                  className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
+                >
+                  Build This Itinerary
+                </Link>
+              </article>
             ))}
           </div>
         </div>
