@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Coffee, Map, ShieldCheck, Users } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
 import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
@@ -14,6 +15,141 @@ function BulletList({ items }: { items: string[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+type Destination = NonNullable<ReturnType<typeof getAllArizonaDestination>>;
+
+function getDestinationFitSnapshot(destination: Destination) {
+  const combinedText = [
+    destination.tagline,
+    destination.intro,
+    ...destination.bestFor,
+    ...destination.outdoorActivities,
+    ...destination.easyTrails,
+    ...destination.safetyTips,
+  ]
+    .join(' ')
+    .toLowerCase();
+
+  const hasCoolWeather =
+    combinedText.includes('cool') ||
+    combinedText.includes('pine') ||
+    combinedText.includes('forest') ||
+    combinedText.includes('mountain') ||
+    combinedText.includes('higher elevation');
+  const hasWater =
+    combinedText.includes('lake') ||
+    combinedText.includes('creek') ||
+    combinedText.includes('river') ||
+    combinedText.includes('water');
+  const hasTown =
+    combinedText.includes('downtown') ||
+    combinedText.includes('town') ||
+    combinedText.includes('food') ||
+    combinedText.includes('walkable');
+  const hasHeatRisk =
+    combinedText.includes('heat') ||
+    combinedText.includes('exposed') ||
+    combinedText.includes('summer') ||
+    combinedText.includes('desert');
+
+  const groupFit = hasTown
+    ? 'Mixed-interest groups'
+    : hasCoolWeather
+      ? 'Summer escape groups'
+      : hasWater
+        ? 'Families who need an easy reset'
+        : 'First-time Arizona visitors';
+
+  const easyWin =
+    destination.easyTrails[0] ?? destination.outdoorActivities[0] ?? `${destination.name} scenic stop`;
+  const resetStop = destination.eatNearby[0] ?? `${destination.name} food stop`;
+  const watchOut = hasHeatRisk
+    ? 'Plan early, protect shade time, and avoid exposed midday outdoor plans.'
+    : destination.safetyTips[0] ?? 'Keep timing flexible and check conditions before leaving.';
+  const bestUse = destination.bestFor[0] ?? 'Flexible Arizona day';
+
+  return [
+    {
+      label: 'Best fit',
+      value: groupFit,
+      detail: `A strong match for ${bestUse.toLowerCase()} without overcomplicating the day.`,
+      icon: Users,
+    },
+    {
+      label: 'Easiest win',
+      value: easyWin,
+      detail: 'Start here when the group needs a simple first stop.',
+      icon: Map,
+    },
+    {
+      label: 'Reset stop',
+      value: resetStop,
+      detail: 'Use food or coffee as the pressure-release valve for the day.',
+      icon: Coffee,
+    },
+    {
+      label: 'Watch-out',
+      value: hasHeatRisk ? 'Heat and timing' : 'Pacing and conditions',
+      detail: watchOut,
+      icon: ShieldCheck,
+    },
+  ];
+}
+
+function DestinationFitSnapshot({ destination }: { destination: Destination }) {
+  const snapshots = getDestinationFitSnapshot(destination);
+
+  return (
+    <section className="border-b border-zinc-100 bg-white px-6 py-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+          <div>
+            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-orange-600">
+              Quick fit check
+            </p>
+            <h2 className="text-2xl font-black tracking-tight text-zinc-950 md:text-3xl">
+              Is {destination.name} a good match for your group?
+            </h2>
+          </div>
+          <Link
+            to={`/trip-builder?location=${destination.slug}`}
+            className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-5 py-3 text-xs font-black uppercase tracking-widest text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+          >
+            Test it in Trip Builder
+          </Link>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {snapshots.map((snapshot) => {
+            const Icon = snapshot.icon;
+
+            return (
+              <article
+                key={snapshot.label}
+                className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4"
+              >
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-orange-600 shadow-sm">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-orange-600">
+                    {snapshot.label}
+                  </p>
+                </div>
+                <h3 className="text-lg font-black leading-6 text-zinc-950">
+                  {snapshot.value}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">
+                  {snapshot.detail}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -112,6 +248,8 @@ export default function ArizonaDestinationPage() {
           </div>
         </div>
       </section>
+
+      <DestinationFitSnapshot destination={destination} />
 
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-6 md:grid-cols-2">
