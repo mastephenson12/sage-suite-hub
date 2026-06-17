@@ -28,6 +28,47 @@ const phoenixDayTripFaqs = [
     answer:
       'Sedona, Cave Creek, Prescott, and Tucson can be strong visitor-friendly choices because they offer memorable scenery, food stops, and flexible ways to keep the day simple.',
   },
+  {
+    question: 'What is the best Phoenix day trip for a small group?',
+    answer:
+      'For a small group, the best Phoenix day trip is usually the one with one clear outdoor anchor, one food or reset stop, and a shorter backup nearby. Cave Creek, Payson, Prescott, Cottonwood, Sedona, and Flagstaff all work well when matched to drive time and season.',
+  },
+  {
+    question: 'How far should families drive for a Phoenix day trip?',
+    answer:
+      'Most families do best with a Phoenix day trip under two hours each way unless the destination is the main event. For longer drives to Sedona, Flagstaff, or Tucson, plan a full day and keep the schedule simple.',
+  },
+];
+
+const quickChoosers = [
+  {
+    prompt: 'We only have a morning',
+    pick: 'Cave Creek or a Phoenix-area preserve',
+    reason:
+      'Best when the group needs desert views, breakfast or lunch nearby, and a low-pressure return home.',
+    to: '/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=relax&length=half-day&season=winter&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=60',
+  },
+  {
+    prompt: 'We want cooler air',
+    pick: 'Payson, Prescott, or Flagstaff',
+    reason:
+      'Better for summer planning, tree shade, creek or lake energy, and groups that need a break from Phoenix heat.',
+    to: '/trip-builder?plan=ready&location=payson&kids=yes&group=family&activity=explore&length=full-day&season=summer&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=120',
+  },
+  {
+    prompt: 'We have visitors in town',
+    pick: 'Sedona, Tucson, or Prescott',
+    reason:
+      'Good showpiece choices with memorable scenery, easy food stops, and enough variety for mixed interests.',
+    to: '/trip-builder?plan=ready&location=sedona&kids=no&group=visitors&activity=explore&length=full-day&season=spring&ages=adults&shade=true&bathrooms=true&stroller=false&drive=180',
+  },
+  {
+    prompt: 'We need the easiest win',
+    pick: 'Prescott or Cottonwood',
+    reason:
+      'A strong middle ground when you want a real Arizona day out without making the whole plan depend on a hard hike.',
+    to: '/trip-builder?plan=ready&location=prescott&kids=yes&group=low-stress&activity=relax&length=full-day&season=fall&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=120',
+  },
 ];
 
 const driveBands = [
@@ -180,6 +221,42 @@ export default function ArizonaDayTripsFromPhoenix() {
         </div>
       </section>
 
+      <section className="border-b border-zinc-200 bg-zinc-50 px-6 py-12">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-7 max-w-3xl">
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
+              Quick chooser
+            </p>
+            <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+              Start with the group mood, then pick the destination
+            </h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {quickChoosers.map((choice) => (
+              <Link
+                key={choice.prompt}
+                to={choice.to}
+                className="flex min-h-[250px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-orange-300 hover:shadow-lg"
+              >
+                <p className="text-[11px] font-black uppercase tracking-[0.16em] text-orange-600">
+                  {choice.prompt}
+                </p>
+                <h3 className="mt-3 text-xl font-black tracking-tight">
+                  {choice.pick}
+                </h3>
+                <p className="mt-3 flex-1 text-sm leading-7 text-zinc-600">
+                  {choice.reason}
+                </p>
+                <span className="mt-5 text-xs font-black uppercase tracking-widest text-zinc-950">
+                  Build this day
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="px-6 py-14">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8">
@@ -318,6 +395,38 @@ export default function ArizonaDayTripsFromPhoenix() {
             >
               Open Trip Builder
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white px-6 pb-16">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-7">
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
+              Phoenix day-trip FAQs
+            </p>
+            <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+              Fast answers before you load the car
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {phoenixDayTripFaqs.map((faq) => (
+              <details
+                key={faq.question}
+                className="group rounded-2xl border border-zinc-200 bg-zinc-50 px-5 py-4"
+              >
+                <summary className="cursor-pointer list-none text-base font-black tracking-tight text-zinc-950">
+                  {faq.question}
+                  <span className="float-right text-zinc-500 transition group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm leading-7 text-zinc-600">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
