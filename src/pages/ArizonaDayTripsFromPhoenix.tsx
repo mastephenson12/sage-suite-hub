@@ -517,68 +517,68 @@ export default function ArizonaDayTripsFromPhoenix() {
         </div>
       </section>
 
-      <section className="border-y border-zinc-200 bg-zinc-950 px-6 py-14 text-white">
+      <section className="border-y border-zinc-200 bg-white px-6 py-14">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 max-w-3xl">
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-300">
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
               Group fit matrix
             </p>
             <h2 className="text-3xl font-black tracking-tight md:text-4xl">
               Match the Phoenix day trip to the people coming with you
             </h2>
-            <p className="mt-4 text-base leading-8 text-zinc-300">
+            <p className="mt-4 text-base leading-8 text-zinc-600">
               The best plan is usually the one that fits the least flexible
               person in the group. Use this quick matrix before you commit to a
               drive, trail, or full-day route.
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.06]">
-            <div className="hidden grid-cols-[1fr_1.1fr_1.1fr_0.9fr] gap-4 border-b border-white/10 bg-white/[0.08] px-5 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-orange-200 md:grid">
+          <div className="overflow-hidden rounded-[1.75rem] border border-zinc-200 bg-zinc-50 shadow-sm">
+            <div className="hidden grid-cols-[1fr_1.1fr_1.1fr_0.9fr] gap-4 border-b border-zinc-200 bg-white px-5 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-orange-600 md:grid">
               <span>Group need</span>
               <span>Best picks</span>
               <span>Why it works</span>
               <span>Skip for now</span>
             </div>
 
-            <div className="divide-y divide-white/10">
+            <div className="divide-y divide-zinc-200">
               {groupFitRows.map((row) => (
                 <article
                   key={row.need}
                   className="grid gap-4 px-5 py-5 md:grid-cols-[1fr_1.1fr_1.1fr_0.9fr]"
                 >
                   <div>
-                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-600 md:hidden">
                       Group need
                     </p>
-                    <h3 className="text-base font-black tracking-tight text-white">
+                    <h3 className="text-base font-black tracking-tight text-zinc-950">
                       {row.need}
                     </h3>
                   </div>
 
                   <div>
-                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-600 md:hidden">
                       Best picks
                     </p>
-                    <p className="text-sm font-semibold leading-7 text-white">
+                    <p className="text-sm font-semibold leading-7 text-zinc-900">
                       {row.bestPicks}
                     </p>
                   </div>
 
                   <div>
-                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-600 md:hidden">
                       Why it works
                     </p>
-                    <p className="text-sm leading-7 text-zinc-300">
+                    <p className="text-sm leading-7 text-zinc-600">
                       {row.why}
                     </p>
                   </div>
 
                   <div>
-                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-600 md:hidden">
                       Skip for now
                     </p>
-                    <p className="text-sm leading-7 text-zinc-400">
+                    <p className="text-sm leading-7 text-zinc-500">
                       {row.avoid}
                     </p>
                   </div>
