@@ -205,6 +205,39 @@ const groupStyles = [
   },
 ];
 
+const groupFitRows = [
+  {
+    need: 'Young kids or short attention spans',
+    bestPicks: 'Cave Creek, Prescott, or a Phoenix-area preserve',
+    why: 'Shorter outdoor windows, food nearby, and easier exits if the day gets sideways.',
+    avoid: 'Long drives with multiple trail stops',
+  },
+  {
+    need: 'Out-of-town visitors',
+    bestPicks: 'Sedona, Tucson, Prescott, or Flagstaff',
+    why: 'These give guests the Arizona scenery they came for without needing expert hiking plans.',
+    avoid: 'Hidden-gem routes that require lots of explaining',
+  },
+  {
+    need: 'Grandparents or mixed mobility',
+    bestPicks: 'Prescott, Cottonwood, Cave Creek, or Tucson',
+    why: 'Walkable areas, scenic stops, restaurants, and flexible pacing keep everyone included.',
+    avoid: 'Plans where the whole payoff depends on one hard hike',
+  },
+  {
+    need: 'Summer heat relief',
+    bestPicks: 'Payson, Prescott, Flagstaff, Show Low, or Pinetop-Lakeside',
+    why: 'Higher elevation, trees, lakes, and creek options give the group a better comfort margin.',
+    avoid: 'Exposed desert trails after the early morning window',
+  },
+  {
+    need: 'Friend group with mixed interests',
+    bestPicks: 'Cottonwood, Jerome, Prescott, Sedona, or Tucson',
+    why: 'Food, views, shops, short walks, and scenic anchors let people enjoy the day differently.',
+    avoid: 'One-activity days where everyone has to want the same thing',
+  },
+];
+
 const phoenixQuickPlanText = [
   'Arizona day trip idea from Sage:',
   'Start from Phoenix and choose by drive time.',
@@ -480,6 +513,78 @@ export default function ArizonaDayTripsFromPhoenix() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-zinc-200 bg-zinc-950 px-6 py-14 text-white">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 max-w-3xl">
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-300">
+              Group fit matrix
+            </p>
+            <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+              Match the Phoenix day trip to the people coming with you
+            </h2>
+            <p className="mt-4 text-base leading-8 text-zinc-300">
+              The best plan is usually the one that fits the least flexible
+              person in the group. Use this quick matrix before you commit to a
+              drive, trail, or full-day route.
+            </p>
+          </div>
+
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.06]">
+            <div className="hidden grid-cols-[1fr_1.1fr_1.1fr_0.9fr] gap-4 border-b border-white/10 bg-white/[0.08] px-5 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-orange-200 md:grid">
+              <span>Group need</span>
+              <span>Best picks</span>
+              <span>Why it works</span>
+              <span>Skip for now</span>
+            </div>
+
+            <div className="divide-y divide-white/10">
+              {groupFitRows.map((row) => (
+                <article
+                  key={row.need}
+                  className="grid gap-4 px-5 py-5 md:grid-cols-[1fr_1.1fr_1.1fr_0.9fr]"
+                >
+                  <div>
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                      Group need
+                    </p>
+                    <h3 className="text-base font-black tracking-tight text-white">
+                      {row.need}
+                    </h3>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                      Best picks
+                    </p>
+                    <p className="text-sm font-semibold leading-7 text-white">
+                      {row.bestPicks}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                      Why it works
+                    </p>
+                    <p className="text-sm leading-7 text-zinc-300">
+                      {row.why}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 md:hidden">
+                      Skip for now
+                    </p>
+                    <p className="text-sm leading-7 text-zinc-400">
+                      {row.avoid}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
