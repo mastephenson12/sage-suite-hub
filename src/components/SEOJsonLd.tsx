@@ -5,11 +5,17 @@ type FAQItem = {
   answer: string;
 };
 
+type BreadcrumbItem = {
+  name: string;
+  url: string;
+};
+
 type SEOJsonLdProps = {
   title?: string;
   description?: string;
   url?: string;
   faqs?: FAQItem[];
+  breadcrumbs?: BreadcrumbItem[];
 };
 
 function setMetaTag(name: string, content: string) {
@@ -55,6 +61,7 @@ export default function SEOJsonLd({
   description = 'Sage helps families and friends plan Arizona adventures, discover beginner-friendly hikes, explore road trip ideas, and build healthier travel memories together.',
   url = 'https://sage.healthandtravels.com/',
   faqs = [],
+  breadcrumbs = [],
 }: SEOJsonLdProps) {
   useEffect(() => {
     document.title = title;
@@ -139,9 +146,27 @@ export default function SEOJsonLd({
         }
       : null;
 
-  const schemas = faqSchema
-    ? [websiteSchema, webPageSchema, organizationSchema, faqSchema]
-    : [websiteSchema, webPageSchema, organizationSchema];
+  const breadcrumbSchema =
+    breadcrumbs.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: breadcrumb.name,
+            item: breadcrumb.url,
+          })),
+        }
+      : null;
+
+  const schemas = [
+    websiteSchema,
+    webPageSchema,
+    organizationSchema,
+    faqSchema,
+    breadcrumbSchema,
+  ].filter(Boolean);
 
   return (
     <>
