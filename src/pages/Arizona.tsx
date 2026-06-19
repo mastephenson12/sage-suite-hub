@@ -29,6 +29,13 @@ const Arizona: React.FC = () => {
         description="Explore Arizona family adventure guides for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, Grand Canyon, Show Low, Pinetop-Lakeside, Bisbee, Williams, Cottonwood, Jerome, Lake Havasu, and Yuma."
         url="https://sage.healthandtravels.com/arizona"
         faqs={arizonaFaqs}
+        breadcrumbs={[
+          { name: 'Sage', url: 'https://sage.healthandtravels.com/' },
+          {
+            name: 'Arizona Adventure Guides',
+            url: 'https://sage.healthandtravels.com/arizona',
+          },
+        ]}
       />
 
       <section className="bg-gradient-to-b from-orange-50 to-white px-6 py-16 md:py-24">
