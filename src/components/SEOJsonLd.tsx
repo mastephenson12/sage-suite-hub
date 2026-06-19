@@ -84,6 +84,14 @@ export default function SEOJsonLd({
     name: 'Sage Health and Travels',
     url: 'https://sage.healthandtravels.com/',
     description,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: 'https://sage.healthandtravels.com/arizona?style={search_term_string}',
+      },
+      'query-input': 'required name=search_term_string',
+    },
     publisher: {
       '@type': 'Organization',
       name: 'Health and Travels',
