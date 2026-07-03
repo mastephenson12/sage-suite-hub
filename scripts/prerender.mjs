@@ -91,6 +91,24 @@ const seasonalFamilyAdventureFaqs = [
   },
 ];
 
+const hikesWithKidsFaqs = [
+  {
+    question: 'What are the best Arizona hikes with kids?',
+    answer:
+      'The best Arizona hikes with kids are short, easy to exit, close to bathrooms or food, and matched to the season. Good starter areas include Cave Creek, Prescott, Payson, Sedona, Tucson, Flagstaff, and Phoenix-area preserves when heat and trail difficulty are reasonable.',
+  },
+  {
+    question: 'How long should a family hike be in Arizona?',
+    answer:
+      'Most families do best starting with hikes under 2 miles, especially with younger kids, visitors, or summer conditions. Older kids and confident hikers can build up gradually when weather, shade, water, and footing are safe.',
+  },
+  {
+    question: 'When is the safest time to hike with kids in Arizona?',
+    answer:
+      'Morning is usually safest, especially in warm desert areas. In summer, families should prioritize higher elevation destinations, shade, early starts, and backup plans that do not depend on exposed desert trails.',
+  },
+];
+
 const safetyFaqs = [
   {
     question: 'How much water should I bring for an Arizona desert hike?',
@@ -257,6 +275,15 @@ await writeRoute(
   seasonalFamilyAdventureHtml
 );
 
+const hikesWithKidsHtml = applySeo(baseHtml, {
+  title: 'Best Arizona Hikes With Kids | Family Trail Guide | Sage',
+  description:
+    'Find family-friendly Arizona hikes with kids by age, season, heat, shade, bathrooms, drive time, and easy trip planning help from Sage.',
+  url: `${siteUrl}/arizona/hikes-with-kids`,
+  faqs: hikesWithKidsFaqs,
+});
+await writeRoute('arizona/hikes-with-kids', hikesWithKidsHtml);
+
 const safetyHtml = applySeo(baseHtml, {
   title: 'Arizona Desert Hiking Safety Guide | Hydration, Heat & Gear',
   description:
@@ -280,4 +307,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 4} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 5} Arizona SEO pages.`);
