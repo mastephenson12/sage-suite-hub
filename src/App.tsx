@@ -33,6 +33,7 @@ import Arizona from './pages/Arizona';
 import ArizonaDestinationPage from './pages/ArizonaDestinationPage';
 import ArizonaDayTripsFromPhoenix from './pages/ArizonaDayTripsFromPhoenix';
 import ArizonaSeasonalFamilyAdventures from './pages/ArizonaSeasonalFamilyAdventures';
+import ArizonaHikesWithKids from './pages/ArizonaHikesWithKids';
 import DesertHikingSafety from './pages/DesertHikingSafety';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -138,6 +139,7 @@ function AppContent() {
           <Route path="/arizona" element={<Arizona />} />
           <Route path="/arizona/day-trips-from-phoenix" element={<ArizonaDayTripsFromPhoenix />} />
           <Route path="/arizona/family-adventures-by-season" element={<ArizonaSeasonalFamilyAdventures />} />
+          <Route path="/arizona/hikes-with-kids" element={<ArizonaHikesWithKids />} />
           <Route path="/arizona/desert-hiking-safety" element={<DesertHikingSafety />} />
           <Route path="/arizona/:slug" element={<ArizonaDestinationPage />} />
 
@@ -179,6 +181,13 @@ function AppContent() {
                   className="transition-colors hover:text-black"
                 >
                   Arizona Guides
+                </Link>
+
+                <Link
+                  to="/arizona/hikes-with-kids"
+                  className="transition-colors hover:text-black"
+                >
+                  Kids Hikes
                 </Link>
 
                 <Link
