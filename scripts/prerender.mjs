@@ -37,6 +37,19 @@ const destinations = [
   ],
 }));
 
+const exploreFaqs = [
+  {
+    question: 'What can I find in the Sage Explore Directory?',
+    answer:
+      'The Sage Explore Directory links to Arizona family adventure hubs, destination guides, trail guides, archive itineraries, and companion Health and Travels articles.',
+  },
+  {
+    question: 'Is this page useful for planning Arizona trips?',
+    answer:
+      'Yes. It is built as a simple starting point for families who want to compare Arizona destinations, hikes, seasonal ideas, safety notes, and ready-made itineraries.',
+  },
+];
+
 const arizonaFaqs = [
   {
     question: 'What is the best way to plan an Arizona family adventure?',
@@ -258,6 +271,15 @@ async function writeRoute(routePath, html) {
 
 const baseHtml = await readFile(indexPath, 'utf8');
 
+const exploreHtml = applySeo(baseHtml, {
+  title: 'Explore Arizona Family Travel Guides | Sage Directory',
+  description:
+    'Browse every major Sage Arizona family travel hub, destination guide, trail guide, archive itinerary, and related Health and Travels article from one directory.',
+  url: `${siteUrl}/explore`,
+  faqs: exploreFaqs,
+});
+await writeRoute('explore', exploreHtml);
+
 const arizonaHtml = applySeo(baseHtml, {
   title: 'Arizona Family Adventure Guides | Sage Health and Travels',
   description:
@@ -342,4 +364,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 6} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 7} Arizona SEO pages.`);
