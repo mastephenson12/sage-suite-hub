@@ -321,4 +321,130 @@ Want a custom Flagstaff itinerary built for your family?
 [**Plan My Flagstaff Escape**](/chat)
 `,
   },
+  {
+    id: 'phoenix-things-to-do-with-kids-when-hot',
+    title: 'Things to Do in Phoenix With Kids When It Is Too Hot Outside',
+    date: 'Jul 5, 2026',
+    category: 'Family Travel',
+    content: `
+# Things to Do in Phoenix With Kids When It Is Too Hot Outside
+
+Phoenix can still work with kids in summer, but the plan has to respect the heat. The winning formula is simple: **outside early, inside midday, water or rest in the afternoon, and nothing heroic.**
+
+This guide is for families who want a real Phoenix day without turning the itinerary into a survival challenge.
+
+---
+
+## Quick Answer: Best Hot-Day Phoenix Plan With Kids
+
+Use this rhythm:
+
+- **6:00-8:30 AM:** short outdoor stop, shaded park, zoo arrival, or easy desert view.
+- **9:30-11:30 AM:** museum, aquarium, indoor play, library, or breakfast/brunch.
+- **12:00-4:30 PM:** air-conditioning, pool, nap, movie, mall, or hotel reset.
+- **5:30 PM or later:** dinner, splash pad, sunset drive, or a very short shaded walk.
+
+If the heat is extreme, skip the outdoor trail entirely.
+
+---
+
+## Best Early Outdoor Stops
+
+### Papago Park
+
+Papago works best at sunrise or very early morning. Keep it short: Hole-in-the-Rock, a few photos, water, then leave before the rocks start radiating heat.
+
+### Phoenix Zoo or Desert Botanical Garden
+
+These can work as early arrivals, especially if you plan a short visit and do not pretend shade is the same as air-conditioning. Leave while everyone still feels good.
+
+### Easy Neighborhood Parks
+
+Choose bathrooms, shade, parking, and a fast exit over dramatic scenery. A basic shaded playground can beat a famous desert trail when kids are small.
+
+---
+
+## Best Indoor Phoenix Activities for Hot Days
+
+Use one indoor anchor for the middle of the day:
+
+- Arizona Science Center for hands-on kid energy.
+- Children's Museum of Phoenix for younger kids.
+- Heard Museum for art, culture, and a calmer indoor pace.
+- OdySea Aquarium or indoor Scottsdale-area stops when you want a longer air-conditioned block.
+- A library, movie, mall play area, or indoor climbing/play space when the group is fading.
+
+The goal is not to impress the internet. The goal is to keep the day comfortable enough that people still like each other at dinner.
+
+---
+
+## Splash Pads, Pools, and Water Resets
+
+For Phoenix heat, water is not an extra. It is often the plan.
+
+Good hot-day water options:
+
+- Hotel pool time.
+- Splash pad after breakfast or near sunset.
+- Tempe Town Lake as a comfort stop, not a midday heat march.
+- Resort day pass if your budget and timing fit.
+
+Bring sandals, dry clothes, snacks, and a towel even when the stop looks casual.
+
+---
+
+## Food Strategy
+
+Pick the food stop before you leave. Heat plus hungry kids is where nice family plans go sideways.
+
+Look for:
+
+- Easy parking.
+- Indoor seating.
+- Kid-friendly menu.
+- Gluten-free options if your family needs them.
+- A location close to the next reset, not across town.
+
+For a bigger Phoenix family overview, read [Phoenix, Arizona: Your Family's Perfect Desert Escape](https://healthandtravels.com/p/phoenix-arizona-adventure).
+
+---
+
+## Heat Rules Sage Uses
+
+When Phoenix heat is high, Sage should push outdoor activities earlier and protect the middle of the day.
+
+- Trails before 9:00 AM in dangerous heat.
+- No exposed midday hikes.
+- Indoor anchors from late morning through afternoon.
+- Water, shade, hats, sunscreen, and realistic drive times.
+- A backup plan that does not depend on everyone being tough.
+
+---
+
+## One Easy Hot-Day Phoenix Itinerary
+
+**Morning:** Papago Park photo stop or a short shaded park visit.  
+**Late Morning:** Arizona Science Center, Children's Museum, Heard Museum, or OdySea Aquarium.  
+**Lunch:** Indoor restaurant chosen before you leave.  
+**Afternoon:** Pool, nap, movie, mall, or hotel reset.  
+**Evening:** Splash pad, easy dinner, or sunset drive.
+
+That is enough. In Phoenix summer, a calm day is a successful day.
+
+---
+
+## Related Sage Guides
+
+- [Phoenix toddler-friendly parks](/archive/phoenix-toddler-friendly-parks)
+- [Papago Park family guide](/trail-guides/papago-park)
+- [Best Arizona hikes with kids](/arizona/hikes-with-kids)
+- [Flagstaff family escape](/archive/flagstaff-family-escape)
+
+---
+
+## Build the Full Phoenix Heat Plan
+
+[**Plan a Phoenix Heat-Safe Family Day**](/trip-builder?plan=ready&location=phoenix&kids=yes&activity=indoor-outdoor&length=full-day&season=summer&ages=mixed&shade=true&bathrooms=true&stroller=true&drive=60&heat=extreme)
+`,
+  },
 ];
