@@ -132,6 +132,19 @@ const safetyFaqs = [
   },
 ];
 
+const spanishPhoenixHeatFaqs = [
+  {
+    question: 'Que hacer en Phoenix con ninos cuando hace demasiado calor?',
+    answer:
+      'Lo mejor es salir muy temprano, usar actividades bajo techo durante el mediodia, planear alberca o descanso en la tarde, y dejar caminatas expuestas para otro dia.',
+  },
+  {
+    question: 'Es seguro caminar con ninos en Phoenix durante calor extremo?',
+    answer:
+      'No. En calor extremo, las familias deben evitar caminatas expuestas y elegir actividades bajo techo, agua, sombra o salidas muy cortas temprano.',
+  },
+];
+
 function escapeAttribute(value) {
   return value
     .replaceAll('&', '&amp;')
@@ -293,6 +306,28 @@ const safetyHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona/desert-hiking-safety', safetyHtml);
 
+const spanishPhoenixHeatHtml = applySeo(baseHtml, {
+  title: 'Que hacer en Phoenix con ninos cuando hace demasiado calor | Sage',
+  description:
+    'Guia familiar en espanol para planear Phoenix con ninos durante calor extremo: actividades bajo techo, alberca, splash pads, comida, sombra y salidas tempranas.',
+  url: `${siteUrl}/es/archive/phoenix-things-to-do-with-kids-when-hot`,
+  faqs: spanishPhoenixHeatFaqs,
+})
+  .replace('<html lang="en">', '<html lang="es">')
+  .replace(
+    '</head>',
+    [
+      '    <link rel="alternate" hreflang="es" href="https://sage.healthandtravels.com/es/archive/phoenix-things-to-do-with-kids-when-hot" />',
+      '    <link rel="alternate" hreflang="en" href="https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot" />',
+      '    <link rel="alternate" hreflang="x-default" href="https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot" />',
+      '  </head>',
+    ].join('\n')
+  );
+await writeRoute(
+  'es/archive/phoenix-things-to-do-with-kids-when-hot',
+  spanishPhoenixHeatHtml
+);
+
 for (const destination of destinations) {
   const title = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
   const description = `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
@@ -307,4 +342,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 5} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 6} Arizona SEO pages.`);
