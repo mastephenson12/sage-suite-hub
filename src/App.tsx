@@ -22,6 +22,7 @@ import PopularArizonaGuides from './components/PopularArizonaGuides';
 import SeasonalPlanningPanel from './components/SeasonalPlanningPanel';
 
 import Archive from './pages/Archive';
+import Explore from './pages/Explore';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
 import Community from './pages/Community';
@@ -129,6 +130,7 @@ function AppContent() {
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
 
+          <Route path="/explore" element={<Explore />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/archive/:id" element={<ArticlePage />} />
           <Route
@@ -170,6 +172,10 @@ function AppContent() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
+                <Link to="/explore" className="transition-colors hover:text-black">
+                  Explore
+                </Link>
+
                 <Link to="/archive" className="transition-colors hover:text-black">
                   Archive
                 </Link>
