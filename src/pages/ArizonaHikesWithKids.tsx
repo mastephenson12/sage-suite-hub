@@ -133,6 +133,16 @@ const shareText = [
   'Guide: https://sage.healthandtravels.com/arizona/hikes-with-kids',
 ].join('\n');
 
+const voteText = [
+  'Which Arizona family hike plan should we choose?',
+  '',
+  '1. Easy desert morning: short Phoenix or Cave Creek walk plus food nearby.',
+  '2. Cooler creek or pine day: Payson, Prescott, or Flagstaff for shade and elevation.',
+  '3. Red rock reward hike: Sedona or Cottonwood with one scenic payoff.',
+  '',
+  'Sage guide: https://sage.healthandtravels.com/arizona/hikes-with-kids',
+].join('\n');
+
 export default function ArizonaHikesWithKids() {
   return (
     <main className="min-h-screen bg-white text-zinc-900">
@@ -372,8 +382,10 @@ export default function ArizonaHikesWithKids() {
         <div className="mx-auto max-w-6xl">
           <SharePlanPanel
             title="Share this Arizona hikes with kids guide"
-            body="Send this to the parent who wants a real hike, not a family mutiny with trail dust."
-            shareText={shareText}
+            description="Send this to the parent who wants a real hike, not a family mutiny with trail dust."
+            quickPlanText={shareText}
+            voteText={voteText}
+            eventContext="arizona_hikes_with_kids"
           />
         </div>
       </section>
