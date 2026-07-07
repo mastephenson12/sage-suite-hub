@@ -1,53 +1,98 @@
-import { writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFile, writeFile } from 'node:fs/promises';
 
-const SITE_URL = 'https://sage.healthandtravels.com';
-const TODAY = new Date().toISOString().slice(0, 10);
+const siteUrl = 'https://sage.healthandtravels.com';
+const today = new Date().toISOString().slice(0, 10);
 
-const routes = [
-  { path: '/', priority: '1.0', changefreq: 'weekly' },
-  { path: '/trip-builder', priority: '0.9', changefreq: 'weekly' },
-  { path: '/chat', priority: '0.8', changefreq: 'weekly' },
-  { path: '/arizona', priority: '0.9', changefreq: 'weekly' },
-  { path: '/arizona/desert-hiking-safety', priority: '0.9', changefreq: 'monthly' },
-  { path: '/arizona/sedona', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/flagstaff', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/payson', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/prescott', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/cave-creek', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/page', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/tucson', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/grand-canyon', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/show-low', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/pinetop-lakeside', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/bisbee', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/williams', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/cottonwood', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/jerome', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/lake-havasu', priority: '0.8', changefreq: 'monthly' },
-  { path: '/arizona/yuma', priority: '0.8', changefreq: 'monthly' },
-  { path: '/trail-guides', priority: '0.8', changefreq: 'weekly' },
-  { path: '/archive', priority: '0.8', changefreq: 'weekly' },
-  { path: '/community', priority: '0.7', changefreq: 'monthly' },
-  { path: '/about', priority: '0.6', changefreq: 'monthly' },
-  { path: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
-  { path: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
+const staticRoutes = [
+  { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/explore', changefreq: 'weekly', priority: '0.9' },
+  { path: '/trip-builder', changefreq: 'weekly', priority: '0.9' },
+  { path: '/chat', changefreq: 'monthly', priority: '0.5' },
+  { path: '/arizona', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/day-trips-from-phoenix', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/family-adventures-by-season', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/hikes-with-kids', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/desert-hiking-safety', changefreq: 'monthly', priority: '0.9' },
+  { path: '/trail-guides', changefreq: 'weekly', priority: '0.8' },
+  { path: '/archive', changefreq: 'weekly', priority: '0.8' },
+  { path: '/es/archive/phoenix-things-to-do-with-kids-when-hot', changefreq: 'monthly', priority: '0.8' },
+  { path: '/community', changefreq: 'monthly', priority: '0.7' },
+  { path: '/about', changefreq: 'monthly', priority: '0.6' },
+  { path: '/privacy-policy', changefreq: 'yearly', priority: '0.3' },
+  { path: '/terms-of-service', changefreq: 'yearly', priority: '0.3' },
 ];
 
-const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes
-  .map(
-    (route) => `  <url>
-    <loc>${SITE_URL}${route.path === '/' ? '' : route.path}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>${route.changefreq}</changefreq>
-    <priority>${route.priority}</priority>
-  </url>`
-  )
-  .join('\n')}
-</urlset>
-`;
+async function readSource(path) {
+  return readFile(path, 'utf8');
+}
 
-writeFileSync(join(process.cwd(), 'public', 'sitemap.xml'), xml);
-console.log(`Generated sitemap with ${routes.length} URLs for ${SITE_URL}`);
+function extractStringValues(source, propertyName) {
+  const pattern = new RegExp(`${propertyName}:\\s*['\"]([^'\"]+)['\"]`, 'g');
+  return [...source.matchAll(pattern)].map((match) => match[1]);
+}
+
+function uniqueRoutes(routes) {
+  const seen = new Set();
+
+  return routes.filter((route) => {
+    if (seen.has(route.path)) return false;
+    seen.add(route.path);
+    return true;
+  });
+}
+
+function routeToXml(route) {
+  const loc = route.path === '/' ? `${siteUrl}/` : `${siteUrl}${route.path}`;
+
+  return [
+    '  <url>',
+    `    <loc>${loc}</loc>`,
+    `    <lastmod>${route.lastmod || today}</lastmod>`,
+    `    <changefreq>${route.changefreq}</changefreq>`,
+    `    <priority>${route.priority}</priority>`,
+    '  </url>',
+  ].join('\n');
+}
+
+const [articlesSource, destinationsSource, trailsSource] = await Promise.all([
+  readSource('src/data/articles.ts'),
+  readSource('src/data/arizonaDestinations.ts'),
+  readSource('src/data/trails.ts'),
+]);
+
+const destinationRoutes = extractStringValues(destinationsSource, 'slug').map((slug) => ({
+  path: `/arizona/${slug}`,
+  changefreq: 'weekly',
+  priority: '0.8',
+}));
+
+const trailRoutes = extractStringValues(trailsSource, 'id').map((id) => ({
+  path: `/trail-guides/${id}`,
+  changefreq: 'monthly',
+  priority: '0.7',
+}));
+
+const archiveRoutes = extractStringValues(articlesSource, 'id').map((id) => ({
+  path: `/archive/${id}`,
+  changefreq: 'monthly',
+  priority: id === 'phoenix-things-to-do-with-kids-when-hot' ? '0.8' : '0.7',
+}));
+
+const routes = uniqueRoutes([
+  ...staticRoutes,
+  ...destinationRoutes,
+  ...trailRoutes,
+  ...archiveRoutes,
+]);
+
+const sitemap = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ...routes.map(routeToXml),
+  '</urlset>',
+  '',
+].join('\n');
+
+await writeFile('public/sitemap.xml', sitemap, 'utf8');
+
+console.log(`Generated public/sitemap.xml with ${routes.length} URLs.`);
