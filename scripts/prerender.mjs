@@ -4,6 +4,11 @@ import path from 'node:path';
 const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
+const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
+const legacySpanishPhoenixHeatPath =
+  'es/archive/phoenix-things-to-do-with-kids-when-hot';
+const englishPhoenixHeatPath =
+  'archive/phoenix-things-to-do-with-kids-when-hot';
 
 const destinations = [
   ['sedona', 'Sedona'],
@@ -332,23 +337,21 @@ const spanishPhoenixHeatHtml = applySeo(baseHtml, {
   title: 'Que hacer en Phoenix con ninos cuando hace demasiado calor | Sage',
   description:
     'Guia familiar en espanol para planear Phoenix con ninos durante calor extremo: actividades bajo techo, alberca, splash pads, comida, sombra y salidas tempranas.',
-  url: `${siteUrl}/es/archive/phoenix-things-to-do-with-kids-when-hot`,
+  url: `${siteUrl}/${spanishPhoenixHeatPath}`,
   faqs: spanishPhoenixHeatFaqs,
 })
   .replace('<html lang="en">', '<html lang="es">')
   .replace(
     '</head>',
     [
-      '    <link rel="alternate" hreflang="es" href="https://sage.healthandtravels.com/es/archive/phoenix-things-to-do-with-kids-when-hot" />',
-      '    <link rel="alternate" hreflang="en" href="https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot" />',
-      '    <link rel="alternate" hreflang="x-default" href="https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot" />',
+      `    <link rel="alternate" hreflang="es" href="${siteUrl}/${spanishPhoenixHeatPath}" />`,
+      `    <link rel="alternate" hreflang="en" href="${siteUrl}/${englishPhoenixHeatPath}" />`,
+      `    <link rel="alternate" hreflang="x-default" href="${siteUrl}/${englishPhoenixHeatPath}" />`,
       '  </head>',
     ].join('\n')
   );
-await writeRoute(
-  'es/archive/phoenix-things-to-do-with-kids-when-hot',
-  spanishPhoenixHeatHtml
-);
+await writeRoute(spanishPhoenixHeatPath, spanishPhoenixHeatHtml);
+await writeRoute(legacySpanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 
 for (const destination of destinations) {
   const title = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
@@ -364,4 +367,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 7} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 8} Arizona SEO pages.`);
