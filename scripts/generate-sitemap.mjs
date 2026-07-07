@@ -15,6 +15,7 @@ const staticRoutes = [
   { path: '/arizona/desert-hiking-safety', changefreq: 'monthly', priority: '0.9' },
   { path: '/trail-guides', changefreq: 'weekly', priority: '0.8' },
   { path: '/archive', changefreq: 'weekly', priority: '0.8' },
+  { path: '/archive/payson-with-kids-woods-canyon-lake-mogollon-rim', changefreq: 'monthly', priority: '0.8' },
   { path: '/es/archive/phoenix-things-to-do-with-kids-when-hot', changefreq: 'monthly', priority: '0.8' },
   { path: '/community', changefreq: 'monthly', priority: '0.7' },
   { path: '/about', changefreq: 'monthly', priority: '0.6' },
