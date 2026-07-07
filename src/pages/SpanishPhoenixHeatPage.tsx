@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOJsonLd from '../components/SEOJsonLd';
 
+const spanishUrl =
+  'https://sage.healthandtravels.com/es/archive/phoenix-con-ninos-cuando-hace-calor';
+const englishUrl =
+  'https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot';
+
 const spanishFaqs = [
   {
     question: 'Que hacer en Phoenix con ninos cuando hace demasiado calor?',
@@ -35,23 +40,22 @@ function setAlternateLink(hreflang: string, href: string) {
   link.setAttribute('href', href);
 }
 
+const indoorIdeas = [
+  'Arizona Science Center para energia practica y curiosa.',
+  'Children\'s Museum of Phoenix para ninos pequenos.',
+  'Heard Museum para arte, cultura y un ritmo mas tranquilo.',
+  'OdySea Aquarium o actividades bajo techo en Scottsdale.',
+  'Biblioteca, cine, area de juegos bajo techo o centro comercial.',
+];
+
 export default function SpanishPhoenixHeatPage() {
   React.useEffect(() => {
     const previousLang = document.documentElement.lang;
 
     document.documentElement.lang = 'es';
-    setAlternateLink(
-      'es',
-      'https://sage.healthandtravels.com/es/archive/phoenix-things-to-do-with-kids-when-hot'
-    );
-    setAlternateLink(
-      'en',
-      'https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot'
-    );
-    setAlternateLink(
-      'x-default',
-      'https://sage.healthandtravels.com/archive/phoenix-things-to-do-with-kids-when-hot'
-    );
+    setAlternateLink('es', spanishUrl);
+    setAlternateLink('en', englishUrl);
+    setAlternateLink('x-default', englishUrl);
 
     return () => {
       document.documentElement.lang = previousLang || 'en';
@@ -63,20 +67,21 @@ export default function SpanishPhoenixHeatPage() {
       <SEOJsonLd
         title="Que hacer en Phoenix con ninos cuando hace demasiado calor | Sage"
         description="Guia familiar en espanol para planear Phoenix con ninos durante calor extremo: actividades bajo techo, alberca, splash pads, comida, sombra y salidas tempranas."
-        url="https://sage.healthandtravels.com/es/archive/phoenix-things-to-do-with-kids-when-hot"
+        url={spanishUrl}
         faqs={spanishFaqs}
         breadcrumbs={[
           { name: 'Sage', url: 'https://sage.healthandtravels.com/' },
-          { name: 'Archivo en espanol', url: 'https://sage.healthandtravels.com/es/archive/phoenix-things-to-do-with-kids-when-hot' },
+          { name: 'Guias en espanol', url: spanishUrl },
         ]}
       />
 
       <section className="relative overflow-hidden bg-zinc-950 px-6 py-16 text-white md:py-24">
-        <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 opacity-35">
           <img
             src="/images/phoenix-sunset-hike.avif"
             alt="Paisaje del desierto de Phoenix al atardecer"
             className="h-full w-full object-cover"
+            fetchPriority="high"
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-zinc-950/40" />
@@ -163,11 +168,9 @@ export default function SpanishPhoenixHeatPage() {
           <h2>Mejores actividades bajo techo en Phoenix</h2>
           <p>Usen una actividad bajo techo como ancla del mediodia:</p>
           <ul>
-            <li>Arizona Science Center para energia practica y curiosa.</li>
-            <li>Children's Museum of Phoenix para ninos pequenos.</li>
-            <li>Heard Museum para arte, cultura y un ritmo mas tranquilo.</li>
-            <li>OdySea Aquarium o actividades bajo techo en Scottsdale.</li>
-            <li>Biblioteca, cine, area de juegos bajo techo o centro comercial.</li>
+            {indoorIdeas.map((idea) => (
+              <li key={idea}>{idea}</li>
+            ))}
           </ul>
 
           <h2>Splash pads, albercas y descansos con agua</h2>
