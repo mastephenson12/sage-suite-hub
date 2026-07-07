@@ -36,6 +36,11 @@ const hubLinks = [
     description: 'A heat-safe Phoenix plan with early outdoor stops, indoor midday anchors, water resets, and realistic pacing.',
     to: '/archive/phoenix-things-to-do-with-kids-when-hot',
   },
+  {
+    title: 'Phoenix con ninos cuando hace demasiado calor',
+    description: 'Guia familiar en espanol con actividades bajo techo, agua, sombra, comida y salidas tempranas para dias de calor.',
+    to: '/es/archive/phoenix-con-ninos-cuando-hace-calor',
+  },
 ];
 
 const companionReads = [
