@@ -134,6 +134,10 @@ function AppContent() {
           <Route path="/archive" element={<Archive />} />
           <Route path="/archive/:id" element={<ArticlePage />} />
           <Route
+            path="/es/archive/phoenix-con-ninos-cuando-hace-calor"
+            element={<SpanishPhoenixHeatPage />}
+          />
+          <Route
             path="/es/archive/phoenix-things-to-do-with-kids-when-hot"
             element={<SpanishPhoenixHeatPage />}
           />
