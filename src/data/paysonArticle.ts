@@ -5,10 +5,13 @@ export const paysonFamilyGuide: Article = {
   title: 'Payson With Kids: Woods Canyon Lake, Mogollon Rim Views, and Easy Family Stops',
   date: 'Jul 6, 2026',
   category: 'Family Travel',
+  image: '/images/payson-rim-overlook.avif',
   content: `
 # Payson With Kids: Woods Canyon Lake, Mogollon Rim Views, and Easy Family Stops
 
 Payson is one of the best Arizona family escapes when Phoenix is too hot but you do not want to commit to a long mountain drive. In about two hours from the Valley, families can trade desert pavement for pine trees, lake air, picnic stops, and easy Mogollon Rim views.
+
+![Family view from the Mogollon Rim near Payson, Arizona](/images/payson-rim-overlook.avif)
 
 This guide is built for families who want a practical Payson day trip or overnight weekend: simple pacing, kid-friendly stops, cooler-air options, and enough flexibility to handle naps, snacks, weather, and the classic Arizona summer question: "Where can we go that does not feel like an oven?"
 
@@ -30,6 +33,8 @@ Families usually like Payson because it offers:
 - Mogollon Rim overlooks with big views and minimal hiking required
 - A manageable drive for a full-day escape from the Valley
 
+![Kids exploring a pine forest near Payson and Woods Canyon Lake](/images/payson-family-pine-forest.avif)
+
 If you are comparing destinations, Payson is usually better than Sedona for a low-pressure summer cooling trip, while [Flagstaff](/arizona/flagstaff) is better when you want a true city weekend with museums, food, and longer activity lists.
 
 ## Best Family Route From Phoenix
@@ -42,9 +47,13 @@ Start early, especially from May through September. The goal is to reach the for
 
 If you are visiting during a major heat wave, pair this with our [Phoenix things to do with kids when hot](/archive/phoenix-things-to-do-with-kids-when-hot) guide so you have a backup plan for the drive day.
 
+![Woods Canyon Lake road sign in the pine forest near Payson](/images/payson-woods-canyon-road-sign.avif)
+
 ### 9:15 AM - Woods Canyon Lake
 
 Woods Canyon Lake is one of the easiest family-friendly stops near Payson because it gives kids a clear destination: water, trees, rocks, shoreline, and places to pause. You do not need a huge hike to make it worthwhile.
+
+![Woods Canyon Lake seen through the pines near Payson, Arizona](/images/payson-lake-through-pines.avif)
 
 Good family options near the lake:
 
@@ -70,6 +79,8 @@ A good Payson family lunch plan should include:
 ### 2:00 PM - Mogollon Rim Viewpoint
 
 The Mogollon Rim is the big payoff. You can get wide forest and canyon views without making the day feel like a hard hike. This is the place to slow down, take photos, and let the kids see how different Arizona can feel just a couple hours from Phoenix.
+
+![Wide Mogollon Rim overlook with pine trees near Payson](/images/payson-family-rim-view.avif)
 
 Safety note: Rim viewpoints can have steep edges, uneven rock, loose gravel, and sudden wind. Keep kids close, avoid edge photos, and do not treat scenic overlooks like playgrounds.
 
