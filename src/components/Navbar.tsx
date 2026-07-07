@@ -5,7 +5,7 @@ import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from "../constants";
 const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 border-b border-zinc-100 bg-white/95 py-3 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6">
         <div className="flex items-center gap-10">
           <Link to="/" className="group flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl transition-transform group-hover:scale-110">
@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-7 text-[12px] font-bold uppercase tracking-widest text-zinc-500 lg:flex">
+          <div className="hidden items-center gap-6 text-[12px] font-bold uppercase tracking-widest text-zinc-500 xl:gap-7 lg:flex">
             <Link to="/explore" className="transition-colors hover:text-black">
               Explore
             </Link>
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3 lg:ml-8 xl:ml-12">
           <Link
             to="/chat"
             className="hidden rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-zinc-800 transition-colors hover:bg-zinc-100 md:block"
