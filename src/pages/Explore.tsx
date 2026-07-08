@@ -22,6 +22,11 @@ const hubLinks = [
     to: '/arizona/day-trips-from-phoenix',
   },
   {
+    title: 'Arizona Weekend Trips for Families and Friends',
+    description: 'Choose low-stress Arizona weekend trips by season, drive time, cooler air, red rocks, food stops, and group energy.',
+    to: '/arizona/weekend-trips',
+  },
+  {
     title: 'Arizona Family Adventures By Season',
     description: 'Choose better trips for spring, summer, monsoon, fall, and winter conditions.',
     to: '/arizona/family-adventures-by-season',
