@@ -91,6 +91,24 @@ const phoenixDayTripFaqs = [
   },
 ];
 
+const weekendTripsFaqs = [
+  {
+    question: 'What are the best Arizona weekend trips for families?',
+    answer:
+      'Strong Arizona weekend trips for families include Flagstaff, Payson, Prescott, Sedona, Tucson, Williams, Grand Canyon, Show Low, and Pinetop-Lakeside when the plan matches the season, drive time, and kid energy level.',
+  },
+  {
+    question: 'What are the best Arizona weekend trips for groups of friends?',
+    answer:
+      'Groups of friends usually do well with Sedona, Flagstaff, Prescott, Cottonwood and Jerome, Page, Tucson, or a Grand Canyon weekend because these places combine scenery, food, flexible activities, and easy shared lodging options.',
+  },
+  {
+    question: 'Where should Phoenix families go for a cooler weekend?',
+    answer:
+      'For cooler summer weekends from Phoenix, families should look first at Flagstaff, Payson, Prescott, Show Low, Pinetop-Lakeside, and the Mogollon Rim because higher elevation and shade make the trip easier to enjoy.',
+  },
+];
+
 const seasonalFamilyAdventureFaqs = [
   {
     question: 'What is the best season for family adventures in Arizona?',
@@ -303,6 +321,15 @@ const phoenixDayTripsHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona/day-trips-from-phoenix', phoenixDayTripsHtml);
 
+const weekendTripsHtml = applySeo(baseHtml, {
+  title: 'Arizona Weekend Trips for Families and Friends | Sage',
+  description:
+    'Find Arizona weekend trips for families, parents, and groups of friends by drive time, season, heat, scenery, food stops, cabins, easy hikes, and low-stress planning.',
+  url: `${siteUrl}/arizona/weekend-trips`,
+  faqs: weekendTripsFaqs,
+});
+await writeRoute('arizona/weekend-trips', weekendTripsHtml);
+
 const seasonalFamilyAdventureHtml = applySeo(baseHtml, {
   title: 'Best Arizona Family Adventures by Season | Sage',
   description:
@@ -367,4 +394,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 8} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 9} Arizona SEO pages.`);
