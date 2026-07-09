@@ -116,6 +116,35 @@ function AppContent() {
     return () => window.clearTimeout(timeoutId);
   }, [location.pathname, location.hash]);
 
+  React.useEffect(() => {
+    const pagePath = `${location.pathname}${location.search}`;
+    const gaWindow = window as Window & {
+      __SAGE_GA_MEASUREMENT_ID?: string;
+      gtag?: (...args: unknown[]) => void;
+      dataLayer?: Array<Record<string, unknown>>;
+    };
+
+    const pagePayload = {
+      page_path: pagePath,
+      page_location: `${window.location.origin}${pagePath}`,
+      page_title: document.title,
+    };
+
+    if (
+      typeof gaWindow.gtag === 'function' &&
+      typeof gaWindow.__SAGE_GA_MEASUREMENT_ID === 'string'
+    ) {
+      gaWindow.gtag('config', gaWindow.__SAGE_GA_MEASUREMENT_ID, pagePayload);
+    }
+
+    if (Array.isArray(gaWindow.dataLayer)) {
+      gaWindow.dataLayer.push({
+        event: 'page_view',
+        ...pagePayload,
+      });
+    }
+  }, [location.pathname, location.search]);
+
   const hideSiteChrome =
     location.pathname === '/chat' || location.pathname.startsWith('/suite');
 
