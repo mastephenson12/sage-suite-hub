@@ -54,9 +54,12 @@
     <!-- Google Analytics -->
     <script>
       (function () {
-        var measurementId = '%VITE_GOOGLE_ANALYTICS_ID%';
+        var envMeasurementId = '%VITE_GOOGLE_ANALYTICS_ID%';
+        var measurementId = envMeasurementId && envMeasurementId.indexOf('%') !== 0
+          ? envMeasurementId
+          : 'G-JD5CV1F4TH';
 
-        if (!measurementId || measurementId.indexOf('%') === 0) {
+        if (!measurementId) {
           return;
         }
 
