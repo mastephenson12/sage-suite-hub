@@ -22,6 +22,11 @@ const hubLinks = [
     to: '/arizona/day-trips-from-phoenix',
   },
   {
+    title: 'Payson and Rim Country With Kids',
+    description: 'Plan a cooler family escape from Phoenix with Woods Canyon Lake, Mogollon Rim views, pine forest stops, weather backups, and low-stress pacing.',
+    to: '/arizona/payson-rim-country-with-kids',
+  },
+  {
     title: 'Arizona Weekend Trips for Families and Friends',
     description: 'Choose low-stress Arizona weekend trips by season, drive time, cooler air, red rocks, food stops, and group energy.',
     to: '/arizona/weekend-trips',
