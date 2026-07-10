@@ -38,6 +38,7 @@ import ArizonaSeasonalFamilyAdventures from './pages/ArizonaSeasonalFamilyAdvent
 import ArizonaHikesWithKids from './pages/ArizonaHikesWithKids';
 import DesertHikingSafety from './pages/DesertHikingSafety';
 import PaysonRimCountryWithKids from './pages/PaysonRimCountryWithKids';
+import CoolArizonaSummerTripsWithKids from './pages/CoolArizonaSummerTripsWithKids';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -185,6 +186,7 @@ function AppContent() {
           <Route path="/arizona/hikes-with-kids" element={<ArizonaHikesWithKids />} />
           <Route path="/arizona/desert-hiking-safety" element={<DesertHikingSafety />} />
           <Route path="/arizona/payson-rim-country-with-kids" element={<PaysonRimCountryWithKids />} />
+          <Route path="/arizona/cool-summer-trips-with-kids" element={<CoolArizonaSummerTripsWithKids />} />
           <Route path="/arizona/:slug" element={<ArizonaDestinationPage />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
