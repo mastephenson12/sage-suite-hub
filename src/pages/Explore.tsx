@@ -12,6 +12,11 @@ const hubLinks = [
     to: '/arizona',
   },
   {
+    title: 'Cool Arizona Summer Trips With Kids',
+    description: 'Find cooler Arizona summer escapes from Phoenix with higher elevation towns, lake days, shaded backups, and heat-safe pacing.',
+    to: '/arizona/cool-summer-trips-with-kids',
+  },
+  {
     title: 'Best Arizona Hikes With Kids',
     description: 'Compare beginner-friendly hikes by season, shade, bathrooms, drive time, and family energy level.',
     to: '/arizona/hikes-with-kids',
