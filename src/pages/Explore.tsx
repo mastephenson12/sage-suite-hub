@@ -12,6 +12,11 @@ const hubLinks = [
     to: '/arizona',
   },
   {
+    title: 'Guias de Arizona en espanol para familias',
+    description: 'Punto de entrada en espanol para familias que quieren explorar Arizona con ninos, amigos, calor, seguridad y planes realistas.',
+    to: '/es/arizona',
+  },
+  {
     title: 'Cool Arizona Summer Trips With Kids',
     description: 'Find cooler Arizona summer escapes from Phoenix with higher elevation towns, lake days, shaded backups, and heat-safe pacing.',
     to: '/arizona/cool-summer-trips-with-kids',
@@ -220,7 +225,7 @@ const Explore: React.FC = () => {
             These articles live on the main Health and Travels site and pair well with the Sage planning pages.
           </p>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-3">
           {companionReads.map((read) => (
             <a
               key={read.href}
