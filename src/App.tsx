@@ -39,6 +39,7 @@ import ArizonaHikesWithKids from './pages/ArizonaHikesWithKids';
 import DesertHikingSafety from './pages/DesertHikingSafety';
 import PaysonRimCountryWithKids from './pages/PaysonRimCountryWithKids';
 import CoolArizonaSummerTripsWithKids from './pages/CoolArizonaSummerTripsWithKids';
+import SpanishArizonaHub from './pages/SpanishArizonaHub';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -174,6 +175,7 @@ function AppContent() {
             path="/es/archive/phoenix-things-to-do-with-kids-when-hot"
             element={<SpanishPhoenixHeatPage />}
           />
+          <Route path="/es/arizona" element={<SpanishArizonaHub />} />
           <Route
             path="/es/arizona/viajes-frescos-verano-con-ninos"
             element={<SpanishCoolArizonaSummerTrips />}
@@ -236,6 +238,13 @@ function AppContent() {
                   className="transition-colors hover:text-black"
                 >
                   Arizona Guides
+                </Link>
+
+                <Link
+                  to="/es/arizona"
+                  className="transition-colors hover:text-black"
+                >
+                  Espanol
                 </Link>
 
                 <Link
