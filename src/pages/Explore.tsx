@@ -17,6 +17,11 @@ const hubLinks = [
     to: '/arizona/cool-summer-trips-with-kids',
   },
   {
+    title: 'Viajes frescos de verano en Arizona con ninos',
+    description: 'Guia en espanol para familias que buscan escapar del calor de Phoenix con Payson, Flagstaff, Prescott, lagos, sombra y planes bajo techo.',
+    to: '/es/arizona/viajes-frescos-verano-con-ninos',
+  },
+  {
     title: 'Best Arizona Hikes With Kids',
     description: 'Compare beginner-friendly hikes by season, shade, bathrooms, drive time, and family energy level.',
     to: '/arizona/hikes-with-kids',
