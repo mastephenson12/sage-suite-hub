@@ -5,10 +5,10 @@ import {
   CalendarDays,
   Compass,
   Droplets,
-  Languages,
-  MapPinned,
+  MapPin,
   Mountain,
   ShieldCheck,
+  Sparkles,
   Sun,
   Trees,
   Users,
@@ -96,7 +96,7 @@ const planningPaths = [
     text:
       'Compara tiempo de manejo, clima, comida, estacionamiento y si el viaje funciona como ida y vuelta o fin de semana.',
     to: '/arizona/day-trips-from-phoenix',
-    icon: MapPinned,
+    icon: MapPin,
   },
   {
     title: 'Fines de semana familiares',
@@ -256,10 +256,10 @@ export default function SpanishArizonaHub() {
       <section className="border-b border-zinc-100 bg-emerald-50 px-6 py-10">
         <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-4">
           {[
-            { icon: Languages, label: 'Idioma', value: 'Guias en espanol' },
+            { icon: Sparkles, label: 'Idioma', value: 'Guias en espanol' },
             { icon: Users, label: 'Para quien', value: 'Familias y grupos' },
             { icon: ShieldCheck, label: 'Prioridad', value: 'Calor y seguridad' },
-            { icon: MapPinned, label: 'Zona', value: 'Arizona completo' },
+            { icon: MapPin, label: 'Zona', value: 'Arizona completo' },
           ].map((stat) => {
             const Icon = stat.icon;
             return (
