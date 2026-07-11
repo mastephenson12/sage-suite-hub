@@ -4,9 +4,11 @@ import path from 'node:path';
 const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
+const spanishArizonaPath = 'es/arizona';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
 const legacySpanishPhoenixHeatPath =
   'es/archive/phoenix-things-to-do-with-kids-when-hot';
+const englishArizonaPath = 'arizona';
 const englishPhoenixHeatPath =
   'archive/phoenix-things-to-do-with-kids-when-hot';
 
@@ -70,6 +72,24 @@ const arizonaFaqs = [
     question: 'Which Arizona destinations are good for families?',
     answer:
       'Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, Grand Canyon, Show Low, Pinetop-Lakeside, Bisbee, Williams, Cottonwood, Jerome, Lake Havasu, and Yuma can all work well when the plan matches the season and hiking level.',
+  },
+];
+
+const spanishArizonaFaqs = [
+  {
+    question: 'Que es Sage Arizona en espanol?',
+    answer:
+      'Es una guia familiar para planear viajes por Arizona con ninos, amigos o familia: destinos, caminatas faciles, calor, comida, agua, sombra y planes realistas.',
+  },
+  {
+    question: 'Cuales son buenos destinos de Arizona para familias?',
+    answer:
+      'Sedona, Flagstaff, Payson, Prescott, Grand Canyon, Tucson, Show Low, Pinetop-Lakeside y Phoenix pueden funcionar bien si el plan respeta la temporada, el calor y la edad de los ninos.',
+  },
+  {
+    question: 'Como usar esta pagina?',
+    answer:
+      'Empieza por la temporada o el tipo de viaje: escapar del calor, caminar con ninos, salir desde Phoenix, hacer fin de semana o buscar un plan bajo techo.',
   },
 ];
 
@@ -286,6 +306,21 @@ function applySeo(html, { title, description, url, faqs }) {
   return output.replace('</head>', `${routeSchema}\n  </head>`);
 }
 
+function addLanguageAlternates(html, language, alternates) {
+  return html
+    .replace('<html lang="en">', `<html lang="${language}">`)
+    .replace(
+      '</head>',
+      [
+        ...alternates.map(
+          (alternate) =>
+            `    <link rel="alternate" hreflang="${alternate.hreflang}" href="${alternate.href}" />`
+        ),
+        '  </head>',
+      ].join('\n')
+    );
+}
+
 async function writeRoute(routePath, html) {
   const routeDir = path.join(distDir, routePath);
   await mkdir(routeDir, { recursive: true });
@@ -311,6 +346,23 @@ const arizonaHtml = applySeo(baseHtml, {
   faqs: arizonaFaqs,
 });
 await writeRoute('arizona', arizonaHtml);
+
+const spanishArizonaHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Guias de Arizona en espanol para familias | Sage',
+    description:
+      'Punto de entrada en espanol para planear viajes familiares por Arizona: Phoenix, Sedona, Flagstaff, Payson, Grand Canyon, caminatas con ninos, calor y fines de semana.',
+    url: `${siteUrl}/${spanishArizonaPath}`,
+    faqs: spanishArizonaFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishArizonaPath}` },
+    { hreflang: 'en', href: `${siteUrl}/${englishArizonaPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/${englishArizonaPath}` },
+  ]
+);
+await writeRoute(spanishArizonaPath, spanishArizonaHtml);
 
 const phoenixDayTripsHtml = applySeo(baseHtml, {
   title: 'Best Arizona Day Trips from Phoenix | Sage',
@@ -360,23 +412,21 @@ const safetyHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona/desert-hiking-safety', safetyHtml);
 
-const spanishPhoenixHeatHtml = applySeo(baseHtml, {
-  title: 'Que hacer en Phoenix con ninos cuando hace demasiado calor | Sage',
-  description:
-    'Guia familiar en espanol para planear Phoenix con ninos durante calor extremo: actividades bajo techo, alberca, splash pads, comida, sombra y salidas tempranas.',
-  url: `${siteUrl}/${spanishPhoenixHeatPath}`,
-  faqs: spanishPhoenixHeatFaqs,
-})
-  .replace('<html lang="en">', '<html lang="es">')
-  .replace(
-    '</head>',
-    [
-      `    <link rel="alternate" hreflang="es" href="${siteUrl}/${spanishPhoenixHeatPath}" />`,
-      `    <link rel="alternate" hreflang="en" href="${siteUrl}/${englishPhoenixHeatPath}" />`,
-      `    <link rel="alternate" hreflang="x-default" href="${siteUrl}/${englishPhoenixHeatPath}" />`,
-      '  </head>',
-    ].join('\n')
-  );
+const spanishPhoenixHeatHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Que hacer en Phoenix con ninos cuando hace demasiado calor | Sage',
+    description:
+      'Guia familiar en espanol para planear Phoenix con ninos durante calor extremo: actividades bajo techo, alberca, splash pads, comida, sombra y salidas tempranas.',
+    url: `${siteUrl}/${spanishPhoenixHeatPath}`,
+    faqs: spanishPhoenixHeatFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishPhoenixHeatPath}` },
+    { hreflang: 'en', href: `${siteUrl}/${englishPhoenixHeatPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/${englishPhoenixHeatPath}` },
+  ]
+);
 await writeRoute(spanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 await writeRoute(legacySpanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 
@@ -394,4 +444,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 9} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 10} Arizona SEO pages.`);
