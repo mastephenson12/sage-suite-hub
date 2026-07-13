@@ -22,6 +22,7 @@ import PopularArizonaGuides from './components/PopularArizonaGuides';
 import SeasonalPlanningPanel from './components/SeasonalPlanningPanel';
 
 import Archive from './pages/Archive';
+import AdventureChooser from './pages/AdventureChooser';
 import Explore from './pages/Explore';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
@@ -159,6 +160,7 @@ function AppContent() {
       <main className="flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/start-here" element={<AdventureChooser />} />
           <Route path="/trip-builder" element={<TripBuilderPage />} />
 
           <Route path="/chat" element={<ChatPage />} />
@@ -218,6 +220,10 @@ function AppContent() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
+                <Link to="/start-here" className="transition-colors hover:text-black">
+                  Start Here
+                </Link>
+
                 <Link to="/explore" className="transition-colors hover:text-black">
                   Explore
                 </Link>
