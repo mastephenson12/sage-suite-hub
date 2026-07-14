@@ -21,7 +21,11 @@ const Navbar: React.FC = () => {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-6 text-[12px] font-bold uppercase tracking-widest text-zinc-500 xl:gap-7 lg:flex">
+          <div className="hidden items-center gap-5 text-[12px] font-bold uppercase tracking-widest text-zinc-500 xl:gap-6 lg:flex">
+            <Link to="/start-here" className="transition-colors hover:text-black">
+              Start Here
+            </Link>
+
             <Link to="/explore" className="transition-colors hover:text-black">
               Explore
             </Link>
