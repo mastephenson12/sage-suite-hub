@@ -41,6 +41,8 @@ const mainChoices = [
       'Higher elevation, shade, lake stops, pine forests, and realistic heat-safe pacing from Phoenix.',
     to: '/arizona/cool-summer-trips-with-kids',
     icon: CloudSun,
+    image: '/images/flagstaff-family-adventure.avif',
+    imageAlt: 'Family adventure in the pine forests near Flagstaff, Arizona',
     bestFor: ['Phoenix families', 'Summer weekends', 'Heat breaks'],
   },
   {
@@ -50,6 +52,8 @@ const mainChoices = [
       'Compare beginner-friendly hikes by season, shade, bathrooms, drive time, and family energy level.',
     to: '/arizona/hikes-with-kids',
     icon: Trees,
+    image: '/images/devils-bridge.avif',
+    imageAlt: 'Red rock hiking scenery near Sedona, Arizona',
     bestFor: ['First hikes', 'Kids', 'Visitors'],
   },
   {
@@ -59,6 +63,8 @@ const mainChoices = [
       'Simple day trips by drive time, heat, elevation, food stops, and how much energy the group has.',
     to: '/arizona/day-trips-from-phoenix',
     icon: Car,
+    image: '/images/sedona-canyon.avif',
+    imageAlt: 'Sedona red rock canyon view for an Arizona day trip',
     bestFor: ['Day trips', 'Guests', 'Busy weekends'],
   },
   {
@@ -68,6 +74,8 @@ const mainChoices = [
       'Pick a better Arizona weekend base for cabins, scenery, food, easy hikes, and group flexibility.',
     to: '/arizona/weekend-trips',
     icon: CalendarDays,
+    image: '/images/grand-canyon.avif',
+    imageAlt: 'Grand Canyon family weekend view in Arizona',
     bestFor: ['Friend groups', 'Parents', 'Cabin trips'],
   },
   {
@@ -77,6 +85,8 @@ const mainChoices = [
       'Early outdoor moments, indoor midday anchors, water resets, and realistic Phoenix pacing.',
     to: '/archive/phoenix-things-to-do-with-kids-when-hot',
     icon: Building2,
+    image: '/images/phoenix-sunset-hike.avif',
+    imageAlt: 'Phoenix desert sunset with heat-safe Arizona planning context',
     bestFor: ['Hot days', 'Toddlers', 'No travel day'],
   },
   {
@@ -86,6 +96,8 @@ const mainChoices = [
       'Guias familiares para explorar Arizona con ninos, calor, seguridad, fines de semana y planes realistas.',
     to: '/es/arizona',
     icon: Sparkles,
+    image: '/images/sedona-family.avif',
+    imageAlt: 'Familia explorando las rocas rojas de Sedona en Arizona',
     bestFor: ['Espanol', 'Familias', 'Arizona'],
   },
 ];
@@ -112,14 +124,14 @@ const destinationShortcuts = [
     to: '/arizona/grand-canyon',
   },
   {
-    name: 'Papago Park',
-    note: 'Short desert stop, Hole-in-the-Rock, zoo, garden, and Phoenix add-ons.',
-    to: '/archive/papago-park-family-guide',
+    name: 'Cave Creek',
+    note: 'Desert scenery, casual food, easier visitor pacing, and North Valley access.',
+    to: '/arizona/cave-creek',
   },
   {
-    name: 'Piestewa Peak',
-    note: 'Central Phoenix mountain energy with serious heat and effort checks.',
-    to: '/archive/piestewa-peak-family-hike-guide',
+    name: 'Camelback Mountain',
+    note: 'A famous Phoenix-area hike that needs honest heat, effort, and safety checks.',
+    to: '/trail-guides/camelback-mountain',
   },
 ];
 
@@ -167,33 +179,43 @@ const AdventureChooser: React.FC = () => {
         ]}
       />
 
-      <section className="bg-gradient-to-b from-emerald-50 via-white to-white px-6 py-16 md:py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-4xl">
-            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-emerald-700">
+      <section className="bg-zinc-950 px-6 py-14 text-white md:py-20">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+          <div>
+            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-emerald-300">
               Start Here
             </p>
-            <h1 className="text-4xl font-black uppercase tracking-tight text-zinc-950 md:text-6xl">
+            <h1 className="text-4xl font-black uppercase tracking-tight md:text-6xl">
               Choose your Arizona adventure without overthinking it
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-600 md:text-xl">
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-200 md:text-xl">
               Pick the situation that sounds most like your family, visitors, or friend group. Sage will send you to the most useful Arizona guide first.
             </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                to="/trip-builder"
+                className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-7 py-4 text-sm font-black uppercase tracking-widest text-zinc-950 transition hover:bg-emerald-300"
+              >
+                Build a Custom Trip
+              </Link>
+              <Link
+                to="/explore"
+                className="inline-flex items-center justify-center rounded-xl border border-white/70 bg-white/10 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-white hover:text-zinc-950"
+              >
+                Browse Everything
+              </Link>
+            </div>
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              to="/trip-builder"
-              className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-emerald-700"
-            >
-              Build a Custom Trip
-            </Link>
-            <Link
-              to="/explore"
-              className="inline-flex items-center justify-center rounded-xl border border-zinc-900 bg-white px-7 py-4 text-sm font-black uppercase tracking-widest text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
-            >
-              Browse Everything
-            </Link>
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl">
+            <img
+              src="/images/sedona-canyon.avif"
+              alt="Arizona red rock canyon scenery for family trip planning"
+              className="h-full max-h-[430px] w-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
           </div>
         </div>
       </section>
@@ -216,38 +238,50 @@ const AdventureChooser: React.FC = () => {
               <Link
                 key={choice.to}
                 to={choice.to}
-                className="group flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
               >
-                <div className="mb-5 flex items-center justify-between gap-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
+                <div className="aspect-[4/3] overflow-hidden bg-zinc-100">
+                  <img
+                    src={choice.image}
+                    alt={choice.imageAlt}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mb-5 flex items-center justify-between gap-4">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </div>
+                    <span className="rounded-full bg-zinc-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                      {choice.eyebrow}
+                    </span>
                   </div>
-                  <span className="rounded-full bg-zinc-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
-                    {choice.eyebrow}
+
+                  <h3 className="text-xl font-black tracking-tight text-zinc-950">
+                    {choice.title}
+                  </h3>
+                  <p className="mt-3 flex-grow text-sm leading-7 text-zinc-600">
+                    {choice.description}
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {choice.bestFor.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-zinc-200 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <span className="mt-6 text-sm font-black uppercase tracking-widest text-emerald-700">
+                    Open best guide
                   </span>
                 </div>
-
-                <h3 className="text-xl font-black tracking-tight text-zinc-950">
-                  {choice.title}
-                </h3>
-                <p className="mt-3 flex-grow text-sm leading-7 text-zinc-600">
-                  {choice.description}
-                </p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {choice.bestFor.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-zinc-200 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <span className="mt-6 text-sm font-black uppercase tracking-widest text-emerald-700">
-                  Open best guide
-                </span>
               </Link>
             );
           })}
