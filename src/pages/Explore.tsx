@@ -7,6 +7,11 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const hubLinks = [
   {
+    title: 'Arizona Adventure Finder',
+    description: 'Choose the right Arizona family trip by drive time, heat, kid age, and group style.',
+    to: '/arizona/adventure-finder',
+  },
+  {
     title: 'Arizona Family Adventure Hub',
     description: 'Start here for family-friendly Arizona destinations, easy trails, food ideas, lodging notes, and safety planning.',
     to: '/arizona',
