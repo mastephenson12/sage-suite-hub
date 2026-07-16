@@ -12,6 +12,7 @@ import {
   Sparkles,
   Trees,
   Users,
+  type LucideIcon,
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
 
@@ -136,7 +137,7 @@ const FinderCard: React.FC<{
   title: string;
   text: string;
   to: string;
-  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
+  icon: LucideIcon;
   picks?: string[];
 }> = ({ title, text, to, icon: Icon, picks }) => (
   <Link
@@ -144,7 +145,7 @@ const FinderCard: React.FC<{
     className="group flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
   >
     <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
-      <Icon className="h-6 w-6" aria-hidden />
+      <Icon className="h-6 w-6" aria-hidden="true" />
     </div>
     <h3 className="text-xl font-black tracking-tight text-zinc-950">{title}</h3>
     <p className="mt-3 flex-grow text-sm leading-7 text-zinc-600">{text}</p>
@@ -219,7 +220,6 @@ const ArizonaAdventureFinder: React.FC = () => {
               className="h-full max-h-[430px] w-full object-cover"
               loading="eager"
               decoding="async"
-              fetchPriority="high"
             />
           </div>
         </div>
