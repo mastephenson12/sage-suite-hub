@@ -10,6 +10,7 @@ const staticRoutes = [
   { path: '/trip-builder', changefreq: 'weekly', priority: '0.9' },
   { path: '/chat', changefreq: 'monthly', priority: '0.5' },
   { path: '/arizona', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/adventure-finder', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
