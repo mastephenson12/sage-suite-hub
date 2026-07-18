@@ -12,6 +12,11 @@ const hubLinks = [
     to: '/arizona/adventure-finder',
   },
   {
+    title: 'Plan Arizona Trips by Situation',
+    description: 'Start with your real need: toddlers, extreme heat, visitors, half-day plans, weekends, bathrooms, shade, water, or friend groups.',
+    to: '/arizona/plan-by-situation',
+  },
+  {
     title: 'Arizona Family Adventure Hub',
     description: 'Start here for family-friendly Arizona destinations, easy trails, food ideas, lodging notes, and safety planning.',
     to: '/arizona',
