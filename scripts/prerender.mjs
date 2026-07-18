@@ -75,6 +75,24 @@ const arizonaFaqs = [
   },
 ];
 
+const planBySituationFaqs = [
+  {
+    question: 'How do I choose the best Arizona family trip for my situation?',
+    answer:
+      'Start with the real constraint: heat, kid ages, drive time, bathrooms, shade, visitors, or weekend length. Then choose one outdoor anchor, one food stop, and one backup plan.',
+  },
+  {
+    question: 'What should families do in Arizona when it is too hot?',
+    answer:
+      'On very hot days, avoid exposed midday trails and use early starts, indoor anchors, pools, splash pads, shaded parks, lakes, or higher-elevation destinations.',
+  },
+  {
+    question: 'What Arizona trips work well with toddlers?',
+    answer:
+      'Toddlers usually do best with short walks, bathrooms nearby, shade, snacks, stroller-friendly or easy-exit paths, and a realistic schedule.',
+  },
+];
+
 const spanishArizonaFaqs = [
   {
     question: 'Que es Sage Arizona en espanol?',
@@ -347,6 +365,15 @@ const arizonaHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona', arizonaHtml);
 
+const planBySituationHtml = applySeo(baseHtml, {
+  title: 'Plan Arizona Family Trips by Situation | Sage',
+  description:
+    'Choose the right Arizona family trip by situation: toddlers, extreme heat, visitors, half-day plans, weekend trips, bathrooms, shade, water, and friend groups.',
+  url: `${siteUrl}/arizona/plan-by-situation`,
+  faqs: planBySituationFaqs,
+});
+await writeRoute('arizona/plan-by-situation', planBySituationHtml);
+
 const spanishArizonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {
     title: 'Guias de Arizona en espanol para familias | Sage',
@@ -444,4 +471,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 10} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 11} Arizona SEO pages.`);
