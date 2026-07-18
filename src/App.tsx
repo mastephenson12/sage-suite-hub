@@ -44,6 +44,7 @@ import CoolArizonaSummerTripsWithKids from './pages/CoolArizonaSummerTripsWithKi
 import SpanishArizonaHub from './pages/SpanishArizonaHub';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
+import RussianArizonaHub from './pages/RussianArizonaHub';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
@@ -183,6 +184,7 @@ function AppContent() {
             path="/es/arizona/viajes-frescos-verano-con-ninos"
             element={<SpanishCoolArizonaSummerTrips />}
           />
+          <Route path="/ru" element={<RussianArizonaHub />} />
 
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
@@ -234,87 +236,55 @@ function AppContent() {
                   Archive
                 </Link>
 
-                <Link
-                  to="/trail-guides"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/trail-guides" className="transition-colors hover:text-black">
                   Trails
                 </Link>
 
-                <Link
-                  to="/arizona"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/arizona" className="transition-colors hover:text-black">
                   Arizona Guides
                 </Link>
 
-                <Link
-                  to="/arizona/adventure-finder"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">
                   Adventure Finder
                 </Link>
 
-                <Link
-                  to="/es/arizona"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/es/arizona" className="transition-colors hover:text-black">
                   Espanol
                 </Link>
 
-                <Link
-                  to="/arizona/weekend-trips"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/ru" className="transition-colors hover:text-black">
+                  Русский
+                </Link>
+
+                <Link to="/arizona/weekend-trips" className="transition-colors hover:text-black">
                   Weekend Trips
                 </Link>
 
-                <Link
-                  to="/arizona/hikes-with-kids"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/arizona/hikes-with-kids" className="transition-colors hover:text-black">
                   Kids Hikes
                 </Link>
 
-                <Link
-                  to="/arizona/family-adventures-by-season"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/arizona/family-adventures-by-season" className="transition-colors hover:text-black">
                   Seasons
                 </Link>
 
-                <Link
-                  to="/arizona/day-trips-from-phoenix"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/arizona/day-trips-from-phoenix" className="transition-colors hover:text-black">
                   Phoenix Trips
                 </Link>
 
-                <Link
-                  to="/community"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/community" className="transition-colors hover:text-black">
                   Community
                 </Link>
 
-                <Link
-                  to="/trip-builder"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/trip-builder" className="transition-colors hover:text-black">
                   Trip Builder
                 </Link>
 
-                <Link
-                  to="/privacy-policy"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/privacy-policy" className="transition-colors hover:text-black">
                   Privacy Policy
                 </Link>
 
-                <Link
-                  to="/terms-of-service"
-                  className="transition-colors hover:text-black"
-                >
+                <Link to="/terms-of-service" className="transition-colors hover:text-black">
                   Terms of Service
                 </Link>
               </div>
