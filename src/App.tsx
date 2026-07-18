@@ -43,6 +43,7 @@ import DesertHikingSafety from './pages/DesertHikingSafety';
 import PaysonRimCountryWithKids from './pages/PaysonRimCountryWithKids';
 import CoolArizonaSummerTripsWithKids from './pages/CoolArizonaSummerTripsWithKids';
 import SpanishArizonaHub from './pages/SpanishArizonaHub';
+import SpanishPlanBySituation from './pages/SpanishPlanBySituation';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
 import RussianArizonaHub from './pages/RussianArizonaHub';
@@ -181,6 +182,10 @@ function AppContent() {
             element={<SpanishPhoenixHeatPage />}
           />
           <Route path="/es/arizona" element={<SpanishArizonaHub />} />
+          <Route
+            path="/es/arizona/planificar-por-situacion"
+            element={<SpanishPlanBySituation />}
+          />
           <Route
             path="/es/arizona/viajes-frescos-verano-con-ninos"
             element={<SpanishCoolArizonaSummerTrips />}
