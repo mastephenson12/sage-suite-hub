@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Coffee, Map, ShieldCheck, Users } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
+import QuickPlanBox from '../components/QuickPlanBox';
 import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
 
@@ -20,8 +20,9 @@ function BulletList({ items }: { items: string[] }) {
 
 type Destination = NonNullable<ReturnType<typeof getAllArizonaDestination>>;
 
-function getDestinationFitSnapshot(destination: Destination) {
-  const combinedText = [
+function getQuickPlan(destination: Destination) {
+  const text = [
+    destination.name,
     destination.tagline,
     destination.intro,
     ...destination.bestFor,
@@ -32,125 +33,55 @@ function getDestinationFitSnapshot(destination: Destination) {
     .join(' ')
     .toLowerCase();
 
-  const hasCoolWeather =
-    combinedText.includes('cool') ||
-    combinedText.includes('pine') ||
-    combinedText.includes('forest') ||
-    combinedText.includes('mountain') ||
-    combinedText.includes('higher elevation');
-  const hasWater =
-    combinedText.includes('lake') ||
-    combinedText.includes('creek') ||
-    combinedText.includes('river') ||
-    combinedText.includes('water');
-  const hasTown =
-    combinedText.includes('downtown') ||
-    combinedText.includes('town') ||
-    combinedText.includes('food') ||
-    combinedText.includes('walkable');
-  const hasHeatRisk =
-    combinedText.includes('heat') ||
-    combinedText.includes('exposed') ||
-    combinedText.includes('summer') ||
-    combinedText.includes('desert');
+  const slug = destination.slug;
+  const isPhoenixArea = ['cave-creek', 'scottsdale', 'phoenix'].includes(slug);
+  const isCoolerEscape =
+    text.includes('cool') || text.includes('pine') || text.includes('forest') || text.includes('higher elevation');
+  const isDesertHeavy =
+    text.includes('desert') || text.includes('heat') || text.includes('saguaro') || text.includes('exposed');
+  const hasWater = text.includes('lake') || text.includes('creek') || text.includes('river') || text.includes('water');
 
-  const groupFit = hasTown
-    ? 'Mixed-interest groups'
-    : hasCoolWeather
-      ? 'Summer escape groups'
-      : hasWater
-        ? 'Families who need an easy reset'
-        : 'First-time Arizona visitors';
+  const driveTime =
+    slug === 'sedona'
+      ? 'About 2 hours from Phoenix, longer with traffic or weekend parking delays.'
+      : slug === 'flagstaff'
+        ? 'About 2 to 2.5 hours from Phoenix; plan more time for snow, storms, or weekend traffic.'
+        : slug === 'grand-canyon'
+          ? 'About 3.5 to 4 hours from Phoenix to the South Rim, so overnight pacing is easier.'
+          : slug === 'payson'
+            ? 'About 1.5 to 2 hours from Phoenix, depending on where you start and Rim traffic.'
+            : slug === 'prescott'
+              ? 'About 1.75 to 2 hours from Phoenix, depending on route and weekend traffic.'
+              : slug === 'tucson'
+                ? 'About 1.75 to 2 hours from Phoenix, usually best as a full day or overnight.'
+                : slug === 'page'
+                  ? 'About 4.5 hours from Phoenix, so treat it like a northern Arizona road trip.'
+                  : isPhoenixArea
+                    ? 'Usually under 1 hour from much of metro Phoenix.'
+                    : 'Check your starting point, then keep one flexible buffer stop in the plan.';
 
-  const easyWin =
-    destination.easyTrails[0] ?? destination.outdoorActivities[0] ?? `${destination.name} scenic stop`;
-  const resetStop = destination.eatNearby[0] ?? `${destination.name} food stop`;
-  const watchOut = hasHeatRisk
-    ? 'Plan early, protect shade time, and avoid exposed midday outdoor plans.'
-    : destination.safetyTips[0] ?? 'Keep timing flexible and check conditions before leaving.';
-  const bestUse = destination.bestFor[0] ?? 'Flexible Arizona day';
+  const bestTime = isDesertHeavy
+    ? 'Early morning in warm months; late afternoon can work when the plan is short and simple.'
+    : isCoolerEscape
+      ? 'Late spring through fall for cooler air; check winter roads and layers.'
+      : 'Morning is usually easiest for parking, kid energy, and fewer rushed decisions.';
 
-  return [
-    {
-      label: 'Best fit',
-      value: groupFit,
-      detail: `A strong match for ${bestUse.toLowerCase()} without overcomplicating the day.`,
-      icon: Users,
-    },
-    {
-      label: 'Easiest win',
-      value: easyWin,
-      detail: 'Start here when the group needs a simple first stop.',
-      icon: Map,
-    },
-    {
-      label: 'Reset stop',
-      value: resetStop,
-      detail: 'Use food or coffee as the pressure-release valve for the day.',
-      icon: Coffee,
-    },
-    {
-      label: 'Watch-out',
-      value: hasHeatRisk ? 'Heat and timing' : 'Pacing and conditions',
-      detail: watchOut,
-      icon: ShieldCheck,
-    },
-  ];
-}
+  const firstMove =
+    destination.easyTrails[0] ?? destination.outdoorActivities[0] ?? `Start with one scenic ${destination.name} stop.`;
 
-function DestinationFitSnapshot({ destination }: { destination: Destination }) {
-  const snapshots = getDestinationFitSnapshot(destination);
+  const heatNote = isDesertHeavy
+    ? 'Avoid exposed midday outdoor plans in hot weather. Build shade, water, and indoor or food resets into the day.'
+    : isCoolerEscape
+      ? 'This can be a cooler Arizona option, but still check storms, sun exposure, and water needs.'
+      : 'Watch temperature, wind, and monsoon timing before committing to a long outdoor window.';
 
-  return (
-    <section className="border-b border-zinc-100 bg-white px-6 py-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
-          <div>
-            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-orange-600">
-              Quick fit check
-            </p>
-            <h2 className="text-2xl font-black tracking-tight text-zinc-950 md:text-3xl">
-              Is {destination.name} a good match for your group?
-            </h2>
-          </div>
-          <Link
-            to={`/trip-builder?location=${destination.slug}`}
-            className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-5 py-3 text-xs font-black uppercase tracking-widest text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
-          >
-            Test it in Trip Builder
-          </Link>
-        </div>
+  const bathroomShadeFood = hasWater
+    ? 'Pair water or trail time with a known bathroom/food stop so the day has an easy reset point.'
+    : destination.eatNearby[0]
+      ? `Use ${destination.eatNearby[0]} as the reset stop after the main outdoor anchor.`
+      : 'Choose the food and bathroom stop before leaving, especially with younger kids or visitors.';
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {snapshots.map((snapshot) => {
-            const Icon = snapshot.icon;
-
-            return (
-              <article
-                key={snapshot.label}
-                className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4"
-              >
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-orange-600 shadow-sm">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-orange-600">
-                    {snapshot.label}
-                  </p>
-                </div>
-                <h3 className="text-lg font-black leading-6 text-zinc-950">
-                  {snapshot.value}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-zinc-600">
-                  {snapshot.detail}
-                </p>
-              </article>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
+  return { driveTime, bestTime, firstMove, heatNote, bathroomShadeFood };
 }
 
 export default function ArizonaDestinationPage() {
@@ -173,7 +104,7 @@ export default function ArizonaDestinationPage() {
             This Arizona guide is not built yet.
           </h1>
           <p className="mb-8 text-lg leading-8 text-zinc-600">
-            The destination you are looking for wandered off trail. Very human of it.
+            The destination you are looking for wandered off trail.
           </p>
           <Link
             to="/arizona"
@@ -189,6 +120,7 @@ export default function ArizonaDestinationPage() {
   const pageTitle = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
   const pageDescription = `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
   const pageUrl = `https://sage.healthandtravels.com/arizona/${destination.slug}`;
+  const quickPlan = getQuickPlan(destination);
 
   return (
     <main className="min-h-screen bg-white text-zinc-900">
@@ -249,7 +181,19 @@ export default function ArizonaDestinationPage() {
         </div>
       </section>
 
-      <DestinationFitSnapshot destination={destination} />
+      <QuickPlanBox
+        title={`Quick plan for ${destination.name}`}
+        subtitle="Use this first if you are trying to decide whether this guide fits your family, visitors, or friend group."
+        bestFor={destination.bestFor.slice(0, 4)}
+        bestTime={quickPlan.bestTime}
+        driveTime={quickPlan.driveTime}
+        firstMove={quickPlan.firstMove}
+        heatNote={quickPlan.heatNote}
+        bathroomShadeFood={quickPlan.bathroomShadeFood}
+        tripBuilderTo={`/trip-builder?location=${destination.slug}`}
+        secondaryTo="/arizona/adventure-finder"
+        secondaryLabel="Compare trips"
+      />
 
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-6 md:grid-cols-2">
@@ -298,7 +242,7 @@ export default function ArizonaDestinationPage() {
             <p className="mb-4 text-sm leading-7 text-zinc-700">
               Review the Arizona Desert Hiking Safety Guide before you go. It covers
               water planning, heat warning signs, timing, kid rules, and essential
-              gear so the desert does not become the trip planner.
+              gear.
             </p>
             <Link
               to="/arizona/desert-hiking-safety"
@@ -316,7 +260,7 @@ export default function ArizonaDestinationPage() {
             FAQ
           </p>
           <h2 className="mb-8 text-3xl font-black tracking-tight text-zinc-950 md:text-4xl">
-            Planning {destination.name} without making it weirdly complicated
+            Planning {destination.name} without making it complicated
           </h2>
 
           <div className="grid gap-5 md:grid-cols-2">
@@ -343,9 +287,8 @@ export default function ArizonaDestinationPage() {
             Turn {destination.name} into a simple Arizona trip plan
           </h2>
           <p className="mx-auto mb-8 max-w-2xl text-base leading-8 text-zinc-600">
-            Start with Sage Trip Builder, refine it with Sage AI, then join Arizona
-            Hikers Association for more local ideas and outdoor momentum. Look at
-            us, building an actual path instead of another website cul-de-sac.
+            Start with Sage Trip Builder, refine it with Sage AI, then use the guide
+            as your practical checklist for the day.
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
