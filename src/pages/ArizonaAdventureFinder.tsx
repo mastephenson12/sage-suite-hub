@@ -7,7 +7,6 @@ import {
   CloudSun,
   Compass,
   MapPin,
-  Mountain,
   ShieldCheck,
   Sparkles,
   Trees,
@@ -15,6 +14,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
+import QuickPlanBox from '../components/QuickPlanBox';
 
 const finderFaqs = [
   {
@@ -224,6 +224,21 @@ const ArizonaAdventureFinder: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <QuickPlanBox
+        eyebrow="Fast Answer"
+        title="Use Adventure Finder when the group does not know what kind of Arizona day it wants yet"
+        subtitle="This page is the decision doorway: pick by drive time, people, weather, then jump to the guide that fits."
+        bestFor={['Parents', 'Friend groups', 'Visitors', 'Hot-weather planning']}
+        bestTime="Use it before choosing a destination, especially when heat, mixed ages, or limited drive time could make the wrong trip harder."
+        driveTime="Start with under 45 minutes, 1 to 2 hours, or 2 to 3 hours so the plan matches the real day you have."
+        firstMove="Choose the drive-time box first, then narrow by who is coming and what the weather allows."
+        heatNote="If Phoenix is extremely hot, prioritize higher elevation, water, indoor midday anchors, or very early desert stops."
+        bathroomShadeFood="The best plan is one outdoor anchor, one food or bathroom reset, and one backup if the group fades."
+        tripBuilderTo="/trip-builder"
+        secondaryTo="/explore"
+        secondaryLabel="Browse all guides"
+      />
 
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="mb-8 max-w-3xl">
