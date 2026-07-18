@@ -34,6 +34,7 @@ import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
 import ArizonaDestinationPage from './pages/ArizonaDestinationPage';
 import ArizonaAdventureFinder from './pages/ArizonaAdventureFinder';
+import ArizonaPlanBySituation from './pages/ArizonaPlanBySituation';
 import ArizonaDayTripsFromPhoenix from './pages/ArizonaDayTripsFromPhoenix';
 import ArizonaWeekendTrips from './pages/ArizonaWeekendTrips';
 import ArizonaSeasonalFamilyAdventures from './pages/ArizonaSeasonalFamilyAdventures';
@@ -193,6 +194,7 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
           <Route path="/arizona/adventure-finder" element={<ArizonaAdventureFinder />} />
+          <Route path="/arizona/plan-by-situation" element={<ArizonaPlanBySituation />} />
           <Route path="/arizona/day-trips-from-phoenix" element={<ArizonaDayTripsFromPhoenix />} />
           <Route path="/arizona/weekend-trips" element={<ArizonaWeekendTrips />} />
           <Route path="/arizona/family-adventures-by-season" element={<ArizonaSeasonalFamilyAdventures />} />
@@ -242,6 +244,10 @@ function AppContent() {
 
                 <Link to="/arizona" className="transition-colors hover:text-black">
                   Arizona Guides
+                </Link>
+
+                <Link to="/arizona/plan-by-situation" className="transition-colors hover:text-black">
+                  Plan by Situation
                 </Link>
 
                 <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">
