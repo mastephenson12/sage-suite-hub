@@ -46,6 +46,13 @@ const Navbar: React.FC = () => {
             </Link>
 
             <Link
+              to="/arizona/plan-by-situation"
+              className="transition-colors hover:text-black"
+            >
+              Plan
+            </Link>
+
+            <Link
               to="/arizona/hikes-with-kids"
               className="transition-colors hover:text-black"
             >
