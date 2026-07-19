@@ -94,7 +94,7 @@ const planningCards = [
     title: 'Когда слишком жарко',
     description:
       'Раннее утро, прохладные остановки, вода, тень и запасные варианты вместо открытых маршрутов в середине дня.',
-    to: '/ru/arizona/plan-by-situation#heat',
+    to: '/ru/arizona/cool-summer-trips-with-kids',
     icon: Sun,
   },
   {
