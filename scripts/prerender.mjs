@@ -6,6 +6,8 @@ const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
+const russianArizonaPath = 'ru';
+const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
 const legacySpanishPhoenixHeatPath =
   'es/archive/phoenix-things-to-do-with-kids-when-hot';
@@ -128,6 +130,42 @@ const spanishPlanBySituationFaqs = [
     question: 'Que viajes funcionan con ninos pequenos?',
     answer:
       'Los ninos pequenos suelen disfrutar mas planes con caminatas cortas, banos cercanos, sombra, snacks, salidas faciles y un horario realista.',
+  },
+];
+
+const russianArizonaFaqs = [
+  {
+    question: 'Что такое Sage на русском языке?',
+    answer:
+      'Sage помогает семьям планировать поездки по Аризоне: выбирать маршруты, учитывать жару, воду, тень, возраст детей, время в дороге и запасной план.',
+  },
+  {
+    question: 'Подходит ли Sage для поездок с детьми?',
+    answer:
+      'Да. Sage делает упор на семейные поездки, короткие прогулки, понятную логистику, безопасность и реалистичный темп без перегруженного расписания.',
+  },
+  {
+    question: 'Можно ли задать Sage вопрос на русском?',
+    answer:
+      'Да. Перейдите в планировщик и опишите поездку по-русски: кто едет, откуда вы выезжаете, сколько есть времени и что нравится вашей семье.',
+  },
+];
+
+const russianPlanBySituationFaqs = [
+  {
+    question: 'Как выбрать лучшую семейную поездку по Аризоне?',
+    answer:
+      'Начните с реальной ситуации: жара, возраст детей, время в дороге, туалеты, тень, вода, гости или длина поездки. Затем выберите одну главную активность, место для еды и запасной план.',
+  },
+  {
+    question: 'Что делать в Аризоне, когда слишком жарко?',
+    answer:
+      'В сильную жару избегайте открытых маршрутов в середине дня. Используйте раннее утро, музеи, бассейны, splash pads, тень, озёра или более прохладные места на высоте.',
+  },
+  {
+    question: 'Какие поездки подходят с маленькими детьми?',
+    answer:
+      'Маленьким детям обычно лучше подходят короткие прогулки, туалеты рядом, тень, перекусы, простой выход с маршрута и реалистичный темп.',
   },
 ];
 
@@ -428,6 +466,40 @@ const spanishPlanBySituationHtml = addLanguageAlternates(
 );
 await writeRoute(spanishPlanBySituationPath, spanishPlanBySituationHtml);
 
+const russianArizonaHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Путешествия по Аризоне на русском языке | Sage',
+    description:
+      'Планируйте семейные поездки по Аризоне на русском языке: маршруты, жара, безопасность, поездки с детьми, Седона, Флагстафф, Пейсон и другие направления.',
+    url: `${siteUrl}/${russianArizonaPath}`,
+    faqs: russianArizonaFaqs,
+  }),
+  'ru',
+  [
+    { hreflang: 'ru', href: `${siteUrl}/${russianArizonaPath}` },
+    { hreflang: 'en', href: `${siteUrl}/${englishArizonaPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/${englishArizonaPath}` },
+  ]
+);
+await writeRoute(russianArizonaPath, russianArizonaHtml);
+
+const russianPlanBySituationHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'План поездки по Аризоне по ситуации | Sage',
+    description:
+      'Русская страница Sage для выбора семейной поездки по Аризоне: маленькие дети, жара, гости, полдня, выходные, туалеты, тень, вода и группы друзей.',
+    url: `${siteUrl}/${russianPlanBySituationPath}`,
+    faqs: russianPlanBySituationFaqs,
+  }),
+  'ru',
+  [
+    { hreflang: 'ru', href: `${siteUrl}/${russianPlanBySituationPath}` },
+    { hreflang: 'en', href: `${siteUrl}/${englishPlanBySituationPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/${englishPlanBySituationPath}` },
+  ]
+);
+await writeRoute(russianPlanBySituationPath, russianPlanBySituationHtml);
+
 const phoenixDayTripsHtml = applySeo(baseHtml, {
   title: 'Best Arizona Day Trips from Phoenix | Sage',
   description:
@@ -508,4 +580,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 12} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 14} Arizona SEO pages.`);
