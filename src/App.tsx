@@ -47,6 +47,7 @@ import SpanishPlanBySituation from './pages/SpanishPlanBySituation';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
 import RussianArizonaHub from './pages/RussianArizonaHub';
+import RussianPlanBySituation from './pages/RussianPlanBySituation';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
@@ -191,6 +192,10 @@ function AppContent() {
             element={<SpanishCoolArizonaSummerTrips />}
           />
           <Route path="/ru" element={<RussianArizonaHub />} />
+          <Route
+            path="/ru/arizona/plan-by-situation"
+            element={<RussianPlanBySituation />}
+          />
 
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
