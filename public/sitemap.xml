@@ -7,6 +7,12 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://sage.healthandtravels.com/start-here</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://sage.healthandtravels.com/explore</loc>
     <lastmod>2026-07-18</lastmod>
     <changefreq>weekly</changefreq>
