@@ -4,6 +4,7 @@ import path from 'node:path';
 const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
+const startHerePath = 'start-here';
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const russianArizonaPath = 'ru';
@@ -47,6 +48,24 @@ const destinations = [
     },
   ],
 }));
+
+const startHereFaqs = [
+  {
+    question: 'How should I start planning an Arizona family adventure?',
+    answer:
+      'Start with your real situation: little kids, heat, visitors, half-day timing, bathrooms, shade, water, or a weekend trip. Then choose one outdoor anchor, one reset stop, and one backup plan.',
+  },
+  {
+    question: 'Can Sage help parents and groups choose the right Arizona trip?',
+    answer:
+      'Yes. Sage points parents, visitors, and groups of friends toward Arizona guides and planner paths based on age, weather, drive time, shade, bathrooms, food, and group energy.',
+  },
+  {
+    question: 'What is the fastest way to use Sage?',
+    answer:
+      'Use the Start Here chooser, pick the situation that fits your day, and then open the suggested guide or pre-filled trip builder path.',
+  },
+];
 
 const exploreFaqs = [
   {
@@ -405,6 +424,15 @@ async function writeRoute(routePath, html) {
 
 const baseHtml = await readFile(indexPath, 'utf8');
 
+const startHereHtml = applySeo(baseHtml, {
+  title: 'Start Here: Choose Your Arizona Family Adventure | Sage',
+  description:
+    'Choose the best Sage Arizona family travel path by situation: little kids, heat, visitors, half-day plans, bathrooms, shade, water, weekend trips, and friend groups.',
+  url: `${siteUrl}/${startHerePath}`,
+  faqs: startHereFaqs,
+});
+await writeRoute(startHerePath, startHereHtml);
+
 const exploreHtml = applySeo(baseHtml, {
   title: 'Explore Arizona Family Travel Guides | Sage Directory',
   description:
@@ -580,4 +608,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 14} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 15} Arizona SEO pages.`);
