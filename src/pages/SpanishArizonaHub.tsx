@@ -59,6 +59,14 @@ function setAlternateLink(hreflang: string, href: string) {
 
 const featuredSpanishGuides = [
   {
+    title: 'Planificar viajes por Arizona por situacion',
+    description:
+      'Empieza con lo que realmente cambia el dia: ninos pequenos, calor extremo, visitantes, medio dia, banos, sombra, agua o grupos de amigos.',
+    to: '/es/arizona/planificar-por-situacion',
+    label: 'Empezar aqui',
+    icon: Compass,
+  },
+  {
     title: 'Viajes frescos de verano en Arizona con ninos',
     description:
       'Payson, Flagstaff, Prescott, Show Low, Pinetop y planes con sombra, agua o aire acondicionado para escapar del calor.',
@@ -77,6 +85,13 @@ const featuredSpanishGuides = [
 ];
 
 const planningPaths = [
+  {
+    title: 'Planificar por situacion',
+    text:
+      'Elige segun tu realidad: ninos pequenos, calor, visitantes, medio dia, fin de semana, banos, sombra, agua o grupo grande.',
+    to: '/es/arizona/planificar-por-situacion',
+    icon: Sparkles,
+  },
   {
     title: 'Escapar del calor de Phoenix',
     text:
@@ -286,7 +301,7 @@ export default function SpanishArizonaHub() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           {featuredSpanishGuides.map((guide) => {
             const Icon = guide.icon;
             return (
