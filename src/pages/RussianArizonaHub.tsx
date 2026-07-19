@@ -82,6 +82,30 @@ const destinations = [
   },
 ];
 
+const planningCards = [
+  {
+    title: 'Планировать по ситуации',
+    description:
+      'Начните с реальности вашей поездки: маленькие дети, жара, гости, полдня, выходные, туалеты, тень, вода или группа друзей.',
+    to: '/ru/arizona/plan-by-situation',
+    icon: Compass,
+  },
+  {
+    title: 'Когда слишком жарко',
+    description:
+      'Раннее утро, прохладные остановки, вода, тень и запасные варианты вместо открытых маршрутов в середине дня.',
+    to: '/ru/arizona/plan-by-situation#heat',
+    icon: Sun,
+  },
+  {
+    title: 'Для семьи или друзей',
+    description:
+      'Планы для детей, гостей, нескольких семей или друзей, которым нужен простой и гибкий день.',
+    to: '/ru/arizona/plan-by-situation#friends',
+    icon: Users,
+  },
+];
+
 export default function RussianArizonaHub() {
   React.useEffect(() => {
     const previousLang = document.documentElement.lang;
@@ -154,11 +178,11 @@ export default function RussianArizonaHub() {
               Спланировать поездку
             </Link>
             <Link
-              to="/arizona/cool-summer-trips-with-kids"
+              to="/ru/arizona/plan-by-situation"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-white/10"
             >
               <Sun className="h-4 w-4" aria-hidden="true" />
-              Летние поездки
+              По ситуации
             </Link>
           </div>
         </div>
@@ -179,6 +203,40 @@ export default function RussianArizonaHub() {
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">{stat.label}</p>
                 <p className="mt-2 text-sm font-black leading-6 text-zinc-950">{stat.value}</p>
               </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 py-14">
+        <div className="mb-8 max-w-3xl">
+          <p className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-emerald-700">
+            Быстрый выбор
+          </p>
+          <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+            Начните с вашей ситуации
+          </h2>
+          <p className="mt-3 text-base leading-7 text-zinc-600">
+            Это самый быстрый путь к полезному плану, когда важны жара, дети, гости, время или энергия группы.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {planningCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <Link
+                key={card.title}
+                to={card.to}
+                className="group rounded-xl border border-zinc-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:bg-emerald-50"
+              >
+                <Icon className="h-6 w-6 text-emerald-700" aria-hidden="true" />
+                <h3 className="mt-5 text-xl font-black">{card.title}</h3>
+                <p className="mt-3 leading-7 text-zinc-600">{card.description}</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-black text-emerald-800">
+                  Открыть <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </span>
+              </Link>
             );
           })}
         </div>
