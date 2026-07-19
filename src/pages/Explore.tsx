@@ -27,6 +27,11 @@ const hubLinks = [
     to: '/es/arizona',
   },
   {
+    title: 'Planificar viajes por situacion en Arizona',
+    description: 'Guia en espanol para escoger un plan segun ninos pequenos, calor, visitantes, medio dia, banos, sombra, agua o grupo de amigos.',
+    to: '/es/arizona/planificar-por-situacion',
+  },
+  {
     title: 'Cool Arizona Summer Trips With Kids',
     description: 'Find cooler Arizona summer escapes from Phoenix with higher elevation towns, lake days, shaded backups, and heat-safe pacing.',
     to: '/arizona/cool-summer-trips-with-kids',
