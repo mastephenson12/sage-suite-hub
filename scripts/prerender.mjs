@@ -5,10 +5,12 @@ const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
 const spanishArizonaPath = 'es/arizona';
+const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
 const legacySpanishPhoenixHeatPath =
   'es/archive/phoenix-things-to-do-with-kids-when-hot';
 const englishArizonaPath = 'arizona';
+const englishPlanBySituationPath = 'arizona/plan-by-situation';
 const englishPhoenixHeatPath =
   'archive/phoenix-things-to-do-with-kids-when-hot';
 
@@ -108,6 +110,24 @@ const spanishArizonaFaqs = [
     question: 'Como usar esta pagina?',
     answer:
       'Empieza por la temporada o el tipo de viaje: escapar del calor, caminar con ninos, salir desde Phoenix, hacer fin de semana o buscar un plan bajo techo.',
+  },
+];
+
+const spanishPlanBySituationFaqs = [
+  {
+    question: 'Como elegir el mejor viaje familiar por Arizona?',
+    answer:
+      'Empieza con la situacion real: calor, edades de los ninos, tiempo de manejo, banos, sombra, visitantes o duracion del viaje. Despues elige una actividad principal, una parada de comida y un plan B.',
+  },
+  {
+    question: 'Que hacer en Arizona cuando hace demasiado calor?',
+    answer:
+      'En dias de mucho calor, evita caminatas expuestas al mediodia. Usa salidas temprano, museos, albercas, splash pads, sombra, lagos o destinos de mas elevacion.',
+  },
+  {
+    question: 'Que viajes funcionan con ninos pequenos?',
+    answer:
+      'Los ninos pequenos suelen disfrutar mas planes con caminatas cortas, banos cercanos, sombra, snacks, salidas faciles y un horario realista.',
   },
 ];
 
@@ -391,6 +411,23 @@ const spanishArizonaHtml = addLanguageAlternates(
 );
 await writeRoute(spanishArizonaPath, spanishArizonaHtml);
 
+const spanishPlanBySituationHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Planificar viajes por Arizona por situacion | Sage',
+    description:
+      'Guia en espanol para escoger un viaje familiar por Arizona segun ninos pequenos, calor extremo, visitantes, medio dia, fines de semana, banos, sombra, agua o grupos de amigos.',
+    url: `${siteUrl}/${spanishPlanBySituationPath}`,
+    faqs: spanishPlanBySituationFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishPlanBySituationPath}` },
+    { hreflang: 'en', href: `${siteUrl}/${englishPlanBySituationPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/${englishPlanBySituationPath}` },
+  ]
+);
+await writeRoute(spanishPlanBySituationPath, spanishPlanBySituationHtml);
+
 const phoenixDayTripsHtml = applySeo(baseHtml, {
   title: 'Best Arizona Day Trips from Phoenix | Sage',
   description:
@@ -471,4 +508,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 11} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 12} Arizona SEO pages.`);
