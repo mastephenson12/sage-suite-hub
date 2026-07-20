@@ -17,36 +17,42 @@ const confidenceChecks = [
     title: 'Shade reality check',
     description:
       'See whether a plan is likely to feel exposed, partly shaded, or more comfortable for kids.',
+    to: '/arizona/cool-summer-trips-with-kids',
   },
   {
     icon: Waves,
     title: 'Bathroom sanity filter',
     description:
       'Prioritize stops where families are less likely to conduct desperate restroom diplomacy.',
+    to: '/arizona/plan-by-situation',
   },
   {
     icon: Clock,
     title: 'Best time to go',
     description:
       'Get timing guidance so desert heat does not turn a sweet outing into a survival documentary.',
+    to: '/arizona/family-adventures-by-season',
   },
   {
     icon: Car,
     title: 'Drive-time fit',
     description:
       'Match ideas to realistic travel windows from Phoenix and nearby Arizona family hubs.',
+    to: '/arizona/day-trips-from-phoenix',
   },
   {
     icon: Soup,
     title: 'Food nearby',
     description:
       'Build plans around places to eat, because hungry families are basically tiny governments collapsing.',
+    to: '/trip-builder?plan=ready&location=arizona&kids=yes&food=nearby',
   },
   {
     icon: ShieldCheck,
     title: 'Backup safety plan',
     description:
       'Get indoor, easier, or lower-stress alternatives when weather, energy, or kid patience falls apart.',
+    to: '/arizona/desert-hiking-safety',
   },
 ];
 
@@ -72,7 +78,7 @@ const FamilyConfidencePanel: React.FC = () => {
             </h2>
 
             <p className="mt-5 text-lg leading-relaxed text-zinc-600">
-              Most travel sites tell you a place is “beautiful.” Great. So is a cactus,
+              Most travel sites tell you a place is "beautiful." Great. So is a cactus,
               until your kid grabs it. Sage focuses on the practical stuff families
               need before they commit to the drive.
             </p>
@@ -115,11 +121,13 @@ const FamilyConfidencePanel: React.FC = () => {
               const Icon = check.icon;
 
               return (
-                <article
+                <Link
                   key={check.title}
-                  className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  to={check.to}
+                  className="group rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-orange-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  aria-label={`${check.title}: open related Sage guide`}
                 >
-                  <div className="mb-4 inline-flex rounded-2xl bg-zinc-100 p-3 text-zinc-900">
+                  <div className="mb-4 inline-flex rounded-2xl bg-zinc-100 p-3 text-zinc-900 transition group-hover:bg-orange-50 group-hover:text-orange-700">
                     <Icon className="h-5 w-5" />
                   </div>
 
@@ -130,7 +138,7 @@ const FamilyConfidencePanel: React.FC = () => {
                   <p className="text-sm leading-relaxed text-zinc-600">
                     {check.description}
                   </p>
-                </article>
+                </Link>
               );
             })}
 
