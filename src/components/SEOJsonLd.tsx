@@ -127,7 +127,11 @@ export default function SEOJsonLd({
     '@type': 'Organization',
     name: 'Health and Travels',
     url: 'https://healthandtravels.com/',
-    sameAs: ['https://sage.healthandtravels.com/'],
+    sameAs: [
+      'https://sage.healthandtravels.com/',
+      'https://www.facebook.com/HealthandTravels',
+      'https://www.instagram.com/heal_thandtravels',
+    ],
   };
 
   const faqSchema =
