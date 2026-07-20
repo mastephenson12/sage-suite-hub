@@ -11,10 +11,17 @@ const staticRoutes = [
   { path: '/chat', changefreq: 'monthly', priority: '0.5' },
   { path: '/arizona', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/adventure-finder', changefreq: 'weekly', priority: '0.95' },
+  { path: '/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona', changefreq: 'weekly', priority: '0.9' },
+  { path: '/es/arizona/planificar-por-situacion', changefreq: 'weekly', priority: '0.9' },
+  { path: '/ru', changefreq: 'weekly', priority: '0.8' },
+  { path: '/ru/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
+  { path: '/ru/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/day-trips-from-phoenix', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/payson-rim-country-with-kids', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/weekend-trips', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/family-adventures-by-season', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/hikes-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/desert-hiking-safety', changefreq: 'monthly', priority: '0.9' },
@@ -61,13 +68,17 @@ function routeToXml(route) {
   ].join('\n');
 }
 
-const [articlesSource, destinationsSource, trailsSource] = await Promise.all([
+const [articlesSource, destinationsSource, extraDestinationsSource, trailsSource] = await Promise.all([
   readSource('src/data/articles.ts'),
   readSource('src/data/arizonaDestinations.ts'),
+  readSource('src/data/extraArizonaDestinations.ts'),
   readSource('src/data/trails.ts'),
 ]);
 
-const destinationRoutes = extractStringValues(destinationsSource, 'slug').map((slug) => ({
+const destinationRoutes = [
+  ...extractStringValues(destinationsSource, 'slug'),
+  ...extractStringValues(extraDestinationsSource, 'slug'),
+].map((slug) => ({
   path: `/arizona/${slug}`,
   changefreq: 'weekly',
   priority: '0.8',
