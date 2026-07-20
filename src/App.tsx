@@ -53,6 +53,7 @@ import RussianCoolArizonaSummerTrips from './pages/RussianCoolArizonaSummerTrips
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
+import NotFound from './pages/NotFound';
 
 const homeFaqs = [
   {
@@ -91,7 +92,6 @@ function HomePage() {
         url="https://sage.healthandtravels.com/"
         faqs={homeFaqs}
       />
-
       <Hero />
       <FamilyConfidencePanel />
       <StartHere />
@@ -120,11 +120,9 @@ function AppContent() {
 
   React.useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-
     const timeoutId = window.setTimeout(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }, 0);
-
     return () => window.clearTimeout(timeoutId);
   }, [location.pathname, location.hash]);
 
@@ -135,25 +133,19 @@ function AppContent() {
       gtag?: (...args: unknown[]) => void;
       dataLayer?: Array<Record<string, unknown>>;
     };
-
     const pagePayload = {
       page_path: pagePath,
       page_location: `${window.location.origin}${pagePath}`,
       page_title: document.title,
     };
-
     if (
       typeof gaWindow.gtag === 'function' &&
       typeof gaWindow.__SAGE_GA_MEASUREMENT_ID === 'string'
     ) {
       gaWindow.gtag('config', gaWindow.__SAGE_GA_MEASUREMENT_ID, pagePayload);
     }
-
     if (Array.isArray(gaWindow.dataLayer)) {
-      gaWindow.dataLayer.push({
-        event: 'page_view',
-        ...pagePayload,
-      });
+      gaWindow.dataLayer.push({ event: 'page_view', ...pagePayload });
     }
   }, [location.pathname, location.search]);
 
@@ -163,49 +155,26 @@ function AppContent() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       {!hideSiteChrome && <Navbar />}
-
       <main className="flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/start-here" element={<AdventureChooser />} />
           <Route path="/trip-builder" element={<TripBuilderPage />} />
-
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
-
           <Route path="/explore" element={<Explore />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/archive/:id" element={<ArticlePage />} />
-          <Route
-            path="/es/archive/phoenix-con-ninos-cuando-hace-calor"
-            element={<SpanishPhoenixHeatPage />}
-          />
-          <Route
-            path="/es/archive/phoenix-things-to-do-with-kids-when-hot"
-            element={<SpanishPhoenixHeatPage />}
-          />
+          <Route path="/es/archive/phoenix-con-ninos-cuando-hace-calor" element={<SpanishPhoenixHeatPage />} />
+          <Route path="/es/archive/phoenix-things-to-do-with-kids-when-hot" element={<SpanishPhoenixHeatPage />} />
           <Route path="/es/arizona" element={<SpanishArizonaHub />} />
-          <Route
-            path="/es/arizona/planificar-por-situacion"
-            element={<SpanishPlanBySituation />}
-          />
-          <Route
-            path="/es/arizona/viajes-frescos-verano-con-ninos"
-            element={<SpanishCoolArizonaSummerTrips />}
-          />
+          <Route path="/es/arizona/planificar-por-situacion" element={<SpanishPlanBySituation />} />
+          <Route path="/es/arizona/viajes-frescos-verano-con-ninos" element={<SpanishCoolArizonaSummerTrips />} />
           <Route path="/ru" element={<RussianArizonaHub />} />
-          <Route
-            path="/ru/arizona/plan-by-situation"
-            element={<RussianPlanBySituation />}
-          />
-          <Route
-            path="/ru/arizona/cool-summer-trips-with-kids"
-            element={<RussianCoolArizonaSummerTrips />}
-          />
-
+          <Route path="/ru/arizona/plan-by-situation" element={<RussianPlanBySituation />} />
+          <Route path="/ru/arizona/cool-summer-trips-with-kids" element={<RussianCoolArizonaSummerTrips />} />
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
-
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
@@ -220,11 +189,9 @@ function AppContent() {
           <Route path="/arizona/payson-rim-country-with-kids" element={<PaysonRimCountryWithKids />} />
           <Route path="/arizona/cool-summer-trips-with-kids" element={<CoolArizonaSummerTripsWithKids />} />
           <Route path="/arizona/:slug" element={<ArizonaDestinationPage />} />
-
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
-
-          <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
@@ -236,90 +203,34 @@ function AppContent() {
                 <p className="mb-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
                   © {new Date().getFullYear()} Health & Travels Journal
                 </p>
-
                 <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-300">
                   Trip planning powered by Sage • Health & Travels
                 </p>
               </div>
-
               <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
-                <Link to="/start-here" className="transition-colors hover:text-black">
-                  Start Here
-                </Link>
-
-                <Link to="/explore" className="transition-colors hover:text-black">
-                  Explore
-                </Link>
-
-                <Link to="/archive" className="transition-colors hover:text-black">
-                  Archive
-                </Link>
-
-                <Link to="/trail-guides" className="transition-colors hover:text-black">
-                  Trails
-                </Link>
-
-                <Link to="/arizona" className="transition-colors hover:text-black">
-                  Arizona Guides
-                </Link>
-
-                <Link to="/arizona/plan-by-situation" className="transition-colors hover:text-black">
-                  Plan by Situation
-                </Link>
-
-                <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">
-                  Adventure Finder
-                </Link>
-
-                <Link to="/es/arizona" className="transition-colors hover:text-black">
-                  Espanol
-                </Link>
-
-                <Link to="/ru" className="transition-colors hover:text-black">
-                  Русский
-                </Link>
-
-                <Link to="/arizona/weekend-trips" className="transition-colors hover:text-black">
-                  Weekend Trips
-                </Link>
-
-                <Link to="/arizona/hikes-with-kids" className="transition-colors hover:text-black">
-                  Kids Hikes
-                </Link>
-
-                <Link to="/arizona/easy-family-hikes" className="transition-colors hover:text-black">
-                  Easy Hikes
-                </Link>
-
-                <Link to="/arizona/family-adventures-by-season" className="transition-colors hover:text-black">
-                  Seasons
-                </Link>
-
-                <Link to="/arizona/day-trips-from-phoenix" className="transition-colors hover:text-black">
-                  Phoenix Trips
-                </Link>
-
-                <Link to="/community" className="transition-colors hover:text-black">
-                  Community
-                </Link>
-
-                <Link to="/trip-builder" className="transition-colors hover:text-black">
-                  Trip Builder
-                </Link>
-
-                <Link to="/privacy-policy" className="transition-colors hover:text-black">
-                  Privacy Policy
-                </Link>
-
-                <Link to="/terms-of-service" className="transition-colors hover:text-black">
-                  Terms of Service
-                </Link>
+                <Link to="/start-here" className="transition-colors hover:text-black">Start Here</Link>
+                <Link to="/explore" className="transition-colors hover:text-black">Explore</Link>
+                <Link to="/archive" className="transition-colors hover:text-black">Archive</Link>
+                <Link to="/trail-guides" className="transition-colors hover:text-black">Trails</Link>
+                <Link to="/arizona" className="transition-colors hover:text-black">Arizona Guides</Link>
+                <Link to="/arizona/plan-by-situation" className="transition-colors hover:text-black">Plan by Situation</Link>
+                <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">Adventure Finder</Link>
+                <Link to="/es/arizona" className="transition-colors hover:text-black">Espanol</Link>
+                <Link to="/ru" className="transition-colors hover:text-black">Русский</Link>
+                <Link to="/arizona/weekend-trips" className="transition-colors hover:text-black">Weekend Trips</Link>
+                <Link to="/arizona/hikes-with-kids" className="transition-colors hover:text-black">Kids Hikes</Link>
+                <Link to="/arizona/easy-family-hikes" className="transition-colors hover:text-black">Easy Hikes</Link>
+                <Link to="/arizona/family-adventures-by-season" className="transition-colors hover:text-black">Seasons</Link>
+                <Link to="/arizona/day-trips-from-phoenix" className="transition-colors hover:text-black">Phoenix Trips</Link>
+                <Link to="/community" className="transition-colors hover:text-black">Community</Link>
+                <Link to="/trip-builder" className="transition-colors hover:text-black">Trip Builder</Link>
+                <Link to="/privacy-policy" className="transition-colors hover:text-black">Privacy Policy</Link>
+                <Link to="/terms-of-service" className="transition-colors hover:text-black">Terms of Service</Link>
               </div>
             </div>
           </div>
         </footer>
       )}
-
       {!hideSiteChrome && <ChatWidget />}
     </div>
   );
