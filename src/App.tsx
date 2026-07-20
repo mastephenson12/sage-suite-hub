@@ -39,6 +39,7 @@ import ArizonaDayTripsFromPhoenix from './pages/ArizonaDayTripsFromPhoenix';
 import ArizonaWeekendTrips from './pages/ArizonaWeekendTrips';
 import ArizonaSeasonalFamilyAdventures from './pages/ArizonaSeasonalFamilyAdventures';
 import ArizonaHikesWithKids from './pages/ArizonaHikesWithKids';
+import EasyArizonaFamilyHikes from './pages/EasyArizonaFamilyHikes';
 import DesertHikingSafety from './pages/DesertHikingSafety';
 import PaysonRimCountryWithKids from './pages/PaysonRimCountryWithKids';
 import CoolArizonaSummerTripsWithKids from './pages/CoolArizonaSummerTripsWithKids';
@@ -214,6 +215,7 @@ function AppContent() {
           <Route path="/arizona/weekend-trips" element={<ArizonaWeekendTrips />} />
           <Route path="/arizona/family-adventures-by-season" element={<ArizonaSeasonalFamilyAdventures />} />
           <Route path="/arizona/hikes-with-kids" element={<ArizonaHikesWithKids />} />
+          <Route path="/arizona/easy-family-hikes" element={<EasyArizonaFamilyHikes />} />
           <Route path="/arizona/desert-hiking-safety" element={<DesertHikingSafety />} />
           <Route path="/arizona/payson-rim-country-with-kids" element={<PaysonRimCountryWithKids />} />
           <Route path="/arizona/cool-summer-trips-with-kids" element={<CoolArizonaSummerTripsWithKids />} />
@@ -283,6 +285,10 @@ function AppContent() {
 
                 <Link to="/arizona/hikes-with-kids" className="transition-colors hover:text-black">
                   Kids Hikes
+                </Link>
+
+                <Link to="/arizona/easy-family-hikes" className="transition-colors hover:text-black">
+                  Easy Hikes
                 </Link>
 
                 <Link to="/arizona/family-adventures-by-season" className="transition-colors hover:text-black">
