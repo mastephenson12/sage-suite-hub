@@ -24,6 +24,7 @@ const staticRoutes = [
   { path: '/arizona/weekend-trips', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/family-adventures-by-season', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/hikes-with-kids', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/easy-family-hikes', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/desert-hiking-safety', changefreq: 'monthly', priority: '0.9' },
   { path: '/trail-guides', changefreq: 'weekly', priority: '0.8' },
   { path: '/archive', changefreq: 'weekly', priority: '0.8' },
