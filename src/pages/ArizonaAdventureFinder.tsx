@@ -9,6 +9,7 @@ import {
   MapPin,
   ShieldCheck,
   Sparkles,
+  Sun,
   Trees,
   Users,
   type LucideIcon,
@@ -133,6 +134,37 @@ const firstPicks = [
   },
 ];
 
+const instantNextSteps = [
+  {
+    title: 'It is hot today',
+    text: 'Go straight to cooler-air, water, shade, and indoor backup ideas.',
+    to: '/arizona/cool-summer-trips-with-kids',
+    cta: 'Find heat-safe ideas',
+    icon: Sun,
+  },
+  {
+    title: 'We want an easy hike',
+    text: 'Start with hikes that make sense for kids, visitors, and mixed energy.',
+    to: '/arizona/hikes-with-kids',
+    cta: 'Open kid hikes',
+    icon: Trees,
+  },
+  {
+    title: 'We want a weekend',
+    text: 'Compare red rocks, pine towns, canyon trips, and realistic drive times.',
+    to: '/arizona/weekend-trips',
+    cta: 'Compare weekends',
+    icon: CalendarDays,
+  },
+  {
+    title: 'Just build it for me',
+    text: 'Use Sage to make a custom plan around ages, heat, food, and pace.',
+    to: '/trip-builder?plan=ready&location=arizona&kids=yes&pace=low-stress',
+    cta: 'Use planner',
+    icon: Compass,
+  },
+];
+
 const FinderCard: React.FC<{
   title: string;
   text: string;
@@ -239,6 +271,40 @@ const ArizonaAdventureFinder: React.FC = () => {
         secondaryTo="/explore"
         secondaryLabel="Browse all guides"
       />
+
+      <section className="border-b border-zinc-100 bg-emerald-50 px-6 py-10">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-6 max-w-3xl">
+            <p className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-emerald-700">
+              Pick the fastest path
+            </p>
+            <h2 className="text-2xl font-black tracking-tight text-zinc-950 md:text-3xl">
+              What kind of Arizona plan do you need right now?
+            </h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {instantNextSteps.map((step) => {
+              const Icon = step.icon;
+              return (
+                <Link
+                  key={step.title}
+                  to={step.to}
+                  className="group flex h-full flex-col rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md"
+                >
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 transition group-hover:bg-emerald-700 group-hover:text-white">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-lg font-black tracking-tight text-zinc-950">{step.title}</h3>
+                  <p className="mt-3 flex-grow text-sm leading-6 text-zinc-600">{step.text}</p>
+                  <span className="mt-5 text-xs font-black uppercase tracking-widest text-emerald-700">
+                    {step.cta}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="mb-8 max-w-3xl">
