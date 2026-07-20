@@ -104,14 +104,20 @@ const quickRules = [
   {
     title: 'Heat changes the plan first',
     text: 'If the forecast is hot, choose elevation, shade, water, or a shorter morning plan before choosing a famous trail.',
+    cta: 'Build a heat-smart plan',
+    to: '/trip-builder?plan=ready&kids=yes&group=family&activity=explore&length=half-day&season=summer&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=180',
   },
   {
     title: 'Food is part of the route',
     text: 'The best family plan has one outdoor anchor, one reset stop, and one backup. Lunch is not a side quest.',
+    cta: 'Plan the full day',
+    to: '/trip-builder?plan=ready&kids=yes&group=family&activity=explore&length=full-day&season=any&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=120',
   },
   {
     title: 'Visitors need simple wins',
     text: 'For guests, choose memorable scenery and easy logistics before chasing the hardest hike in the region.',
+    cta: 'Build a visitor-friendly plan',
+    to: '/trip-builder?plan=ready&kids=yes&group=visitors&activity=explore&length=full-day&season=any&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=120',
   },
 ];
 
@@ -187,16 +193,21 @@ export default function ArizonaSeasonalFamilyAdventures() {
       <section className="px-6 py-12">
         <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
           {quickRules.map((rule) => (
-            <article
+            <Link
               key={rule.title}
-              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5"
+              to={rule.to}
+              aria-label={`${rule.title}: ${rule.cta}`}
+              className="group block rounded-2xl border border-zinc-200 bg-zinc-50 p-5 transition duration-200 hover:-translate-y-0.5 hover:border-orange-300 hover:bg-white hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm"
             >
-              <CalendarDays className="mb-4 h-5 w-5 text-orange-600" />
+              <CalendarDays className="mb-4 h-5 w-5 text-orange-600 transition-transform group-hover:scale-110" />
               <h2 className="text-lg font-black tracking-tight">
                 {rule.title}
               </h2>
               <p className="mt-2 text-sm leading-6 text-zinc-600">{rule.text}</p>
-            </article>
+              <span className="mt-4 inline-flex text-xs font-black uppercase tracking-[0.14em] text-orange-700">
+                {rule.cta} →
+              </span>
+            </Link>
           ))}
         </div>
       </section>
