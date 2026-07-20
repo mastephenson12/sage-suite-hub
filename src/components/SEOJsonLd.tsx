@@ -16,6 +16,8 @@ type SEOJsonLdProps = {
   url?: string;
   faqs?: FAQItem[];
   breadcrumbs?: BreadcrumbItem[];
+  robots?: string;
+  includeSiteSchema?: boolean;
 };
 
 function setMetaTag(name: string, content: string) {
@@ -62,10 +64,13 @@ export default function SEOJsonLd({
   url = 'https://sage.healthandtravels.com/',
   faqs = [],
   breadcrumbs = [],
+  robots = 'index, follow',
+  includeSiteSchema = true,
 }: SEOJsonLdProps) {
   useEffect(() => {
     document.title = title;
     setMetaTag('description', description);
+    setMetaTag('robots', robots);
     setCanonical(url);
 
     setPropertyMetaTag('og:title', title);
@@ -76,20 +81,22 @@ export default function SEOJsonLd({
     setMetaTag('twitter:card', 'summary_large_image');
     setMetaTag('twitter:title', title);
     setMetaTag('twitter:description', description);
-  }, [title, description, url]);
+  }, [title, description, url, robots]);
 
-  const websiteSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Sage Health and Travels',
-    url: 'https://sage.healthandtravels.com/',
-    description,
-    publisher: {
-      '@type': 'Organization',
-      name: 'Health and Travels',
-      url: 'https://healthandtravels.com/',
-    },
-  };
+  const websiteSchema = includeSiteSchema
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Sage Health and Travels',
+        url: 'https://sage.healthandtravels.com/',
+        description,
+        publisher: {
+          '@type': 'Organization',
+          name: 'Health and Travels',
+          url: 'https://healthandtravels.com/',
+        },
+      }
+    : null;
 
   const webPageSchema = {
     '@context': 'https://schema.org',
@@ -122,17 +129,19 @@ export default function SEOJsonLd({
     ],
   };
 
-  const organizationSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Health and Travels',
-    url: 'https://healthandtravels.com/',
-    sameAs: [
-      'https://sage.healthandtravels.com/',
-      'https://www.facebook.com/HealthandTravels',
-      'https://www.instagram.com/heal_thandtravels',
-    ],
-  };
+  const organizationSchema = includeSiteSchema
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Health and Travels',
+        url: 'https://healthandtravels.com/',
+        sameAs: [
+          'https://sage.healthandtravels.com/',
+          'https://www.facebook.com/HealthandTravels',
+          'https://www.instagram.com/heal_thandtravels',
+        ],
+      }
+    : null;
 
   const faqSchema =
     faqs.length > 0
