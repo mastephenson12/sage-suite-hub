@@ -52,6 +52,11 @@ const hubLinks = [
     to: '/es/arizona/viajes-frescos-verano-con-ninos',
   },
   {
+    title: 'Caminatas en Arizona con ninos',
+    description: 'Guia en espanol para escoger senderos familiares por edad, temporada, calor, sombra, banos, agua y distancia realista.',
+    to: '/es/arizona/caminatas-con-ninos',
+  },
+  {
     title: 'Best Arizona Hikes With Kids',
     description: 'Compare beginner-friendly hikes by season, shade, bathrooms, drive time, and family energy level.',
     to: '/arizona/hikes-with-kids',
