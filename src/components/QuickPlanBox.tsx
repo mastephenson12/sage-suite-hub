@@ -12,6 +12,7 @@ import {
   Utensils,
   type LucideIcon,
 } from 'lucide-react';
+import AffiliateRecommendation from './AffiliateRecommendation';
 
 type QuickPlanItem = {
   label: string;
@@ -43,6 +44,30 @@ const iconMap: Record<string, LucideIcon> = {
   'Bathrooms / shade / food': Utensils,
 };
 
+const sedonaAffiliateExperiences = [
+  {
+    title: 'Private Sedona Scenic Half-Day Tour',
+    description:
+      'A flexible private tour for families and first-time visitors who want major Sedona scenery without planning every stop themselves.',
+    bestFor: 'families, first-time visitors, and small groups',
+    url: 'https://www.viator.com/tours/Sedona/Sedona-Scenic-Tour-and-Helicopter/d750-109073P4?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=SedonaHalfDay',
+  },
+  {
+    title: 'Private Customizable Sedona Vortex Jeep Tour',
+    description:
+      'A private Jeep experience that can be adjusted around your group and gives visitors a guided way to explore Sedona vortex areas.',
+    bestFor: 'families with older children, couples, and friend groups',
+    url: 'https://www.viator.com/tours/Sedona/The-Original-Sedona-Vortex-Tour/d750-25271P1?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=SedonaJeep',
+  },
+  {
+    title: 'Sedona Red Rock Highlights E-Bike Tour',
+    description:
+      'A guided e-bike option for travelers who want to cover more ground and see red rock highlights without turning the day into a long hike.',
+    bestFor: 'active adults, teens who meet operator requirements, and friend groups',
+    url: 'https://www.viator.com/tours/Sedona/Sedona-Red-Rock-Highlights-E-Bike-Tour/d750-209615P359?pid=P00292684&mcid=42383&medium=link&medium_version=selector&campaign=SedonaEBike',
+  },
+];
+
 const QuickPlanBox: React.FC<QuickPlanBoxProps> = ({
   eyebrow = 'Quick Plan',
   title,
@@ -66,6 +91,8 @@ const QuickPlanBox: React.FC<QuickPlanBoxProps> = ({
       ? [{ label: 'Bathrooms / shade / food', value: bathroomShadeFood }]
       : []),
   ];
+
+  const showSedonaExperiences = tripBuilderTo.includes('location=sedona');
 
   return (
     <section className="border-y border-emerald-100 bg-emerald-50 px-6 py-10">
@@ -131,6 +158,37 @@ const QuickPlanBox: React.FC<QuickPlanBoxProps> = ({
             );
           })}
         </div>
+
+        {showSedonaExperiences && (
+          <div className="mt-8 rounded-3xl border border-orange-200 bg-orange-50 p-5 md:p-7">
+            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-orange-700">
+              Optional guided experiences
+            </p>
+            <h3 className="mt-2 text-2xl font-black tracking-tight text-zinc-950">
+              Guided Sedona experiences worth considering
+            </h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-700">
+              These are optional paid activities. Choose one only when it genuinely fits your group, schedule, mobility, and budget.
+            </p>
+            <p className="mt-2 text-xs leading-6 text-zinc-500">
+              Affiliate disclosure: Sage Health and Travels may earn a commission if you book through these links, at no additional cost to you.
+            </p>
+
+            <div className="mt-5 grid gap-4 lg:grid-cols-3">
+              {sedonaAffiliateExperiences.map((experience) => (
+                <AffiliateRecommendation
+                  key={experience.title}
+                  title={experience.title}
+                  description={experience.description}
+                  url={experience.url}
+                  provider="Viator"
+                  bestFor={experience.bestFor}
+                  placement="sedona_quick_plan"
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
