@@ -7,6 +7,7 @@ const indexPath = path.join(distDir, 'index.html');
 const startHerePath = 'start-here';
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
+const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
@@ -149,6 +150,24 @@ const spanishPlanBySituationFaqs = [
     question: 'Que viajes funcionan con ninos pequenos?',
     answer:
       'Los ninos pequenos suelen disfrutar mas planes con caminatas cortas, banos cercanos, sombra, snacks, salidas faciles y un horario realista.',
+  },
+];
+
+const spanishHikesWithKidsFaqs = [
+  {
+    question: 'Cuales son buenas caminatas en Arizona con ninos?',
+    answer:
+      'Buenas caminatas con ninos son cortas, faciles de abandonar, adecuadas para la temporada y cercanas a banos, comida, sombra o agua.',
+  },
+  {
+    question: 'Cuanto debe durar una caminata familiar en Arizona?',
+    answer:
+      'Para muchas familias, lo mejor es empezar con caminatas de menos de 2 millas, especialmente con ninos pequenos, visitantes o calor.',
+  },
+  {
+    question: 'A que hora es mejor caminar con ninos en Arizona?',
+    answer:
+      'La manana suele ser la mejor opcion. En verano, las familias deben elegir elevacion, sombra, agua, salidas muy temprano y un plan B.',
   },
 ];
 
@@ -494,6 +513,23 @@ const spanishPlanBySituationHtml = addLanguageAlternates(
 );
 await writeRoute(spanishPlanBySituationPath, spanishPlanBySituationHtml);
 
+const spanishHikesWithKidsHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Caminatas en Arizona con ninos | Guia familiar | Sage',
+    description:
+      'Guia en espanol para escoger caminatas en Arizona con ninos por edad, temporada, calor, sombra, banos, agua, distancia y plan familiar realista.',
+    url: `${siteUrl}/${spanishHikesWithKidsPath}`,
+    faqs: spanishHikesWithKidsFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishHikesWithKidsPath}` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/hikes-with-kids` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/hikes-with-kids` },
+  ]
+);
+await writeRoute(spanishHikesWithKidsPath, spanishHikesWithKidsHtml);
+
 const russianArizonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {
     title: 'Путешествия по Аризоне на русском языке | Sage',
@@ -608,4 +644,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 15} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 16} Arizona SEO pages.`);
