@@ -17,6 +17,7 @@ const staticRoutes = [
   { path: '/ru/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
+  { path: '/es/arizona/caminatas-con-ninos', changefreq: 'weekly', priority: '0.9' },
   { path: '/ru/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/day-trips-from-phoenix', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/payson-rim-country-with-kids', changefreq: 'weekly', priority: '0.9' },
