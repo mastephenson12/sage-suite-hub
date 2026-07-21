@@ -75,6 +75,14 @@ const featuredSpanishGuides = [
     icon: Trees,
   },
   {
+    title: 'Caminatas en Arizona con ninos',
+    description:
+      'Escoge senderos familiares por edad, temporada, calor, sombra, banos, agua y energia real del grupo.',
+    to: '/es/arizona/caminatas-con-ninos',
+    label: 'Caminatas',
+    icon: Mountain,
+  },
+  {
     title: 'Phoenix con ninos cuando hace demasiado calor',
     description:
       'Una guia para dias de calor fuerte: salir temprano, usar museos, agua, comida facil y descansos bajo techo.',
@@ -103,7 +111,7 @@ const planningPaths = [
     title: 'Caminatas con ninos',
     text:
       'Empieza con caminatas cortas, banos cercanos, agua, snacks, salida temprano y una opcion de retirada facil.',
-    to: '/arizona/hikes-with-kids',
+    to: '/es/arizona/caminatas-con-ninos',
     icon: Users,
   },
   {
