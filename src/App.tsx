@@ -47,6 +47,7 @@ import SpanishArizonaHub from './pages/SpanishArizonaHub';
 import SpanishPlanBySituation from './pages/SpanishPlanBySituation';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
+import SpanishArizonaHikesWithKids from './pages/SpanishArizonaHikesWithKids';
 import RussianArizonaHub from './pages/RussianArizonaHub';
 import RussianPlanBySituation from './pages/RussianPlanBySituation';
 import RussianCoolArizonaSummerTrips from './pages/RussianCoolArizonaSummerTrips';
@@ -170,6 +171,7 @@ function AppContent() {
           <Route path="/es/arizona" element={<SpanishArizonaHub />} />
           <Route path="/es/arizona/planificar-por-situacion" element={<SpanishPlanBySituation />} />
           <Route path="/es/arizona/viajes-frescos-verano-con-ninos" element={<SpanishCoolArizonaSummerTrips />} />
+          <Route path="/es/arizona/caminatas-con-ninos" element={<SpanishArizonaHikesWithKids />} />
           <Route path="/ru" element={<RussianArizonaHub />} />
           <Route path="/ru/arizona/plan-by-situation" element={<RussianPlanBySituation />} />
           <Route path="/ru/arizona/cool-summer-trips-with-kids" element={<RussianCoolArizonaSummerTrips />} />
