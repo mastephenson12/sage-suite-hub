@@ -34,6 +34,7 @@ import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
 import ArizonaDestinationPage from './pages/ArizonaDestinationPage';
 import ArizonaAdventureFinder from './pages/ArizonaAdventureFinder';
+import ArizonaFirstTripGuide from './pages/ArizonaFirstTripGuide';
 import ArizonaPlanBySituation from './pages/ArizonaPlanBySituation';
 import ArizonaDayTripsFromPhoenix from './pages/ArizonaDayTripsFromPhoenix';
 import ArizonaWeekendTrips from './pages/ArizonaWeekendTrips';
@@ -181,6 +182,7 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/arizona" element={<Arizona />} />
           <Route path="/arizona/adventure-finder" element={<ArizonaAdventureFinder />} />
+          <Route path="/arizona/first-trip" element={<ArizonaFirstTripGuide />} />
           <Route path="/arizona/plan-by-situation" element={<ArizonaPlanBySituation />} />
           <Route path="/arizona/day-trips-from-phoenix" element={<ArizonaDayTripsFromPhoenix />} />
           <Route path="/arizona/weekend-trips" element={<ArizonaWeekendTrips />} />
@@ -215,6 +217,7 @@ function AppContent() {
                 <Link to="/archive" className="transition-colors hover:text-black">Archive</Link>
                 <Link to="/trail-guides" className="transition-colors hover:text-black">Trails</Link>
                 <Link to="/arizona" className="transition-colors hover:text-black">Arizona Guides</Link>
+                <Link to="/arizona/first-trip" className="transition-colors hover:text-black">First Trip</Link>
                 <Link to="/arizona/plan-by-situation" className="transition-colors hover:text-black">Plan by Situation</Link>
                 <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">Adventure Finder</Link>
                 <Link to="/es/arizona" className="transition-colors hover:text-black">Espanol</Link>
