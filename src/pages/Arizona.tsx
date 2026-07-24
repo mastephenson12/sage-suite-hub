@@ -63,6 +63,12 @@ const Arizona: React.FC = () => {
               Build a Custom Trip
             </Link>
             <Link
+              to="/arizona/first-trip"
+              className="inline-flex items-center justify-center rounded-2xl border border-orange-300 bg-white px-7 py-4 text-sm font-black uppercase tracking-widest text-orange-700 transition hover:border-orange-500 hover:bg-orange-50"
+            >
+              First Arizona Trip
+            </Link>
+            <Link
               to="/arizona/plan-by-situation"
               className="inline-flex items-center justify-center rounded-2xl border border-emerald-300 bg-white px-7 py-4 text-sm font-black uppercase tracking-widest text-emerald-700 transition hover:border-emerald-500 hover:bg-emerald-50"
             >
