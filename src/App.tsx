@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-d
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
+import ArizonaHero from './components/ArizonaHero';
 import Archive from './pages/Archive';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
@@ -25,7 +26,7 @@ function AppContent() {
       
       <main className="flex-grow">
         <Routes>
-          <Route path="/" element={<Hero />} />
+          <Route path="/" element={<div className="h-screen bg-red-500 flex items-center justify-center"><h1 className="text-6xl text-white">TEST - ARIZONA HERO SHOULD BE HERE</h1></div>} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
           <Route path="/archive" element={<Archive />} />
