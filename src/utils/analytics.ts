@@ -6,6 +6,7 @@ export type AnalyticsEventName =
   | 'health_travels_ideas_click'
   | 'plan_another_trip_click'
   | 'save_trip_plan_click'
+  | 'packing_checklist_toggle'
   | 'arizona_guides_click'
   | 'share_plan_panel_copy'
   | 'popular_trip_card_click'
