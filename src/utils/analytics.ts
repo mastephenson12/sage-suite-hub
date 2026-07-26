@@ -5,6 +5,7 @@ export type AnalyticsEventName =
   | 'sage_ai_refine_click'
   | 'health_travels_ideas_click'
   | 'plan_another_trip_click'
+  | 'save_trip_plan_click'
   | 'arizona_guides_click'
   | 'share_plan_panel_copy'
   | 'popular_trip_card_click'
