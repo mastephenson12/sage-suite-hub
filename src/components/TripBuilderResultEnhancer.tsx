@@ -2,14 +2,18 @@ import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   Backpack,
+  Baby,
   CalendarCheck,
   CheckCircle2,
   Clock3,
   Copy,
+  Droplets,
   MapPin,
   MessageCircle,
   ShieldCheck,
   Sparkles,
+  ThermometerSun,
+  Utensils,
 } from 'lucide-react';
 import ParentRealityCheckCard from './ParentRealityCheckCard';
 import SaveTripPlanCard from './SaveTripPlanCard';
@@ -34,14 +38,106 @@ function buildChatLink(location: string, prompt: string): string {
   return `/chat?${params.toString()}`;
 }
 
-const packingItems = [
-  'Water for every person, plus extra for the ride back',
-  'Snacks that will not melt into sadness',
-  'Sun protection: hats, sunscreen, sunglasses, light layers',
-  'Comfortable shoes with grip, not heroic flip-flops',
-  'Small first-aid kit, wipes, and backup trash bag',
-  'Offline map or screenshot of the plan before leaving',
-];
+type PackingItem = {
+  id: string;
+  label: string;
+  helper: string;
+  priority: 'core' | 'heat' | 'kids' | 'comfort';
+};
+
+function buildPackingItems({
+  hasKids,
+  wantsShade,
+  needsBathrooms,
+  season,
+  includeToddlers,
+}: {
+  hasKids: boolean;
+  wantsShade: boolean;
+  needsBathrooms: boolean;
+  season: string;
+  includeToddlers: boolean;
+}): PackingItem[] {
+  const isHotSeason = /summer|july|august|june|hot|warm/i.test(season);
+
+  const items: PackingItem[] = [
+    {
+      id: 'water',
+      label: isHotSeason ? 'Extra water and electrolytes' : 'Water for every person',
+      helper: isHotSeason
+        ? 'Plan for more than you think you need, especially for Phoenix-area stops.'
+        : 'Bring enough for the outing plus the ride back.',
+      priority: isHotSeason ? 'heat' : 'core',
+    },
+    {
+      id: 'snacks',
+      label: 'Easy snacks',
+      helper: 'Choose snacks that survive the car, heat, and kid negotiations.',
+      priority: 'core',
+    },
+    {
+      id: 'sun',
+      label: 'Sun protection',
+      helper: 'Hats, sunscreen, sunglasses, and light layers keep the day from turning sideways.',
+      priority: wantsShade ? 'heat' : 'core',
+    },
+    {
+      id: 'shoes',
+      label: 'Shoes with grip',
+      helper: 'Skip heroic flip-flops for rocky desert paths, creek edges, and stairs.',
+      priority: 'core',
+    },
+    {
+      id: 'offline-map',
+      label: 'Screenshot or offline map',
+      helper: 'Save the plan before leaving in case cell service drops.',
+      priority: 'core',
+    },
+    {
+      id: 'first-aid',
+      label: 'Small first-aid kit',
+      helper: 'Bandages, wipes, tweezers, and a trash bag handle most small trail problems.',
+      priority: 'comfort',
+    },
+  ];
+
+  if (needsBathrooms) {
+    items.push({
+      id: 'bathroom-reset',
+      label: 'Bathroom reset kit',
+      helper: 'Wipes, sanitizer, backup clothes, and a plastic bag are worth the tiny packing space.',
+      priority: 'comfort',
+    });
+  }
+
+  if (hasKids) {
+    items.push({
+      id: 'kid-reset',
+      label: 'Kid reset item',
+      helper: 'A small comfort item, mini game, or favorite snack can save the ride home.',
+      priority: 'kids',
+    });
+  }
+
+  if (includeToddlers) {
+    items.push(
+      {
+        id: 'toddler-clothes',
+        label: 'Toddler backup clothes',
+        helper: 'Add socks, shirt, shorts, and a bag for wet or dusty clothes.',
+        priority: 'kids',
+      },
+      {
+        id: 'carrier-stroller',
+        label: 'Carrier or rugged stroller plan',
+        helper: 'Decide before you arrive so the trailhead does not become the planning meeting.',
+        priority: 'kids',
+      }
+    );
+  }
+
+  return items;
+}
 
 const itineraryFlow = [
   {
@@ -80,6 +176,8 @@ const guidedSteps = [
 const TripBuilderResultEnhancer: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [copied, setCopied] = React.useState(false);
+  const [checkedPackingItems, setCheckedPackingItems] = React.useState<string[]>([]);
+  const [includeToddlers, setIncludeToddlers] = React.useState(false);
   const isReady = searchParams.get('plan') === 'ready';
 
   if (!isReady) return null;
@@ -105,6 +203,39 @@ const TripBuilderResultEnhancer: React.FC = () => {
     (tripLength === 'Half Day' ? 4 : 0);
 
   const safeConfidenceScore = Math.min(confidenceScore, 96);
+  const packingItems = React.useMemo(
+    () =>
+      buildPackingItems({
+        hasKids,
+        wantsShade,
+        needsBathrooms,
+        season,
+        includeToddlers,
+      }),
+    [hasKids, wantsShade, needsBathrooms, season, includeToddlers]
+  );
+  const checkedCount = checkedPackingItems.filter((itemId) =>
+    packingItems.some((item) => item.id === itemId)
+  ).length;
+  const packingProgress = Math.round((checkedCount / packingItems.length) * 100);
+
+  const togglePackingItem = (itemId: string) => {
+    setCheckedPackingItems((currentItems) => {
+      const isChecked = currentItems.includes(itemId);
+      const nextItems = isChecked
+        ? currentItems.filter((currentItem) => currentItem !== itemId)
+        : [...currentItems, itemId];
+
+      trackEvent('packing_checklist_toggle', {
+        label: isChecked ? 'Uncheck Packing Item' : 'Check Packing Item',
+        destination: location,
+        item: itemId,
+        location: 'trip_result_packing_checklist',
+      });
+
+      return nextItems;
+    });
+  };
 
   const nextActions = [
     {
@@ -375,16 +506,103 @@ const TripBuilderResultEnhancer: React.FC = () => {
             </article>
 
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
-              <div className="mb-4 flex items-center gap-3">
-                <Backpack className="h-5 w-5 text-zinc-800" />
-                <h3 className="text-xl font-black">What to bring</h3>
+              <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <Backpack className="h-5 w-5 text-zinc-800" />
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                      Before you leave
+                    </p>
+                    <h3 className="text-xl font-black">Pack-it prep checklist</h3>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-800">
+                  {checkedCount}/{packingItems.length} ready
+                </div>
               </div>
 
-              <ul className="grid gap-2 text-sm leading-relaxed text-zinc-700 sm:grid-cols-2">
+              <div className="mb-4 h-2 overflow-hidden rounded-full bg-zinc-100">
+                <div
+                  className="h-full rounded-full bg-emerald-500 transition-all"
+                  style={{ width: `${packingProgress}%` }}
+                />
+              </div>
+
+              {hasKids && (
+                <label className="mb-4 flex cursor-pointer items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-4">
+                  <input
+                    type="checkbox"
+                    checked={includeToddlers}
+                    onChange={(event) => {
+                      setIncludeToddlers(event.target.checked);
+                      trackEvent('packing_checklist_toggle', {
+                        label: event.target.checked ? 'Add Toddler Items' : 'Remove Toddler Items',
+                        destination: location,
+                        location: 'trip_result_packing_checklist',
+                      });
+                    }}
+                    className="mt-1 h-4 w-4 rounded border-orange-300 text-orange-600 focus:ring-orange-500"
+                  />
+                  <span>
+                    <span className="flex items-center gap-2 text-sm font-black text-orange-950">
+                      <Baby className="h-4 w-4" />
+                      Traveling with toddlers or little kids?
+                    </span>
+                    <span className="mt-1 block text-sm leading-relaxed text-orange-950/75">
+                      Add backup clothes, carrier or rugged stroller planning, and extra reset items.
+                    </span>
+                  </span>
+                </label>
+              )}
+
+              <div className="mb-4 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+                  <div className="mb-1 flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
+                    <Droplets className="h-4 w-4 text-sky-600" />
+                    Water
+                  </div>
+                  <p className="text-sm font-semibold text-zinc-700">
+                    Bring extra for the ride back.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+                  <div className="mb-1 flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
+                    <ThermometerSun className="h-4 w-4 text-orange-600" />
+                    Heat
+                  </div>
+                  <p className="text-sm font-semibold text-zinc-700">
+                    Start outdoor time early.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+                  <div className="mb-1 flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
+                    <Utensils className="h-4 w-4 text-emerald-600" />
+                    Food
+                  </div>
+                  <p className="text-sm font-semibold text-zinc-700">
+                    Pack snacks before hunger takes over.
+                  </p>
+                </div>
+              </div>
+
+              <ul className="grid gap-3 text-sm leading-relaxed text-zinc-700 sm:grid-cols-2">
                 {packingItems.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="mt-[2px] text-orange-500">•</span>
-                    <span>{item}</span>
+                  <li key={item.id}>
+                    <label className="flex h-full cursor-pointer gap-3 rounded-2xl border border-zinc-200 p-4 transition hover:border-orange-300 hover:bg-orange-50/70">
+                      <input
+                        type="checkbox"
+                        checked={checkedPackingItems.includes(item.id)}
+                        onChange={() => togglePackingItem(item.id)}
+                        className="mt-1 h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <span>
+                        <span className="block font-black text-zinc-950">{item.label}</span>
+                        <span className="mt-1 block text-sm leading-relaxed text-zinc-600">
+                          {item.helper}
+                        </span>
+                      </span>
+                    </label>
                   </li>
                 ))}
               </ul>
