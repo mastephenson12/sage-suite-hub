@@ -1,83 +1,170 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { trails } from '../data/trails';
-import { MapPin, Star, Clock, Mountain } from 'lucide-react';
+import { trails, Trail } from '../data/trails';
+import { MapPin, Star, Clock, Mountain, Sparkles, ExternalLink } from 'lucide-react';
 import { getTrailImage } from '../utils/getTrailImage';
+
+const TrailCardImage: React.FC<{ trail: Trail }> = ({ trail }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-zinc-100">
+        <div className="text-zinc-300 text-xs font-black uppercase tracking-[0.4em]">
+          Visual Missing
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={getTrailImage(trail)}
+      alt={trail.name}
+      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      referrerPolicy="no-referrer"
+      onError={() => setHasError(true)}
+    />
+  );
+};
+
+const difficultyClasses: Record<Trail['difficulty'], string> = {
+  Easy: 'bg-emerald-500 text-white',
+  Moderate: 'bg-amber-500 text-white',
+  Hard: 'bg-orange-500 text-white',
+  Extreme: 'bg-red-600 text-white',
+};
+
+const buildTrailScoutPrompt = (trail: Trail) => {
+  return `Help me plan a trip around this Arizona trail: ${trail.name} in ${trail.location}. Include best timing, family-friendliness, parking, what to pack, nearby places to eat or stay, and remind me to check the AllTrails route page before I go.`;
+};
 
 const TrailGuides: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto px-6 py-24">
-      <header className="mb-20 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-50 border border-zinc-100 rounded-full mb-8">
+    <div className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-8">
+      <header className="mb-8 text-center">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50 px-3 py-1.5">
           <Mountain className="w-4 h-4 text-brand-primary" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em]">Verified Trail Intelligence</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em]">
+            Trail Intelligence
+          </span>
         </div>
-        <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.85]">Trail Guides</h1>
-        <p className="text-xl text-zinc-500 italic font-serif max-w-2xl mx-auto">GPS-verified routes, elevation data, and strategic field intel for Arizona's most iconic peaks.</p>
+
+        <h1 className="mb-3 text-4xl font-black uppercase tracking-tighter text-zinc-950 md:text-5xl">
+          Trail Guides
+        </h1>
+
+        <p className="mx-auto max-w-xl text-sm italic font-serif text-zinc-500 md:text-base">
+          Verified routes, elevation data, family-ready Arizona hiking ideas, and quick AllTrails links for map and review checks.
+        </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {trails.map((trail) => (
-          <Link 
-            key={trail.id} 
-            to={`/trail-guides/${trail.id}`}
-            className="group block bg-white border border-zinc-100 rounded-[48px] overflow-hidden hover:border-brand-primary/20 hover:shadow-2xl hover:shadow-zinc-100/50 transition-all"
+          <div
+            key={trail.id}
+            className="group overflow-hidden rounded-[28px] border border-zinc-100 bg-white transition-all hover:border-brand-primary/20 hover:shadow-xl hover:shadow-zinc-100/50"
           >
-            <div className="relative h-80 overflow-hidden bg-zinc-100">
-              <img 
-                src={getTrailImage(trail)} 
-                alt={trail.name} 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  console.error(`Failed to load image for ${trail.name}:`, trail.image);
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
-                  target.parentElement!.innerHTML = `<div class="text-zinc-300 text-xs font-black uppercase tracking-[0.4em]">Visual Missing</div>`;
-                }}
-              />
-              <div className="absolute top-6 left-6 flex gap-2">
-                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg ${
-                  trail.difficulty === 'Easy' ? 'bg-emerald-500 text-white' :
-                  trail.difficulty === 'Moderate' ? 'bg-amber-500 text-white' :
-                  trail.difficulty === 'Hard' ? 'bg-orange-500 text-white' :
-                  'bg-red-600 text-white'
-                }`}>
-                  {trail.difficulty}
-                </span>
-                <div className="px-4 py-1.5 bg-white/90 backdrop-blur-md rounded-full flex items-center gap-1.5 shadow-lg">
-                  <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{trail.rating}</span>
+            <Link to={`/trail-guides/${trail.id}`} className="block">
+              <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
+                <TrailCardImage trail={trail} />
+
+                <div className="absolute left-4 top-4 flex gap-2">
+                  <span
+                    className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow ${difficultyClasses[trail.difficulty]}`}
+                  >
+                    {trail.difficulty}
+                  </span>
+
+                  <div className="flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 shadow backdrop-blur">
+                    <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                    <span className="text-[10px] font-black uppercase tracking-widest">
+                      {trail.rating}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="p-10">
-              <div className="flex items-center gap-2 text-zinc-400 mb-4">
+            </Link>
+
+            <div className="p-5">
+              <div className="mb-3 flex items-center gap-2 text-zinc-400">
                 <MapPin className="w-3 h-3" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{trail.location}</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                  {trail.location}
+                </span>
               </div>
-              <h3 className="text-3xl font-black uppercase tracking-tight mb-6 group-hover:text-brand-primary transition-colors">{trail.name}</h3>
-              
-              <div className="flex items-center justify-between pt-6 border-t border-zinc-100">
-                <div className="flex items-center gap-6">
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300 mb-1">Distance</span>
-                    <span className="text-xs font-black uppercase tracking-widest">{trail.distance}</span>
+
+              <Link to={`/trail-guides/${trail.id}`} className="block">
+                <h3 className="mb-4 text-xl font-black uppercase tracking-tight text-zinc-950 transition-colors group-hover:text-brand-primary md:text-2xl">
+                  {trail.name}
+                </h3>
+              </Link>
+
+              <div className="border-t border-zinc-100 pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-5">
+                    <div className="flex flex-col">
+                      <span className="mb-1 text-[8px] font-black uppercase tracking-widest text-zinc-300">
+                        Distance
+                      </span>
+                      <span className="text-xs font-black uppercase tracking-widest">
+                        {trail.distance}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="mb-1 text-[8px] font-black uppercase tracking-widest text-zinc-300">
+                        Elevation
+                      </span>
+                      <span className="text-xs font-black uppercase tracking-widest">
+                        {trail.elevationGain}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-black uppercase tracking-widest text-zinc-300 mb-1">Elevation</span>
-                    <span className="text-xs font-black uppercase tracking-widest">{trail.elevationGain}</span>
+
+                  <div className="flex items-center gap-2 text-brand-primary">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-xs font-black uppercase tracking-widest">
+                      {trail.time}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-brand-primary">
-                  <Clock className="w-4 h-4" />
-                  <span className="text-xs font-black uppercase tracking-widest">{trail.time}</span>
+
+                <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                      to={`/trail-guides/${trail.id}`}
+                      className="text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors hover:text-black"
+                    >
+                      Read Trail Guide →
+                    </Link>
+
+                    {trail.allTrailsUrl && (
+                      <a
+                        href={trail.allTrailsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 transition-colors hover:text-emerald-800"
+                      >
+                        Map & Reviews
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+
+                  <Link
+                    to={`/chat?prompt=${encodeURIComponent(
+                      buildTrailScoutPrompt(trail)
+                    )}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-zinc-50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-700 transition hover:border-zinc-400 hover:bg-zinc-100 hover:text-black"
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    Ask Scout about this trail
+                  </Link>
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

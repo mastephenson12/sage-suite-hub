@@ -40,18 +40,27 @@ A world-first **Gemini 2.5 Live** integration. A voice-activated guide that help
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/adventure-hub.git
-cd adventure-hub
+git clone https://github.com/mastephenson12/sage-suite-hub.git
+cd sage-suite-hub
 ```
+### 2. Install Dependencies
 
-### 2. Environment Variables
+npm install
+
+### 3. Run the App Locally
+
+npm run dev
+
+Then open http://localhost:5173 in your browser to see SageSuite!
+
+### 4. Environment Variables
 You must provide a Gemini API Key to power the AI features. Create a `.env` file or add this to your deployment settings:
 
 ```env
-API_KEY=your_google_gemini_api_key_here
+GEMINI_API_KEY=your_google_gemini_api_key_here
 ```
 
-### 3. Deploy to the Web
+### 5. Deploy to the Web
 The easiest way to launch is using **Vercel**:
 1. Connect your GitHub account.
 2. Select the `adventure-hub` repository.

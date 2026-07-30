@@ -1,47 +1,74 @@
-import { GoogleGenAI, Type } from "@google/genai";
+type ChatMessage = {
+  role: "user" | "model";
+  parts: { text: string }[];
+};
 
-const apiKey = process.env.GEMINI_API_KEY || '';
-const genAI = new GoogleGenAI({ apiKey });
+function normalizeHistory(history: ChatMessage[] = []): ChatMessage[] {
+  return history
+    .filter(
+      (msg) =>
+        msg &&
+        (msg.role === "user" || msg.role === "model") &&
+        Array.isArray(msg.parts) &&
+        msg.parts.length > 0 &&
+        typeof msg.parts[0]?.text === "string" &&
+        msg.parts[0].text.trim().length > 0
+    )
+    .map((msg) => ({
+      role: msg.role,
+      parts: msg.parts.map((part) => ({
+        text: String(part.text ?? "").trim(),
+      })),
+    }));
+}
 
-export const chatWithGemini = async (message: string, history: { role: 'user' | 'model', parts: { text: string }[] }[] = []) => {
+export const chatWithGemini = async (
+  message: string,
+  history: ChatMessage[] = []
+): Promise<string> => {
   try {
-    const model = "gemini-3-flash-preview";
-    const chat = genAI.chats.create({
-      model,
-      config: {
-        systemInstruction: "You are Sage, a travel planning assistant for Health & Travels. You help families and groups plan trips anywhere in the world, with special expertise in Arizona. You can assist with flights, camping, hotels, vacation rentals, and outdoor adventures. Be clear, practical, friendly, and safety-aware. When users are unsure, ask helpful questions about destination, dates, group size, and budget to guide the planning process."
+    const cleanMessage = message.trim();
+
+    if (!cleanMessage) {
+      return "Please type a message so I can help plan your trip.";
+    }
+
+    const messages = [
+      ...normalizeHistory(history).map((msg) => ({
+        role: msg.role,
+        content: msg.parts.map((part) => part.text).join("\n"),
+      })),
+      {
+        role: "user" as const,
+        content: cleanMessage,
       },
+    ];
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ messages }),
     });
 
-    // Note: sendMessage only takes the message string, not the full history object in this SDK version
-    // If history is needed, we would need to initialize the chat with history if the SDK supports it, 
-    // but the standard sendMessage is usually enough for simple interactions.
-    // For this implementation, we'll just send the message.
-    const result = await chat.sendMessage({ message });
-    return result.text;
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return "I'm having trouble connecting to the command center right now. Please try again later.";
+    const data: { text?: string; error?: string } = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || `Request failed with status ${response.status}`);
+    }
+
+    return data.text || "I’m having trouble planning that right now. Please try again.";
+  } catch (error: any) {
+    console.error("Chat API Error:", error);
+    return (
+      error?.message ||
+      "I’m having trouble connecting right now. Please try again in a moment."
+    );
   }
 };
 
-export const generateImage = async (prompt: string) => {
-  try {
-    const response = await genAI.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: {
-        parts: [{ text: prompt }],
-      },
-    });
-
-    for (const part of response.candidates?.[0]?.content?.parts || []) {
-      if (part.inlineData) {
-        return `data:image/png;base64,${part.inlineData.data}`;
-      }
-    }
-    return null;
-  } catch (error) {
-    console.error("Image Generation Error:", error);
-    return null;
-  }
+export const generateImage = async (_prompt: string): Promise<string | null> => {
+  console.warn("generateImage is not wired to a secure server endpoint yet.");
+  return null;
 };

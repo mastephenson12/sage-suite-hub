@@ -1,60 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sage | Family Trip Planning for Arizona and Beyond</title>
-  <script>
-    // Safe initialization of process.env for React/GenAI SDK
-    window.process = window.process || { env: {} };
-    window.process.env = window.process.env || {};
-    window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'development';
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/src/index.css">
-</head>
-<body class="bg-white antialiased m-0 font-sans overflow-x-hidden">
-  <!-- Intelligence Sync Loader -->
-  <div id="app-loader" style="position: fixed; inset: 0; background: #09090b; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);">
-    <div style="width:32px; height:32px; border:2px solid #27272a; border-top-color:#3b82f6; border-radius:50%; animation: spin 1s linear infinite; margin-bottom:20px;"></div>
-    <div style="text-align: center;">
-      <p style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#f4f4f5; margin-bottom:4px;">
-Loading Sage Travel Planner
-</p>
-<p style="font-size:8px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:#52525b;">
-Health & Travels
-</p>
-    </div>
-  </div>
-  
-  <div id="root"></div>
-  
-  <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
-  <script>
-    // Reveal app once root has content (React successfully mounted)
-    const checkInit = setInterval(() => {
-      const root = document.getElementById('root');
-      if (root && root.children.length > 0) {
-        const loader = document.getElementById('app-loader');
-        if (loader) {
-          loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 600);
+  <head>
+    <!-- Basic Setup -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Verification Tag -->
+    <meta name="agd-partner-manual-verification" />
+    <meta name="p:domain_verify" content="6e508bff48e55fe77b5e65c92925a697" />
+
+    <!-- Primary SEO Fallback -->
+    <title>Sage | Arizona Family Trip Planner</title>
+    <meta
+      name="description"
+      content="Plan safer, easier Arizona family adventures with Sage. Build trips for Sedona, Flagstaff, Payson, Prescott, Cave Creek, Page, Tucson, and Grand Canyon with trails, food, stays, and safety tips."
+    />
+    <link rel="canonical" href="https://sage.healthandtravels.com/" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sage | Arizona Family Trip Planner" />
+    <meta
+      property="og:description"
+      content="Build Arizona family adventure plans with easy trails, outdoor ideas, food stops, lodging ideas, and safety notes."
+    />
+    <meta property="og:url" content="https://sage.healthandtravels.com/" />
+    <meta property="og:site_name" content="Sage Health and Travels" />
+
+    <!-- Twitter / Social -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sage | Arizona Family Trip Planner" />
+    <meta
+      name="twitter:description"
+      content="Plan Arizona family adventures with Sage: trails, food, stays, safety tips, and simple trip planning help."
+    />
+
+    <!-- Structured Data Fallback -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Sage Health and Travels",
+        "url": "https://sage.healthandtravels.com/",
+        "description": "Sage helps families plan Arizona adventures with trails, food stops, places to stay, and safety tips.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Health and Travels",
+          "url": "https://healthandtravels.com/"
         }
-        clearInterval(checkInit);
       }
-    }, 50);
-    
-    // Safety release: If React fails to mount after 4 seconds, clear the loader so we can see errors
-    setTimeout(() => {
-        const loader = document.getElementById('app-loader');
-        if (loader && loader.style.opacity !== '0') {
-            console.warn("Manual loader release triggered.");
-            loader.style.opacity = '0';
-            setTimeout(() => loader.remove(), 600);
+    </script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function () {
+        var envMeasurementId = '%VITE_GOOGLE_ANALYTICS_ID%';
+        var measurementId = envMeasurementId && envMeasurementId.indexOf('%') !== 0
+          ? envMeasurementId
+          : 'G-DKH3PF8GEJ';
+
+        if (!measurementId) {
+          return;
         }
-        clearInterval(checkInit);
-    }, 4000);
-  </script>
-<script type="module" src="/src/main.tsx"></script>
-</body>
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+        window.__SAGE_GA_MEASUREMENT_ID = measurementId;
+
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+        document.head.appendChild(script);
+
+        window.gtag('js', new Date());
+        window.gtag('config', measurementId, { send_page_view: false });
+      })();
+    </script>
+
+    <!-- Google AdSense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4161437990209561"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Emerald Tracking Script -->
+    <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1">
+      (function () {
+          var script = document.createElement("script");
+          script.async = 1;
+          script.src = 'https://emrldtp.cc/NTM4MTE1.js?t=538115';
+          document.head.appendChild(script);
+      })();
+    </script>
+
+    <!-- GetYourGuide Widget -->
+    <script
+      async
+      defer
+      src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
+      data-gyg-partner-id="F1CGEME"
+    ></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- App Entry -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

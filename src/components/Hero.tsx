@@ -1,115 +1,315 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { LOGO_DATA_URL, BRAND_NAME } from '../constants';
-import { ArrowRight, Map, Shield, Zap } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { trackEvent } from '../utils/analytics';
+
+const arizonaCards = [
+  {
+    title: 'Sedona',
+    description: 'Red rock hikes, scenic stops, and family-friendly day plans.',
+    image: '/images/sedona-family.avif',
+    to: '/archive/sedona-family-adventure',
+    cta: 'View Sedona Guide',
+  },
+  {
+    title: 'Grand Canyon',
+    description: 'Simple rim walks, overlook strategy, and safer family timing.',
+    image: '/images/grand-canyon.avif',
+    to: '/archive/grand-canyon-family-adventure',
+    cta: 'View Grand Canyon Guide',
+  },
+  {
+    title: 'Flagstaff',
+    description: 'Cool mountain air, pine forests, lava caves, and weekend ideas.',
+    image: '/images/flagstaff-family-adventure.avif',
+    to: '/archive/flagstaff-family-escape',
+    cta: 'View Flagstaff Guide',
+  },
+];
+
+const destinationOptions = [
+  { label: 'Sedona', value: 'sedona', activity: 'explore', season: 'spring' },
+  { label: 'Flagstaff', value: 'flagstaff', activity: 'hike', season: 'summer' },
+  { label: 'Payson', value: 'payson', activity: 'explore', season: 'summer' },
+  { label: 'Phoenix', value: 'phoenix', activity: 'relax', season: 'winter' },
+  { label: 'Tucson', value: 'tucson', activity: 'explore', season: 'winter' },
+  { label: 'Not sure yet', value: '', activity: 'explore', season: 'spring' },
+];
+
+const groupOptions = [
+  { label: 'Toddlers / preschoolers', value: 'toddlers' },
+  { label: 'Elementary-age kids', value: 'elementary' },
+  { label: 'Mixed family group', value: 'mixed' },
+  { label: 'Tweens / teens', value: 'teens' },
+  { label: 'Adults only', value: 'adults' },
+];
+
+const priorityOptions = [
+  { label: 'Easy trail + bathrooms', value: 'bathrooms', shade: true, bathrooms: true, stroller: false, length: 'half-day' },
+  { label: 'Shade + low stress', value: 'shade', shade: true, bathrooms: true, stroller: false, length: 'full-day' },
+  { label: 'Stroller-friendly', value: 'stroller', shade: true, bathrooms: true, stroller: true, length: 'half-day' },
+  { label: 'Cool-weather escape', value: 'cool', shade: true, bathrooms: false, stroller: false, length: 'full-day' },
+  { label: 'Weekend adventure', value: 'weekend', shade: true, bathrooms: true, stroller: false, length: 'weekend' },
+];
 
 export const Hero: React.FC = () => {
-  const [imgError, setImgError] = useState(false);
-  const logoSrc = LOGO_DATA_URL || 'logo.png';
+  const navigate = useNavigate();
+  const [destination, setDestination] = useState(destinationOptions[0]);
+  const [group, setGroup] = useState(groupOptions[1]);
+  const [priority, setPriority] = useState(priorityOptions[0]);
+
+  const handleQuickPlan = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    trackEvent('homepage_quick_plan_submit', {
+      destination: destination.label,
+      group: group.label,
+      priority: priority.label,
+    });
+
+    const params = new URLSearchParams();
+    params.set('plan', 'ready');
+    if (destination.value) params.set('location', destination.value);
+    params.set('kids', group.value === 'adults' ? 'no' : 'yes');
+    params.set('activity', destination.activity);
+    params.set('length', priority.length);
+    params.set('season', destination.season);
+    params.set('ages', group.value === 'adults' ? 'mixed' : group.value);
+    params.set('shade', String(priority.shade));
+    params.set('bathrooms', String(priority.bathrooms));
+    params.set('stroller', String(priority.stroller));
+    params.set('drive', destination.value === 'flagstaff' || destination.value === 'tucson' ? '180' : '120');
+
+    navigate(`/trip-builder?${params.toString()}`);
+  };
 
   return (
-    <div className="bg-white pt-24 pb-24 border-b border-zinc-100 overflow-hidden relative min-h-[80vh] flex items-center">
+    <section className="relative overflow-hidden border-b border-zinc-100 bg-white">
       <div className="absolute inset-0 -z-10">
-        <img 
-          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80" 
-          alt="Arizona" 
-          className="w-full h-full object-cover opacity-10"
+        <img
+          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
+          alt="Arizona desert road"
+          className="h-full w-full object-cover opacity-10"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/80 to-white"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
       </div>
-      
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10 animate-fade-in">
-        <div className="flex justify-center mb-12">
-          <div className="relative">
-            <div className="absolute inset-0 bg-brand-accent blur-3xl opacity-10 rounded-full animate-pulse"></div>
-            {!imgError ? (
-              <img 
-                src={logoSrc} 
-                alt={BRAND_NAME} 
-                className="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10"
-                referrerPolicy="no-referrer"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div className="w-36 h-36 md:w-44 md:h-44 bg-zinc-950 rounded-[40px] flex items-center justify-center relative z-10 shadow-2xl">
-                <span className="text-white font-black text-4xl">H&T</span>
+
+      <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-14 md:pb-20 md:pt-20">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div className="max-w-3xl">
+            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
+              Sage Arizona Trip Planner
+            </p>
+
+            <h1 className="max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-black md:text-6xl">
+              Plan a Safer Arizona Family Adventure in Minutes
+            </h1>
+
+            <p className="mt-6 max-w-2xl font-serif text-lg italic leading-relaxed text-zinc-600 md:text-xl">
+              Pick where you want to go, who is coming, and what matters most.
+              Sage turns that into a starter plan with outdoor ideas, food stops,
+              lodging direction, bathroom notes, shade warnings, and timing help,
+              because family trips should not require 47 tabs and a tactical binder.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <a
+                href="#quick-plan"
+                onClick={() =>
+                  trackEvent('homepage_plan_trip_click', {
+                    label: 'Plan My Arizona Trip',
+                    location: 'hero_primary_cta',
+                  })
+                }
+                className="inline-flex items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95"
+              >
+                Plan My Arizona Trip
+              </a>
+
+              <Link
+                to="/arizona"
+                onClick={() =>
+                  trackEvent('arizona_guides_click', {
+                    label: 'Explore Family Guides',
+                    location: 'hero_secondary_cta',
+                  })
+                }
+                className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-8 py-4 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+              >
+                Explore Family Guides
+              </Link>
+            </div>
+
+            <div className="mt-8 grid gap-3 text-sm text-zinc-600 sm:grid-cols-3">
+              <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
+                ✅ Kid-fit trail ideas
               </div>
-            )}
+              <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
+                🚻 Bathroom + shade notes
+              </div>
+              <div className="rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3">
+                🍽️ Food and backup plans
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 text-brand-primary text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-12 shadow-sm">
-          <span className="w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
-          Fresh Trail Intel Dispatched Tuesday
-        </div>
-        
-        <h1 className="text-6xl md:text-[88px] font-[900] text-black mb-12 leading-[0.85] tracking-tighter uppercase">
-          Health, Trails, and <br/>Arizona Skies.
-        </h1>
-        
-        <p className="text-xl md:text-2xl text-zinc-500 italic max-w-2xl mx-auto leading-relaxed mb-16 font-medium font-serif">
-          Exploring the High Desert’s most breathtaking trails and hidden wellness retreats for the modern explorer.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link 
-            to="/chat" 
-            className="bg-brand-primary hover:bg-brand-dark text-white px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all shadow-xl shadow-brand-primary/20 active:scale-95 flex items-center justify-center gap-2"
+
+          <form
+            id="quick-plan"
+            onSubmit={handleQuickPlan}
+            className="rounded-[2rem] border border-zinc-200 bg-white/95 p-6 shadow-sm backdrop-blur md:p-8"
           >
-            Ask Portal Scout <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link 
-            to="/trail-guides" 
-            className="bg-zinc-100 hover:bg-zinc-200 text-black px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all active:scale-95"
-          >
-            Browse Trail Intel
-          </Link>
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
+              Start here
+            </p>
+
+            <h2 className="mt-3 text-2xl font-black tracking-tight text-black md:text-3xl">
+              Get a starter plan in 3 quick choices.
+            </h2>
+
+            <p className="mt-3 text-sm leading-relaxed text-zinc-600">
+              This sends you to the full Sage Trip Builder with your answers already
+              loaded. Fancy? No. Useful? Tragically, yes.
+            </p>
+
+            <div className="mt-6 space-y-5">
+              <label className="block">
+                <span className="mb-2 block text-sm font-black text-zinc-900">
+                  1. Where are you headed?
+                </span>
+                <select
+                  value={destination.value}
+                  onChange={(event) => {
+                    const nextDestination = destinationOptions.find(
+                      (option) => option.value === event.target.value
+                    );
+                    if (nextDestination) setDestination(nextDestination);
+                  }}
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                >
+                  {destinationOptions.map((option) => (
+                    <option key={option.label} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-black text-zinc-900">
+                  2. Who is coming?
+                </span>
+                <select
+                  value={group.value}
+                  onChange={(event) => {
+                    const nextGroup = groupOptions.find(
+                      (option) => option.value === event.target.value
+                    );
+                    if (nextGroup) setGroup(nextGroup);
+                  }}
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                >
+                  {groupOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-black text-zinc-900">
+                  3. What matters most?
+                </span>
+                <select
+                  value={priority.value}
+                  onChange={(event) => {
+                    const nextPriority = priorityOptions.find(
+                      (option) => option.value === event.target.value
+                    );
+                    if (nextPriority) setPriority(nextPriority);
+                  }}
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                >
+                  {priorityOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <button
+                type="submit"
+                className="inline-flex w-full items-center justify-center rounded-2xl bg-black px-8 py-4 text-base font-black uppercase tracking-[0.12em] text-white transition hover:bg-zinc-800 active:scale-[0.99]"
+              >
+                Build My Starter Plan
+              </button>
+            </div>
+
+            <div className="mt-6 grid gap-2 text-xs font-bold text-zinc-600 sm:grid-cols-2">
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🌤 Best time notes</span>
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🚗 Drive fit</span>
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🥪 Food nearby</span>
+              <span className="rounded-full bg-zinc-100 px-3 py-2">🧯 Safety reminders</span>
+            </div>
+          </form>
         </div>
 
-        {/* Feature Grid */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-          <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 hover:border-brand-primary/20 transition-all group">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
-              <Map className="w-6 h-6 text-brand-primary" />
+        <div className="mt-14">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
+                Start with a proven favorite
+              </p>
+              <h2 className="mt-2 text-2xl font-black tracking-tight text-black md:text-3xl">
+                Popular Arizona family trips
+              </h2>
             </div>
-            <h3 className="text-sm font-black uppercase tracking-widest mb-3">Trail Mapping</h3>
-            <p className="text-xs text-zinc-500 leading-relaxed">Advanced GPS-verified routes through Sedona, Flagstaff, and the Superstition Wilderness.</p>
           </div>
-          <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 hover:border-brand-primary/20 transition-all group">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
-              <Shield className="w-6 h-6 text-brand-primary" />
-            </div>
-            <h3 className="text-sm font-black uppercase tracking-widest mb-3">Wellness Protocols</h3>
-            <p className="text-xs text-zinc-500 leading-relaxed">Curated recovery and performance guides tailored for high-altitude desert environments.</p>
-          </div>
-          <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 hover:border-brand-primary/20 transition-all group">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
-              <Zap className="w-6 h-6 text-brand-primary" />
-            </div>
-            <h3 className="text-sm font-black uppercase tracking-widest mb-3">Real-time Intel</h3>
-            <p className="text-xs text-zinc-500 leading-relaxed">Live weather, trail conditions, and scout reports delivered directly to your command center.</p>
-          </div>
-        </div>
 
-        <div className="mt-24 flex flex-col items-center gap-4">
-          <p className="text-[11px] font-black text-zinc-300 uppercase tracking-[0.4em]">
-            Join <span className="text-black">5,241+</span> Pioneers
-          </p>
-          <div className="flex -space-x-3">
-            {[1,2,3,4,5].map(i => (
-              <div key={i} className="w-10 h-10 rounded-full border-4 border-white bg-zinc-200 overflow-hidden shadow-md">
-                 <img 
-                  src={`https://i.pravatar.cc/100?u=${i+10}`} 
-                  alt="explorer" 
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {arizonaCards.map((card) => (
+              <Link
+                key={card.title}
+                to={card.to}
+                onClick={() =>
+                  trackEvent('popular_trip_card_click', {
+                    label: card.cta,
+                    destination: card.title,
+                    location: 'homepage_popular_trips',
+                  })
+                }
+                className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+              >
+                <div className="relative h-[320px] overflow-hidden">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="mb-2 text-2xl font-black text-white">
+                      {card.title}
+                    </h3>
+
+                    <p className="mb-4 max-w-xs text-sm leading-relaxed text-white/90">
+                      {card.description}
+                    </p>
+
+                    <span className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white backdrop-blur-sm">
+                      {card.cta}
+                    </span>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
