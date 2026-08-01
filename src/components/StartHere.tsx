@@ -351,7 +351,7 @@ function ChoiceGroup<T extends string>({ title, options, value, onChange }: Choi
   return (
     <fieldset className="min-w-0">
       <legend className="mb-3 text-sm font-black text-zinc-950">{title}</legend>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2">
         {options.map((option) => {
           const Icon = option.icon;
           const isSelected = option.value === value;
@@ -361,7 +361,7 @@ function ChoiceGroup<T extends string>({ title, options, value, onChange }: Choi
               key={option.value}
               type="button"
               onClick={() => onChange(option.value)}
-              className={`flex min-h-[52px] min-w-0 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] font-black uppercase tracking-[0.04em] transition ${
+              className={`flex min-h-[52px] min-w-0 items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-[11px] font-black uppercase tracking-[0.04em] transition sm:px-3 sm:text-xs ${
                 isSelected
                   ? 'border-emerald-700 bg-emerald-700 text-white'
                   : 'border-zinc-200 bg-white text-zinc-700 hover:border-emerald-300 hover:bg-emerald-50'
