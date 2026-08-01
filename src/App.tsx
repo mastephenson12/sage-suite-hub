@@ -10,9 +10,6 @@ import {
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
-<<<<<<< HEAD
-import ArizonaHero from './components/ArizonaHero';
-=======
 import FamilyConfidencePanel from './components/FamilyConfidencePanel';
 import TripBuilderResultEnhancer from './components/TripBuilderResultEnhancer';
 import NewsletterConversionPanel from './components/NewsletterConversionPanel';
@@ -23,13 +20,16 @@ import SEOJsonLd from './components/SEOJsonLd';
 import HomeFAQ from './components/HomeFAQ';
 import PopularArizonaGuides from './components/PopularArizonaGuides';
 import SeasonalPlanningPanel from './components/SeasonalPlanningPanel';
+import AuthorityTrustPanel from './components/AuthorityTrustPanel';
 
->>>>>>> 2c97eb0876311f0394c3eb2e3779aa619fb1b3cf
 import Archive from './pages/Archive';
 import AdventureChooser from './pages/AdventureChooser';
 import Explore from './pages/Explore';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
+import EditorialStandards from './pages/EditorialStandards';
+import AuthorMarkStephenson from './pages/AuthorMarkStephenson';
+import AffiliateDisclosure from './pages/AffiliateDisclosure';
 import Community from './pages/Community';
 import ChatPage from './pages/ChatPage';
 import SuiteDashboard from './pages/SuiteDashboard';
@@ -53,9 +53,16 @@ import SpanishPlanBySituation from './pages/SpanishPlanBySituation';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
 import SpanishArizonaHikesWithKids from './pages/SpanishArizonaHikesWithKids';
+import SpanishDayTripsFromPhoenix from './pages/SpanishDayTripsFromPhoenix';
+import SpanishPaysonRimCountryWithKids from './pages/SpanishPaysonRimCountryWithKids';
+import SpanishFirstArizonaTripGuide from './pages/SpanishFirstArizonaTripGuide';
+import SpanishArizonaWeekendTrips from './pages/SpanishArizonaWeekendTrips';
 import RussianArizonaHub from './pages/RussianArizonaHub';
 import RussianPlanBySituation from './pages/RussianPlanBySituation';
 import RussianCoolArizonaSummerTrips from './pages/RussianCoolArizonaSummerTrips';
+import RussianArizonaHikesWithKids from './pages/RussianArizonaHikesWithKids';
+import RussianDayTripsFromPhoenix from './pages/RussianDayTripsFromPhoenix';
+import RussianFirstArizonaTripGuide from './pages/RussianFirstArizonaTripGuide';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
@@ -103,6 +110,7 @@ function HomePage() {
       <StartHere />
       <PopularArizonaGuides />
       <SeasonalPlanningPanel />
+      <AuthorityTrustPanel />
       <HowItWorks />
       <NewsletterConversionPanel />
       <FreedomBridge />
@@ -163,13 +171,9 @@ function AppContent() {
       {!hideSiteChrome && <Navbar />}
       <main className="flex-grow pb-24">
         <Routes>
-<<<<<<< HEAD
-          <Route path="/" element={<div className="h-screen bg-red-500 flex items-center justify-center"><h1 className="text-6xl text-white">TEST - ARIZONA HERO SHOULD BE HERE</h1></div>} />
-=======
           <Route path="/" element={<HomePage />} />
           <Route path="/start-here" element={<AdventureChooser />} />
           <Route path="/trip-builder" element={<TripBuilderPage />} />
->>>>>>> 2c97eb0876311f0394c3eb2e3779aa619fb1b3cf
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
           <Route path="/explore" element={<Explore />} />
@@ -178,16 +182,26 @@ function AppContent() {
           <Route path="/es/archive/phoenix-con-ninos-cuando-hace-calor" element={<SpanishPhoenixHeatPage />} />
           <Route path="/es/archive/phoenix-things-to-do-with-kids-when-hot" element={<SpanishPhoenixHeatPage />} />
           <Route path="/es/arizona" element={<SpanishArizonaHub />} />
+          <Route path="/es/arizona/primer-viaje-a-arizona-con-ninos" element={<SpanishFirstArizonaTripGuide />} />
           <Route path="/es/arizona/planificar-por-situacion" element={<SpanishPlanBySituation />} />
           <Route path="/es/arizona/viajes-frescos-verano-con-ninos" element={<SpanishCoolArizonaSummerTrips />} />
           <Route path="/es/arizona/caminatas-con-ninos" element={<SpanishArizonaHikesWithKids />} />
+          <Route path="/es/arizona/viajes-de-un-dia-desde-phoenix" element={<SpanishDayTripsFromPhoenix />} />
+          <Route path="/es/arizona/payson-y-mogollon-rim-con-ninos" element={<SpanishPaysonRimCountryWithKids />} />
+          <Route path="/es/arizona/escapadas-fin-de-semana-con-ninos" element={<SpanishArizonaWeekendTrips />} />
           <Route path="/ru" element={<RussianArizonaHub />} />
+          <Route path="/ru/arizona/first-trip-with-kids" element={<RussianFirstArizonaTripGuide />} />
           <Route path="/ru/arizona/plan-by-situation" element={<RussianPlanBySituation />} />
           <Route path="/ru/arizona/cool-summer-trips-with-kids" element={<RussianCoolArizonaSummerTrips />} />
+          <Route path="/ru/arizona/hikes-with-kids" element={<RussianArizonaHikesWithKids />} />
+          <Route path="/ru/arizona/day-trips-from-phoenix" element={<RussianDayTripsFromPhoenix />} />
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
+          <Route path="/editorial-standards" element={<EditorialStandards />} />
+          <Route path="/author/mark-stephenson" element={<AuthorMarkStephenson />} />
+          <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
           <Route path="/arizona" element={<Arizona />} />
           <Route path="/arizona/adventure-finder" element={<ArizonaAdventureFinder />} />
           <Route path="/arizona/first-trip" element={<ArizonaFirstTripGuide />} />
@@ -236,6 +250,10 @@ function AppContent() {
                 <Link to="/arizona/family-adventures-by-season" className="transition-colors hover:text-black">Seasons</Link>
                 <Link to="/arizona/day-trips-from-phoenix" className="transition-colors hover:text-black">Phoenix Trips</Link>
                 <Link to="/community" className="transition-colors hover:text-black">Community</Link>
+                <Link to="/about" className="transition-colors hover:text-black">About</Link>
+                <Link to="/editorial-standards" className="transition-colors hover:text-black">Editorial Standards</Link>
+                <Link to="/author/mark-stephenson" className="transition-colors hover:text-black">Author</Link>
+                <Link to="/affiliate-disclosure" className="transition-colors hover:text-black">Affiliate Disclosure</Link>
                 <Link to="/trip-builder" className="transition-colors hover:text-black">Trip Builder</Link>
                 <Link to="/privacy-policy" className="transition-colors hover:text-black">Privacy Policy</Link>
                 <Link to="/terms-of-service" className="transition-colors hover:text-black">Terms of Service</Link>

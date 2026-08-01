@@ -34,6 +34,13 @@ type GuideResult = {
   helper: string;
 };
 
+type StarterPlan = {
+  title: string;
+  description: string;
+  to: string;
+  icon: LucideIcon;
+};
+
 type GroupValue = 'kids' | 'toddlers' | 'friends' | 'visitors' | 'adults';
 type HeatValue = 'normal' | 'warm' | 'extreme';
 type TimeValue = 'two-hours' | 'half-day' | 'full-day' | 'weekend';
@@ -204,6 +211,135 @@ function buildTripBuilderUrl(
   return `/trip-builder?${params.toString()}`;
 }
 
+function getStarterPlans(
+  group: GroupValue,
+  heat: HeatValue,
+  time: TimeValue,
+  goal: GoalValue
+): StarterPlan[] {
+  const audience =
+    group === 'toddlers'
+      ? 'toddlers'
+      : group === 'friends'
+        ? 'friends'
+        : group === 'visitors'
+          ? 'visiting family'
+          : group === 'adults'
+            ? 'adults'
+            : 'kids';
+  const pace =
+    time === 'two-hours'
+      ? 'short'
+      : time === 'weekend'
+        ? 'weekend'
+        : time === 'full-day'
+          ? 'full-day'
+          : 'half-day';
+  const heatRule =
+    heat === 'extreme'
+      ? 'extreme-heat'
+      : heat === 'warm'
+        ? 'warm-weather'
+        : 'normal-weather';
+
+  const baseParams = new URLSearchParams({
+    plan: 'ready',
+    group: group === 'friends' ? 'friends' : 'family',
+    kids: group === 'adults' ? 'no' : 'yes',
+    ages: audience,
+    length: pace,
+    heat: heatRule,
+  });
+
+  const makeUrl = (location: string, activity: string, extras: Record<string, string> = {}) => {
+    const params = new URLSearchParams(baseParams);
+    params.set('location', location);
+    params.set('activity', activity);
+    Object.entries(extras).forEach(([key, value]) => params.set(key, value));
+    return `/trip-builder?${params.toString()}`;
+  };
+
+  const plans: StarterPlan[] = [];
+
+  if (heat === 'extreme' || goal === 'indoor') {
+    plans.push({
+      title: 'Phoenix heat-safe reset',
+      description: 'Early outdoor moment, indoor midday anchor, food break, and an easier evening.',
+      to: makeUrl('phoenix', 'indoor-outdoor', {
+        season: 'summer',
+        bathrooms: 'true',
+        shade: 'true',
+        food: 'nearby',
+      }),
+      icon: ShieldCheck,
+    });
+  }
+
+  if (goal === 'pines' || goal === 'water' || heat === 'extreme') {
+    plans.push({
+      title: 'Payson pines and water day',
+      description: 'Cooler air, Rim Country scenery, lake or creek time, and a relaxed food stop.',
+      to: makeUrl('payson', goal === 'water' ? 'water' : 'pines', {
+        season: 'summer',
+        drive: time === 'weekend' ? '180' : '120',
+        shade: 'true',
+      }),
+      icon: Trees,
+    });
+  }
+
+  if (time === 'weekend') {
+    plans.push({
+      title: 'Weekend base camp plan',
+      description: 'One strong destination, one flexible second morning, and room for tired people.',
+      to: makeUrl(goal === 'pines' ? 'flagstaff' : 'sedona', 'weekend', {
+        season: heat === 'extreme' ? 'summer' : 'spring',
+        food: 'nearby',
+      }),
+      icon: CalendarDays,
+    });
+  }
+
+  if (goal === 'hike' && heat !== 'extreme') {
+    plans.push({
+      title: 'Easy trail starter',
+      description: 'Short hike, clear turnaround point, bathroom check, and a snack stop nearby.',
+      to: makeUrl('phoenix', 'hike', {
+        drive: time === 'two-hours' ? '45' : '90',
+        bathrooms: group === 'toddlers' ? 'true' : 'flexible',
+      }),
+      icon: Mountain,
+    });
+  }
+
+  if (group === 'visitors' || time === 'half-day') {
+    plans.push({
+      title: 'Visitor-friendly Arizona afternoon',
+      description: 'Big scenery without overpacking the day, plus food and a backup stop.',
+      to: makeUrl('phoenix', 'scenic', {
+        drive: '90',
+        food: 'nearby',
+        backup: 'yes',
+      }),
+      icon: Car,
+    });
+  }
+
+  if (plans.length < 3) {
+    plans.push({
+      title: 'Balanced Arizona family day',
+      description: 'A practical starter plan with one outdoor anchor, food, shade, and backup options.',
+      to: makeUrl('arizona', goal, {
+        food: goal === 'food' ? 'nearby' : 'flexible',
+        shade: String(heat !== 'normal'),
+      }),
+      icon: Compass,
+    });
+  }
+
+  return plans.slice(0, 3);
+}
+
 type ChoiceGroupProps<T extends string> = {
   title: string;
   options: ChoiceOption<T>[];
@@ -225,7 +361,7 @@ function ChoiceGroup<T extends string>({ title, options, value, onChange }: Choi
               key={option.value}
               type="button"
               onClick={() => onChange(option.value)}
-              className={`flex min-h-[48px] items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs font-black uppercase tracking-wide transition ${
+              className={`flex min-h-[52px] min-w-0 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] font-black uppercase tracking-[0.04em] transition ${
                 isSelected
                   ? 'border-emerald-700 bg-emerald-700 text-white'
                   : 'border-zinc-200 bg-white text-zinc-700 hover:border-emerald-300 hover:bg-emerald-50'
@@ -233,7 +369,7 @@ function ChoiceGroup<T extends string>({ title, options, value, onChange }: Choi
               aria-pressed={isSelected}
             >
               <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <span className="leading-tight">{option.label}</span>
+              <span className="min-w-0 whitespace-normal break-words leading-tight">{option.label}</span>
             </button>
           );
         })}
@@ -254,6 +390,10 @@ const StartHere: React.FC = () => {
   );
   const tripBuilderUrl = React.useMemo(
     () => buildTripBuilderUrl(group, heat, time, goal),
+    [group, heat, time, goal]
+  );
+  const starterPlans = React.useMemo(
+    () => getStarterPlans(group, heat, time, goal),
     [group, heat, time, goal]
   );
   const RecommendationIcon = recommendation.icon;
@@ -341,6 +481,41 @@ const StartHere: React.FC = () => {
                 >
                   Build custom plan
                 </Link>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h3 className="text-sm font-black uppercase tracking-[0.18em] text-zinc-800">
+                  Ready-made starts
+                </h3>
+                <span className="text-xs font-bold text-zinc-500">Matched to your taps</span>
+              </div>
+
+              <div className="grid gap-3 md:grid-cols-3">
+                {starterPlans.map((plan) => {
+                  const PlanIcon = plan.icon;
+
+                  return (
+                    <Link
+                      key={`${plan.title}-${plan.to}`}
+                      to={plan.to}
+                      onClick={() =>
+                        trackEvent('start_here_starter_plan_click', {
+                          ...eventPayload,
+                          starterPlan: plan.title,
+                        })
+                      }
+                      className="group rounded-lg border border-zinc-200 bg-white p-4 transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md"
+                    >
+                      <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-100 text-emerald-700 transition group-hover:bg-emerald-700 group-hover:text-white">
+                        <PlanIcon className="h-4 w-4" aria-hidden="true" />
+                      </div>
+                      <h4 className="text-sm font-black leading-snug text-zinc-950">{plan.title}</h4>
+                      <p className="mt-2 text-xs font-semibold leading-5 text-zinc-600">{plan.description}</p>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>

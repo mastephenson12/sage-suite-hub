@@ -8,6 +8,7 @@ const startHerePath = 'start-here';
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
+const spanishWeekendTripsPath = 'es/arizona/escapadas-fin-de-semana-con-ninos';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
@@ -582,6 +583,23 @@ const weekendTripsHtml = applySeo(baseHtml, {
 });
 await writeRoute('arizona/weekend-trips', weekendTripsHtml);
 
+const spanishWeekendTripsHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Escapadas de fin de semana en Arizona con ninos | Sage',
+    description:
+      'Guia en espanol para elegir escapadas de fin de semana en Arizona con ninos, familia o amigos por clima, manejo, comida, hospedaje, seguridad y plan B.',
+    url: `${siteUrl}/${spanishWeekendTripsPath}`,
+    faqs: weekendTripsFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishWeekendTripsPath}` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/weekend-trips` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/weekend-trips` },
+  ]
+);
+await writeRoute(spanishWeekendTripsPath, spanishWeekendTripsHtml);
+
 const seasonalFamilyAdventureHtml = applySeo(baseHtml, {
   title: 'Best Arizona Family Adventures by Season | Sage',
   description:
@@ -644,4 +662,4 @@ for (const destination of destinations) {
   await writeRoute(`arizona/${destination.slug}`, html);
 }
 
-console.log(`Prerendered ${destinations.length + 16} Arizona SEO pages.`);
+console.log(`Prerendered ${destinations.length + 17} Arizona SEO pages.`);

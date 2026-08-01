@@ -222,6 +222,34 @@ const publicPages = [
     ],
   },
   {
+    routePath: 'editorial-standards',
+    title: 'Editorial Standards | Sage Health and Travels',
+    description: 'Read how Sage Health and Travels reviews Arizona family travel guides, safety notes, affiliate placements, AI assistance, and source checks.',
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Editorial Standards', url: `${siteUrl}/editorial-standards` },
+    ],
+  },
+  {
+    routePath: 'author/mark-stephenson',
+    title: 'Mark Stephenson | Health and Travels Author Profile',
+    description: 'Meet Mark Stephenson, founder and editor of Health and Travels and the family travel voice behind Sage Arizona trip planning.',
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'About', url: `${siteUrl}/about` },
+      { name: 'Mark Stephenson', url: `${siteUrl}/author/mark-stephenson` },
+    ],
+  },
+  {
+    routePath: 'affiliate-disclosure',
+    title: 'Affiliate Disclosure | Sage Health and Travels',
+    description: 'Read how Health and Travels and Sage may use affiliate links while keeping Arizona family travel recommendations practical and reader-first.',
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Affiliate Disclosure', url: `${siteUrl}/affiliate-disclosure` },
+    ],
+  },
+  {
     routePath: 'privacy-policy',
     title: 'Privacy Policy | Sage Health and Travels',
     description: 'Read the Sage Health and Travels privacy policy, including how site usage, analytics, forms, and third-party services may handle information.',
@@ -230,6 +258,22 @@ const publicPages = [
     routePath: 'terms-of-service',
     title: 'Terms of Service | Sage Health and Travels',
     description: 'Read the terms governing use of Sage Health and Travels, its trip-planning tools, travel information, external links, and related services.',
+  },
+  {
+    routePath: 'es/arizona/primer-viaje-a-arizona-con-ninos',
+    language: 'es',
+    title: 'Primer viaje a Arizona con niños | Guía familiar | Sage',
+    description: 'Guía en español para planear un primer viaje a Arizona con niños, familia o amigos: Phoenix, Sedona, Flagstaff, Grand Canyon, Payson, Prescott, Tucson, calor, comida, baños y rutas fáciles.',
+    alternates: [
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/primer-viaje-a-arizona-con-ninos` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/first-trip` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/first-trip` },
+    ],
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Arizona en español', url: `${siteUrl}/es/arizona` },
+      { name: 'Primer viaje a Arizona', url: `${siteUrl}/es/arizona/primer-viaje-a-arizona-con-ninos` },
+    ],
   },
   {
     routePath: 'es/arizona/viajes-frescos-verano-con-ninos',
@@ -241,6 +285,85 @@ const publicPages = [
       { hreflang: 'en', href: `${siteUrl}/arizona/cool-summer-trips-with-kids` },
       { hreflang: 'ru', href: `${siteUrl}/ru/arizona/cool-summer-trips-with-kids` },
       { hreflang: 'x-default', href: `${siteUrl}/arizona/cool-summer-trips-with-kids` },
+    ],
+  },
+  {
+    routePath: 'es/arizona/viajes-de-un-dia-desde-phoenix',
+    language: 'es',
+    title: 'Viajes de un dia desde Phoenix con ninos | Sage',
+    description: 'Guia en espanol para escoger viajes familiares de un dia desde Phoenix por tiempo de manejo, temporada, calor, comida, banos, sombra y energia del grupo.',
+    alternates: [
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+    ],
+  },
+  {
+    routePath: 'es/arizona/payson-y-mogollon-rim-con-ninos',
+    language: 'es',
+    title: 'Payson y Mogollon Rim con ninos | Guia familiar en Arizona | Sage',
+    description: 'Guia en espanol para planear Payson y Mogollon Rim con ninos desde Phoenix: Woods Canyon Lake, miradores, pinos, picnic, seguridad, monzones y ritmo familiar.',
+    alternates: [
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/payson-y-mogollon-rim-con-ninos` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/payson-rim-country-with-kids` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/payson-rim-country-with-kids` },
+    ],
+  },
+  {
+    routePath: 'es/arizona/escapadas-fin-de-semana-con-ninos',
+    language: 'es',
+    title: 'Escapadas de fin de semana en Arizona con ninos | Sage',
+    description: 'Guia en espanol para elegir escapadas de fin de semana en Arizona con ninos, familia o amigos por clima, manejo, comida, hospedaje, seguridad y plan B.',
+    alternates: [
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/escapadas-fin-de-semana-con-ninos` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/weekend-trips` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/weekend-trips` },
+    ],
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Arizona en espanol', url: `${siteUrl}/es/arizona` },
+      { name: 'Escapadas de fin de semana', url: `${siteUrl}/es/arizona/escapadas-fin-de-semana-con-ninos` },
+    ],
+  },
+  {
+    routePath: 'ru/arizona/day-trips-from-phoenix',
+    language: 'ru',
+    title: 'Поездки на один день из Phoenix с детьми | Sage',
+    description: 'Русская страница Sage для семейных поездок на один день из Phoenix: Payson, Sedona, Flagstaff, Prescott, Tucson, жара, дорога, еда, туалеты и запасной план.',
+    alternates: [
+      { hreflang: 'ru', href: `${siteUrl}/ru/arizona/day-trips-from-phoenix` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+    ],
+  },
+  {
+    routePath: 'ru/arizona/first-trip-with-kids',
+    language: 'ru',
+    title: 'Первая поездка в Аризону с детьми | Семейный гид | Sage',
+    description: 'Русскоязычный гид Sage для первой поездки по Аризоне с детьми, семьей или друзьями: Phoenix, Sedona, Flagstaff, Grand Canyon, Payson, Prescott, Tucson, жара, еда, туалеты и простой план.',
+    alternates: [
+      { hreflang: 'ru', href: `${siteUrl}/ru/arizona/first-trip-with-kids` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/first-trip` },
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/primer-viaje-a-arizona-con-ninos` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/first-trip` },
+    ],
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Аризона на русском', url: `${siteUrl}/ru` },
+      { name: 'Первая поездка в Аризону', url: `${siteUrl}/ru/arizona/first-trip-with-kids` },
+    ],
+  },
+  {
+    routePath: 'ru/arizona/hikes-with-kids',
+    language: 'ru',
+    title: 'Походы по Аризоне с детьми | Sage',
+    description: 'Русский гид по семейным походам в Аризоне: возраст детей, сезон, жара, тень, туалеты, вода, расстояние, еда и запасной план.',
+    alternates: [
+      { hreflang: 'ru', href: `${siteUrl}/ru/arizona/hikes-with-kids` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/hikes-with-kids` },
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/caminatas-con-ninos` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/hikes-with-kids` },
     ],
   },
   {

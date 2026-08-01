@@ -59,6 +59,14 @@ function setAlternateLink(hreflang: string, href: string) {
 
 const featuredSpanishGuides = [
   {
+    title: 'Primer viaje a Arizona con ninos',
+    description:
+      'Una guia para familias y grupos que visitan Arizona por primera vez: ruta, temporada, calor, comida, banos, manejo y plan B.',
+    to: '/es/arizona/primer-viaje-a-arizona-con-ninos',
+    label: 'Primera vez',
+    icon: Sparkles,
+  },
+  {
     title: 'Planificar viajes por Arizona por situacion',
     description:
       'Empieza con lo que realmente cambia el dia: ninos pequenos, calor extremo, visitantes, medio dia, banos, sombra, agua o grupos de amigos.',
@@ -81,6 +89,30 @@ const featuredSpanishGuides = [
     to: '/es/arizona/caminatas-con-ninos',
     label: 'Caminatas',
     icon: Mountain,
+  },
+  {
+    title: 'Viajes de un dia desde Phoenix con ninos',
+    description:
+      'Escoge salidas familiares por tiempo de manejo, temporada, calor, comida, banos, sombra y energia real del grupo.',
+    to: '/es/arizona/viajes-de-un-dia-desde-phoenix',
+    label: 'Desde Phoenix',
+    icon: MapPin,
+  },
+  {
+    title: 'Payson y Mogollon Rim con ninos',
+    description:
+      'Una escapada familiar desde Phoenix con pinos, lago, miradores, comida facil, monzones y ritmo realista.',
+    to: '/es/arizona/payson-y-mogollon-rim-con-ninos',
+    label: 'Pinos',
+    icon: Trees,
+  },
+  {
+    title: 'Escapadas de fin de semana en Arizona',
+    description:
+      'Elige destino por clima, manejo, comida, hospedaje, una aventura principal y plan B para familias o grupos de amigos.',
+    to: '/es/arizona/escapadas-fin-de-semana-con-ninos',
+    label: 'Fin de semana',
+    icon: CalendarDays,
   },
   {
     title: 'Phoenix con ninos cuando hace demasiado calor',
@@ -118,14 +150,14 @@ const planningPaths = [
     title: 'Viajes desde Phoenix',
     text:
       'Compara tiempo de manejo, clima, comida, estacionamiento y si el viaje funciona como ida y vuelta o fin de semana.',
-    to: '/arizona/day-trips-from-phoenix',
+    to: '/es/arizona/viajes-de-un-dia-desde-phoenix',
     icon: MapPin,
   },
   {
     title: 'Fines de semana familiares',
     text:
       'Para grupos y familias, menos paradas suele ser mejor: una aventura principal, una buena comida y una noche tranquila.',
-    to: '/arizona/weekend-trips',
+    to: '/es/arizona/escapadas-fin-de-semana-con-ninos',
     icon: CalendarDays,
   },
 ];
@@ -147,7 +179,7 @@ const destinations = [
     name: 'Payson y Mogollon Rim',
     bestFor: 'Pinos, lagos, miradores y descanso del calor',
     note: 'Revisen monzones y caminos forestales antes de salir.',
-    to: '/arizona/payson-rim-country-with-kids',
+    to: '/es/arizona/payson-y-mogollon-rim-con-ninos',
   },
   {
     name: 'Prescott',
@@ -422,6 +454,7 @@ export default function SpanishArizonaHub() {
         quickPlanText={quickPlanText}
         voteText={voteText}
         eventContext="spanish_arizona_hub"
+        locale="es"
       />
 
       <section className="border-t border-zinc-100 px-6 py-14">
