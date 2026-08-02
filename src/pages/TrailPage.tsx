@@ -15,6 +15,7 @@ import {
   Star,
 } from 'lucide-react';
 import BeforeYouGoPanel from '../components/BeforeYouGoPanel';
+import OfflineTrailPack from '../components/OfflineTrailPack';
 import { trails } from '../data/trails';
 import {
   getSafetyBadgeClasses,
@@ -245,6 +246,13 @@ const TrailPage: React.FC = () => {
         subtitle="Check the basics before the group hits the trail: heat, water, bathrooms, parking, food, and a shorter backup option."
         context="trail"
         plannerTo={tripSlug ? `/trip-builder?location=${tripSlug}` : '/trip-builder'}
+      />
+
+      <OfflineTrailPack
+        trail={trail}
+        safetyTitle={safety?.title}
+        safetyMessage={safety?.message}
+        safetySuggestion={safety?.suggestion}
       />
 
       <div className="mx-auto max-w-6xl px-6 pt-20">
