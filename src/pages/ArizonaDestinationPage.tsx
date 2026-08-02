@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SEOJsonLd from '../components/SEOJsonLd';
+import BeforeYouGoPanel from '../components/BeforeYouGoPanel';
 import QuickPlanBox from '../components/QuickPlanBox';
 import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
@@ -193,6 +194,12 @@ export default function ArizonaDestinationPage() {
         tripBuilderTo={`/trip-builder?location=${destination.slug}`}
         secondaryTo="/arizona/adventure-finder"
         secondaryLabel="Compare trips"
+      />
+
+      <BeforeYouGoPanel
+        title={`Before you go to ${destination.name}`}
+        subtitle="Use this as the final family check before you leave: heat, water, bathrooms, parking, food, and the backup plan."
+        plannerTo={`/trip-builder?location=${destination.slug}`}
       />
 
       <section className="mx-auto max-w-6xl px-6 py-14">

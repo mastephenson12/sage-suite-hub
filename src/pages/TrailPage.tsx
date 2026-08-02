@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Star,
 } from 'lucide-react';
+import BeforeYouGoPanel from '../components/BeforeYouGoPanel';
 import { trails } from '../data/trails';
 import {
   getSafetyBadgeClasses,
@@ -238,6 +239,13 @@ const TrailPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <BeforeYouGoPanel
+        title={`Before you hike ${trail.name}`}
+        subtitle="Check the basics before the group hits the trail: heat, water, bathrooms, parking, food, and a shorter backup option."
+        context="trail"
+        plannerTo={tripSlug ? `/trip-builder?location=${tripSlug}` : '/trip-builder'}
+      />
 
       <div className="mx-auto max-w-6xl px-6 pt-20">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
