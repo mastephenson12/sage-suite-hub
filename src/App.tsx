@@ -15,6 +15,7 @@ import TripBuilderResultEnhancer from './components/TripBuilderResultEnhancer';
 import NewsletterConversionPanel from './components/NewsletterConversionPanel';
 import HowItWorks from './components/HowItWorks';
 import StartHere from './components/StartHere';
+import GroupRealityCheckPanel from './components/GroupRealityCheckPanel';
 import FreedomBridge from './components/FreedomBridge';
 import SEOJsonLd from './components/SEOJsonLd';
 import HomeFAQ from './components/HomeFAQ';
@@ -108,6 +109,7 @@ function HomePage() {
       <Hero />
       <FamilyConfidencePanel />
       <StartHere />
+      <GroupRealityCheckPanel />
       <PopularArizonaGuides />
       <SeasonalPlanningPanel />
       <AuthorityTrustPanel />
