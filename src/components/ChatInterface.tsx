@@ -1,16 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Accessibility,
-  CalendarDays,
-  Dog,
-  Footprints,
-  Gem,
-  IceCream,
-  Map,
-  PiggyBank,
-  Snowflake,
-  Utensils,
-} from 'lucide-react';
+import ArizonaQuickFinder from './ArizonaQuickFinder';
 
 type Message = {
   role: 'user' | 'model';
@@ -35,79 +24,6 @@ const QUICK_PROMPTS = [
   'Easy Arizona hikes with kids',
   'Best Arizona road trip',
 ];
-
-const ARIZONA_STARTERS = [
-  {
-    label: 'Easy family hikes',
-    description: 'Gentle trails that work for kids and beginners',
-    prompt:
-      'Help me find an easy family hike in Arizona. Ask me about our starting point, the kids’ ages, the season, and whether we need shade, bathrooms, or stroller access.',
-    icon: Footprints,
-  },
-  {
-    label: 'Cool off',
-    description: 'Water, shade, and cooler high-country escapes',
-    prompt:
-      'Help me find places to cool off in Arizona. Ask where we are starting, who is going, how far we can drive, and whether we prefer water, indoor activities, or cooler mountain weather.',
-    icon: Snowflake,
-  },
-  {
-    label: 'Weekend trips',
-    description: 'A realistic two- or three-day Arizona getaway',
-    prompt:
-      'Plan an Arizona weekend trip for us. Ask about our starting point, group, budget, dates, drive limit, and preferred mix of outdoor time, food, and relaxing.',
-    icon: Map,
-  },
-  {
-    label: 'Local food',
-    description: 'Memorable stops to pair with an adventure',
-    prompt:
-      'Help me plan an Arizona adventure around great local food. Ask where we will be, who is going, our food preferences, budget, and what activities we want nearby.',
-    icon: Utensils,
-  },
-  {
-    label: 'Dog friendly',
-    description: 'Trails, patios, stays, and stops for your pup',
-    prompt:
-      'Find a dog-friendly Arizona adventure. Ask about our location, dates, drive limit, dog’s size and trail experience, and whether we need pet-friendly food or lodging.',
-    icon: Dog,
-  },
-  {
-    label: 'Toddler friendly',
-    description: 'Short outings with practical family details',
-    prompt:
-      'Find toddler-friendly activities in Arizona. Ask about our starting point, dates, drive limit, nap schedule, stroller needs, bathrooms, shade, and indoor backup options.',
-    icon: IceCream,
-  },
-  {
-    label: 'Accessible adventures',
-    description: 'Options shaped around mobility and access needs',
-    prompt:
-      'Help me find an accessible Arizona adventure. Ask about our starting point, dates, drive limit, mobility needs, surface requirements, restrooms, parking, and other accommodations.',
-    icon: Accessibility,
-  },
-  {
-    label: 'Free things to do',
-    description: 'Low-cost ideas with no admission required',
-    prompt:
-      'Find free things to do in Arizona. Ask where we are starting, who is going, when, how far we can drive, and whether we prefer nature, culture, or a mix.',
-    icon: PiggyBank,
-  },
-  {
-    label: 'Hidden gems',
-    description: 'Quieter Arizona places beyond the obvious stops',
-    prompt:
-      'Show me hidden gems in Arizona. Ask about our starting point, group, dates, drive limit, interests, and comfort with dirt roads or less-developed places.',
-    icon: Gem,
-  },
-  {
-    label: 'This weekend',
-    description: 'Timely ideas shaped around your group',
-    prompt:
-      'Help me choose the best Arizona activities for this weekend. Ask where we are starting, who is going, how far we can drive, our budget, and what kind of day we want.',
-    icon: CalendarDays,
-  },
-] as const;
 
 function linkifyText(text: string) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -273,55 +189,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <section
-        aria-labelledby="arizona-starters-title"
-        className="border-b border-zinc-200 bg-gradient-to-br from-amber-50 via-white to-emerald-50/70 px-4 py-6 md:px-6 md:py-7"
-      >
-        <div className="mx-auto max-w-5xl">
-          <div className="max-w-2xl">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-primary">
-              Start exploring Arizona
-            </p>
-            <h2
-              id="arizona-starters-title"
-              className="mt-2 text-2xl font-black tracking-tight text-zinc-950 md:text-3xl"
-            >
-              What kind of adventure are you looking for?
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-zinc-600 md:text-base">
-              Choose a starting point and Sage will ask the right follow-up questions.
-            </p>
-          </div>
-
-          <div className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-5">
-            {ARIZONA_STARTERS.map(({ label, description, prompt, icon: Icon }) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => void sendMessage(prompt)}
-                disabled={isLoading}
-                aria-label={`${label}: ${description}`}
-                className="group flex min-h-[104px] items-start gap-3 rounded-2xl border border-zinc-200/90 bg-white/90 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
-              >
-                <span
-                  aria-hidden="true"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary transition group-hover:bg-brand-primary group-hover:text-white"
-                >
-                  <Icon className="h-4.5 w-4.5" strokeWidth={2.25} />
-                </span>
-                <span>
-                  <span className="block text-sm font-bold leading-5 text-zinc-900">
-                    {label}
-                  </span>
-                  <span className="mt-1 block text-xs leading-4 text-zinc-500">
-                    {description}
-                  </span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ArizonaQuickFinder
+        disabled={isLoading}
+        onPlan={(prompt) => void sendMessage(prompt)}
+      />
 
       <div className="mx-auto grid h-[62vh] min-h-[500px] max-h-[640px] w-full grid-cols-1 gap-3 md:grid-cols-3">
         <div className="col-span-1 flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-lg md:col-span-2">
