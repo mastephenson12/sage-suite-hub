@@ -17,6 +17,9 @@ build
 .next
 out
 
+# Private photo staging (uploaded originals should not enter Git)
+photo-inbox/
+
 # Environment variables
 .env
 .env.local

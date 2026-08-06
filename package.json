@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "node scripts/generate-sitemap.mjs && tsc && vite build && node scripts/prerender.mjs && node scripts/prerender-public-pages.mjs",
     "cloudinary:upload": "node scripts/upload-cloudinary-images.mjs",
+    "cloudinary:inbox": "node scripts/upload-cloudinary-inbox.mjs",
     "cloudinary:catalog": "node scripts/sync-cloudinary-catalog.mjs",
     "cloudinary:catalog:local": "node scripts/sync-cloudinary-catalog.mjs --local",
     "preview": "vite preview"

@@ -59,3 +59,56 @@ To bootstrap or audit local fallback files without calling Cloudinary:
 ```sh
 npm run cloudinary:catalog:local
 ```
+
+## Private phone-photo inbox
+
+Downloaded phone and Google Photos originals belong in the Git-ignored `photo-inbox` directory, not `public/images`.
+
+Organize photos by destination:
+
+```text
+photo-inbox/
+  sedona/
+    _defaults.json
+    bell-rock-family-hike.jpg
+    bell-rock-family-hike.jpg.json
+  payson/
+    _defaults.json
+    woods-canyon-lake-picnic.heic
+```
+
+Each destination `_defaults.json` can supply shared information:
+
+```json
+{
+  "location": "Sedona, Arizona",
+  "credit": "Mark Stephenson",
+  "rights": "user-owned",
+  "usage": ["hero", "card", "article"],
+  "tags": ["sedona", "family", "hiking"]
+}
+```
+
+Add a sidecar named `<photo filename>.json` when a photo needs its own description:
+
+```json
+{
+  "alt": "Family walking toward Bell Rock on a clear spring morning",
+  "caption": "An easy family outing near Bell Rock in Sedona"
+}
+```
+
+Preview names and metadata without uploading:
+
+```sh
+npm run cloudinary:inbox
+```
+
+Upload when the preview looks right:
+
+```sh
+npm run cloudinary:inbox -- --confirm
+npm run cloudinary:catalog
+```
+
+The inbox accepts AVIF, HEIC, HEIF, JPEG, PNG, and WebP, walks nested folders, generates clean public IDs, and flags missing metadata. Originals remain private and untracked by Git.

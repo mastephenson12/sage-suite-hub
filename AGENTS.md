@@ -15,6 +15,7 @@ This repo powers `sage.healthandtravels.com`, the Sage family travel planning si
 - Cloudinary delivery: `src/components/CloudinaryImage.tsx` and `src/utils/cloudinary.ts`
 - Cloudinary upload workflow: `docs/CLOUDINARY.md`
 - Searchable Cloudinary photo catalog: `src/data/cloudinaryImages.json`
+- Private phone-photo staging: `photo-inbox/` (Git-ignored; never commit its contents)
 
 ## Build behavior
 
