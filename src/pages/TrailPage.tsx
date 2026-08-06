@@ -23,6 +23,7 @@ import {
   getTrailPageSafety,
   toTripSlug,
 } from '../utils/sage';
+import CloudinaryImage from '../components/CloudinaryImage';
 
 const TrailHeroImage: React.FC<{ src?: string; alt: string }> = ({
   src,
@@ -44,10 +45,14 @@ const TrailHeroImage: React.FC<{ src?: string; alt: string }> = ({
   }
 
   return (
-    <img
+    <CloudinaryImage
       src={src || fallback}
       alt={alt}
       className="h-full w-full object-cover"
+      sizes="100vw"
+      widthHint={1600}
+      loading="eager"
+      fetchPriority="high"
       referrerPolicy="no-referrer"
       onError={() => setHasError(true)}
     />

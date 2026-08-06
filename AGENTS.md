@@ -11,7 +11,9 @@ This repo powers `sage.healthandtravels.com`, the Sage family travel planning si
 - Top navigation: `src/components/Navbar.tsx`
 - Static SEO prerendering: `scripts/prerender.mjs`
 - Sitemap generation: `scripts/generate-sitemap.mjs`
-- Public images: `public/images`
+- Image originals and local fallbacks: `public/images`
+- Cloudinary delivery: `src/components/CloudinaryImage.tsx` and `src/utils/cloudinary.ts`
+- Cloudinary upload workflow: `docs/CLOUDINARY.md`
 
 ## Build behavior
 
@@ -31,6 +33,7 @@ That means new archive articles, destination guide slugs, and trail ids are auto
 - Keep hero/card images below roughly 300 KB when possible.
 - Use descriptive filenames such as `payson-rim-overlook.avif`.
 - Add images to `public/images` and reference them as `/images/file-name.avif`.
+- Keep those local paths in content; `CloudinaryImage` maps them to stable Cloudinary public IDs when the Vercel environment is configured.
 - When adding an article, include internal links to related Sage pages and at least one useful Health and Travels companion article when relevant.
 
 ## SEO workflow

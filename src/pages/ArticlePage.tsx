@@ -12,6 +12,7 @@ import {
   Share2,
   ExternalLink,
 } from 'lucide-react';
+import CloudinaryImage from '../components/CloudinaryImage';
 
 const ArticleHeroImage: React.FC<{ src?: string; alt: string }> = ({ src, alt }) => {
   const [hasError, setHasError] = useState(false);
@@ -30,10 +31,14 @@ const ArticleHeroImage: React.FC<{ src?: string; alt: string }> = ({ src, alt })
   }
 
   return (
-    <img
+    <CloudinaryImage
       src={src || fallback}
       alt={alt}
       className="h-full w-full object-cover"
+      sizes="100vw"
+      widthHint={1600}
+      loading="eager"
+      fetchPriority="high"
       referrerPolicy="no-referrer"
       onError={() => setHasError(true)}
     />
@@ -158,7 +163,21 @@ const ArticlePage: React.FC = () => {
         </div>
 
         <div className="prose prose-zinc prose-lg max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              img: ({ src, alt }) => (
+                <CloudinaryImage
+                  src={typeof src === 'string' ? src : ''}
+                  alt={alt || ''}
+                  className="h-auto w-full rounded-2xl"
+                  sizes="(min-width: 896px) 896px, 100vw"
+                  widthHint={1280}
+                  crop="limit"
+                />
+              ),
+            }}
+          >
             {article.content}
           </ReactMarkdown>
         </div>

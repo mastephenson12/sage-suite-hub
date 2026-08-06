@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { trackEvent } from '../utils/analytics';
+import CloudinaryImage from './CloudinaryImage';
 
 const arizonaCards = [
   {
@@ -282,11 +283,12 @@ export const Hero: React.FC = () => {
                 className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="relative h-[320px] overflow-hidden">
-                  <img
+                  <CloudinaryImage
                     src={card.image}
                     alt={card.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    widthHint={960}
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
