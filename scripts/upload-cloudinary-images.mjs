@@ -67,7 +67,13 @@ if (!cloudName || !apiKey || !apiSecret) {
 for (const filename of files) {
   const timestamp = Math.floor(Date.now() / 1000);
   const publicId = publicIdFor(filename);
-  const signedParams = { overwrite: 'true', public_id: publicId, timestamp: String(timestamp) };
+  const signedParams = {
+    asset_folder: folder,
+    overwrite: 'true',
+    public_id: publicId,
+    tags: 'arizona,sage',
+    timestamp: String(timestamp),
+  };
   const signature = sign(signedParams, apiSecret);
   const bytes = await readFile(path.join(imageDirectory, filename));
   const form = new FormData();
@@ -75,7 +81,9 @@ for (const filename of files) {
   form.set('api_key', apiKey);
   form.set('timestamp', String(timestamp));
   form.set('public_id', publicId);
+  form.set('asset_folder', folder);
   form.set('overwrite', 'true');
+  form.set('tags', 'arizona,sage');
   form.set('signature', signature);
 
   const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {

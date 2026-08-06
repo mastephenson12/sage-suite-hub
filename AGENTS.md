@@ -14,6 +14,7 @@ This repo powers `sage.healthandtravels.com`, the Sage family travel planning si
 - Image originals and local fallbacks: `public/images`
 - Cloudinary delivery: `src/components/CloudinaryImage.tsx` and `src/utils/cloudinary.ts`
 - Cloudinary upload workflow: `docs/CLOUDINARY.md`
+- Searchable Cloudinary photo catalog: `src/data/cloudinaryImages.json`
 
 ## Build behavior
 
@@ -34,6 +35,7 @@ That means new archive articles, destination guide slugs, and trail ids are auto
 - Use descriptive filenames such as `payson-rim-overlook.avif`.
 - Add images to `public/images` and reference them as `/images/file-name.avif`.
 - Keep those local paths in content; `CloudinaryImage` maps them to stable Cloudinary public IDs when the Vercel environment is configured.
+- Search `src/data/cloudinaryImages.json` before choosing or requesting a photo. Prefer assets with complete alt, location, credit, rights, and usage metadata.
 - When adding an article, include internal links to related Sage pages and at least one useful Health and Travels companion article when relevant.
 
 ## SEO workflow

@@ -35,3 +35,27 @@ npm run cloudinary:upload -- --confirm
 ```
 
 The browser receives responsive Cloudinary URLs with automatic format and quality. If Cloudinary is not configured or an asset is missing, `CloudinaryImage` falls back to the matching file in `public/images`.
+
+Scripted uploads use `sage/arizona` as both the visible Cloudinary asset folder and the delivery public-ID prefix, and add the baseline `sage` and `arizona` tags.
+
+## Keep the searchable catalog current
+
+For each asset in Cloudinary, use descriptive lowercase public IDs and add:
+
+- tags for location, people, activity, season, orientation, and intended use;
+- contextual `alt` and `caption` fields;
+- contextual `location`, `credit`, `rights`, and comma-separated `usage` fields.
+
+After uploading or editing metadata, regenerate the repository catalog:
+
+```sh
+npm run cloudinary:catalog
+```
+
+Commit `src/data/cloudinaryImages.json` with the related site change. The catalog contains only public asset information; API credentials are never written to it. It flags missing accessibility, ownership, location, tagging, and usage information.
+
+To bootstrap or audit local fallback files without calling Cloudinary:
+
+```sh
+npm run cloudinary:catalog:local
+```
