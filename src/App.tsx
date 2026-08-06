@@ -22,6 +22,7 @@ import HomeFAQ from './components/HomeFAQ';
 import PopularArizonaGuides from './components/PopularArizonaGuides';
 import SeasonalPlanningPanel from './components/SeasonalPlanningPanel';
 import AuthorityTrustPanel from './components/AuthorityTrustPanel';
+import BrandNetworkBar from './components/BrandNetworkBar';
 
 import Archive from './pages/Archive';
 import AdventureChooser from './pages/AdventureChooser';
@@ -170,7 +171,7 @@ function AppContent() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      {!hideSiteChrome && <Navbar />}
+      {hideSiteChrome ? <BrandNetworkBar /> : <Navbar />}
       <main className="flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />

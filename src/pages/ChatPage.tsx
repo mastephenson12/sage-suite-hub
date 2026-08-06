@@ -5,6 +5,8 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ARIZONA_DESTINATIONS, type AffiliateSet } from '../data/viatorLinks';
 import { chatTripPrompts } from '../data/sage/chatTripPrompts';
+import { buildCrossSiteUrl } from '../utils/crossSiteLinks';
+import { trackEvent } from '../utils/analytics';
 
 type Mode = 'general' | 'flights' | 'camping' | 'lodging' | 'arizona';
 
@@ -186,13 +188,24 @@ const ChatPage: React.FC = () => {
     <div className="min-h-screen bg-white">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-4 md:px-5">
         <div className="mb-3">
-          <Link
-            to="/"
+          <a
+            href={buildCrossSiteUrl({
+              destination: 'health-and-travels',
+              medium: 'navigation',
+              campaign: 'sage_chat',
+              content: 'back_to_health_and_travels',
+            })}
+            onClick={() =>
+              trackEvent('cross_site_health_click', {
+                location: 'chat_back_link',
+                destination: 'health-and-travels',
+              })
+            }
             className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Health & Travels
-          </Link>
+          </a>
         </div>
 
         <section className="mb-4 rounded-3xl border border-zinc-200 bg-white p-4 md:p-5">

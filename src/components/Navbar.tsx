@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from "../constants";
+import BrandNetworkBar from "./BrandNetworkBar";
+import { buildCrossSiteUrl } from "../utils/crossSiteLinks";
+import { trackEvent } from "../utils/analytics";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="sticky top-0 z-50 border-b border-zinc-100 bg-white/95 py-3 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6">
+    <nav className="sticky top-0 z-50 border-b border-zinc-100 bg-white/95 backdrop-blur-md">
+      <BrandNetworkBar />
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6 py-3">
         <div className="flex items-center gap-10">
           <Link to="/" className="group flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl transition-transform group-hover:scale-110">
@@ -81,9 +85,20 @@ const Navbar: React.FC = () => {
           </Link>
 
           <a
-            href={SUBSCRIBE_URL}
+            href={buildCrossSiteUrl({
+              destination: 'subscribe',
+              medium: 'cta',
+              campaign: 'sage_navigation',
+              content: 'navbar_get_trip_ideas',
+            })}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              trackEvent('sage_to_newsletter', {
+                location: 'navbar',
+                destination_url: SUBSCRIBE_URL,
+              })
+            }
             className="rounded-lg bg-brand-primary px-5 py-2.5 text-[12px] font-black uppercase tracking-wider text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95 md:px-6 md:text-[13px]"
           >
             Get Trip Ideas

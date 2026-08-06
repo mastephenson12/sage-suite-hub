@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Mail, Map, ShieldCheck, Sparkles, Users } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
+import { buildCrossSiteUrl } from '../utils/crossSiteLinks';
 
 const benefits = [
   {
@@ -43,11 +44,16 @@ const NewsletterConversionPanel: React.FC = () => {
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <a
-                href="https://healthandtravels.com/"
+                href={buildCrossSiteUrl({
+                  destination: 'subscribe',
+                  medium: 'cta',
+                  campaign: 'sage_newsletter_conversion',
+                  content: 'newsletter_conversion_panel',
+                })}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
-                  trackEvent('health_travels_ideas_click', {
+                  trackEvent('sage_to_newsletter', {
                     label: 'Get Free Trip Ideas',
                     location: 'newsletter_conversion_panel',
                   })
