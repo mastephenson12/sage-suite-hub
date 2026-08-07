@@ -9,6 +9,7 @@ const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
 const spanishWeekendTripsPath = 'es/arizona/escapadas-fin-de-semana-con-ninos';
+const spanishSedonaPath = 'es/arizona/sedona-con-ninos';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
@@ -169,6 +170,24 @@ const spanishHikesWithKidsFaqs = [
     question: 'A que hora es mejor caminar con ninos en Arizona?',
     answer:
       'La manana suele ser la mejor opcion. En verano, las familias deben elegir elevacion, sombra, agua, salidas muy temprano y un plan B.',
+  },
+];
+
+const spanishSedonaFaqs = [
+  {
+    question: '¿Sedona es un buen destino para viajar con niños?',
+    answer:
+      'Sí. Sedona ofrece vistas de roca roja, caminatas de distintas dificultades, parques y recorridos panorámicos. El mejor plan familiar combina una sola aventura principal, una comida sencilla y tiempo flexible.',
+  },
+  {
+    question: '¿Cómo funciona el Sedona Shuttle?',
+    answer:
+      'El servicio a trailheads es gratuito, no requiere reservación y normalmente opera de jueves a domingo durante todo el año, con servicio ampliado en algunas temporadas. Revisen siempre el calendario oficial.',
+  },
+  {
+    question: '¿Cuál es la mejor hora para caminar en Sedona con niños?',
+    answer:
+      'La mañana suele ser la mejor opción. En meses calurosos, salgan temprano y eviten roca expuesta al mediodía. Durante el monzón, revisen el pronóstico y estén preparados para tormentas y crecidas repentinas.',
   },
 ];
 
@@ -530,6 +549,23 @@ const spanishHikesWithKidsHtml = addLanguageAlternates(
   ]
 );
 await writeRoute(spanishHikesWithKidsPath, spanishHikesWithKidsHtml);
+
+const spanishSedonaHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Sedona con niños | Guía familiar de caminatas y shuttle | Sage',
+    description:
+      'Guía en español para visitar Sedona con niños: caminatas familiares, shuttle gratuito, estacionamiento, calor, monzón, pases, seguridad y un plan realista.',
+    url: `${siteUrl}/${spanishSedonaPath}`,
+    faqs: spanishSedonaFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishSedonaPath}` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/sedona` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/sedona` },
+  ]
+);
+await writeRoute(spanishSedonaPath, spanishSedonaHtml);
 
 const russianArizonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {

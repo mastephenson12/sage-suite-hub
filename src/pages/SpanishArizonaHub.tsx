@@ -59,6 +59,14 @@ function setAlternateLink(hreflang: string, href: string) {
 
 const featuredSpanishGuides = [
   {
+    title: 'Sedona con niños',
+    description:
+      'Caminatas familiares, shuttle gratuito, estacionamiento, calor, monzón, pases y un plan realista entre las rocas rojas.',
+    to: '/es/arizona/sedona-con-ninos',
+    label: 'Sedona',
+    icon: Mountain,
+  },
+  {
     title: 'Primer viaje a Arizona con ninos',
     description:
       'Una guia para familias y grupos que visitan Arizona por primera vez: ruta, temporada, calor, comida, banos, manejo y plan B.',
@@ -167,7 +175,7 @@ const destinations = [
     name: 'Sedona',
     bestFor: 'Rocas rojas, vistas, caminatas cortas y fotos familiares',
     note: 'En verano salgan muy temprano y eviten roca expuesta al mediodia.',
-    to: '/arizona/sedona',
+    to: '/es/arizona/sedona-con-ninos',
   },
   {
     name: 'Flagstaff',

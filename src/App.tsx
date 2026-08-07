@@ -59,6 +59,7 @@ import SpanishDayTripsFromPhoenix from './pages/SpanishDayTripsFromPhoenix';
 import SpanishPaysonRimCountryWithKids from './pages/SpanishPaysonRimCountryWithKids';
 import SpanishFirstArizonaTripGuide from './pages/SpanishFirstArizonaTripGuide';
 import SpanishArizonaWeekendTrips from './pages/SpanishArizonaWeekendTrips';
+import SpanishSedonaWithKids from './pages/SpanishSedonaWithKids';
 import RussianArizonaHub from './pages/RussianArizonaHub';
 import RussianPlanBySituation from './pages/RussianPlanBySituation';
 import RussianCoolArizonaSummerTrips from './pages/RussianCoolArizonaSummerTrips';
@@ -192,6 +193,7 @@ function AppContent() {
           <Route path="/es/arizona/viajes-de-un-dia-desde-phoenix" element={<SpanishDayTripsFromPhoenix />} />
           <Route path="/es/arizona/payson-y-mogollon-rim-con-ninos" element={<SpanishPaysonRimCountryWithKids />} />
           <Route path="/es/arizona/escapadas-fin-de-semana-con-ninos" element={<SpanishArizonaWeekendTrips />} />
+          <Route path="/es/arizona/sedona-con-ninos" element={<SpanishSedonaWithKids />} />
           <Route path="/ru" element={<RussianArizonaHub />} />
           <Route path="/ru/arizona/first-trip-with-kids" element={<RussianFirstArizonaTripGuide />} />
           <Route path="/ru/arizona/plan-by-situation" element={<RussianPlanBySituation />} />
