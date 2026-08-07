@@ -71,7 +71,7 @@ const destinations = [
   {
     name: 'Седона',
     description: 'Красные скалы, короткие маршруты, смотровые площадки и семейные фотографии.',
-    to: '/arizona/sedona',
+    to: '/ru/arizona/sedona-with-kids',
     icon: Mountain,
   },
   {

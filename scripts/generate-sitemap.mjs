@@ -19,6 +19,7 @@ const staticRoutes = [
   { path: '/ru', changefreq: 'weekly', priority: '0.8' },
   { path: '/ru/arizona/first-trip-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
+  { path: '/ru/arizona/sedona-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/caminatas-con-ninos', changefreq: 'weekly', priority: '0.9' },

@@ -12,6 +12,7 @@ const spanishWeekendTripsPath = 'es/arizona/escapadas-fin-de-semana-con-ninos';
 const spanishSedonaPath = 'es/arizona/sedona-con-ninos';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
+const russianSedonaPath = 'ru/arizona/sedona-with-kids';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
 const legacySpanishPhoenixHeatPath =
   'es/archive/phoenix-things-to-do-with-kids-when-hot';
@@ -206,6 +207,24 @@ const russianArizonaFaqs = [
     question: 'Можно ли задать Sage вопрос на русском?',
     answer:
       'Да. Перейдите в планировщик и опишите поездку по-русски: кто едет, откуда вы выезжаете, сколько есть времени и что нравится вашей семье.',
+  },
+];
+
+const russianSedonaFaqs = [
+  {
+    question: 'Подходит ли Седона для поездки с детьми?',
+    answer:
+      'Да. В Седоне есть красные скалы, маршруты разной сложности, парки и живописные дороги. Для семьи лучше выбрать одну главную прогулку, простую остановку на еду и оставить время на отдых.',
+  },
+  {
+    question: 'Как работает Sedona Shuttle?',
+    answer:
+      'Трансфер к популярным тропам бесплатный, бронирование не требуется. Обычно он работает круглый год с четверга по воскресенье, а в некоторые праздники и сезоны — чаще. Перед поездкой проверьте официальный календарь.',
+  },
+  {
+    question: 'Когда лучше гулять по Седоне с детьми?',
+    answer:
+      'Обычно лучше выходить утром. В жаркие месяцы начинайте очень рано и избегайте открытых скал в середине дня. В сезон муссонов следите за прогнозом, грозами и риском внезапных паводков.',
   },
 ];
 
@@ -600,6 +619,24 @@ const russianPlanBySituationHtml = addLanguageAlternates(
   ]
 );
 await writeRoute(russianPlanBySituationPath, russianPlanBySituationHtml);
+
+const russianSedonaHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Седона с детьми | Семейные маршруты и shuttle | Sage',
+    description:
+      'Русскоязычный гид по Седоне с детьми: семейные маршруты, бесплатный shuttle, парковка, жара, муссоны, пропуска, безопасность и простой план поездки.',
+    url: `${siteUrl}/${russianSedonaPath}`,
+    faqs: russianSedonaFaqs,
+  }),
+  'ru',
+  [
+    { hreflang: 'ru', href: `${siteUrl}/${russianSedonaPath}` },
+    { hreflang: 'es', href: `${siteUrl}/es/arizona/sedona-con-ninos` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/sedona` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/sedona` },
+  ]
+);
+await writeRoute(russianSedonaPath, russianSedonaHtml);
 
 const phoenixDayTripsHtml = applySeo(baseHtml, {
   title: 'Best Arizona Day Trips from Phoenix | Sage',
