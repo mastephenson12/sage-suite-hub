@@ -20,8 +20,13 @@ const Navbar: React.FC = () => {
               />
             </div>
 
-            <span className="hidden text-xl font-[900] uppercase tracking-tighter text-black sm:block">
-              {BRAND_NAME}
+            <span className="hidden sm:block">
+              <span className="block text-xl font-[900] uppercase leading-none tracking-tighter text-black">
+                {BRAND_NAME}
+              </span>
+              <span className="mt-1 block text-[10px] font-black uppercase tracking-[0.18em] text-brand-primary">
+                Sage family trip planner
+              </span>
             </span>
           </Link>
 
@@ -32,10 +37,6 @@ const Navbar: React.FC = () => {
 
             <Link to="/explore" className="transition-colors hover:text-black">
               Explore
-            </Link>
-
-            <Link to="/archive" className="transition-colors hover:text-black">
-              Archive
             </Link>
 
             <Link
@@ -54,13 +55,6 @@ const Navbar: React.FC = () => {
               className="transition-colors hover:text-black"
             >
               Plan
-            </Link>
-
-            <Link
-              to="/arizona/hikes-with-kids"
-              className="transition-colors hover:text-black"
-            >
-              Kids Hikes
             </Link>
 
             <Link to="/community" className="transition-colors hover:text-black">
@@ -99,7 +93,7 @@ const Navbar: React.FC = () => {
                 destination_url: SUBSCRIBE_URL,
               })
             }
-            className="rounded-lg bg-brand-primary px-5 py-2.5 text-[12px] font-black uppercase tracking-wider text-white shadow-lg shadow-brand-primary/10 transition-all hover:bg-brand-dark active:scale-95 md:px-6 md:text-[13px]"
+            className="rounded-lg bg-brand-accent px-5 py-2.5 text-[12px] font-black uppercase tracking-wider text-white shadow-lg shadow-orange-900/10 transition-all hover:bg-orange-800 active:scale-95 md:px-6 md:text-[13px]"
           >
             Get Trip Ideas
           </a>

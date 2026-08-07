@@ -4,7 +4,7 @@ export const LOGO_DATA_URL = 'https://raw.githubusercontent.com/mastephenson12/s
 export const SAGESUITE_URL = 'https://sage.healthandtravels.com';
 export const SAGESUITE_DIRECTORY = 'https://sage.healthandtravels.com/directory';
 export const SAGESUITE_APPLY = 'https://sage.healthandtravels.com/apply';
-export const HEALTH_TRAVELS_URL = 'https://www.healthandtravels.com';
+export const HEALTH_TRAVELS_URL = 'https://healthandtravels.com';
 export const NEWSLETTER_URL =
   import.meta.env.VITE_NEWSLETTER_URL || 'https://newsletter.healthandtravels.com';
 export const SUBSCRIBE_URL =
