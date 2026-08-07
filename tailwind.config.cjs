@@ -15,9 +15,9 @@ module.exports = {
       },
       colors: {
         brand: {
-          primary: '#00796B',
-          dark: '#004D40',
-          accent: '#E65100',
+          primary: '#0D47A1',
+          dark: '#0A3A85',
+          accent: '#5B9E96',
         }
       },
       animation: {
