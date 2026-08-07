@@ -66,6 +66,7 @@ import RussianCoolArizonaSummerTrips from './pages/RussianCoolArizonaSummerTrips
 import RussianArizonaHikesWithKids from './pages/RussianArizonaHikesWithKids';
 import RussianDayTripsFromPhoenix from './pages/RussianDayTripsFromPhoenix';
 import RussianFirstArizonaTripGuide from './pages/RussianFirstArizonaTripGuide';
+import RussianSedonaWithKids from './pages/RussianSedonaWithKids';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
@@ -200,6 +201,7 @@ function AppContent() {
           <Route path="/ru/arizona/cool-summer-trips-with-kids" element={<RussianCoolArizonaSummerTrips />} />
           <Route path="/ru/arizona/hikes-with-kids" element={<RussianArizonaHikesWithKids />} />
           <Route path="/ru/arizona/day-trips-from-phoenix" element={<RussianDayTripsFromPhoenix />} />
+          <Route path="/ru/arizona/sedona-with-kids" element={<RussianSedonaWithKids />} />
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
           <Route path="/community" element={<Community />} />
