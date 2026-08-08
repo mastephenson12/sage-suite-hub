@@ -1,4 +1,5 @@
 import React from "react";
+import { MapPin } from 'lucide-react';
 import { Link } from "react-router-dom";
 import { BRAND_NAME, SUBSCRIBE_URL, LOGO_DATA_URL } from "../constants";
 import BrandNetworkBar from "./BrandNetworkBar";
@@ -71,6 +72,15 @@ const Navbar: React.FC = () => {
 
         <div className="flex shrink-0 items-center gap-3 lg:ml-8 xl:ml-12">
           <Link
+            to="/my-trips"
+            aria-label="Open saved trips"
+            className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[11px] font-black uppercase tracking-widest text-emerald-800 transition-colors hover:bg-emerald-100"
+          >
+            <MapPin className="h-4 w-4" />
+            <span className="hidden xl:inline">My Trips</span>
+          </Link>
+
+          <Link
             to="/chat"
             className="hidden rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-zinc-800 transition-colors hover:bg-zinc-100 md:block"
           >
@@ -110,3 +120,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
