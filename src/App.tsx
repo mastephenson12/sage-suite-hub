@@ -68,6 +68,7 @@ import RussianFirstArizonaTripGuide from './pages/RussianFirstArizonaTripGuide';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
+import MyTrips from './pages/MyTrips';
 import NotFound from './pages/NotFound';
 
 const homeFaqs = [
@@ -177,6 +178,8 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/start-here" element={<AdventureChooser />} />
           <Route path="/trip-builder" element={<TripBuilderPage />} />
+          <Route path="/my-trips" element={<MyTrips />} />
+          <Route path="/my-trips/:tripId" element={<MyTrips />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
           <Route path="/explore" element={<Explore />} />
@@ -230,10 +233,10 @@ function AppContent() {
             <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
               <div>
                 <p className="mb-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
-                  © {new Date().getFullYear()} Health & Travels Journal
+                  Â© {new Date().getFullYear()} Health & Travels Journal
                 </p>
                 <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-zinc-300">
-                  Trip planning powered by Sage • Health & Travels
+                  Trip planning powered by Sage â€¢ Health & Travels
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 md:justify-end">
@@ -246,7 +249,7 @@ function AppContent() {
                 <Link to="/arizona/plan-by-situation" className="transition-colors hover:text-black">Plan by Situation</Link>
                 <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">Adventure Finder</Link>
                 <Link to="/es/arizona" className="transition-colors hover:text-black">Espanol</Link>
-                <Link to="/ru" className="transition-colors hover:text-black">Русский</Link>
+                <Link to="/ru" className="transition-colors hover:text-black">Ð ÑƒÑÑÐºÐ¸Ð¹</Link>
                 <Link to="/arizona/weekend-trips" className="transition-colors hover:text-black">Weekend Trips</Link>
                 <Link to="/arizona/hikes-with-kids" className="transition-colors hover:text-black">Kids Hikes</Link>
                 <Link to="/arizona/easy-family-hikes" className="transition-colors hover:text-black">Easy Hikes</Link>
@@ -258,6 +261,7 @@ function AppContent() {
                 <Link to="/author/mark-stephenson" className="transition-colors hover:text-black">Author</Link>
                 <Link to="/affiliate-disclosure" className="transition-colors hover:text-black">Affiliate Disclosure</Link>
                 <Link to="/trip-builder" className="transition-colors hover:text-black">Trip Builder</Link>
+                <Link to="/my-trips" className="transition-colors hover:text-black">My Trips</Link>
                 <Link to="/privacy-policy" className="transition-colors hover:text-black">Privacy Policy</Link>
                 <Link to="/terms-of-service" className="transition-colors hover:text-black">Terms of Service</Link>
               </div>
@@ -277,3 +281,4 @@ export default function App() {
     </Router>
   );
 }
+
