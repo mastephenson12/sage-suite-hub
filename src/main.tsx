@@ -11,9 +11,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').catch((error) => {
-      console.warn('Sage offline support could not start:', error);
-    });
+    navigator.serviceWorker.register('/service-worker.js').catch((error) => console.warn('Sage offline support could not start:', error));
   });
 }
-
