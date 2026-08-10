@@ -70,6 +70,7 @@ import RussianSedonaWithKids from './pages/RussianSedonaWithKids';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
+import MyTrips from './pages/MyTrips';
 import NotFound from './pages/NotFound';
 
 const homeFaqs = [
@@ -179,6 +180,8 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/start-here" element={<AdventureChooser />} />
           <Route path="/trip-builder" element={<TripBuilderPage />} />
+          <Route path="/my-trips" element={<MyTrips />} />
+          <Route path="/my-trips/:tripId" element={<MyTrips />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/suite/*" element={<SuiteDashboard />} />
           <Route path="/explore" element={<Explore />} />
@@ -262,6 +265,7 @@ function AppContent() {
                 <Link to="/author/mark-stephenson" className="transition-colors hover:text-black">Author</Link>
                 <Link to="/affiliate-disclosure" className="transition-colors hover:text-black">Affiliate Disclosure</Link>
                 <Link to="/trip-builder" className="transition-colors hover:text-black">Trip Builder</Link>
+                <Link to="/my-trips" className="transition-colors hover:text-black">My Trips</Link>
                 <Link to="/privacy-policy" className="transition-colors hover:text-black">Privacy Policy</Link>
                 <Link to="/terms-of-service" className="transition-colors hover:text-black">Terms of Service</Link>
               </div>

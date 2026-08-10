@@ -7,8 +7,10 @@ import {
   Phone,
   Printer,
   Send,
+  WifiOff,
 } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
+import { SavedTripPackingItem, SavedTripSection, saveTrip } from '../utils/savedTrips';
 
 interface SaveTripPlanCardProps {
   destination: string;
@@ -19,6 +21,8 @@ interface SaveTripPlanCardProps {
   wantsShade: boolean;
   needsBathrooms: boolean;
   tripUrl: string;
+  itinerary?: SavedTripSection[];
+  packingItems?: SavedTripPackingItem[];
 }
 
 const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
@@ -30,11 +34,14 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   wantsShade,
   needsBathrooms,
   tripUrl,
+  itinerary = [],
+  packingItems = [],
 }) => {
   const [email, setEmail] = React.useState('');
   const [saved, setSaved] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const [shared, setShared] = React.useState(false);
+  const [savedOffline, setSavedOffline] = React.useState(false);
 
   const planBody = [
     `${destination} family adventure plan`,
@@ -86,6 +93,12 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       location: 'save_trip_plan_card',
     });
     window.setTimeout(() => setCopied(false), 1800);
+  };
+
+  const handleSaveOffline = () => {
+    const savedTrip = saveTrip({ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, tripUrl, offlineText: planBody, itinerary, packingItems });
+    setSavedOffline(true);
+    trackEvent('save_trip_plan_click', { label: 'Save Offline on This Phone', destination, location: 'save_trip_plan_card', saved_trip_id: savedTrip.id });
   };
 
   const handleShareToPhone = async () => {
@@ -150,6 +163,11 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <button type="button" onClick={handleSaveOffline} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-800 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-900 sm:col-span-2">
+          {savedOffline ? <CheckCircle2 className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
+          {savedOffline ? 'Saved in My Trips' : 'Save Offline on This Phone'}
+        </button>
+
         <button
           type="button"
           onClick={handleShareToPhone}

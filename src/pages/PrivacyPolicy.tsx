@@ -24,7 +24,7 @@ const PrivacyPolicy: React.FC = () => {
             Privacy Policy
           </h1>
           <p className="mt-2 text-sm text-zinc-500">
-            Effective Date: March 30, 2026
+            Effective Date: August 8, 2026
           </p>
 
           <div className="prose prose-zinc mt-8 max-w-none">
@@ -95,6 +95,11 @@ const PrivacyPolicy: React.FC = () => {
             <p>
               You can usually control cookies through your browser settings, though disabling them may
               affect some features of the site.
+            </p>
+
+            <h3>Offline trip storage</h3>
+            <p>
+              If you choose “Save Offline on This Phone,” Sage stores the selected trip plan and checklist in your browser&apos;s local storage on that device. The saved trip is not uploaded to a Health and Travels account. You can delete it from My Trips or export a backup. Clearing browser or site data will also remove locally saved trips.
             </p>
 
             <h2>6. How We Share Information</h2>
