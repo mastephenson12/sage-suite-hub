@@ -96,26 +96,9 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   };
 
   const handleSaveOffline = () => {
-    const savedTrip = saveTrip({
-      destination,
-      season,
-      tripLength,
-      groupLabel,
-      confidenceScore,
-      wantsShade,
-      needsBathrooms,
-      tripUrl,
-      offlineText: planBody,
-      itinerary,
-      packingItems,
-    });
+    const savedTrip = saveTrip({ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, tripUrl, offlineText: planBody, itinerary, packingItems });
     setSavedOffline(true);
-    trackEvent('save_trip_plan_click', {
-      label: 'Save Offline on This Phone',
-      destination,
-      location: 'save_trip_plan_card',
-      saved_trip_id: savedTrip.id,
-    });
+    trackEvent('save_trip_plan_click', { label: 'Save Offline on This Phone', destination, location: 'save_trip_plan_card', saved_trip_id: savedTrip.id });
   };
 
   const handleShareToPhone = async () => {
@@ -180,11 +163,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={handleSaveOffline}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-800 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-900 sm:col-span-2"
-        >
+        <button type="button" onClick={handleSaveOffline} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-800 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-900 sm:col-span-2">
           {savedOffline ? <CheckCircle2 className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
           {savedOffline ? 'Saved in My Trips' : 'Save Offline on This Phone'}
         </button>
@@ -284,4 +263,3 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
 };
 
 export default SaveTripPlanCard;
-
