@@ -481,12 +481,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
               needsBathrooms={needsBathrooms}
               tripUrl={currentTripUrl}
               itinerary={itineraryFlow.map(({ title, description }) => ({ title, description }))}
-              packingItems={packingItems.map(({ id, label, helper }) => ({
-                id,
-                label,
-                helper,
-                packed: checkedPackingItems.includes(id),
-              }))}
+              packingItems={packingItems.map(({ id, label, helper }) => ({ id, label, helper, packed: checkedPackingItems.includes(id) }))}
             />
 
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
@@ -622,4 +617,3 @@ const TripBuilderResultEnhancer: React.FC = () => {
 };
 
 export default TripBuilderResultEnhancer;
-
