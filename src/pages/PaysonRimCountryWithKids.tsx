@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
 import SharePlanPanel from '../components/SharePlanPanel';
+import CloudinaryImage from '../components/CloudinaryImage';
 
 const paysonFaqs = [
   {
@@ -150,8 +151,21 @@ const PaysonRimCountryWithKids: React.FC = () => {
         faqs={paysonFaqs}
       />
 
-      <section className="bg-zinc-950 px-6 py-16 text-white md:py-24">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <section className="relative overflow-hidden bg-zinc-950 px-6 py-16 text-white md:py-24">
+        <div className="absolute inset-0 opacity-45">
+          <CloudinaryImage
+            src="/images/payson-lake-through-pines.avif"
+            alt="Woods Canyon Lake seen through pine trees near Payson, Arizona"
+            className="h-full w-full object-cover"
+            widthHint={1600}
+            sizes="100vw"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/90 to-zinc-950/55" />
+
+        <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <p className="mb-4 text-[11px] font-black uppercase tracking-[0.28em] text-emerald-300">
               Payson / Rim Country Family Guide
@@ -191,6 +205,63 @@ const PaysonRimCountryWithKids: React.FC = () => {
               Choose one outdoor anchor, add one food or picnic plan, then keep a storm and tired-kid backup ready. That is the whole playbook.
             </p>
           </aside>
+        </div>
+      </section>
+
+      <section className="px-6 py-14">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 max-w-3xl">
+            <p className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-emerald-700">
+              Woods Canyon in Real Life
+            </p>
+            <h2 className="text-3xl font-black uppercase tracking-tight md:text-4xl">
+              Pines, trail signs, and the Rim
+            </h2>
+            <p className="mt-3 text-base leading-7 text-zinc-600">
+              These local photos show the landscape and wayfinding families can expect around Woods Canyon Lake and Rim Country.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <figure className="overflow-hidden rounded-lg border border-zinc-100 bg-white shadow-sm">
+              <CloudinaryImage
+                src="/images/payson-woods-trail.avif"
+                alt="Pine forest trail near Woods Canyon Lake in Arizona Rim Country"
+                className="aspect-[4/3] w-full object-cover"
+                widthHint={640}
+                sizes="(min-width: 768px) 33vw, 100vw"
+              />
+              <figcaption className="p-4 text-sm leading-6 text-zinc-600">
+                Forest paths make the area feel cooler, but families should still watch footing and afternoon weather.
+              </figcaption>
+            </figure>
+
+            <figure className="overflow-hidden rounded-lg border border-zinc-100 bg-white shadow-sm">
+              <CloudinaryImage
+                src="/images/payson-woods-canyon-road-sign.avif"
+                alt="Woods Canyon Lake road sign among pine trees near Payson"
+                className="aspect-[4/3] w-full object-cover"
+                widthHint={640}
+                sizes="(min-width: 768px) 33vw, 100vw"
+              />
+              <figcaption className="p-4 text-sm leading-6 text-zinc-600">
+                Watch for Woods Canyon Lake signs as you leave Payson and climb toward the Mogollon Rim.
+              </figcaption>
+            </figure>
+
+            <figure className="overflow-hidden rounded-lg border border-zinc-100 bg-white shadow-sm">
+              <CloudinaryImage
+                src="/images/payson-family-rim-view.avif"
+                alt="Wide Mogollon Rim view framed by pine trees near Payson, Arizona"
+                className="aspect-[4/3] w-full object-cover"
+                widthHint={640}
+                sizes="(min-width: 768px) 33vw, 100vw"
+              />
+              <figcaption className="p-4 text-sm leading-6 text-zinc-600">
+                A Rim overlook can deliver the big scenery moment without adding another long hike.
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
