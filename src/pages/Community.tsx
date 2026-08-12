@@ -49,53 +49,28 @@ export default function Community() {
           </div>
         </div>
 
-        <div className="mx-auto mb-10 grid max-w-4xl gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-orange-100 bg-white p-8 shadow-sm">
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.25em] text-zinc-400">
-              Monthly
-            </p>
+        <div className="mx-auto mb-10 max-w-3xl rounded-3xl border-2 border-orange-400 bg-white p-8 shadow-md">
+          <p className="mb-2 text-xs font-black uppercase tracking-[0.25em] text-orange-600">
+            Arizona Family Trail Pass
+          </p>
 
-            <h2 className="mb-4 text-4xl font-black text-zinc-900">
-              $7<span className="text-base font-bold text-zinc-500">/month</span>
-            </h2>
+          <h2 className="mb-4 text-4xl font-black text-zinc-900">
+            $7<span className="text-base font-bold text-zinc-500">/month</span>
+            <span className="mx-3 text-2xl text-zinc-300">or</span>
+            $69<span className="text-base font-bold text-zinc-500">/year</span>
+          </h2>
 
-            <p className="mb-6 text-sm leading-6 text-zinc-600">
-              Great if you want to try the community and start joining the adventure.
-            </p>
+          <p className="mx-auto mb-6 max-w-xl text-sm leading-6 text-zinc-600">
+            Choose monthly or yearly membership on the secure Arizona Hikers
+            Association checkout page.
+          </p>
 
-            <a
-              href="https://members.arizonahikersassociation.org/checkout/monthly"
-              className="block rounded-full bg-zinc-900 px-6 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-zinc-700"
-            >
-              Join Monthly
-            </a>
-          </div>
-
-          <div className="relative rounded-3xl border-2 border-orange-400 bg-white p-8 shadow-md">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-5 py-2 text-xs font-black uppercase tracking-widest text-white">
-              Best Value
-            </div>
-
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.25em] text-orange-600">
-              Annual
-            </p>
-
-            <h2 className="mb-4 text-4xl font-black text-zinc-900">
-              $49<span className="text-base font-bold text-zinc-500">/year</span>
-            </h2>
-
-            <p className="mb-6 text-sm leading-6 text-zinc-600">
-              Save money and get a bonus Arizona Hikers Association T-shirt
-              when you join for the year.
-            </p>
-
-            <a
-              href="https://members.arizonahikersassociation.org/checkout/annual"
-              className="block rounded-full bg-orange-500 px-6 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
-            >
-              Join Yearly + Get the Shirt
-            </a>
-          </div>
+          <a
+            href="https://join.arizonahikersassociation.org/join?utm_source=sage&amp;utm_medium=referral&amp;utm_campaign=aha_membership&amp;utm_content=community_page"
+            className="block rounded-full bg-orange-500 px-6 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
+          >
+            Choose Your Membership
+          </a>
         </div>
 
         <div className="rounded-3xl bg-white p-6 shadow-sm">
@@ -104,10 +79,10 @@ export default function Community() {
           </p>
 
           <a
-            href="https://members.arizonahikersassociation.org/login"
+            href="https://members.arizonahikersassociation.org/communities/groups/arizona-hikers-association/home"
             className="inline-block rounded-full border border-zinc-300 px-6 py-3 text-sm font-black uppercase tracking-widest text-zinc-700 transition hover:border-zinc-900 hover:text-zinc-900"
           >
-            Log In Here
+            Open the Member Community
           </a>
         </div>
       </section>
