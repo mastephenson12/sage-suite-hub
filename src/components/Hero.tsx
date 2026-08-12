@@ -52,9 +52,29 @@ const priorityOptions = [
   { label: 'Weekend adventure', value: 'weekend', shade: true, bathrooms: true, stroller: false, length: 'weekend' },
 ];
 
+function getHealthAndTravelsContext() {
+  const params = new URLSearchParams(window.location.search);
+  const source = params.get('utm_source');
+  const campaign = params.get('utm_campaign') || '';
+  const requestedDestination = params.get('destination') || params.get('location') || '';
+
+  const isHealthAndTravelsReferral = source === 'healthandtravels';
+  const destinationValue = requestedDestination || (campaign.includes('payson') ? 'payson' : '');
+  const matchedDestination = destinationOptions.find((option) => option.value === destinationValue);
+
+  return {
+    isHealthAndTravelsReferral,
+    campaign,
+    matchedDestination,
+  };
+}
+
 export const Hero: React.FC = () => {
   const navigate = useNavigate();
-  const [destination, setDestination] = useState(destinationOptions[0]);
+  const [referralContext] = useState(getHealthAndTravelsContext);
+  const [destination, setDestination] = useState(
+    referralContext.matchedDestination || destinationOptions[0]
+  );
   const [group, setGroup] = useState(groupOptions[1]);
   const [priority, setPriority] = useState(priorityOptions[0]);
 
@@ -65,6 +85,8 @@ export const Hero: React.FC = () => {
       destination: destination.label,
       group: group.label,
       priority: priority.label,
+      source: referralContext.isHealthAndTravelsReferral ? 'healthandtravels' : 'direct',
+      campaign: referralContext.campaign || 'none',
     });
 
     const params = new URLSearchParams();
@@ -79,6 +101,10 @@ export const Hero: React.FC = () => {
     params.set('bathrooms', String(priority.bathrooms));
     params.set('stroller', String(priority.stroller));
     params.set('drive', destination.value === 'flagstaff' || destination.value === 'tucson' ? '180' : '120');
+    if (referralContext.isHealthAndTravelsReferral) {
+      params.set('source', 'healthandtravels');
+      if (referralContext.campaign) params.set('campaign', referralContext.campaign);
+    }
 
     navigate(`/trip-builder?${params.toString()}`);
   };
@@ -101,6 +127,15 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-14 md:pb-20 md:pt-20">
+        {referralContext.isHealthAndTravelsReferral && (
+          <div className="mb-7 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-950">
+            <strong className="font-black">Coming from Health &amp; Travels?</strong>{' '}
+            {referralContext.matchedDestination
+              ? `I carried ${referralContext.matchedDestination.label} into the planner for you. Adjust the family and priorities below, then build your starter plan.`
+              : 'Turn the guide you were reading into a practical starter plan. Pick the destination, family fit, and what matters most below.'}
+          </div>
+        )}
+
         <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
             <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
