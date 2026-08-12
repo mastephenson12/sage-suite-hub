@@ -14,6 +14,7 @@ import {
   Users,
 } from 'lucide-react';
 import PopularArizonaGuides from '../components/PopularArizonaGuides';
+import CloudinaryImage from '../components/CloudinaryImage';
 import {
   ActivityType,
   KidAgeGroup,
@@ -55,6 +56,14 @@ const kidAgeGroupOptions: KidAgeGroup[] = [
   'mixed',
   'teens',
 ];
+
+const tripBuilderPhotos = {
+  sedona: { src: '/images/sedona-canyon.avif', alt: 'Red rock canyon scenery in Sedona, Arizona' },
+  flagstaff: { src: '/images/flagstaff-family-adventure.avif', alt: 'Family exploring the pine forests near Flagstaff, Arizona' },
+  payson: { src: '/images/payson-lake-through-pines.avif', alt: 'Woods Canyon Lake framed by pine trees near Payson, Arizona' },
+  phoenix: { src: '/images/phoenix-sunset-hike.avif', alt: 'Sunset over a desert hiking trail near Phoenix, Arizona' },
+  default: { src: '/images/grand-canyon.avif', alt: 'Wide view across the Grand Canyon in Arizona' },
+};
 
 const destinationPresets = [
   {
@@ -173,6 +182,14 @@ const TripBuilder: React.FC = () => {
   ]);
 
   const tripSlug = toTripSlug(location);
+  const tripPhoto = useMemo(() => {
+    const normalizedLocation = location.trim().toLowerCase();
+    if (normalizedLocation.includes('sedona')) return tripBuilderPhotos.sedona;
+    if (normalizedLocation.includes('flagstaff')) return tripBuilderPhotos.flagstaff;
+    if (normalizedLocation.includes('payson') || normalizedLocation.includes('rim')) return tripBuilderPhotos.payson;
+    if (normalizedLocation.includes('phoenix') || normalizedLocation.includes('scottsdale')) return tripBuilderPhotos.phoenix;
+    return tripBuilderPhotos.default;
+  }, [location]);
 
   const shareParams = useMemo(() => {
     const params = new URLSearchParams();
@@ -261,6 +278,22 @@ const TripBuilder: React.FC = () => {
             the bar really is “does this help before the kids revolt?”
           </p>
         </div>
+
+        <figure className="mb-10 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 shadow-sm">
+          <CloudinaryImage
+            src={tripPhoto.src}
+            alt={tripPhoto.alt}
+            className="h-56 w-full object-cover md:h-80"
+            sizes="(min-width: 1024px) 1152px, 100vw"
+            widthHint={1600}
+            crop="fill"
+            loading="eager"
+            fetchPriority="high"
+          />
+          <figcaption className="px-5 py-3 text-sm text-zinc-500">
+            Your destination changes the plan. Sage uses the place, season and family filters together—not the photo alone.
+          </figcaption>
+        </figure>
 
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <form
