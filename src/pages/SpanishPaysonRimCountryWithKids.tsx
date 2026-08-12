@@ -13,6 +13,7 @@ import {
   Users,
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
+import CloudinaryImage from '../components/CloudinaryImage';
 import SharePlanPanel from '../components/SharePlanPanel';
 
 const spanishUrl =
@@ -185,10 +186,13 @@ export default function SpanishPaysonRimCountryWithKids() {
 
       <section className="relative overflow-hidden bg-emerald-950 px-6 py-16 text-white md:py-24">
         <div className="absolute inset-0 opacity-40">
-          <img
+          <CloudinaryImage
             src="/images/payson-rim-overlook.avif"
             alt="Vista de pinos y montanas cerca de Payson y Mogollon Rim"
             className="h-full w-full object-cover"
+            widthHint={1600}
+            sizes="100vw"
+            loading="eager"
             fetchPriority="high"
           />
         </div>

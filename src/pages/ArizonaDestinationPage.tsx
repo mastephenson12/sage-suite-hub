@@ -4,6 +4,7 @@ import SEOJsonLd from '../components/SEOJsonLd';
 import BeforeYouGoPanel from '../components/BeforeYouGoPanel';
 import QuickPlanBox from '../components/QuickPlanBox';
 import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
+import CloudinaryImage from '../components/CloudinaryImage';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
 
 function BulletList({ items }: { items: string[] }) {
@@ -165,6 +166,21 @@ export default function ArizonaDestinationPage() {
           </div>
 
           <div className="rounded-[2rem] border border-orange-100 bg-white p-6 shadow-sm">
+            {destination.slug === 'payson' && (
+              <figure className="mb-6 overflow-hidden rounded-2xl bg-zinc-100">
+                <CloudinaryImage
+                  src="/images/payson-rim-overlook.avif"
+                  alt="Mogollon Rim overlook and pine forest near Payson, Arizona"
+                  className="aspect-[4/3] w-full object-cover"
+                  widthHint={960}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  loading="eager"
+                />
+                <figcaption className="px-4 py-3 text-xs leading-5 text-zinc-500">
+                  Rim Country brings pine forest and broad overlooks within a practical drive of Phoenix.
+                </figcaption>
+              </figure>
+            )}
             <p className="mb-4 text-xs font-black uppercase tracking-[0.25em] text-zinc-400">
               Best For
             </p>
