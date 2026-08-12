@@ -86,11 +86,16 @@ export const Hero: React.FC = () => {
   return (
     <section className="relative overflow-hidden border-b border-zinc-100 bg-white">
       <div className="absolute inset-0 -z-10">
-        <img
-          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
-          alt="Arizona desert road"
-          className="h-full w-full object-cover opacity-10"
-          referrerPolicy="no-referrer"
+        <CloudinaryImage
+          src="/images/phoenix-sunset-hike.avif"
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover opacity-15"
+          sizes="100vw"
+          widthHint={1920}
+          crop="fill"
+          loading="eager"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
       </div>
@@ -285,7 +290,7 @@ export const Hero: React.FC = () => {
                 <div className="relative h-[320px] overflow-hidden">
                   <CloudinaryImage
                     src={card.image}
-                    alt={card.title}
+                    alt={`${card.title} Arizona family adventure`}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(min-width: 768px) 33vw, 100vw"
                     widthHint={960}
