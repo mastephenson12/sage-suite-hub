@@ -90,6 +90,10 @@ function getFitLabel(score: number): string {
 function getMatchReasons(input: FamilyAdventureInput, destination: SageDestination): string[] {
   const reasons: string[] = [];
 
+  if (getLocationBoost(input.location, destination) >= 10) {
+    reasons.push(`Located in the ${input.location.trim()} area you selected.`);
+  }
+
   if (destination.activityTypes.includes(input.activity)) {
     reasons.push(`Fits your ${input.activity === 'hike' ? 'hiking' : input.activity === 'relax' ? 'easy scenic' : 'mixed adventure'} plan.`);
   }
@@ -170,6 +174,11 @@ export function scoreFamilyAdventure(
 export function getFamilyAdventureMatches(input: FamilyAdventureInput): SageDestinationMatch[] {
   return arizonaFamilyDestinations
     .map((destination) => scoreFamilyAdventure(input, destination))
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => {
+      const locationDifference =
+        getLocationBoost(input.location, b) - getLocationBoost(input.location, a);
+
+      return locationDifference || b.score - a.score;
+    })
     .slice(0, 3);
 }
