@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /suite/
-Disallow: /*?*
 
 Sitemap: https://sage.healthandtravels.com/sitemap.xml

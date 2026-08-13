@@ -156,6 +156,43 @@ const TripBuilder: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [aiPlan, setAiPlan] = useState<SageAiTripPlan | null>(null);
   const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
+  const isGeneratedPlan = searchParams.get('plan') === 'ready';
+
+  React.useEffect(() => {
+    const existingRobots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    const existingCanonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const previousRobotsContent = existingRobots?.content;
+    const previousCanonicalHref = existingCanonical?.href;
+    const robots = existingRobots ?? document.createElement('meta');
+    const canonical = existingCanonical ?? document.createElement('link');
+
+    if (!existingRobots) {
+      robots.name = 'robots';
+      document.head.appendChild(robots);
+    }
+
+    if (!existingCanonical) {
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+
+    robots.content = isGeneratedPlan ? 'noindex, follow' : 'index, follow';
+    canonical.href = 'https://sage.healthandtravels.com/trip-builder';
+
+    return () => {
+      if (existingRobots && previousRobotsContent !== undefined) {
+        existingRobots.content = previousRobotsContent;
+      } else {
+        robots.remove();
+      }
+
+      if (existingCanonical && previousCanonicalHref !== undefined) {
+        existingCanonical.href = previousCanonicalHref;
+      } else {
+        canonical.remove();
+      }
+    };
+  }, [isGeneratedPlan]);
 
   const plan = buildTripPlan(location, hasKids, activity, length, season);
 
