@@ -228,7 +228,7 @@ const TripBuilder: React.FC = () => {
 
   const sharePath = `/trip-builder?${shareParams.toString()}`;
 
-  const tripBrief = useMemo(() => {
+  const tripBrief = (() => {
     const topMatches = familyMatches
       .map(
         (match, index) =>
@@ -261,7 +261,7 @@ const TripBuilder: React.FC = () => {
       `Top Sage matches:\n${topMatches}`,
       `Helpful extras: ${plan.extras.join(' | ')}`,
     ].filter(Boolean).join('\n\n');
-  }, [aiPlan, familyMatches, plan]);
+  })();
 
   const handleBuildTrip = async (e: React.FormEvent) => {
     e.preventDefault();
