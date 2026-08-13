@@ -827,12 +827,14 @@ const TripBuilder: React.FC = () => {
                       Get Trip Ideas by Email
                     </a>
 
-                    <Link
-                      to="/community"
+                    <a
+                      href="https://join.arizonahikersassociation.org/join"
+                target="_blank"
+                rel="noopener noreferrer"
                       className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
                     >
-                      Join Arizona Hikers
-                    </Link>
+                Join Arizona Hikers
+              </a>
                   </div>
                 </div>
               </div>
