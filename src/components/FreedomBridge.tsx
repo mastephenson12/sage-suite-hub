@@ -27,12 +27,14 @@ export default function FreedomBridge() {
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                to="/community"
+              <a
+                href="https://join.arizonahikersassociation.org/join"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform duration-200 hover:scale-[1.02] hover:bg-orange-600"
               >
                 Join Arizona Hikers
-              </Link>
+              </a>
 
               <Link
                 to="/trip-builder"
