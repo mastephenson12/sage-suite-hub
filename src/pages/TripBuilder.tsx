@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   Baby,
@@ -157,26 +157,11 @@ const TripBuilder: React.FC = () => {
   const [aiPlan, setAiPlan] = useState<SageAiTripPlan | null>(null);
   const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
 
-  const plan = useMemo(() => {
-    return buildTripPlan(location, hasKids, activity, length, season);
-  }, [location, hasKids, activity, length, season]);
+  const plan = buildTripPlan(location, hasKids, activity, length, season);
 
-  const familyMatches = useMemo(() => {
-    return getFamilyAdventureMatches({
-      location,
-      hasKids: hasKids === 'yes',
-      activity,
-      length,
-      season,
-      kidAgeGroup,
-      wantsShade,
-      needsBathrooms,
-      needsStrollerAccess,
-      maxDriveMinutes,
-    });
-  }, [
+  const familyMatches = getFamilyAdventureMatches({
     location,
-    hasKids,
+    hasKids: hasKids === 'yes',
     activity,
     length,
     season,
@@ -185,46 +170,32 @@ const TripBuilder: React.FC = () => {
     needsBathrooms,
     needsStrollerAccess,
     maxDriveMinutes,
-  ]);
+  });
 
   const tripSlug = toTripSlug(location);
-  const tripPhoto = useMemo(() => {
-    const normalizedLocation = location.trim().toLowerCase();
-    if (normalizedLocation.includes('sedona')) return tripBuilderPhotos.sedona;
-    if (normalizedLocation.includes('flagstaff')) return tripBuilderPhotos.flagstaff;
-    if (normalizedLocation.includes('payson') || normalizedLocation.includes('rim')) return tripBuilderPhotos.payson;
-    if (normalizedLocation.includes('phoenix') || normalizedLocation.includes('scottsdale')) return tripBuilderPhotos.phoenix;
-    return tripBuilderPhotos.default;
-  }, [location]);
+  const normalizedLocation = location.trim().toLowerCase();
+  const tripPhoto = normalizedLocation.includes('sedona')
+    ? tripBuilderPhotos.sedona
+    : normalizedLocation.includes('flagstaff')
+      ? tripBuilderPhotos.flagstaff
+      : normalizedLocation.includes('payson') || normalizedLocation.includes('rim')
+        ? tripBuilderPhotos.payson
+        : normalizedLocation.includes('phoenix') || normalizedLocation.includes('scottsdale')
+          ? tripBuilderPhotos.phoenix
+          : tripBuilderPhotos.default;
 
-  const shareParams = useMemo(() => {
-    const params = new URLSearchParams();
-
-    params.set('plan', 'ready');
-    if (tripSlug) params.set('location', tripSlug);
-    params.set('kids', hasKids);
-    params.set('activity', activity);
-    params.set('length', length);
-    params.set('season', season);
-    params.set('ages', kidAgeGroup);
-    params.set('shade', String(wantsShade));
-    params.set('bathrooms', String(needsBathrooms));
-    params.set('stroller', String(needsStrollerAccess));
-    params.set('drive', String(maxDriveMinutes));
-
-    return params;
-  }, [
-    activity,
-    hasKids,
-    kidAgeGroup,
-    length,
-    maxDriveMinutes,
-    needsBathrooms,
-    needsStrollerAccess,
-    season,
-    tripSlug,
-    wantsShade,
-  ]);
+  const shareParams = new URLSearchParams();
+  shareParams.set('plan', 'ready');
+  if (tripSlug) shareParams.set('location', tripSlug);
+  shareParams.set('kids', hasKids);
+  shareParams.set('activity', activity);
+  shareParams.set('length', length);
+  shareParams.set('season', season);
+  shareParams.set('ages', kidAgeGroup);
+  shareParams.set('shade', String(wantsShade));
+  shareParams.set('bathrooms', String(needsBathrooms));
+  shareParams.set('stroller', String(needsStrollerAccess));
+  shareParams.set('drive', String(maxDriveMinutes));
 
   const sharePath = `/trip-builder?${shareParams.toString()}`;
 
