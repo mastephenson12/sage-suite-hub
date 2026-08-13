@@ -14,6 +14,10 @@ import {
   Users,
 } from 'lucide-react';
 import PopularArizonaGuides from '../components/PopularArizonaGuides';
+import {
+  generateSageTripPlan,
+  SageAiTripPlan,
+} from '../services/tripPlanService';
 import CloudinaryImage from '../components/CloudinaryImage';
 import {
   ActivityType,
@@ -150,6 +154,8 @@ const TripBuilder: React.FC = () => {
     searchParams.get('plan') === 'ready'
   );
   const [copied, setCopied] = useState(false);
+  const [aiPlan, setAiPlan] = useState<SageAiTripPlan | null>(null);
+  const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
 
   const plan = useMemo(() => {
     return buildTripPlan(location, hasKids, activity, length, season);
@@ -230,7 +236,22 @@ const TripBuilder: React.FC = () => {
       )
       .join('\n');
 
+    const personalizedBrief = aiPlan
+      ? [
+          `Sage personalized plan: ${aiPlan.title}`,
+          aiPlan.summary,
+          `Outdoor anchor: ${aiPlan.outdoorAnchor.name} — ${aiPlan.outdoorAnchor.description}`,
+          `Drive from Phoenix: ${aiPlan.driveFromPhoenix}`,
+          `Food: ${aiPlan.foodStop.name} — ${aiPlan.foodStop.description}`,
+          `Restrooms: ${aiPlan.facilities.restrooms}`,
+          `Shade: ${aiPlan.facilities.shade}`,
+          `Backup: ${aiPlan.backupPlan}`,
+          `Verify before leaving: ${aiPlan.verificationNote}`,
+        ].join('\n')
+      : '';
+
     return [
+      personalizedBrief,
       plan.title,
       plan.intro,
       `Safety: ${plan.safety.title} — ${plan.safety.suggestion}`,
@@ -239,14 +260,36 @@ const TripBuilder: React.FC = () => {
       `Afternoon: ${plan.afternoon}`,
       `Top Sage matches:\n${topMatches}`,
       `Helpful extras: ${plan.extras.join(' | ')}`,
-    ].join('\n\n');
-  }, [familyMatches, plan]);
+    ].filter(Boolean).join('\n\n');
+  }, [aiPlan, familyMatches, plan]);
 
-  const handleBuildTrip = (e: React.FormEvent) => {
+  const handleBuildTrip = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    setAiPlan(null);
+    setAiPlanStatus('loading');
     setSearchParams(shareParams, { replace: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+      const personalizedPlan = await generateSageTripPlan({
+        destination: location.trim() || 'Arizona',
+        group: hasKids === 'yes' ? 'Family with kids' : 'Adults only',
+        activity,
+        length,
+        season,
+        kidAgeGroup: hasKids === 'yes' ? kidAgeGroup : 'not applicable',
+        wantsShade,
+        needsBathrooms,
+        needsStrollerAccess,
+        maxDriveMinutes,
+      });
+      setAiPlan(personalizedPlan);
+      setAiPlanStatus('ready');
+    } catch (error) {
+      console.warn('Personalized Sage plan unavailable; showing local plan.', error);
+      setAiPlanStatus('fallback');
+    }
   };
 
   const handleCopyTripBrief = async () => {
@@ -511,6 +554,83 @@ const TripBuilder: React.FC = () => {
 
             {submitted && (
               <div className="mt-8 space-y-5">
+                <section
+                  className="rounded-3xl border border-emerald-200 bg-emerald-50 p-5"
+                  aria-live="polite"
+                  aria-busy={aiPlanStatus === 'loading'}
+                >
+                  <p className="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
+                    Personalized by Sage
+                  </p>
+
+                  {aiPlanStatus === 'loading' && (
+                    <div>
+                      <h3 className="text-xl font-black text-emerald-950">Adding current trip context…</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-emerald-900">
+                        Your instant local plan is ready below. Sage is adding a specific outdoor anchor, food stop, facilities check, and backup plan.
+                      </p>
+                    </div>
+                  )}
+
+                  {aiPlanStatus === 'fallback' && (
+                    <div>
+                      <h3 className="text-xl font-black text-emerald-950">Your reliable local plan is ready</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-emerald-900">
+                        Live personalization is temporarily unavailable, so Sage kept the fast local plan and destination matches below instead of leaving you stuck.
+                      </p>
+                    </div>
+                  )}
+
+                  {aiPlanStatus === 'ready' && aiPlan && (
+                    <div className="mt-3 space-y-4 text-emerald-950">
+                      <div>
+                        <h3 className="text-2xl font-black tracking-tight">{aiPlan.title}</h3>
+                        <p className="mt-2 leading-relaxed">{aiPlan.summary}</p>
+                      </div>
+
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <div className="rounded-2xl bg-white p-4">
+                          <p className="font-black">Main outdoor stop</p>
+                          <p className="mt-1 font-semibold">{aiPlan.outdoorAnchor.name}</p>
+                          <p className="mt-1 text-sm leading-relaxed">{aiPlan.outdoorAnchor.description}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-4">
+                          <p className="font-black">Estimated drive from Phoenix</p>
+                          <p className="mt-1 text-sm leading-relaxed">{aiPlan.driveFromPhoenix}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-4">
+                          <p className="font-black">Kid-friendly food</p>
+                          <p className="mt-1 font-semibold">{aiPlan.foodStop.name}</p>
+                          <p className="mt-1 text-sm leading-relaxed">{aiPlan.foodStop.description}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-4">
+                          <p className="font-black">Restrooms and shade</p>
+                          <p className="mt-1 text-sm leading-relaxed"><strong>Restrooms:</strong> {aiPlan.facilities.restrooms}</p>
+                          <p className="mt-1 text-sm leading-relaxed"><strong>Shade:</strong> {aiPlan.facilities.shade}</p>
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl border border-emerald-200 bg-white p-4">
+                        <p className="font-black">Weather and heat backup</p>
+                        <p className="mt-1 text-sm leading-relaxed">{aiPlan.backupPlan}</p>
+                      </div>
+
+                      {aiPlan.cautions.length > 0 && (
+                        <div>
+                          <p className="font-black">Before you go</p>
+                          <ul className="mt-2 space-y-1 text-sm leading-relaxed">
+                            {aiPlan.cautions.map((caution) => <li key={caution}>• {caution}</li>)}
+                          </ul>
+                        </div>
+                      )}
+
+                      <p className="text-xs leading-relaxed text-emerald-800">
+                        {aiPlan.verificationNote}
+                      </p>
+                    </div>
+                  )}
+                </section>
+
                 <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                     <div>
