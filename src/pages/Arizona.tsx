@@ -137,12 +137,14 @@ const Arizona: React.FC = () => {
             inspiration, and more reasons to get outside instead of letting another
             weekend disappear into chores and screen sludge.
           </p>
-          <Link
-            to="/community"
+          <a
+            href="https://join.arizonahikersassociation.org/join"
+                target="_blank"
+                rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-emerald-700"
           >
-            Join Arizona Hikers
-          </Link>
+                Join Arizona Hikers
+              </a>
         </div>
       </section>
     </main>
