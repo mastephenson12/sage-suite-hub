@@ -180,8 +180,6 @@ const TripBuilderResultEnhancer: React.FC = () => {
   const [includeToddlers, setIncludeToddlers] = React.useState(false);
   const isReady = searchParams.get('plan') === 'ready';
 
-  if (!isReady) return null;
-
   const location = prettify(searchParams.get('location'), 'Arizona');
   const season = prettify(searchParams.get('season'), 'Your Season');
   const tripLength = prettify(searchParams.get('length'), 'Family Outing');
