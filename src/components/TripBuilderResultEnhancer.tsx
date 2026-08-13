@@ -219,6 +219,8 @@ const TripBuilderResultEnhancer: React.FC = () => {
   ).length;
   const packingProgress = Math.round((checkedCount / packingItems.length) * 100);
 
+  if (!isReady) return null;
+
   const togglePackingItem = (itemId: string) => {
     setCheckedPackingItems((currentItems) => {
       const isChecked = currentItems.includes(itemId);
