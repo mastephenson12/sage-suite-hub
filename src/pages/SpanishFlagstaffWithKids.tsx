@@ -10,7 +10,6 @@ import {
   MoonStar,
   Mountain,
   ShieldCheck,
-  Snowflake,
   Trees,
   Users,
 } from 'lucide-react';
@@ -187,7 +186,7 @@ export default function SpanishFlagstaffWithKids() {
       <section className="relative overflow-hidden bg-slate-950 px-6 py-16 text-white md:py-24">
         <div className="absolute inset-0 opacity-45">
           <img
-            src="/images/flagstaff-ponderosa-pines-family.avif"
+            src="/images/payson-rim-overlook.avif"
             alt="Familia explorando un bosque de pinos ponderosa cerca de Flagstaff, Arizona"
             className="h-full w-full object-cover"
             fetchPriority="high"
