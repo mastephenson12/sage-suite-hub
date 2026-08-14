@@ -59,6 +59,14 @@ function setAlternateLink(hreflang: string, href: string) {
 
 const featuredSpanishGuides = [
   {
+    title: 'Flagstaff con niños',
+    description:
+      'Bosque, Buffalo Park, Lowell Observatory, altura, monzón, nieve y planes familiares realistas para un día o fin de semana.',
+    to: '/es/arizona/flagstaff-con-ninos',
+    label: 'Flagstaff',
+    icon: Trees,
+  },
+  {
     title: 'Sedona con niños',
     description:
       'Caminatas familiares, shuttle gratuito, estacionamiento, calor, monzón, pases y un plan realista entre las rocas rojas.',
@@ -181,7 +189,7 @@ const destinations = [
     name: 'Flagstaff',
     bestFor: 'Aire fresco, bosque, Lowell Observatory y escapada de verano',
     note: 'Ideal para dormir una noche si vienen desde Phoenix.',
-    to: '/arizona/flagstaff',
+    to: '/es/arizona/flagstaff-con-ninos',
   },
   {
     name: 'Payson y Mogollon Rim',
