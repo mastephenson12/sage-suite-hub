@@ -16,6 +16,7 @@ const staticRoutes = [
   { path: '/es/arizona/primer-viaje-a-arizona-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/planificar-por-situacion', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/sedona-con-ninos', changefreq: 'weekly', priority: '0.95' },
+  { path: '/es/arizona/flagstaff-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru', changefreq: 'weekly', priority: '0.8' },
   { path: '/ru/arizona/first-trip-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
