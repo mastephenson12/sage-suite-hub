@@ -10,6 +10,7 @@ const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
 const spanishWeekendTripsPath = 'es/arizona/escapadas-fin-de-semana-con-ninos';
 const spanishSedonaPath = 'es/arizona/sedona-con-ninos';
+const spanishFlagstaffPath = 'es/arizona/flagstaff-con-ninos';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const russianSedonaPath = 'ru/arizona/sedona-with-kids';
@@ -171,6 +172,24 @@ const spanishHikesWithKidsFaqs = [
     question: 'A que hora es mejor caminar con ninos en Arizona?',
     answer:
       'La manana suele ser la mejor opcion. En verano, las familias deben elegir elevacion, sombra, agua, salidas muy temprano y un plan B.',
+  },
+];
+
+const spanishFlagstaffFaqs = [
+  {
+    question: '¿Flagstaff es un buen destino para viajar con niños?',
+    answer:
+      'Sí. Flagstaff combina bosque de pinos, clima más fresco que Phoenix, parques, caminatas, astronomía y opciones bajo techo. Una aventura principal y tiempo para comida y descanso suelen producir el mejor día familiar.',
+  },
+  {
+    question: '¿Cuál es la mejor época para visitar Flagstaff con niños?',
+    answer:
+      'El verano funciona bien para escapar del calor del desierto; el otoño trae clima fresco; y el invierno puede incluir nieve, hielo y cierres. Revisen tormentas durante el monzón y carreteras durante el invierno.',
+  },
+  {
+    question: '¿Se puede visitar Flagstaff en un solo día desde Phoenix?',
+    answer:
+      'Sí, pero es un día largo. Escojan una sola actividad principal y salgan temprano. Dormir una noche permite combinar bosque y Lowell Observatory sin manejar cansados.',
   },
 ];
 
@@ -585,6 +604,23 @@ const spanishSedonaHtml = addLanguageAlternates(
   ]
 );
 await writeRoute(spanishSedonaPath, spanishSedonaHtml);
+
+const spanishFlagstaffHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Flagstaff con niños | Guía familiar de bosque y estrellas | Sage',
+    description:
+      'Guía en español para visitar Flagstaff con niños: bosque, Buffalo Park, Lowell Observatory, clima, monzón, nieve, seguridad y planes familiares realistas.',
+    url: `${siteUrl}/${spanishFlagstaffPath}`,
+    faqs: spanishFlagstaffFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishFlagstaffPath}` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/flagstaff` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/flagstaff` },
+  ]
+);
+await writeRoute(spanishFlagstaffPath, spanishFlagstaffHtml);
 
 const russianArizonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {
