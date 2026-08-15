@@ -369,6 +369,17 @@ const CoolArizonaSummerTripsWithKids: React.FC = () => {
         eventContext="cool_arizona_summer_trips_with_kids"
       />
 
+      <section className="border-y border-emerald-100 bg-emerald-50 px-6 py-12">
+        <div className="mx-auto flex max-w-6xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-800">Want the destination comparison first?</p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-zinc-950 md:text-3xl">Read the Health &amp; Travels heat-escape guide</h2>
+            <p className="mt-3 text-sm leading-7 text-zinc-600">Compare Payson, Flagstaff, Prescott, Show Low, and Pinetop by trip shape, family fit, and practical tradeoffs—then come back here to personalize the winner.</p>
+          </div>
+          <a href="https://healthandtravels.com/cool-arizona-summer-trips-from-phoenix?utm_source=sage&amp;utm_medium=guide&amp;utm_campaign=cool_summer_trips&amp;utm_content=companion_guide" className="inline-flex shrink-0 items-center justify-center rounded-full bg-emerald-800 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-emerald-700">Compare the destinations</a>
+        </div>
+      </section>
+
       <section className="px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
