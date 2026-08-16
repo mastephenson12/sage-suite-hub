@@ -393,6 +393,18 @@ const publicPages = [
       { name: 'Гранд-Каньон с детьми', url: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
     ],
   },
+  {
+    routePath: 'es/arizona/gran-canon-con-ninos',
+    language: 'es',
+    title: 'Gran Cañón con niños | Plan familiar del South Rim | Sage',
+    description: 'Guía en español del South Rim con niños: miradores, Rim Trail, shuttle, comida, alojamiento, seguridad y un itinerario familiar.',
+    alternates: [
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/gran-canon-con-ninos` },
+      { hreflang: 'ru', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/grand-canyon` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/grand-canyon` },
+    ],
+  },
 ];
 
 const baseHtml = await readFile(indexPath, 'utf8');
