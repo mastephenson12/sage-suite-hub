@@ -378,6 +378,21 @@ const publicPages = [
       { hreflang: 'x-default', href: `${siteUrl}/arizona/cool-summer-trips-with-kids` },
     ],
   },
+  {
+    routePath: 'ru/arizona/grand-canyon-with-kids',
+    language: 'ru',
+    title: 'Гранд-Каньон с детьми | Семейный план South Rim | Sage',
+    description: 'Русский гид Sage по Южному краю Гранд-Каньона с детьми: виды, Rim Trail, shuttle, еда, жильё, безопасность и готовый маршрут.',
+    alternates: [
+      { hreflang: 'ru', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+      { hreflang: 'x-default', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+    ],
+    breadcrumbs: [
+      { name: 'Sage', url: `${siteUrl}/` },
+      { name: 'Аризона на русском', url: `${siteUrl}/ru` },
+      { name: 'Гранд-Каньон с детьми', url: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+    ],
+  },
 ];
 
 const baseHtml = await readFile(indexPath, 'utf8');
