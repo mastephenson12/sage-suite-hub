@@ -22,6 +22,24 @@ function BulletList({ items }: { items: string[] }) {
 
 type Destination = NonNullable<ReturnType<typeof getAllArizonaDestination>>;
 
+const GRAND_CANYON_PHOTOS = [
+  {
+    src: 'https://res.cloudinary.com/o7p0njjh/image/upload/f_auto,q_auto,w_1200,c_fill,g_auto/health-and-travels/arizona/grand-canyon/south-rim/2018-fall/grand-canyon-framed-by-pine-trees-fall-2018',
+    alt: 'Wide Grand Canyon view framed by pine trees along the South Rim on a clear November day',
+    caption: 'South Rim canyon layers framed by high-country pines.',
+  },
+  {
+    src: 'https://res.cloudinary.com/o7p0njjh/image/upload/f_auto,q_auto,w_900,c_fill,g_auto/health-and-travels/arizona/grand-canyon/south-rim/2018-fall/family-with-toddler-grand-canyon-overlook-fall-2018',
+    alt: 'An adult holding a warmly dressed toddler beside a Grand Canyon South Rim overlook in November',
+    caption: 'Cold-weather family exploring at a protected South Rim overlook.',
+  },
+  {
+    src: 'https://res.cloudinary.com/o7p0njjh/image/upload/f_auto,q_auto,w_900,c_fill,g_auto/health-and-travels/arizona/grand-canyon/south-rim/2018-fall/grand-canyon-south-rim-squirrel-fall-2018',
+    alt: 'A squirrel perched on a pine tree at the Grand Canyon South Rim in November',
+    caption: 'A South Rim wildlife moment—enjoy wildlife from a respectful distance.',
+  },
+];
+
 function getQuickPlan(destination: Destination) {
   const text = [
     destination.name,
@@ -217,6 +235,37 @@ export default function ArizonaDestinationPage() {
         subtitle="Use this as the final family check before you leave: heat, water, bathrooms, parking, food, and the backup plan."
         plannerTo={`/trip-builder?location=${destination.slug}`}
       />
+
+      {destination.slug === 'grand-canyon' && (
+        <section className="mx-auto max-w-6xl px-6 py-14" aria-labelledby="grand-canyon-photo-title">
+          <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-orange-500">
+            Firsthand family visit
+          </p>
+          <h2 id="grand-canyon-photo-title" className="mb-3 text-3xl font-black tracking-tight text-zinc-950 md:text-4xl">
+            What the South Rim looks like with a family
+          </h2>
+          <p className="mb-8 max-w-3xl text-base leading-8 text-zinc-600">
+            These original Health &amp; Travels photos show the canyon, cold-weather layers, and wildlife you may encounter during a November visit.
+          </p>
+          <div className="grid gap-6 md:grid-cols-3">
+            {GRAND_CANYON_PHOTOS.map((photo) => (
+              <figure key={photo.src} className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+                <CloudinaryImage
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="aspect-[4/3] w-full object-cover"
+                  widthHint={960}
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  loading="lazy"
+                />
+                <figcaption className="px-5 py-4 text-sm leading-6 text-zinc-600">
+                  {photo.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-6 md:grid-cols-2">
