@@ -22,24 +22,24 @@ const englishUrl = 'https://sage.healthandtravels.com/arizona/day-trips-from-pho
 
 const spanishFaqs = [
   {
-    question: 'Cuales son buenos viajes de un dia desde Phoenix con ninos?',
+    question: '¿Cuáles son buenos viajes de un día desde Phoenix con niños?',
     answer:
-      'Buenos viajes de un dia desde Phoenix con ninos incluyen Cave Creek, Prescott, Payson, Cottonwood, Sedona, Tucson y Flagstaff cuando el tiempo de manejo, el clima, los banos, la comida y la energia del grupo encajan.',
+      'Buenos viajes de un día desde Phoenix con niños incluyen Cave Creek, Prescott, Payson, Cottonwood, Sedona, Tucson y Flagstaff cuando el tiempo de manejo, el clima, los baños, la comida y la energía del grupo encajan.',
   },
   {
-    question: 'Donde escapar del calor de Phoenix por un dia?',
+    question: '¿Dónde escapar del calor de Phoenix por un día?',
     answer:
-      'Para escapar del calor de Phoenix, busquen mas elevacion, pinos, lagos, sombra o agua. Payson, Prescott, Flagstaff, Show Low y Pinetop-Lakeside suelen funcionar mejor que senderos expuestos del desierto en verano.',
+      'Para escapar del calor de Phoenix, busquen más elevación, pinos, lagos, sombra o agua. Payson, Prescott, Flagstaff, Show Low y Pinetop-Lakeside suelen funcionar mejor que senderos expuestos del desierto en verano.',
   },
   {
-    question: 'Cuanto manejar para un viaje familiar de un dia?',
+    question: '¿Cuánto manejar para un viaje familiar de un día?',
     answer:
-      'La mayoria de familias disfruta mas si el manejo queda bajo dos horas por tramo. Sedona, Flagstaff y Tucson pueden funcionar, pero conviene mantener el dia simple y escoger una sola aventura principal.',
+      'La mayoría de las familias disfruta más si el manejo queda por debajo de dos horas por tramo. Sedona, Flagstaff y Tucson pueden funcionar, pero conviene mantener el día simple y escoger una sola aventura principal.',
   },
   {
-    question: 'Como planear un viaje de un dia sin estresar al grupo?',
+    question: '¿Cómo planear un viaje de un día sin estresar al grupo?',
     answer:
-      'Elijan un destino principal, una comida facil, banos cercanos, suficiente agua y una opcion de respaldo. Menos paradas suele crear mejor experiencia para familias y grupos de amigos.',
+      'Elijan un destino principal, una comida fácil, baños cercanos, suficiente agua y una opción de respaldo. Menos paradas suele crear una mejor experiencia para familias y grupos de amigos.',
   },
 ];
 
@@ -196,14 +196,14 @@ export default function SpanishDayTripsFromPhoenix() {
   return (
     <main className="min-h-screen bg-white text-zinc-900">
       <SEOJsonLd
-        title="Viajes de un dia desde Phoenix con ninos | Sage"
-        description="Guia en espanol para escoger viajes familiares de un dia desde Phoenix por tiempo de manejo, temporada, calor, comida, banos, sombra y energia del grupo."
+        title="Viajes de un día desde Phoenix con niños | Sage"
+        description="Guía en español para escoger viajes familiares de un día desde Phoenix por tiempo de manejo, edades, energía, calor, comida, baños, sombra y plan B."
         url={spanishUrl}
         faqs={spanishFaqs}
         breadcrumbs={[
           { name: 'Sage', url: 'https://sage.healthandtravels.com/' },
-          { name: 'Arizona en espanol', url: 'https://sage.healthandtravels.com/es/arizona' },
-          { name: 'Viajes de un dia desde Phoenix', url: spanishUrl },
+          { name: 'Arizona en español', url: 'https://sage.healthandtravels.com/es/arizona' },
+          { name: 'Viajes de un día desde Phoenix', url: spanishUrl },
         ]}
       />
 
@@ -317,6 +317,48 @@ export default function SpanishDayTripsFromPhoenix() {
         </div>
       </section>
 
+      <section className="border-y border-zinc-100 bg-white px-6 py-14">
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-3xl">
+            <p className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-emerald-700">
+              Filtro familiar
+            </p>
+            <h2 className="text-3xl font-black uppercase tracking-tight md:text-4xl">
+              Ajusta el plan a las edades y la energía
+            </h2>
+            <p className="mt-4 leading-7 text-zinc-600">
+              Antes de elegir un destino, decide cuánto tiempo puede estar cada niño en el auto,
+              cuándo necesita comer o dormir y cuánta energía quedará para el regreso.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                title: 'Bebés y niños pequeños',
+                plan: 'Menos de una hora, baños fáciles, sombra y regreso antes de la siesta.',
+                backup: 'Museo, acuario, biblioteca o comida cerca de Phoenix.',
+              },
+              {
+                title: 'Edad escolar',
+                plan: 'Una aventura corta con agua, bocadillos y una pausa real a mitad del día.',
+                backup: 'Mirador, picnic o centro de visitantes en lugar de otra caminata.',
+              },
+              {
+                title: 'Adolescentes',
+                plan: 'Pueden tolerar más manejo, pero deben participar en la elección y guardar energía para volver.',
+                backup: 'Una sola parada fotográfica y una comida sentados.',
+              },
+            ].map((option) => (
+              <article key={option.title} className="rounded-lg border border-emerald-100 bg-emerald-50 p-6">
+                <h3 className="text-xl font-black">{option.title}</h3>
+                <p className="mt-3 leading-7 text-zinc-700">{option.plan}</p>
+                <p className="mt-4 text-sm leading-6 text-zinc-600"><strong>Plan B:</strong> {option.backup}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="border-y border-zinc-100 bg-zinc-50 px-6 py-14">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 max-w-3xl">
@@ -396,6 +438,22 @@ export default function SpanishDayTripsFromPhoenix() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-zinc-100 bg-emerald-50 px-6 py-10">
+        <div className="mx-auto flex max-w-4xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Antes de decidir</p>
+            <h2 className="mt-2 text-2xl font-black">Descubre las opciones y luego vuelve a planear</h2>
+            <p className="mt-2 max-w-2xl leading-7 text-zinc-600">Health &amp; Travels reúne las aventuras, la comida y cuándo vale la pena pasar la noche.</p>
+          </div>
+          <a
+            href="https://healthandtravels.com/es/excursiones-familiares-desde-phoenix?utm_source=sage&utm_medium=referral&utm_campaign=phoenix_day_trips_es"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-emerald-900 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-emerald-800"
+          >
+            Ver la guía <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
       </section>
 

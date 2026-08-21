@@ -290,8 +290,8 @@ const publicPages = [
   {
     routePath: 'es/arizona/viajes-de-un-dia-desde-phoenix',
     language: 'es',
-    title: 'Viajes de un dia desde Phoenix con ninos | Sage',
-    description: 'Guia en espanol para escoger viajes familiares de un dia desde Phoenix por tiempo de manejo, temporada, calor, comida, banos, sombra y energia del grupo.',
+    title: 'Viajes de un día desde Phoenix con niños | Sage',
+    description: 'Guía en español para escoger viajes familiares de un día desde Phoenix por tiempo de manejo, edades, energía, calor, comida, baños, sombra y plan B.',
     alternates: [
       { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
       { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
