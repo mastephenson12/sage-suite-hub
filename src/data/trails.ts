@@ -16,6 +16,76 @@ export interface Trail {
 
 export const trails: Trail[] = [
   {
+    id: 'papago-park',
+    name: 'Hole-in-the-Rock at Papago Park',
+    location: 'Phoenix, AZ',
+    difficulty: 'Easy',
+    distance: 'About 0.3 miles round trip',
+    elevationGain: 'About 30 ft',
+    time: '30-60 minutes',
+    rating: 4.7,
+    image: '/images/papago-hole-in-the-rock-family-trail.avif',
+    description: 'A short, exposed desert walk with a memorable rock opening and broad Phoenix views. The mileage is small, but heat, uneven rock, drop-offs, and family energy still decide whether it is a good choice.',
+    intel: `
+# Plan this stop around your family, not the mileage
+
+Hole-in-the-Rock is a practical Phoenix-area win when everyone wants a clear payoff without a long hike. The best family version is usually one short outdoor anchor, followed by water, food, shade, or a nearby indoor plan.
+
+![Families visible for scale on the Hole-in-the-Rock formation at Papago Park](/images/papago-hole-in-the-rock-trail-sign.avif)
+
+*Original Health & Travels photo from June 30, 2026. The people on the formation show the scale and exposed terrain.*
+
+## Choose the right version
+
+| Your group | Best plan | Turnaround rule |
+| --- | --- | --- |
+| Toddlers or low energy | View the formation, walk only as far as footing feels comfortable, then return | Turn around at the first climbing, heat, or hand-holding problem |
+| Elementary-age kids | Short walk to the opening with an adult close beside each child | Do not let the view turn into unsupervised scrambling |
+| Teens or energetic adults | Add a longer Papago walk only when temperature and daylight are forgiving | Keep the easy exit; do not add mileage just because the first stop felt short |
+| Mixed ages | Make the opening optional and give non-climbers a clear waiting plan | The least heat-tolerant person sets the schedule |
+
+## Heat and shade check
+
+This is exposed desert terrain. Start around sunrise or choose another day when the forecast removes your safe margin. Rock and pavement continue radiating heat, and a short route is not automatically a safe summer route. Carry water from the vehicle, use sun protection, and leave before anyone develops headache, dizziness, nausea, unusual fatigue, confusion, or poor coordination.
+
+The trailhead sign photographed here also warns that Phoenix mountain trails close to dogs at **100°F and above**. Confirm current City of Phoenix rules and closures before bringing a dog.
+
+![Hole-in-the-Rock trail sign and exposed approach at Papago Park](/images/papago-hole-in-the-rock-trail-sign.avif)
+
+## Parking, bathrooms, food, and backup
+
+- **Parking:** Arrive early and note which lot you used; Papago has several attractions and access points.
+- **Bathrooms:** Do not assume a restroom is beside the exact trail start. Use a known facility before the walk and keep a backup stop in the plan.
+- **Food:** Bring water and a familiar snack. Save a restaurant decision for after everyone is cool and seated.
+- **Backup:** If heat, crowds, or energy make the trail a bad fit, use a photo stop and move to an air-conditioned activity.
+
+![Sunrise over the Papago Park area parking lots](/images/papago-park-sunrise.avif)
+
+## Pairing it with Phoenix Zoo
+
+Phoenix Zoo is nearby and can become the main family anchor, but it is still a large outdoor property. Check current hours, tickets, weather policies, shade options, and attraction availability on the official zoo site. The seasonal hours shown in a photograph are a dated field observation, not today's schedule.
+
+![Phoenix Zoo entrance near Papago Park](/images/phoenix-zoo-entrance.avif)
+
+## A low-stress flow
+
+1. Check the hourly forecast and official park notices.
+2. Arrive early, use the bathroom, and fill water before walking.
+3. Do Hole-in-the-Rock as the only required outdoor objective.
+4. Reassess heat and energy back at the vehicle.
+5. Choose food, Phoenix Zoo, Desert Botanical Garden, or an indoor backup only after that reset.
+
+## Read the discovery guide
+
+[Open the complete Papago Park family guide on Health & Travels](https://healthandtravels.com/papago-park-with-kids) for original photos, firsthand arrival notes, safety guidance, and ideas for building the rest of the day.
+
+## Verify before leaving
+
+- [City of Phoenix Papago Park trails](https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park/papago-trails.html)
+- [Phoenix Zoo visitor information](https://www.phoenixzoo.org/visit/)
+    `
+  },
+  {
     id: 'devils-bridge',
     name: "Devil's Bridge",
     location: 'Sedona, AZ',
