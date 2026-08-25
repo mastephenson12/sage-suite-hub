@@ -693,13 +693,23 @@ const russianSedonaHtml = addLanguageAlternates(
 );
 await writeRoute(russianSedonaPath, russianSedonaHtml);
 
-const phoenixDayTripsHtml = applySeo(baseHtml, {
-  title: 'Best Arizona Day Trips from Phoenix | Sage',
-  description:
-    'Find family-friendly Arizona day trips from Phoenix by drive time, season, heat, kids, visitors, easy hikes, food stops, and weekend range.',
-  url: `${siteUrl}/arizona/day-trips-from-phoenix`,
-  faqs: phoenixDayTripFaqs,
-});
+const phoenixDayTripsHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Best Arizona Day Trips from Phoenix | Sage',
+    description:
+      'Find family-friendly Arizona day trips from Phoenix by drive time, season, heat, kids, visitors, easy hikes, food stops, and weekend range.',
+    url: `${siteUrl}/arizona/day-trips-from-phoenix`,
+    faqs: phoenixDayTripFaqs,
+  }),
+  'en',
+  [
+    { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+    { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
+    { hreflang: 'ru', href: `${siteUrl}/ru/arizona/day-trips-from-phoenix` },
+    { hreflang: 'de', href: `${siteUrl}/${germanDayTripsPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+  ]
+);
 await writeRoute('arizona/day-trips-from-phoenix', phoenixDayTripsHtml);
 
 const germanDayTripsHtml = addLanguageAlternates(
