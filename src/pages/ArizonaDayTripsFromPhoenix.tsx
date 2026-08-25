@@ -12,6 +12,24 @@ import {
 import SEOJsonLd from '../components/SEOJsonLd';
 import SharePlanPanel from '../components/SharePlanPanel';
 
+const englishUrl = 'https://sage.healthandtravels.com/arizona/day-trips-from-phoenix';
+const spanishUrl = 'https://sage.healthandtravels.com/es/arizona/viajes-de-un-dia-desde-phoenix';
+const russianUrl = 'https://sage.healthandtravels.com/ru/arizona/day-trips-from-phoenix';
+const germanUrl = 'https://sage.healthandtravels.com/de/arizona/tagesausfluege-ab-phoenix';
+
+function setAlternateLink(hreflang: string, href: string) {
+  let link = document.querySelector<HTMLLinkElement>(
+    `link[rel="alternate"][hreflang="${hreflang}"]`
+  );
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'alternate';
+    link.hreflang = hreflang;
+    document.head.appendChild(link);
+  }
+  link.href = href;
+}
+
 const phoenixDayTripFaqs = [
   {
     question: 'What are the best family day trips from Phoenix?',
@@ -266,6 +284,24 @@ const phoenixVoteText = [
 ].join('\n');
 
 export default function ArizonaDayTripsFromPhoenix() {
+  React.useEffect(() => {
+    setAlternateLink('en', englishUrl);
+    setAlternateLink('es', spanishUrl);
+    setAlternateLink('ru', russianUrl);
+    setAlternateLink('de', germanUrl);
+    setAlternateLink('x-default', englishUrl);
+
+    return () => {
+      ['en', 'es', 'ru', 'de', 'x-default'].forEach((hreflang) => {
+        document
+          .querySelector<HTMLLinkElement>(
+            `link[rel="alternate"][hreflang="${hreflang}"]`
+          )
+          ?.remove();
+      });
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-white text-zinc-900">
       <SEOJsonLd

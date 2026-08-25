@@ -32,6 +32,7 @@ const staticRoutes = [
   { path: '/ru/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/ru/arizona/hikes-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/ru/arizona/day-trips-from-phoenix', changefreq: 'weekly', priority: '0.9' },
+  { path: '/de/arizona/tagesausfluege-ab-phoenix', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/day-trips-from-phoenix', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/payson-rim-country-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/weekend-trips', changefreq: 'weekly', priority: '0.9' },

@@ -17,6 +17,7 @@ const russianSedonaPath = 'ru/arizona/sedona-with-kids';
 const spanishPhoenixHeatPath = 'es/archive/phoenix-con-ninos-cuando-hace-calor';
 const legacySpanishPhoenixHeatPath =
   'es/archive/phoenix-things-to-do-with-kids-when-hot';
+const germanDayTripsPath = 'de/arizona/tagesausfluege-ab-phoenix';
 const englishArizonaPath = 'arizona';
 const englishPlanBySituationPath = 'arizona/plan-by-situation';
 const englishPhoenixHeatPath =
@@ -262,6 +263,24 @@ const russianPlanBySituationFaqs = [
     question: 'Какие поездки подходят с маленькими детьми?',
     answer:
       'Маленьким детям обычно лучше подходят короткие прогулки, туалеты рядом, тень, перекусы, простой выход с маршрута и реалистичный темп.',
+  },
+];
+
+const germanDayTripFaqs = [
+  {
+    question: 'Welche Tagesausflüge ab Phoenix eignen sich für Familien?',
+    answer:
+      'Für kurze Tage eignen sich Papago Park und Cave Creek. Payson und Prescott bieten oft kühlere Luft. Sedona, Flagstaff und Tucson passen zu einem längeren Tag mit nur einem Hauptziel.',
+  },
+  {
+    question: 'Wohin kann man der Hitze von Phoenix entkommen?',
+    answer:
+      'Payson, Prescott und Flagstaff liegen höher und sind häufig kühler. Prüfen Sie am Reisetag trotzdem Wetter, Feuer, Rauch, Gewitter und Straßensperrungen.',
+  },
+  {
+    question: 'Wie viel Fahrzeit ist mit Kindern sinnvoll?',
+    answer:
+      'Für viele Familien sind bis zu zwei Stunden pro Strecke ein guter Höchstwert. Planen Sie nur ein Hauptabenteuer, eine einfache Mahlzeit und einen Plan B.',
   },
 ];
 
@@ -674,14 +693,43 @@ const russianSedonaHtml = addLanguageAlternates(
 );
 await writeRoute(russianSedonaPath, russianSedonaHtml);
 
-const phoenixDayTripsHtml = applySeo(baseHtml, {
-  title: 'Best Arizona Day Trips from Phoenix | Sage',
-  description:
-    'Find family-friendly Arizona day trips from Phoenix by drive time, season, heat, kids, visitors, easy hikes, food stops, and weekend range.',
-  url: `${siteUrl}/arizona/day-trips-from-phoenix`,
-  faqs: phoenixDayTripFaqs,
-});
+const phoenixDayTripsHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Best Arizona Day Trips from Phoenix | Sage',
+    description:
+      'Find family-friendly Arizona day trips from Phoenix by drive time, season, heat, kids, visitors, easy hikes, food stops, and weekend range.',
+    url: `${siteUrl}/arizona/day-trips-from-phoenix`,
+    faqs: phoenixDayTripFaqs,
+  }),
+  'en',
+  [
+    { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+    { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
+    { hreflang: 'ru', href: `${siteUrl}/ru/arizona/day-trips-from-phoenix` },
+    { hreflang: 'de', href: `${siteUrl}/${germanDayTripsPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+  ]
+);
 await writeRoute('arizona/day-trips-from-phoenix', phoenixDayTripsHtml);
+
+const germanDayTripsHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Familienausflüge ab Phoenix | Sage',
+    description:
+      'Deutschsprachiger Sage-Planer für Tagesausflüge ab Phoenix: Fahrzeit, Wetter, Kinder, Essen, Toiletten, Schatten und Plan B.',
+    url: `${siteUrl}/${germanDayTripsPath}`,
+    faqs: germanDayTripFaqs,
+  }),
+  'de',
+  [
+    { hreflang: 'de', href: `${siteUrl}/${germanDayTripsPath}` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+    { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
+    { hreflang: 'ru', href: `${siteUrl}/ru/arizona/day-trips-from-phoenix` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+  ]
+);
+await writeRoute(germanDayTripsPath, germanDayTripsHtml);
 
 const weekendTripsHtml = applySeo(baseHtml, {
   title: 'Arizona Weekend Trips for Families and Friends | Sage',
