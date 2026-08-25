@@ -41,14 +41,13 @@ const seasons = [
 
 export default function GermanDayTripsFromPhoenix() {
   React.useEffect(() => {
-    const previousLang = document.documentElement.lang;
     document.documentElement.lang = 'de';
     setAlternate('de', germanUrl);
     setAlternate('en', englishUrl);
     setAlternate('es', spanishUrl);
     setAlternate('ru', russianUrl);
     setAlternate('x-default', englishUrl);
-    return () => { document.documentElement.lang = previousLang || 'en'; };
+    return () => { document.documentElement.lang = 'en'; };
   }, []);
 
   return <main className="min-h-screen bg-white text-zinc-900">
