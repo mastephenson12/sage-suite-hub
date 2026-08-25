@@ -290,6 +290,16 @@ export default function ArizonaDayTripsFromPhoenix() {
     setAlternateLink('ru', russianUrl);
     setAlternateLink('de', germanUrl);
     setAlternateLink('x-default', englishUrl);
+
+    return () => {
+      ['en', 'es', 'ru', 'de', 'x-default'].forEach((hreflang) => {
+        document
+          .querySelector<HTMLLinkElement>(
+            `link[rel="alternate"][hreflang="${hreflang}"]`
+          )
+          ?.remove();
+      });
+    };
   }, []);
 
   return (
