@@ -20,6 +20,7 @@ const russianUrl =
 const englishUrl = 'https://sage.healthandtravels.com/arizona/day-trips-from-phoenix';
 const spanishUrl =
   'https://sage.healthandtravels.com/es/arizona/viajes-de-un-dia-desde-phoenix';
+const germanUrl = 'https://sage.healthandtravels.com/de/arizona/tagesausfluege-ab-phoenix';
 
 const russianFaqs = [
   {
@@ -188,6 +189,7 @@ export default function RussianDayTripsFromPhoenix() {
     setAlternateLink('ru', russianUrl);
     setAlternateLink('en', englishUrl);
     setAlternateLink('es', spanishUrl);
+    setAlternateLink('de', germanUrl);
     setAlternateLink('x-default', englishUrl);
 
     return () => {
