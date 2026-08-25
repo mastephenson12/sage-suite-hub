@@ -137,6 +137,24 @@ function extractObjects(source, requiredKeys) {
 
 const publicPages = [
   {
+    routePath: 'de/arizona/grand-canyon-mit-kindern',
+    language: 'de',
+    title: 'Grand Canyon mit Kindern | Familienplan für den South Rim | Sage',
+    description: 'Deutschsprachiger Familienplan für den Grand Canyon South Rim: Aussichtspunkte, Rim Trail, Shuttle, Essen, Unterkunft und Sicherheit.',
+    alternates: [
+      { hreflang: 'de', href: `${siteUrl}/de/arizona/grand-canyon-mit-kindern` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/grand-canyon` },
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/gran-canon-con-ninos` },
+      { hreflang: 'ru', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/grand-canyon` },
+    ],
+    breadcrumbs: [
+      { name: 'Sage', url: `${siteUrl}/` },
+      { name: 'Arizona auf Deutsch', url: `${siteUrl}/de/arizona/grand-canyon-mit-kindern` },
+      { name: 'Grand Canyon mit Kindern', url: `${siteUrl}/de/arizona/grand-canyon-mit-kindern` },
+    ],
+  },
+  {
     routePath: 'trip-builder',
     title: 'Arizona Family Trip Builder | Sage Health and Travels',
     description: 'Build a practical Arizona family trip by season, drive time, kid ages, shade, bathrooms, activity level, food stops, and group needs.',
@@ -385,7 +403,10 @@ const publicPages = [
     description: 'Русский гид Sage по Южному краю Гранд-Каньона с детьми: виды, Rim Trail, shuttle, еда, жильё, безопасность и готовый маршрут.',
     alternates: [
       { hreflang: 'ru', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
-      { hreflang: 'x-default', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+      { hreflang: 'de', href: `${siteUrl}/de/arizona/grand-canyon-mit-kindern` },
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/gran-canon-con-ninos` },
+      { hreflang: 'en', href: `${siteUrl}/arizona/grand-canyon` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/grand-canyon` },
     ],
     breadcrumbs: [
       { name: 'Sage', url: `${siteUrl}/` },
@@ -401,6 +422,7 @@ const publicPages = [
     alternates: [
       { hreflang: 'es', href: `${siteUrl}/es/arizona/gran-canon-con-ninos` },
       { hreflang: 'ru', href: `${siteUrl}/ru/arizona/grand-canyon-with-kids` },
+      { hreflang: 'de', href: `${siteUrl}/de/arizona/grand-canyon-mit-kindern` },
       { hreflang: 'en', href: `${siteUrl}/arizona/grand-canyon` },
       { hreflang: 'x-default', href: `${siteUrl}/arizona/grand-canyon` },
     ],
