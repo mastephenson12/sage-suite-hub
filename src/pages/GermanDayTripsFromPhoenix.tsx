@@ -78,7 +78,7 @@ export default function GermanDayTripsFromPhoenix() {
         <h1 className="max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">Familienausflüge ab Phoenix</h1>
         <p className="mt-6 max-w-3xl text-lg leading-8 text-sky-50 md:text-xl">Der beste Familientag beginnt nicht mit dem berühmtesten Ort, sondern mit der richtigen Fahrzeit, dem Wetter, Toiletten, Essen und der Energie Ihrer Gruppe.</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link to="/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=explore&length=full-day&season=spring&shade=true&bathrooms=true&language=de" className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-200 px-6 py-3 text-sm font-black uppercase tracking-wide text-sky-950"><Compass className="h-4 w-4" />Plan erstellen</Link>
+          <Link to="/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=explore&length=full-day&season=spring&shade=true&bathrooms=true" className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-200 px-6 py-3 text-sm font-black uppercase tracking-wide text-sky-950"><Compass className="h-4 w-4" />Planer auf Englisch öffnen</Link>
           <a href="https://healthandtravels.com/de/familienausfluege-ab-phoenix?utm_source=sage&utm_medium=companion&utm_campaign=phoenix_day_trips_de" className="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3 text-sm font-black uppercase tracking-wide text-white">Ausführlichen Guide lesen</a>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default function GermanDayTripsFromPhoenix() {
     <section className="px-6 py-14"><div className="mx-auto max-w-4xl">
       <h2 className="text-3xl font-black uppercase tracking-tight">Häufig gestellte Fragen</h2>
       <div className="mt-8 space-y-6">{faqs.map((faq)=><article key={faq.question}><h3 className="text-lg font-black">{faq.question}</h3><p className="mt-2 leading-7 text-zinc-600">{faq.answer}</p></article>)}</div>
-      <div className="mt-10 rounded-xl bg-sky-950 p-8 text-white"><h2 className="text-2xl font-black uppercase">Jetzt den Tagesausflug zusammenstellen</h2><p className="mt-3 text-sky-100">Sage übernimmt Startort, Kinder, Fahrzeit, Schatten und Toiletten direkt in den Planer.</p><Link to="/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=explore&length=full-day&season=spring&shade=true&bathrooms=true&language=de" className="mt-6 inline-flex rounded-full bg-sky-200 px-6 py-3 text-sm font-black uppercase text-sky-950">Plan mit Sage erstellen</Link></div>
+      <div className="mt-10 rounded-xl bg-sky-950 p-8 text-white"><h2 className="text-2xl font-black uppercase">Jetzt den Tagesausflug zusammenstellen</h2><p className="mt-3 text-sky-100">Sage übernimmt Startort, Kinder, Fahrzeit, Schatten und Toiletten. Der interaktive Planer ist derzeit auf Englisch.</p><Link to="/trip-builder?plan=ready&location=phoenix&kids=yes&group=family&activity=explore&length=full-day&season=spring&shade=true&bathrooms=true" className="mt-6 inline-flex rounded-full bg-sky-200 px-6 py-3 text-sm font-black uppercase text-sky-950">Englischen Sage-Planer öffnen</Link></div>
     </div></section>
   </main>;
 }
