@@ -8,7 +8,7 @@ type SharePlanPanelProps = {
   quickPlanText: string;
   voteText: string;
   eventContext: string;
-  locale?: 'en' | 'es' | 'ru';
+  locale?: 'en' | 'es' | 'ru' | 'de';
 };
 
 function getCurrentUrl() {
@@ -105,6 +105,18 @@ export default function SharePlanPanel({
       link: 'Скопировать ссылку',
       linkText:
         'Отправьте эту страницу Sage, чтобы все смотрели один и тот же план.',
+    },
+    de: {
+      kicker: 'An die Gruppe senden',
+      planCopied: 'Plan kopiert',
+      plan: 'Kurzplan kopieren',
+      planText: 'Eine fertige Zusammenfassung mit Zeitplan, Essen, Wasser und Plan B.',
+      voteCopied: 'Abstimmung kopiert',
+      vote: 'Abstimmung kopieren',
+      voteText: 'Eine kurze Nachricht, mit der Familie oder Freunde die einfachste Option wählen.',
+      linkCopied: 'Link kopiert',
+      link: 'Seitenlink kopieren',
+      linkText: 'Senden Sie diese Sage-Seite, damit alle denselben Plan sehen.',
     },
   }[locale];
 
