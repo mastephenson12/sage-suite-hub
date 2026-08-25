@@ -295,6 +295,7 @@ const publicPages = [
     alternates: [
       { hreflang: 'es', href: `${siteUrl}/es/arizona/viajes-de-un-dia-desde-phoenix` },
       { hreflang: 'en', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
+      { hreflang: 'de', href: `${siteUrl}/de/arizona/tagesausfluege-ab-phoenix` },
       { hreflang: 'x-default', href: `${siteUrl}/arizona/day-trips-from-phoenix` },
     ],
   },
