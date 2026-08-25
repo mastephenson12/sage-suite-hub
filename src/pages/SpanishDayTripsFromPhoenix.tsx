@@ -19,6 +19,7 @@ import SharePlanPanel from '../components/SharePlanPanel';
 const spanishUrl =
   'https://sage.healthandtravels.com/es/arizona/viajes-de-un-dia-desde-phoenix';
 const englishUrl = 'https://sage.healthandtravels.com/arizona/day-trips-from-phoenix';
+const germanUrl = 'https://sage.healthandtravels.com/de/arizona/tagesausfluege-ab-phoenix';
 
 const spanishFaqs = [
   {
@@ -186,6 +187,7 @@ export default function SpanishDayTripsFromPhoenix() {
     document.documentElement.lang = 'es';
     setAlternateLink('es', spanishUrl);
     setAlternateLink('en', englishUrl);
+    setAlternateLink('de', germanUrl);
     setAlternateLink('x-default', englishUrl);
 
     return () => {
