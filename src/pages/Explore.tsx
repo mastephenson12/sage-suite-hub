@@ -62,6 +62,11 @@ const hubLinks = [
     to: '/arizona/hikes-with-kids',
   },
   {
+    title: 'Familienausflüge ab Phoenix',
+    description: 'Deutschsprachiger Sage-Guide für Tagesausflüge nach Fahrzeit, Wetter, Kinderenergie, Essen, Toiletten und Plan B.',
+    to: '/de/arizona/tagesausfluege-ab-phoenix',
+  },
+  {
     title: 'Arizona Day Trips From Phoenix',
     description: 'Find practical family day trips from Phoenix by drive time, weather, elevation, and easy stops.',
     to: '/arizona/day-trips-from-phoenix',
