@@ -19,6 +19,7 @@ import {
   SageAiTripPlan,
 } from '../services/tripPlanService';
 import CloudinaryImage from '../components/CloudinaryImage';
+import { trackEvent } from '../utils/analytics';
 import {
   ActivityType,
   KidAgeGroup,
@@ -273,6 +274,13 @@ const TripBuilder: React.FC = () => {
 
   const handleBuildTrip = async (e: React.FormEvent) => {
     e.preventDefault();
+    trackEvent('trip_builder_submit', {
+      destination: location.trim() || 'Arizona',
+      has_kids: hasKids === 'yes',
+      activity,
+      trip_length: length,
+      season,
+    });
     setSubmitted(true);
     setAiPlan(null);
     setAiPlanStatus('loading');
