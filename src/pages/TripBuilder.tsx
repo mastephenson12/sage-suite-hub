@@ -19,6 +19,7 @@ import {
   SageAiTripPlan,
 } from '../services/tripPlanService';
 import CloudinaryImage from '../components/CloudinaryImage';
+import { trackEvent } from '../utils/analytics';
 import {
   ActivityType,
   KidAgeGroup,
@@ -159,6 +160,20 @@ const TripBuilder: React.FC = () => {
   const isGeneratedPlan = searchParams.get('plan') === 'ready';
 
   React.useEffect(() => {
+    if (searchParams.get('utm_source') !== 'healthandtravels') return;
+    const eventKey = `sage-handoff:${window.location.pathname}${window.location.search}`;
+    if (window.sessionStorage.getItem(eventKey)) return;
+
+    trackEvent('health_article_to_sage', {
+      destination: initialLocation || 'Arizona',
+      campaign: searchParams.get('utm_campaign') || 'unspecified',
+      medium: searchParams.get('utm_medium') || 'referral',
+      plan_ready: isGeneratedPlan,
+    });
+    window.sessionStorage.setItem(eventKey, 'tracked');
+  }, [initialLocation, isGeneratedPlan, searchParams]);
+
+  React.useEffect(() => {
     const existingRobots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     const existingCanonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     const previousRobotsContent = existingRobots?.content;
@@ -211,6 +226,15 @@ const TripBuilder: React.FC = () => {
 
   const tripSlug = toTripSlug(location);
   const normalizedLocation = location.trim().toLowerCase();
+  const companionGuide = normalizedLocation.includes('sedona')
+    ? {
+        href: 'https://healthandtravels.com/sedona-with-kids-family-trip-guide?utm_source=sage&utm_medium=plan_result&utm_campaign=sedona_kids_guide',
+        label: 'Read the Sedona Family Guide',
+      }
+    : {
+        href: 'https://healthandtravels.com/?utm_source=sage&utm_medium=plan_result&utm_campaign=trip_builder',
+        label: 'Explore Health & Travels Guides',
+      };
   const tripPhoto = normalizedLocation.includes('sedona')
     ? tripBuilderPhotos.sedona
     : normalizedLocation.includes('flagstaff')
@@ -273,6 +297,14 @@ const TripBuilder: React.FC = () => {
 
   const handleBuildTrip = async (e: React.FormEvent) => {
     e.preventDefault();
+    trackEvent('trip_builder_submit', {
+      destination: location.trim() || 'Arizona',
+      has_kids: hasKids === 'yes',
+      activity,
+      trip_length: length,
+      season,
+      inbound_campaign: searchParams.get('utm_campaign') || undefined,
+    });
     setSubmitted(true);
     setAiPlan(null);
     setAiPlanStatus('loading');
@@ -856,12 +888,19 @@ const TripBuilder: React.FC = () => {
                     </Link>
 
                     <a
-                      href="https://healthandtravels.com/"
+                      href={companionGuide.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        trackEvent('health_travels_ideas_click', {
+                          destination: location.trim() || 'Arizona',
+                          link_url: companionGuide.href,
+                          placement: 'trip_builder_result',
+                        })
+                      }
                       className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
                     >
-                      Get Trip Ideas by Email
+                      {companionGuide.label}
                     </a>
 
                     <a
