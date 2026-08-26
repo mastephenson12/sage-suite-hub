@@ -346,10 +346,10 @@ const TripBuilder: React.FC = () => {
           </figcaption>
         </figure>
 
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
           <form
             onSubmit={handleBuildTrip}
-            className="rounded-3xl border border-zinc-200 bg-zinc-50 p-6 md:p-8"
+            className="min-w-0 rounded-3xl border border-zinc-200 bg-zinc-50 p-6 md:p-8"
           >
             <div className="space-y-6">
               <div>
@@ -537,7 +537,7 @@ const TripBuilder: React.FC = () => {
             </div>
           </form>
 
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="min-w-0 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm md:p-8">
             <p className="mb-3 text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
               Preview
             </p>
@@ -669,7 +669,7 @@ const TripBuilder: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-3 text-sm font-semibold text-zinc-600">
+                  <div className="break-all rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-3 text-sm font-semibold text-zinc-600">
                     {sharePath}
                   </div>
                 </div>
