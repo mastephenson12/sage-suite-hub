@@ -26,6 +26,7 @@ const staticRoutes = [
   { path: '/ru/arizona/sedona-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/grand-canyon-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/easy-family-hikes', changefreq: 'weekly', priority: '0.95' },
+  { path: '/ru/arizona/woods-canyon-lake-with-kids', changefreq: 'monthly', priority: '0.9' },
   { path: '/de/arizona/grand-canyon-mit-kindern', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
