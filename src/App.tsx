@@ -55,6 +55,7 @@ import SpanishPlanBySituation from './pages/SpanishPlanBySituation';
 import SpanishPhoenixHeatPage from './pages/SpanishPhoenixHeatPage';
 import SpanishCoolArizonaSummerTrips from './pages/SpanishCoolArizonaSummerTrips';
 import SpanishArizonaHikesWithKids from './pages/SpanishArizonaHikesWithKids';
+import SpanishEasyArizonaFamilyHikes from './pages/SpanishEasyArizonaFamilyHikes';
 import SpanishDayTripsFromPhoenix from './pages/SpanishDayTripsFromPhoenix';
 import SpanishPaysonRimCountryWithKids from './pages/SpanishPaysonRimCountryWithKids';
 import SpanishFirstArizonaTripGuide from './pages/SpanishFirstArizonaTripGuide';
@@ -199,6 +200,7 @@ function AppContent() {
           <Route path="/es/arizona/planificar-por-situacion" element={<SpanishPlanBySituation />} />
           <Route path="/es/arizona/viajes-frescos-verano-con-ninos" element={<SpanishCoolArizonaSummerTrips />} />
           <Route path="/es/arizona/caminatas-con-ninos" element={<SpanishArizonaHikesWithKids />} />
+          <Route path="/es/arizona/caminatas-faciles-con-ninos" element={<SpanishEasyArizonaFamilyHikes />} />
           <Route path="/es/arizona/viajes-de-un-dia-desde-phoenix" element={<SpanishDayTripsFromPhoenix />} />
           <Route path="/es/arizona/payson-y-mogollon-rim-con-ninos" element={<SpanishPaysonRimCountryWithKids />} />
           <Route path="/es/arizona/escapadas-fin-de-semana-con-ninos" element={<SpanishArizonaWeekendTrips />} />
