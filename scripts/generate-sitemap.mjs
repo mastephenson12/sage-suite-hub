@@ -19,6 +19,7 @@ const staticRoutes = [
   { path: '/es/arizona/flagstaff-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/gran-canon-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/woods-canyon-lake-con-ninos', changefreq: 'monthly', priority: '0.9' },
+  { path: '/es/arizona/caminatas-faciles-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru', changefreq: 'weekly', priority: '0.8' },
   { path: '/ru/arizona/first-trip-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
