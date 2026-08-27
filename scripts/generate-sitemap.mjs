@@ -24,6 +24,7 @@ const staticRoutes = [
   { path: '/ru/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
   { path: '/ru/arizona/sedona-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/grand-canyon-with-kids', changefreq: 'weekly', priority: '0.95' },
+  { path: '/de/arizona/grand-canyon-mit-kindern', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/caminatas-con-ninos', changefreq: 'weekly', priority: '0.9' },
@@ -67,7 +68,6 @@ function extractStringValues(source, propertyName) {
 
 function uniqueRoutes(routes) {
   const seen = new Set();
-
   return routes.filter((route) => {
     if (seen.has(route.path)) return false;
     seen.add(route.path);
@@ -77,7 +77,6 @@ function uniqueRoutes(routes) {
 
 function routeToXml(route) {
   const loc = route.path === '/' ? `${siteUrl}/` : `${siteUrl}${route.path}`;
-
   return [
     '  <url>',
     `    <loc>${loc}</loc>`,
@@ -98,11 +97,7 @@ const [articlesSource, destinationsSource, extraDestinationsSource, trailsSource
 const destinationRoutes = [
   ...extractStringValues(destinationsSource, 'slug'),
   ...extractStringValues(extraDestinationsSource, 'slug'),
-].map((slug) => ({
-  path: `/arizona/${slug}`,
-  changefreq: 'weekly',
-  priority: '0.8',
-}));
+].map((slug) => ({ path: `/arizona/${slug}`, changefreq: 'weekly', priority: '0.8' }));
 
 const trailRoutes = extractStringValues(trailsSource, 'id').map((id) => ({
   path: `/trail-guides/${id}`,
@@ -132,5 +127,4 @@ const sitemap = [
 ].join('\n');
 
 await writeFile('public/sitemap.xml', sitemap, 'utf8');
-
 console.log(`Generated public/sitemap.xml with ${routes.length} URLs.`);
