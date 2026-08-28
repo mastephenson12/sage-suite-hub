@@ -28,6 +28,7 @@ const staticRoutes = [
   { path: '/ru/arizona/easy-family-hikes', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru/arizona/woods-canyon-lake-with-kids', changefreq: 'monthly', priority: '0.9' },
   { path: '/de/arizona/grand-canyon-mit-kindern', changefreq: 'weekly', priority: '0.95' },
+  { path: '/de/arizona/sedona-mit-kindern', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/caminatas-con-ninos', changefreq: 'weekly', priority: '0.9' },

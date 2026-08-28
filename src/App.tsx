@@ -73,6 +73,7 @@ import RussianSedonaWithKids from './pages/RussianSedonaWithKids';
 import RussianGrandCanyonWithKids from './pages/RussianGrandCanyonWithKids';
 import GermanDayTripsFromPhoenix from './pages/GermanDayTripsFromPhoenix';
 import GermanGrandCanyonWithKids from './pages/GermanGrandCanyonWithKids';
+import GermanSedonaWithKids from './pages/GermanSedonaWithKids';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
@@ -217,6 +218,7 @@ function AppContent() {
           <Route path="/ru/arizona/grand-canyon-with-kids" element={<RussianGrandCanyonWithKids />} />
           <Route path="/de/arizona/tagesausfluege-ab-phoenix" element={<GermanDayTripsFromPhoenix />} />
           <Route path="/de/arizona/grand-canyon-mit-kindern" element={<GermanGrandCanyonWithKids />} />
+          <Route path="/de/arizona/sedona-mit-kindern" element={<GermanSedonaWithKids />} />
           <Route path="/trail-guides" element={<TrailGuides />} />
           <Route path="/trail-guides/:id" element={<TrailPage />} />
           <Route path="/community" element={<Community />} />
@@ -266,6 +268,7 @@ function AppContent() {
                 <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">Adventure Finder</Link>
                 <Link to="/es/arizona" className="transition-colors hover:text-black">Espanol</Link>
                 <Link to="/ru" className="transition-colors hover:text-black">Русский</Link>
+                <Link to="/de/arizona/sedona-mit-kindern" className="transition-colors hover:text-black">Deutsch</Link>
                 <Link to="/arizona/weekend-trips" className="transition-colors hover:text-black">Weekend Trips</Link>
                 <Link to="/arizona/hikes-with-kids" className="transition-colors hover:text-black">Kids Hikes</Link>
                 <Link to="/arizona/easy-family-hikes" className="transition-colors hover:text-black">Easy Hikes</Link>
