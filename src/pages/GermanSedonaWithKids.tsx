@@ -217,7 +217,14 @@ export default function GermanSedonaWithKids() {
         <aside className="rounded-2xl bg-slate-950 p-7 text-white"><h2 className="text-2xl font-black uppercase tracking-tight">Sage-Familienregel</h2><p className="mt-4 leading-7 text-slate-200">Ein Abenteuer, eine Mahlzeit und ein Plan B. Wenn die Familie noch Energie hat, kann immer etwas dazukommen. Andersherum funktioniert es erstaunlich schlechter.</p><Link to="/trip-builder?plan=ready&location=sedona&kids=yes&group=family&activity=explore&length=full-day&language=de" className="mt-6 inline-flex rounded-full bg-blue-700 px-5 py-3 text-sm font-black uppercase tracking-wide text-white">Sedona-Plan bauen</Link></aside>
       </div></section>
 
-      <section className="bg-teal-50/60 px-6 py-14"><div className="mx-auto max-w-6xl"><SharePlanPanel title="Sedona-Plan mit der Familie teilen" planText={quickPlanText} /></div></section>
+      <section className="bg-teal-50/60 px-6 py-14"><div className="mx-auto max-w-6xl"><SharePlanPanel
+          title="Sedona-Plan mit der Familie teilen"
+          description="Kopieren Sie den Kurzplan, starten Sie eine einfache Familienabstimmung oder senden Sie den direkten Link."
+          quickPlanText={quickPlanText}
+          voteText="Sedona-Familienplan: Was passt besser? 1) Frühe kurze Wanderung und Mittagessen, 2) Shuttle und rote Felsen oder 3) Aussichtspunkt, Stadt und Park als ruhiger Plan?"
+          eventContext="german_sedona_with_kids"
+          locale="de"
+        /></div></section>
     </main>
   );
 }
