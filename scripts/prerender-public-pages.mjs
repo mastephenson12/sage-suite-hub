@@ -176,6 +176,16 @@ const publicPages = [
     ],
   },
   {
+    routePath: 'arizona/flagstaff-with-kids',
+    title: 'Flagstaff With Kids | Flexible Family Day and Weekend Planner | Sage',
+    description: 'Plan Flagstaff with kids using realistic day-trip, overnight, and weekend options with weather checks, family pacing, food, bathrooms, and backup ideas.',
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Arizona', url: `${siteUrl}/arizona` },
+      { name: 'Flagstaff With Kids', url: `${siteUrl}/arizona/flagstaff-with-kids` },
+    ],
+  },
+  {
     routePath: 'arizona/payson-rim-country-with-kids',
     title: 'Payson and Rim Country With Kids | Family Guide | Sage',
     description: 'Plan a family trip to Payson and Arizona Rim Country with kid-friendly outdoor activities, lakes, forest stops, food, lodging, safety, and seasonal guidance.',
