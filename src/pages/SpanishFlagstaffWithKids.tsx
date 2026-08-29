@@ -17,7 +17,7 @@ import SEOJsonLd from '../components/SEOJsonLd';
 import SharePlanPanel from '../components/SharePlanPanel';
 
 const spanishUrl = 'https://sage.healthandtravels.com/es/arizona/flagstaff-con-ninos';
-const englishUrl = 'https://sage.healthandtravels.com/arizona/flagstaff';
+const englishUrl = 'https://sage.healthandtravels.com/arizona/flagstaff-with-kids';
 
 const spanishFaqs = [
   {
@@ -196,7 +196,7 @@ export default function SpanishFlagstaffWithKids() {
         <div className="relative mx-auto max-w-6xl">
           <div className="mb-6 flex flex-wrap gap-3 text-[11px] font-black uppercase tracking-[0.22em]">
             <Link
-              to="/arizona/flagstaff"
+              to="/arizona/flagstaff-with-kids"
               className="rounded-full border border-white/30 px-4 py-2 text-white/80 transition hover:bg-white hover:text-slate-950"
             >
               English
