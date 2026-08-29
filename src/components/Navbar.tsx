@@ -10,8 +10,8 @@ const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 border-b border-zinc-100 bg-white/95 backdrop-blur-md">
       <BrandNetworkBar />
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6 py-3">
-        <div className="flex items-center gap-10">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-6 py-3">
+        <div className="flex min-w-0 items-center gap-6">
           <Link to="/" className="group flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl transition-transform group-hover:scale-110">
               <img
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-5 text-[12px] font-bold uppercase tracking-widest text-zinc-500 xl:gap-6 lg:flex">
+          <div className="hidden items-center gap-5 text-[12px] font-bold uppercase tracking-widest text-zinc-500 2xl:flex 2xl:gap-6">
             <Link to="/start-here" className="transition-colors hover:text-black">
               Start Here
             </Link>
@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3 lg:ml-8 xl:ml-12">
+        <div className="flex shrink-0 items-center gap-2 xl:ml-4">
           <Link
             to="/my-trips"
             aria-label="Open saved trips"
