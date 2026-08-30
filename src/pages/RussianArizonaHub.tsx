@@ -63,6 +63,12 @@ const examplePrompts = [
 
 const destinations = [
   {
+    name: 'Папаго-парк',
+    description: 'Hole-in-the-Rock, короткая прогулка, жара, парковка, туалеты и семейный план рядом с Финиксом.',
+    to: '/ru/arizona/papago-park-with-kids',
+    icon: Sun,
+  },
+  {
     name: 'Флагстафф',
     description: 'Сосновый лес, более прохладная погода, обсерватория и удобный летний отдых.',
     to: '/arizona/flagstaff',

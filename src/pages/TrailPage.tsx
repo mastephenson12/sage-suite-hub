@@ -94,6 +94,7 @@ const TrailPage: React.FC = () => {
     const alternates = [
       ['en', 'https://sage.healthandtravels.com/trail-guides/papago-park'],
       ['es', 'https://sage.healthandtravels.com/es/arizona/papago-park-con-ninos'],
+      ['ru', 'https://sage.healthandtravels.com/ru/arizona/papago-park-with-kids'],
       ['x-default', 'https://sage.healthandtravels.com/trail-guides/papago-park'],
     ];
 

@@ -73,6 +73,7 @@ import RussianDayTripsFromPhoenix from './pages/RussianDayTripsFromPhoenix';
 import RussianFirstArizonaTripGuide from './pages/RussianFirstArizonaTripGuide';
 import RussianSedonaWithKids from './pages/RussianSedonaWithKids';
 import RussianGrandCanyonWithKids from './pages/RussianGrandCanyonWithKids';
+import RussianPapagoParkWithKids from './pages/RussianPapagoParkWithKids';
 import GermanDayTripsFromPhoenix from './pages/GermanDayTripsFromPhoenix';
 import GermanGrandCanyonWithKids from './pages/GermanGrandCanyonWithKids';
 import GermanSedonaWithKids from './pages/GermanSedonaWithKids';
@@ -219,6 +220,7 @@ function AppContent() {
           <Route path="/ru/arizona/day-trips-from-phoenix" element={<RussianDayTripsFromPhoenix />} />
           <Route path="/ru/arizona/sedona-with-kids" element={<RussianSedonaWithKids />} />
           <Route path="/ru/arizona/grand-canyon-with-kids" element={<RussianGrandCanyonWithKids />} />
+          <Route path="/ru/arizona/papago-park-with-kids" element={<RussianPapagoParkWithKids />} />
           <Route path="/de/arizona/tagesausfluege-ab-phoenix" element={<GermanDayTripsFromPhoenix />} />
           <Route path="/de/arizona/grand-canyon-mit-kindern" element={<GermanGrandCanyonWithKids />} />
           <Route path="/de/arizona/sedona-mit-kindern" element={<GermanSedonaWithKids />} />
