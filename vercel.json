@@ -3,7 +3,11 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/((?!api/|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|icon-192\\.png|icon-512\\.png|manifest\\.webmanifest|service-worker\\.js|vite\\.svg|assets/|arizona(?:/.*)?$|de/arizona/flagstaff-mit-kindern(?:/)?$).*)",
+      "source": "/de/arizona/flagstaff-mit-kindern",
+      "destination": "/de/arizona/flagstaff-mit-kindern/index.html"
+    },
+    {
+      "source": "/((?!api/|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|icon-192\\.png|icon-512\\.png|manifest\\.webmanifest|service-worker\\.js|vite\\.svg|assets/|arizona(?:/.*)?$).*)",
       "destination": "/index.html"
     }
   ],
