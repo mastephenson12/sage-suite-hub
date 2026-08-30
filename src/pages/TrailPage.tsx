@@ -88,6 +88,29 @@ const TrailPage: React.FC = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
+  useEffect(() => {
+    if (id !== 'papago-park') return;
+
+    const alternates = [
+      ['en', 'https://sage.healthandtravels.com/trail-guides/papago-park'],
+      ['es', 'https://sage.healthandtravels.com/es/arizona/papago-park-con-ninos'],
+      ['x-default', 'https://sage.healthandtravels.com/trail-guides/papago-park'],
+    ];
+
+    alternates.forEach(([hreflang, href]) => {
+      let link = document.querySelector<HTMLLinkElement>(
+        `link[rel="alternate"][hreflang="${hreflang}"]`
+      );
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'alternate';
+        link.hreflang = hreflang;
+        document.head.appendChild(link);
+      }
+      link.href = href;
+    });
+  }, [id]);
+
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
