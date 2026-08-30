@@ -59,6 +59,14 @@ function setAlternateLink(hreflang: string, href: string) {
 
 const featuredSpanishGuides = [
   {
+    title: 'Papago Park con niños',
+    description:
+      'Hole-in-the-Rock, calor, estacionamiento, baños, Phoenix Zoo y tres formas de armar una mañana familiar sencilla.',
+    to: '/es/arizona/papago-park-con-ninos',
+    label: 'Phoenix',
+    icon: Sun,
+  },
+  {
     title: 'Flagstaff con niños',
     description:
       'Bosque, Buffalo Park, Lowell Observatory, altura, monzón, nieve y planes familiares realistas para un día o fin de semana.',

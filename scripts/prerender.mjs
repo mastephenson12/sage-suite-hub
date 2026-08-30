@@ -11,6 +11,7 @@ const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
 const spanishWeekendTripsPath = 'es/arizona/escapadas-fin-de-semana-con-ninos';
 const spanishSedonaPath = 'es/arizona/sedona-con-ninos';
 const spanishFlagstaffPath = 'es/arizona/flagstaff-con-ninos';
+const spanishPapagoPath = 'es/arizona/papago-park-con-ninos';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const russianSedonaPath = 'ru/arizona/sedona-with-kids';
@@ -191,6 +192,24 @@ const spanishFlagstaffFaqs = [
     question: '¿Se puede visitar Flagstaff en un solo día desde Phoenix?',
     answer:
       'Sí, pero es un día largo. Escojan una sola actividad principal y salgan temprano. Dormir una noche permite combinar bosque y Lowell Observatory sin manejar cansados.',
+  },
+];
+
+const spanishPapagoFaqs = [
+  {
+    question: '¿Papago Park es una buena salida con niños?',
+    answer:
+      'Sí, cuando la familia lo trata como una visita corta y expuesta al desierto. Hole-in-the-Rock ofrece una vista rápida, pero requiere supervisión cercana por la roca irregular, las zonas expuestas y la poca sombra.',
+  },
+  {
+    question: '¿Cuál es la mejor hora para ir?',
+    answer:
+      'La mañana temprano suele ofrecer temperaturas más cómodas y una llegada más tranquila. Revisen el pronóstico por hora y los avisos actuales del parque antes de salir.',
+  },
+  {
+    question: '¿Se puede visitar Phoenix Zoo el mismo día?',
+    answer:
+      'Sí, pero es mejor que Hole-in-the-Rock o Phoenix Zoo sea la actividad principal. Dejen la segunda parada como opcional según el clima y la energía familiar.',
   },
 ];
 
@@ -640,6 +659,23 @@ const spanishFlagstaffHtml = addLanguageAlternates(
   ]
 );
 await writeRoute(spanishFlagstaffPath, spanishFlagstaffHtml);
+
+const spanishPapagoHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Papago Park con niños | Plan familiar en Phoenix | Sage',
+    description:
+      'Planea Papago Park con niños en español: Hole-in-the-Rock, calor, estacionamiento, baños, Phoenix Zoo, supervisión y un itinerario familiar sencillo.',
+    url: `${siteUrl}/${spanishPapagoPath}`,
+    faqs: spanishPapagoFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishPapagoPath}` },
+    { hreflang: 'en', href: `${siteUrl}/trail-guides/papago-park` },
+    { hreflang: 'x-default', href: `${siteUrl}/trail-guides/papago-park` },
+  ]
+);
+await writeRoute(spanishPapagoPath, spanishPapagoHtml);
 
 const russianArizonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {

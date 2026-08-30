@@ -18,6 +18,7 @@ const staticRoutes = [
   { path: '/es/arizona/sedona-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/flagstaff-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/gran-canon-con-ninos', changefreq: 'weekly', priority: '0.95' },
+  { path: '/es/arizona/papago-park-con-ninos', changefreq: 'monthly', priority: '0.9' },
   { path: '/es/arizona/woods-canyon-lake-con-ninos', changefreq: 'monthly', priority: '0.9' },
   { path: '/es/arizona/caminatas-faciles-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/ru', changefreq: 'weekly', priority: '0.8' },
