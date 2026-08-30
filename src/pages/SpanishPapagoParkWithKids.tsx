@@ -5,6 +5,7 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const spanishUrl = 'https://sage.healthandtravels.com/es/arizona/papago-park-con-ninos';
 const englishUrl = 'https://sage.healthandtravels.com/trail-guides/papago-park';
+const russianUrl = 'https://sage.healthandtravels.com/ru/arizona/papago-park-with-kids';
 
 const faqs = [
   { question: '¿Papago Park es una buena salida con niños?', answer: 'Sí, cuando la familia lo trata como una visita corta y expuesta al desierto. Hole-in-the-Rock ofrece una vista rápida, pero requiere supervisión cercana por la roca irregular, las zonas expuestas y la poca sombra.' },
@@ -45,6 +46,7 @@ export default function SpanishPapagoParkWithKids() {
     document.documentElement.lang = 'es';
     setAlternateLink('es', spanishUrl);
     setAlternateLink('en', englishUrl);
+    setAlternateLink('ru', russianUrl);
     setAlternateLink('x-default', englishUrl);
     return () => { document.documentElement.lang = previousLang || 'en'; };
   }, []);

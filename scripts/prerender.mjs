@@ -12,6 +12,7 @@ const spanishWeekendTripsPath = 'es/arizona/escapadas-fin-de-semana-con-ninos';
 const spanishSedonaPath = 'es/arizona/sedona-con-ninos';
 const spanishFlagstaffPath = 'es/arizona/flagstaff-con-ninos';
 const spanishPapagoPath = 'es/arizona/papago-park-con-ninos';
+const russianPapagoPath = 'ru/arizona/papago-park-with-kids';
 const russianArizonaPath = 'ru';
 const russianPlanBySituationPath = 'ru/arizona/plan-by-situation';
 const russianSedonaPath = 'ru/arizona/sedona-with-kids';
@@ -210,6 +211,24 @@ const spanishPapagoFaqs = [
     question: '¿Se puede visitar Phoenix Zoo el mismo día?',
     answer:
       'Sí, pero es mejor que Hole-in-the-Rock o Phoenix Zoo sea la actividad principal. Dejen la segunda parada como opcional según el clima y la energía familiar.',
+  },
+];
+
+const russianPapagoFaqs = [
+  {
+    question: 'Подходит ли Папаго-парк для прогулки с детьми?',
+    answer:
+      'Да, если считать его короткой открытой прогулкой по пустыне. Hole-in-the-Rock быстро даёт красивый вид, но неровная скала, открытые участки и отсутствие тени требуют постоянного контроля взрослых.',
+  },
+  {
+    question: 'Когда лучше приезжать?',
+    answer:
+      'Раннее утро обычно прохладнее и спокойнее. Перед выездом проверьте почасовой прогноз и актуальные сообщения парка.',
+  },
+  {
+    question: 'Можно ли в тот же день посетить Phoenix Zoo?',
+    answer:
+      'Да, но лучше выбрать главным занятием Hole-in-the-Rock или Phoenix Zoo. Вторую остановку оставьте необязательной и решайте после отдыха, воды и оценки семейных сил.',
   },
 ];
 
@@ -671,11 +690,30 @@ const spanishPapagoHtml = addLanguageAlternates(
   'es',
   [
     { hreflang: 'es', href: `${siteUrl}/${spanishPapagoPath}` },
+    { hreflang: 'ru', href: `${siteUrl}/${russianPapagoPath}` },
     { hreflang: 'en', href: `${siteUrl}/trail-guides/papago-park` },
     { hreflang: 'x-default', href: `${siteUrl}/trail-guides/papago-park` },
   ]
 );
 await writeRoute(spanishPapagoPath, spanishPapagoHtml);
+
+const russianPapagoHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Папаго-парк с детьми | Семейный план в Финиксе | Sage',
+    description:
+      'Русский план Папаго-парка с детьми: Hole-in-the-Rock, жара, парковка, туалеты, Phoenix Zoo, контроль детей и простой семейный маршрут.',
+    url: `${siteUrl}/${russianPapagoPath}`,
+    faqs: russianPapagoFaqs,
+  }),
+  'ru',
+  [
+    { hreflang: 'ru', href: `${siteUrl}/${russianPapagoPath}` },
+    { hreflang: 'es', href: `${siteUrl}/${spanishPapagoPath}` },
+    { hreflang: 'en', href: `${siteUrl}/trail-guides/papago-park` },
+    { hreflang: 'x-default', href: `${siteUrl}/trail-guides/papago-park` },
+  ]
+);
+await writeRoute(russianPapagoPath, russianPapagoHtml);
 
 const russianArizonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {
