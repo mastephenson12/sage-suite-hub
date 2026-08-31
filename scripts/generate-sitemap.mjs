@@ -44,6 +44,7 @@ const staticRoutes = [
   { path: '/arizona/day-trips-from-phoenix', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/flagstaff-with-kids', changefreq: 'weekly', priority: '0.95' },
   { path: '/de/arizona/flagstaff-mit-kindern', changefreq: 'weekly', priority: '0.95' },
+  { path: '/de/arizona/prescott-mit-kindern', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/payson-rim-country-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/woods-canyon-lake-family-adventure', changefreq: 'monthly', priority: '0.9' },
   { path: '/arizona/weekend-trips', changefreq: 'weekly', priority: '0.9' },
