@@ -417,6 +417,24 @@ const safetyFaqs = [
   },
 ];
 
+const gilaBendFaqs = [
+  {
+    question: 'Is Gila Bend good for a family weekend?',
+    answer:
+      'Gila Bend works well as a simple cooler-season road trip built around Painted Rock Petroglyph Site, desert scenery, and relaxed family time.',
+  },
+  {
+    question: 'When should families visit Gila Bend?',
+    answer:
+      'Plan for comfortable cooler-season weather and check the exact forecast. Postpone exposed desert activities during dangerous heat, flooding, severe storms, or poor air quality.',
+  },
+  {
+    question: 'Is Painted Rock Petroglyph Site good for children?',
+    answer:
+      'Yes. The Bureau of Land Management highlights interpretive trails and panels for families. Children should stay on established paths and never touch, trace, climb on, or mark rock art.',
+  },
+];
+
 const spanishPhoenixHeatFaqs = [
   {
     question: 'Que hacer en Phoenix con ninos cuando hace demasiado calor?',
@@ -860,6 +878,15 @@ const safetyHtml = applySeo(baseHtml, {
   faqs: safetyFaqs,
 });
 await writeRoute('arizona/desert-hiking-safety', safetyHtml);
+
+const gilaBendHtml = applySeo(baseHtml, {
+  title: 'Gila Bend With Kids | Family Weekend Planner | Sage',
+  description:
+    'Plan Gila Bend with kids: Painted Rock Petroglyph Site, cooler-season timing, respectful desert exploration, realistic family pacing, and a ready-made trip plan.',
+  url: `${siteUrl}/arizona/gila-bend-with-kids`,
+  faqs: gilaBendFaqs,
+});
+await writeRoute('arizona/gila-bend-with-kids', gilaBendHtml);
 
 const spanishPhoenixHeatHtml = addLanguageAlternates(
   applySeo(baseHtml, {
