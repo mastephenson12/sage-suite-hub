@@ -3,7 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { trackEvent } from '../utils/analytics';
 import CloudinaryImage from './CloudinaryImage';
 
-const arizonaCards = [
+const arizonaCards: Array<{
+  title: string;
+  description: string;
+  image: string;
+  imageAlt?: string;
+  to: string;
+  cta: string;
+}> = [
   {
     title: 'Sedona',
     description: 'Red rock hikes, scenic stops, and family-friendly day plans.',
@@ -24,6 +31,16 @@ const arizonaCards = [
     image: '/images/flagstaff-family-adventure.avif',
     to: '/archive/flagstaff-family-escape',
     cta: 'View Flagstaff Guide',
+  },
+  {
+    title: 'Payson & the Mogollon Rim',
+    description: 'Pine forests, Woods Canyon Lake, Rim views, and cooler family escapes.',
+    image:
+      'https://res.cloudinary.com/o7p0njjh/image/upload/f_auto,q_auto,w_1200,c_fill,g_auto/health-and-travels/woods-canyon-lake-area/mogollon-rim-pine-forest-panorama',
+    imageAlt:
+      'Ponderosa pines framing a wide view across the Mogollon Rim near Payson, Arizona',
+    to: '/arizona/payson-rim-country-with-kids',
+    cta: 'View Payson Guide',
   },
 ];
 
@@ -113,7 +130,7 @@ export const Hero: React.FC = () => {
     <section className="relative overflow-hidden border-b border-zinc-100 bg-white">
       <div className="absolute inset-0 -z-10">
         <CloudinaryImage
-          src="/images/phoenix-sunset-hike.avif"
+          src="https://res.cloudinary.com/o7p0njjh/image/upload/f_auto,q_auto,w_1920,c_fill,g_auto/health-and-travels/woods-canyon-lake-area/mogollon-rim-vista-pine-framed-overlook"
           alt=""
           aria-hidden="true"
           className="h-full w-full object-cover opacity-15"
@@ -308,7 +325,7 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {arizonaCards.map((card) => (
               <Link
                 key={card.title}
@@ -325,7 +342,7 @@ export const Hero: React.FC = () => {
                 <div className="relative h-[320px] overflow-hidden">
                   <CloudinaryImage
                     src={card.image}
-                    alt={`${card.title} Arizona family adventure`}
+                    alt={card.imageAlt || `${card.title} Arizona family adventure`}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(min-width: 768px) 33vw, 100vw"
                     widthHint={960}
