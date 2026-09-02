@@ -26,6 +26,7 @@ import BrandNetworkBar from './components/BrandNetworkBar';
 
 import Archive from './pages/Archive';
 import AdventureChooser from './pages/AdventureChooser';
+import PlanArizonaAdventure from './pages/PlanArizonaAdventure';
 import Explore from './pages/Explore';
 import TrailGuides from './pages/TrailGuides';
 import About from './pages/About';
@@ -191,6 +192,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/start-here" element={<AdventureChooser />} />
+          <Route path="/plan" element={<PlanArizonaAdventure />} />
           <Route path="/trip-builder" element={<TripBuilderPage />} />
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/my-trips/:tripId" element={<MyTrips />} />
