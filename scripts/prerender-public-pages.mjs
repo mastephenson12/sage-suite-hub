@@ -166,6 +166,16 @@ const publicPages = [
     ],
   },
   {
+    routePath: 'arizona/flash-flood-go-no-go',
+    title: 'Arizona Flash-Flood Go/No-Go Guide | Never Cross Moving Water | Sage',
+    description: 'Use this Arizona flash-flood decision guide before entering washes, canyons, creek crossings, or flooded roads. Never walk or drive through moving water.',
+    breadcrumbs: [
+      { name: 'Home', url: `${siteUrl}/` },
+      { name: 'Arizona', url: `${siteUrl}/arizona` },
+      { name: 'Flash-Flood Go/No-Go Guide', url: `${siteUrl}/arizona/flash-flood-go-no-go` },
+    ],
+  },
+  {
     routePath: 'arizona/cool-summer-trips-with-kids',
     title: 'Cool Arizona Summer Trips With Kids | Sage',
     description: 'Plan cooler Arizona summer trips with kids using higher elevation, shade, water, early starts, family-friendly stops, food, lodging, and realistic drive times.',
