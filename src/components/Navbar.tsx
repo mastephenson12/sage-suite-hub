@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
             </Link>
 
             <Link
-              to="/arizona/plan-by-situation"
+              to="/plan"
               className="transition-colors hover:text-black"
             >
               Plan
@@ -82,10 +82,10 @@ const Navbar: React.FC = () => {
           </Link>
 
           <Link
-            to="/trip-builder"
+            to="/plan"
             className="hidden rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-emerald-800 transition-colors hover:bg-emerald-100 sm:block"
           >
-            Build My Trip
+            Plan My Adventure
           </Link>
 
           <a
