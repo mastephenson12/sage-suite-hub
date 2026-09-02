@@ -5,6 +5,7 @@ const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
 const startHerePath = 'start-here';
+const plannerPath = 'plan';
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
@@ -72,6 +73,24 @@ const startHereFaqs = [
     question: 'What is the fastest way to use Sage?',
     answer:
       'Use the Start Here chooser, pick the situation that fits your day, and then open the suggested guide or pre-filled trip builder path.',
+  },
+];
+
+const plannerFaqs = [
+  {
+    question: 'How does Sage choose my Arizona adventure matches?',
+    answer:
+      'Sage compares your starting point, group, available time, preferred activity, practical priority, current season, drive time, shade, bathrooms, difficulty, nearby food, and backup-plan quality.',
+  },
+  {
+    question: 'Do I need an account to use the planner?',
+    answer:
+      'No. You can get three recommendations and continue into the detailed Sage trip builder without creating an account.',
+  },
+  {
+    question: 'Should I verify conditions before leaving?',
+    answer:
+      'Yes. Weather, traffic, closures, wildfire restrictions, road access, fees, and facilities can change, so always verify current conditions with the managing agency.',
   },
 ];
 
@@ -584,6 +603,15 @@ const startHereHtml = applySeo(baseHtml, {
   faqs: startHereFaqs,
 });
 await writeRoute(startHerePath, startHereHtml);
+
+const plannerHtml = applySeo(baseHtml, {
+  title: 'Plan My Arizona Adventure | Sage',
+  description:
+    'Answer five quick questions and get three Arizona adventure recommendations matched to your starting point, group, available time, interests, and practical needs.',
+  url: `${siteUrl}/${plannerPath}`,
+  faqs: plannerFaqs,
+});
+await writeRoute(plannerPath, plannerHtml);
 
 const exploreHtml = applySeo(baseHtml, {
   title: 'Explore Arizona Family Travel Guides | Sage Directory',
