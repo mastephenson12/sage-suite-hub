@@ -6,6 +6,7 @@ const today = new Date().toISOString().slice(0, 10);
 const staticRoutes = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
   { path: '/start-here', changefreq: 'weekly', priority: '0.95' },
+  { path: '/plan', changefreq: 'weekly', priority: '1.0' },
   { path: '/explore', changefreq: 'weekly', priority: '0.9' },
   { path: '/trip-builder', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona', changefreq: 'weekly', priority: '0.9' },
