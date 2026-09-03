@@ -69,6 +69,7 @@ import SpanishSedonaWithKids from './pages/SpanishSedonaWithKids';
 import SpanishFlagstaffWithKids from './pages/SpanishFlagstaffWithKids';
 import SpanishGrandCanyonWithKids from './pages/SpanishGrandCanyonWithKids';
 import SpanishPapagoParkWithKids from './pages/SpanishPapagoParkWithKids';
+import SpanishTontoNaturalBridgeWithKids from './pages/SpanishTontoNaturalBridgeWithKids';
 import RussianArizonaHub from './pages/RussianArizonaHub';
 import RussianPlanBySituation from './pages/RussianPlanBySituation';
 import RussianCoolArizonaSummerTrips from './pages/RussianCoolArizonaSummerTrips';
@@ -217,6 +218,7 @@ function AppContent() {
           <Route path="/es/arizona/flagstaff-con-ninos" element={<SpanishFlagstaffWithKids />} />
           <Route path="/es/arizona/gran-canon-con-ninos" element={<SpanishGrandCanyonWithKids />} />
           <Route path="/es/arizona/papago-park-con-ninos" element={<SpanishPapagoParkWithKids />} />
+          <Route path="/es/arizona/tonto-natural-bridge-con-ninos" element={<SpanishTontoNaturalBridgeWithKids />} />
           <Route path="/ru" element={<RussianArizonaHub />} />
           <Route path="/ru/arizona/first-trip-with-kids" element={<RussianFirstArizonaTripGuide />} />
           <Route path="/ru/arizona/plan-by-situation" element={<RussianPlanBySituation />} />
