@@ -1,0 +1,47 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Clock, Compass, Footprints, MapPin, ShieldCheck, Users } from 'lucide-react';
+import SEOJsonLd from '../components/SEOJsonLd';
+import SharePlanPanel from '../components/SharePlanPanel';
+
+const faqs = [
+  { question: 'Is Tonto Natural Bridge good for kids?', answer: 'Yes, when the plan matches each child’s ability. Viewpoints, picnic areas, and the lodge offer a worthwhile visit even when the park’s steep, strenuous trails are not a good fit.' },
+  { question: 'How much time should a family allow?', answer: 'A relaxed half day is a good starting point for overlooks, the historic lodge, a picnic, and one carefully chosen trail.' },
+  { question: 'Can dogs use the trails?', answer: 'No. Arizona State Parks says dogs are not allowed on the park trails.' },
+];
+
+const modes = [
+  { title: 'Overlooks and picnic', bestFor: 'Toddlers, mixed mobility, easy days', plan: 'Make the viewpoints, lodge, lawn, and picnic the whole win. No canyon descent is required.', to: '/trip-builder?plan=ready&location=tonto-natural-bridge&kids=yes&group=family&activity=scenic&length=half-day&season=fall&ages=mixed&shade=true&bathrooms=true&stroller=true&drive=120' },
+  { title: 'One-trail family day', bestFor: 'Sure-footed school-age kids', plan: 'Start above, assess conditions, then choose one open trail that matches the slowest person.', to: '/trip-builder?plan=ready&location=tonto-natural-bridge&kids=yes&group=family&activity=hike&length=half-day&season=fall&ages=older-kids&shade=true&bathrooms=true&stroller=false&drive=120' },
+  { title: 'Rim Country weekend', bestFor: 'Families who want a slower getaway', plan: 'Pair the bridge with a Payson overnight and a separate, lighter Rim Country stop the next day.', to: '/trip-builder?plan=ready&location=payson&kids=yes&group=family&activity=explore&length=weekend&season=fall&ages=mixed&shade=true&bathrooms=true&stroller=false&drive=180' },
+];
+
+const rules = [
+  'Treat every trail as steep and strenuous, regardless of its short mileage.',
+  'Check trail status, weather, hours, and fees on the day of the trip.',
+  'Keep children close near stairs, drop-offs, creek edges, and wet rock.',
+  'Leave the creek bed when storms threaten; never push through changing weather.',
+  'Build the day around the slowest walker and set a turnaround rule.',
+  'Remember that dogs are not allowed on the park trails.',
+];
+
+const planText = ['Tonto Natural Bridge family plan:','','Start with overlooks and the historic lodge. Assess weather, footing, and everyone’s energy. Choose no more than one open trail, then finish with a picnic or an easy Payson meal.','','Rule: the overlooks count as success; descending is optional.','Planner: https://sage.healthandtravels.com/arizona/tonto-natural-bridge-with-kids'].join('\n');
+const voteText = ['Which Tonto Natural Bridge plan fits us?','','1. Overlooks, lodge, and picnic','2. Overlooks plus one suitable trail','3. Rim Country overnight','','Planner: https://sage.healthandtravels.com/arizona/tonto-natural-bridge-with-kids'].join('\n');
+
+export default function TontoNaturalBridgeWithKids() {
+  return <main className="min-h-screen bg-white text-zinc-950">
+    <SEOJsonLd title="Tonto Natural Bridge With Kids | Family Day Trip Planner | Sage" description="Plan Tonto Natural Bridge with kids using honest trail choices, current park checks, family pacing, picnic options, and a ready-made Rim Country day plan." url="https://sage.healthandtravels.com/arizona/tonto-natural-bridge-with-kids" faqs={faqs} />
+    <section className="bg-emerald-950 px-6 py-16 text-white md:py-24"><div className="mx-auto max-w-6xl">
+      <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-emerald-300">Rim Country Family Planner</p>
+      <h1 className="max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">Tonto Natural Bridge with kids</h1>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-emerald-50/80 md:text-xl">Build the day around the view first. Descend only when the trail, weather, footing, and your real family energy all say yes.</p>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Link to={modes[0].to} className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-300 px-6 py-4 text-sm font-black uppercase tracking-widest text-emerald-950"><Compass className="h-4 w-4" /> Build My Plan</Link><a href="https://healthandtravels.com/tonto-natural-bridge-with-kids?utm_source=sage&amp;utm_medium=planner&amp;utm_campaign=tonto_bridge" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-6 py-4 text-sm font-black uppercase tracking-widest">Read the Full Guide <ArrowRight className="h-4 w-4" /></a></div>
+    </div></section>
+    <section className="px-6 py-14"><div className="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">{[[Clock,'Trip shape','Relaxed half day'],[Footprints,'Trail rule','One or none'],[Users,'Best for','Ability-matched groups'],[ShieldCheck,'Guaranteed win','Overlooks and lodge']].map(([Icon,label,value])=>{const StatIcon=Icon as React.ComponentType<{className?:string}>;return <div key={label as string} className="rounded-2xl border border-zinc-200 p-5"><StatIcon className="h-5 w-5 text-emerald-700"/><p className="mt-4 text-[10px] font-black uppercase tracking-widest text-zinc-400">{label as string}</p><p className="mt-1 font-black">{value as string}</p></div>})}</div></section>
+    <section className="bg-zinc-50 px-6 py-16"><div className="mx-auto max-w-6xl"><p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-700">Choose Your Version</p><h2 className="mt-3 text-3xl font-black uppercase tracking-tight md:text-4xl">Match the park to your family today</h2><div className="mt-8 grid gap-6 lg:grid-cols-3">{modes.map(mode=><article key={mode.title} className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"><h3 className="text-xl font-black">{mode.title}</h3><p className="mt-2 text-xs font-black uppercase tracking-widest text-emerald-700">Best for: {mode.bestFor}</p><p className="mt-4 flex-1 leading-7 text-zinc-600">{mode.plan}</p><Link to={mode.to} className="mt-6 inline-flex items-center gap-2 font-black text-emerald-800">Use this plan <ArrowRight className="h-4 w-4"/></Link></article>)}</div></div></section>
+    <section className="px-6 py-16"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_0.8fr]"><div><p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-700">The One Guiding Rule</p><h2 className="mt-3 text-3xl font-black uppercase tracking-tight">The overlooks count as success</h2><p className="mt-5 leading-8 text-zinc-600">Arizona State Parks describes four short but steep and strenuous trails. Mileage alone does not measure the challenge. Start above the bridge, ask staff what is open, and let the slowest walker—not the itinerary—decide whether the family descends.</p><div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-6"><div className="flex items-center gap-3"><ShieldCheck className="h-6 w-6 text-emerald-800"/><h3 className="text-lg font-black">The clean turnaround</h3></div><p className="mt-3 leading-7 text-zinc-700">Turn around for fear, fatigue, slick footing, storm clouds, a closure, or any loss of adult confidence. A picnic and the views are a complete family adventure.</p></div></div><aside className="rounded-2xl bg-zinc-950 p-7 text-white"><h2 className="text-2xl font-black">Six rules for the day</h2><ul className="mt-5 space-y-4">{rules.map(rule=><li key={rule} className="flex gap-3 text-sm leading-6 text-zinc-300"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300"/>{rule}</li>)}</ul></aside></div></section>
+    <section className="bg-emerald-950 px-6 py-16 text-white"><div className="mx-auto max-w-4xl text-center"><MapPin className="mx-auto h-8 w-8 text-emerald-300"/><h2 className="mt-4 text-3xl font-black uppercase tracking-tight">Need the current details?</h2><p className="mx-auto mt-4 max-w-2xl leading-7 text-emerald-50/75">The companion guide includes the latest verified hours and fees, official park links, trail cautions, FAQs, and related Payson planning.</p><a href="https://healthandtravels.com/tonto-natural-bridge-with-kids?utm_source=sage&amp;utm_medium=planner&amp;utm_campaign=tonto_bridge" className="mt-7 inline-flex items-center gap-2 rounded-full bg-emerald-300 px-6 py-4 text-sm font-black uppercase tracking-widest text-emerald-950">Open the Full Guide <ArrowRight className="h-4 w-4"/></a></div></section>
+    <section className="px-6 py-16"><div className="mx-auto max-w-5xl"><SharePlanPanel title="Share the Tonto Natural Bridge plan" description="Copy the simple itinerary, send three family options, or share the planner link." quickPlanText={planText} voteText={voteText} eventContext="tonto_natural_bridge_with_kids" /></div></section>
+    <section className="bg-zinc-50 px-6 py-16"><div className="mx-auto max-w-4xl"><h2 className="text-3xl font-black uppercase tracking-tight">Frequently asked questions</h2><div className="mt-8 space-y-5">{faqs.map(faq=><article key={faq.question} className="rounded-2xl border border-zinc-200 bg-white p-6"><h3 className="font-black">{faq.question}</h3><p className="mt-3 leading-7 text-zinc-600">{faq.answer}</p></article>)}</div></div></section>
+  </main>;
+}

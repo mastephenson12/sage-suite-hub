@@ -7,6 +7,11 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const hubLinks = [
   {
+    title: 'Tonto Natural Bridge With Kids',
+    description: 'Choose an overlook-only, one-trail, or Rim Country weekend plan based on mobility, weather, and real family energy.',
+    to: '/arizona/tonto-natural-bridge-with-kids',
+  },
+  {
     title: 'Arizona Adventure Finder',
     description: 'Choose the right Arizona family trip by drive time, heat, kid age, and group style.',
     to: '/arizona/adventure-finder',
