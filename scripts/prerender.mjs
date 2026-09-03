@@ -458,6 +458,11 @@ const tontoNaturalBridgeFaqs = [
   { question: 'How much time should a family allow?', answer: 'A relaxed half day is a useful starting point for overlooks, the lodge, a picnic, and one carefully chosen trail.' },
   { question: 'Can dogs use the trails?', answer: 'No. Arizona State Parks says dogs are not allowed on the park trails.' },
 ];
+const spanishTontoNaturalBridgeFaqs = [
+  { question: '¿Tonto Natural Bridge es apropiado para niños?', answer: 'Sí, cuando el plan se adapta a la capacidad de cada niño. Los miradores, el picnic y el lodge permiten una visita completa aunque los senderos empinados no sean apropiados.' },
+  { question: '¿Cuánto tiempo necesita una familia?', answer: 'Medio día sin prisa suele permitir miradores, lodge, picnic y un solo sendero cuidadosamente elegido.' },
+  { question: '¿Se permiten perros en los senderos?', answer: 'No. Arizona State Parks indica que los perros no están permitidos en los senderos.' },
+];
 
 const spanishPhoenixHeatFaqs = [
   {
@@ -929,6 +934,23 @@ const tontoNaturalBridgeHtml = applySeo(baseHtml, {
   faqs: tontoNaturalBridgeFaqs,
 });
 await writeRoute('arizona/tonto-natural-bridge-with-kids', tontoNaturalBridgeHtml);
+
+const spanishTontoNaturalBridgeHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Tonto Natural Bridge con niños | Plan familiar | Sage',
+    description:
+      'Planea Tonto Natural Bridge con niños: miradores, senderos empinados, clima, movilidad, picnic y tres versiones familiares del día.',
+    url: `${siteUrl}/es/arizona/tonto-natural-bridge-con-ninos`,
+    faqs: spanishTontoNaturalBridgeFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/es/arizona/tonto-natural-bridge-con-ninos` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/tonto-natural-bridge-with-kids` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/tonto-natural-bridge-with-kids` },
+  ]
+);
+await writeRoute('es/arizona/tonto-natural-bridge-con-ninos', spanishTontoNaturalBridgeHtml);
 
 const spanishPhoenixHeatHtml = addLanguageAlternates(
   applySeo(baseHtml, {

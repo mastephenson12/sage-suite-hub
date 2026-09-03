@@ -7,6 +7,11 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const hubLinks = [
   {
+    title: 'Tonto Natural Bridge con niños',
+    description: 'Plan familiar en español con miradores, sendero opcional, picnic, seguridad y ritmo según la capacidad del grupo.',
+    to: '/es/arizona/tonto-natural-bridge-con-ninos',
+  },
+  {
     title: 'Tonto Natural Bridge With Kids',
     description: 'Choose an overlook-only, one-trail, or Rim Country weekend plan based on mobility, weather, and real family energy.',
     to: '/arizona/tonto-natural-bridge-with-kids',
