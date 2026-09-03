@@ -34,6 +34,7 @@ const staticRoutes = [
   { path: '/de/arizona/sedona-mit-kindern', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/cool-summer-trips-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/gila-bend-with-kids', changefreq: 'weekly', priority: '0.9' },
+  { path: '/arizona/tonto-natural-bridge-with-kids', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-frescos-verano-con-ninos', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/caminatas-con-ninos', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/viajes-de-un-dia-desde-phoenix', changefreq: 'weekly', priority: '0.9' },

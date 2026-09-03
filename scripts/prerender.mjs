@@ -453,6 +453,11 @@ const gilaBendFaqs = [
       'Yes. The Bureau of Land Management highlights interpretive trails and panels for families. Children should stay on established paths and never touch, trace, climb on, or mark rock art.',
   },
 ];
+const tontoNaturalBridgeFaqs = [
+  { question: 'Is Tonto Natural Bridge good for kids?', answer: 'Yes, when the plan matches each child’s ability. Viewpoints, picnic areas, and the lodge offer a worthwhile visit even when the steep, strenuous trails are not a good fit.' },
+  { question: 'How much time should a family allow?', answer: 'A relaxed half day is a useful starting point for overlooks, the lodge, a picnic, and one carefully chosen trail.' },
+  { question: 'Can dogs use the trails?', answer: 'No. Arizona State Parks says dogs are not allowed on the park trails.' },
+];
 
 const spanishPhoenixHeatFaqs = [
   {
@@ -915,6 +920,15 @@ const gilaBendHtml = applySeo(baseHtml, {
   faqs: gilaBendFaqs,
 });
 await writeRoute('arizona/gila-bend-with-kids', gilaBendHtml);
+
+const tontoNaturalBridgeHtml = applySeo(baseHtml, {
+  title: 'Tonto Natural Bridge With Kids | Family Day Trip Planner | Sage',
+  description:
+    'Plan Tonto Natural Bridge with kids using honest trail choices, current park checks, family pacing, picnic options, and a ready-made Rim Country day plan.',
+  url: `${siteUrl}/arizona/tonto-natural-bridge-with-kids`,
+  faqs: tontoNaturalBridgeFaqs,
+});
+await writeRoute('arizona/tonto-natural-bridge-with-kids', tontoNaturalBridgeHtml);
 
 const spanishPhoenixHeatHtml = addLanguageAlternates(
   applySeo(baseHtml, {
