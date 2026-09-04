@@ -287,13 +287,19 @@ const TripBuilder: React.FC = () => {
     setSearchParams(shareParams, { replace: true });
 
     // The share/save controls render after the URL switches to plan=ready.
-    // Jump there so mobile users immediately see how to email the itinerary.
-    window.setTimeout(() => {
+    // Use an immediate jump because smooth scrolling across this long page is
+    // unreliable and appears stuck in Android Chrome.
+    const jumpToEmailTripPack = () => {
       document.getElementById('email-trip-pack')?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+        behavior: 'auto',
+        block: 'start',
       });
-    }, 100);
+    };
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(jumpToEmailTripPack);
+    });
+    window.setTimeout(jumpToEmailTripPack, 500);
 
     try {
       const personalizedPlan = await generateSageTripPlan({
