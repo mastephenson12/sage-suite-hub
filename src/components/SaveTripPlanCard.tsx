@@ -266,7 +266,11 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
         </button>
       </div>
 
-      <form onSubmit={handleSavePlan} className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
+      <form
+        id="email-trip-pack"
+        onSubmit={handleSavePlan}
+        className="mt-4 grid scroll-mt-28 gap-3 sm:grid-cols-[1fr_auto]"
+      >
         <input
           type="email"
           value={email}

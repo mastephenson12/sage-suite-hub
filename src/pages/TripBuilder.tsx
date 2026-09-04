@@ -285,7 +285,15 @@ const TripBuilder: React.FC = () => {
     setAiPlan(null);
     setAiPlanStatus('loading');
     setSearchParams(shareParams, { replace: true });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // The share/save controls render after the URL switches to plan=ready.
+    // Jump there so mobile users immediately see how to email the itinerary.
+    window.setTimeout(() => {
+      document.getElementById('email-trip-pack')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }, 100);
 
     try {
       const personalizedPlan = await generateSageTripPlan({
