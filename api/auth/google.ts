@@ -1,22 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { OAuth2Client } from "google-auth-library";
-import crypto from "crypto";
+import {
+  SESSION_COOKIE_NAME,
+  SESSION_MAX_AGE_SECONDS,
+  signSession,
+} from "../_lib/session.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-function base64url(input: string): string {
-  return Buffer.from(input).toString("base64url");
-}
-
-function signSession(payload: Record<string, unknown>, secret: string): string {
-  const encoded = base64url(JSON.stringify(payload));
-  const signature = crypto
-    .createHmac("sha256", secret)
-    .update(encoded)
-    .digest("base64url");
-
-  return `${encoded}.${signature}`;
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
@@ -52,7 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const now = Math.floor(Date.now() / 1000);
-    const expiresAt = now + 60 * 60 * 24 * 30;
+    const expiresAt = now + SESSION_MAX_AGE_SECONDS;
     const session = signSession(
       {
         sub: payload.sub,
@@ -65,7 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     res.setHeader(
       "Set-Cookie",
-      `sage_session=${session}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
+      `${SESSION_COOKIE_NAME}=${session}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_MAX_AGE_SECONDS}`
     );
     res.setHeader("Cache-Control", "no-store");
 
