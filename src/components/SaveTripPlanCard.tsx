@@ -38,10 +38,18 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   packingItems = [],
 }) => {
   const [email, setEmail] = React.useState('');
-  const [saved, setSaved] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const [shared, setShared] = React.useState(false);
   const [savedOffline, setSavedOffline] = React.useState(false);
+  const [emailStatus, setEmailStatus] = React.useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [emailError, setEmailError] = React.useState('');
+
+  const itineraryBody = itinerary.length
+    ? ['', 'Your itinerary:', ...itinerary.map((item) => `- ${item.title}: ${item.description}`)]
+    : [];
+  const packingBody = packingItems.length
+    ? ['', 'Packing checklist:', ...packingItems.map((item) => `- ${item.label}: ${item.helper}`)]
+    : [];
 
   const planBody = [
     `${destination} family adventure plan`,
@@ -58,30 +66,53 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     '- Bring extra water and snacks.',
     '- Screenshot the plan before leaving.',
     '- Keep a backup stop ready if parking, heat, or kid energy gets weird.',
+    ...itineraryBody,
+    ...packingBody,
     '',
     `Open the plan again: ${tripUrl}`,
     '',
     'More Arizona family trip ideas: https://healthandtravels.com/',
   ].join('\n');
 
-  const handleSavePlan = (event: React.FormEvent) => {
+  const handleSavePlan = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const cleanEmail = email.trim();
 
     if (!cleanEmail) return;
 
-    trackEvent('health_travels_ideas_click', {
-      label: 'Send Me This Plan',
-      destination,
-      location: 'save_trip_plan_card',
-    });
+    setEmailStatus('sending');
+    setEmailError('');
 
-    const subject = encodeURIComponent(`Your ${destination} family trip plan`);
-    const body = encodeURIComponent(planBody);
+    try {
+      const response = await fetch('/api/email-trip-pack', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: cleanEmail,
+          destination,
+          subject: `Your ${destination} family trip plan`,
+          planText: planBody,
+          tripUrl,
+        }),
+      });
 
-    window.location.href = `mailto:${cleanEmail}?subject=${subject}&body=${body}`;
-    setSaved(true);
+      const result = (await response.json().catch(() => ({}))) as { error?: string };
+      if (!response.ok) throw new Error(result.error || 'We could not email the trip pack.');
+
+      setEmailStatus('sent');
+      trackEvent('trip_pack_emailed', {
+        destination,
+        location: 'save_trip_plan_card',
+      });
+    } catch (error) {
+      setEmailStatus('error');
+      setEmailError(error instanceof Error ? error.message : 'We could not email the trip pack.');
+      trackEvent('trip_pack_email_failed', {
+        destination,
+        location: 'save_trip_plan_card',
+      });
+    }
   };
 
   const handleCopyPass = async () => {
@@ -249,14 +280,25 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
           type="submit"
           className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-800"
         >
-          {saved ? <CheckCircle2 className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
-          {saved ? 'Ready to Send' : 'Email It'}
+          {emailStatus === 'sent' ? <CheckCircle2 className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
+          {emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Trip Pack Sent' : 'Email My Trip Pack'}
         </button>
       </form>
 
+      {emailStatus === 'sent' && (
+        <p className="mt-3 rounded-2xl bg-white p-3 text-sm font-bold text-emerald-800" role="status">
+          Check your inbox. Your trip pack is ready to take with you.
+        </p>
+      )}
+
+      {emailStatus === 'error' && (
+        <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm font-bold text-red-800" role="alert">
+          {emailError} You can still use Copy Pass or Save Offline above.
+        </p>
+      )}
+
       <p className="mt-3 text-xs leading-relaxed text-emerald-950/70">
-        This uses built-in phone sharing for now. Later, we can add true Apple Wallet
-        and Google Wallet passes after the certificates and Google Wallet issuer setup are ready.
+        We only use this address to deliver this trip pack. Newsletter signup stays separate.
       </p>
     </article>
   );

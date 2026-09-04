@@ -58,7 +58,11 @@ You must provide a Gemini API Key to power the AI features. Create a `.env` file
 
 ```env
 GEMINI_API_KEY=your_google_gemini_api_key_here
+RESEND_API_KEY=your_resend_api_key_here
+TRIP_PACK_FROM_EMAIL=Sage <trips@your-verified-domain.com>
 ```
+
+`RESEND_API_KEY` and `TRIP_PACK_FROM_EMAIL` enable the **Email My Trip Pack** button. The sender must use a domain verified in Resend.
 
 ### 5. Deploy to the Web
 The easiest way to launch is using **Vercel**:

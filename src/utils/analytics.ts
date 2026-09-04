@@ -21,6 +21,10 @@ export type AnalyticsEventName =
   | 'start_here_starter_plan_click'
   | 'adventure_planner_completed'
   | 'adventure_planner_build_trip_click'
+  | 'health_matcher_to_sage'
+  | 'trip_pack_generated'
+  | 'trip_pack_emailed'
+  | 'trip_pack_email_failed'
   | 'unknown_tracked_click';
 
 type AnalyticsPayload = Record<string, string | number | boolean | null | undefined>;
