@@ -217,6 +217,26 @@ const TripBuilderResultEnhancer: React.FC = () => {
   ).length;
   const packingProgress = Math.round((checkedCount / packingItems.length) * 100);
 
+  React.useEffect(() => {
+    if (!isReady) return;
+
+    const eventKey = `sage.trip-pack-generated:${window.location.search}`;
+    if (window.sessionStorage.getItem(eventKey)) return;
+
+    trackEvent('trip_pack_generated', {
+      destination: location,
+      trip_length: tripLength,
+      group: groupLabel,
+      source: searchParams.get('source') || 'sage',
+    });
+
+    if (searchParams.get('source') === 'health-travels-matcher') {
+      trackEvent('health_matcher_to_sage', { destination: location });
+    }
+
+    window.sessionStorage.setItem(eventKey, '1');
+  }, [groupLabel, isReady, location, searchParams, tripLength]);
+
   if (!isReady) return null;
 
   const togglePackingItem = (itemId: string) => {
