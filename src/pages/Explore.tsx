@@ -7,6 +7,11 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const hubLinks = [
   {
+    title: 'Arizona Trail Etiquette Checklist',
+    description: 'Run a 60-second family briefing for trash, dogs, music, passing, graffiti, wildlife, and leaving the trail ready for the next group.',
+    to: '/arizona/trail-etiquette-checklist',
+  },
+  {
     title: 'Tonto Natural Bridge con niños',
     description: 'Plan familiar en español con miradores, sendero opcional, picnic, seguridad y ritmo según la capacidad del grupo.',
     to: '/es/arizona/tonto-natural-bridge-con-ninos',

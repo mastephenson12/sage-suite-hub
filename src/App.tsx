@@ -50,6 +50,7 @@ import ArizonaHikesWithKids from './pages/ArizonaHikesWithKids';
 import EasyArizonaFamilyHikes from './pages/EasyArizonaFamilyHikes';
 import DesertHikingSafety from './pages/DesertHikingSafety';
 import FlashFloodGoNoGo from './pages/FlashFloodGoNoGo';
+import TrailEtiquetteChecklist from './pages/TrailEtiquetteChecklist';
 import PaysonRimCountryWithKids from './pages/PaysonRimCountryWithKids';
 import FlagstaffWithKids from './pages/FlagstaffWithKids';
 import CoolArizonaSummerTripsWithKids from './pages/CoolArizonaSummerTripsWithKids';
@@ -249,6 +250,7 @@ function AppContent() {
           <Route path="/arizona/easy-family-hikes" element={<EasyArizonaFamilyHikes />} />
           <Route path="/arizona/desert-hiking-safety" element={<DesertHikingSafety />} />
           <Route path="/arizona/flash-flood-go-no-go" element={<FlashFloodGoNoGo />} />
+          <Route path="/arizona/trail-etiquette-checklist" element={<TrailEtiquetteChecklist />} />
           <Route path="/arizona/payson-rim-country-with-kids" element={<PaysonRimCountryWithKids />} />
           <Route path="/arizona/flagstaff-with-kids" element={<FlagstaffWithKids />} />
           <Route path="/arizona/cool-summer-trips-with-kids" element={<CoolArizonaSummerTripsWithKids />} />
