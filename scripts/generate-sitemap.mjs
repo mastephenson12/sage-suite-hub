@@ -57,6 +57,7 @@ const staticRoutes = [
   { path: '/arizona/easy-family-hikes', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/desert-hiking-safety', changefreq: 'monthly', priority: '0.9' },
   { path: '/arizona/flash-flood-go-no-go', changefreq: 'monthly', priority: '0.95' },
+  { path: '/arizona/trail-etiquette-checklist', changefreq: 'monthly', priority: '0.9' },
   { path: '/trail-guides', changefreq: 'weekly', priority: '0.8' },
   { path: '/archive', changefreq: 'weekly', priority: '0.8' },
   { path: '/archive/payson-with-kids-woods-canyon-lake-mogollon-rim', changefreq: 'monthly', priority: '0.8' },
