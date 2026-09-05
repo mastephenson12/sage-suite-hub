@@ -291,7 +291,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
 
       {emailStatus === 'sent' && (
         <p className="mt-3 rounded-2xl bg-white p-3 text-sm font-bold text-emerald-800" role="status">
-          Check your inbox. Your trip pack is ready to take with you.
+          Your trip pack is on its way! Check your inbox. If you don’t see it, check Promotions and Spam.
         </p>
       )}
 
