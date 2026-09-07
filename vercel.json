@@ -1,6 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/es/archive/phoenix-things-to-do-with-kids-when-hot",
+      "destination": "/es/archive/phoenix-con-ninos-cuando-hace-calor",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/de/arizona/flagstaff-mit-kindern",
