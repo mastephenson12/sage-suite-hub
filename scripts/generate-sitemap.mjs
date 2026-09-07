@@ -62,7 +62,6 @@ const staticRoutes = [
   { path: '/archive', changefreq: 'weekly', priority: '0.8' },
   { path: '/archive/payson-with-kids-woods-canyon-lake-mogollon-rim', changefreq: 'monthly', priority: '0.8' },
   { path: '/es/archive/phoenix-con-ninos-cuando-hace-calor', changefreq: 'monthly', priority: '0.8' },
-  { path: '/es/archive/phoenix-things-to-do-with-kids-when-hot', changefreq: 'monthly', priority: '0.8' },
   { path: '/community', changefreq: 'monthly', priority: '0.7' },
   { path: '/about', changefreq: 'monthly', priority: '0.6' },
   { path: '/editorial-standards', changefreq: 'monthly', priority: '0.6' },
