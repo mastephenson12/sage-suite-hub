@@ -281,7 +281,6 @@ A short intro to canyon hiking without overcommitting.
 
 ## Related Arizona Guides
 
-- [Best Sedona Jeep Tours](/archive/best-sedona-jeep-tours)
 - [The Sedona Vortex Protocol](/archive/sedona-vortex-protocol)
 - [3-Day Sedona Family Adventure Itinerary](/archive/sedona-family-adventure)
 `,
