@@ -14,6 +14,7 @@ import {
   Users,
 } from 'lucide-react';
 import PopularArizonaGuides from '../components/PopularArizonaGuides';
+import SEOJsonLd from '../components/SEOJsonLd';
 import {
   generateSageTripPlan,
   SageAiTripPlan,
@@ -159,42 +160,11 @@ const TripBuilder: React.FC = () => {
   const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
   const isGeneratedPlan = searchParams.get('plan') === 'ready';
 
-  React.useEffect(() => {
-    const existingRobots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
-    const existingCanonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    const previousRobotsContent = existingRobots?.content;
-    const previousCanonicalHref = existingCanonical?.href;
-    const robots = existingRobots ?? document.createElement('meta');
-    const canonical = existingCanonical ?? document.createElement('link');
-
-    if (!existingRobots) {
-      robots.name = 'robots';
-      document.head.appendChild(robots);
-    }
-
-    if (!existingCanonical) {
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-
-    robots.content = isGeneratedPlan ? 'noindex, follow' : 'index, follow';
-    canonical.href = 'https://sage.healthandtravels.com/trip-builder';
-
-    return () => {
-      if (existingRobots && previousRobotsContent !== undefined) {
-        existingRobots.content = previousRobotsContent;
-      } else {
-        robots.remove();
-      }
-
-      if (existingCanonical && previousCanonicalHref !== undefined) {
-        existingCanonical.href = previousCanonicalHref;
-      } else {
-        canonical.remove();
-      }
-    };
-  }, [isGeneratedPlan]);
-
+  React.useEffect(() => () => {
+    // Do not leave a saved plan's noindex directive on the next route.
+    const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (robots) robots.content = 'index, follow';
+  }, []);
   const plan = buildTripPlan(location, hasKids, activity, length, season);
 
   const familyMatches = getFamilyAdventureMatches({
@@ -334,6 +304,12 @@ const TripBuilder: React.FC = () => {
 
   return (
     <main className="min-h-screen bg-white text-zinc-900">
+      <SEOJsonLd
+        title="Arizona Family Trip Planner: Build Your Itinerary | Sage"
+        description="Build an Arizona family itinerary around your destination, kids’ ages, season, shade and bathrooms. Save, print or email your trip pack with Sage."
+        url="https://sage.healthandtravels.com/trip-builder"
+        robots={isGeneratedPlan ? 'noindex, follow' : 'index, follow'}
+      />
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <div className="mb-10 max-w-3xl">
           <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
@@ -341,14 +317,14 @@ const TripBuilder: React.FC = () => {
           </p>
 
           <h1 className="mb-4 text-4xl font-black tracking-tight md:text-6xl">
-            Build a safer Arizona adventure plan in a few clicks
+            Build your Arizona family trip itinerary
           </h1>
 
           <p className="text-lg leading-relaxed text-zinc-600 md:text-xl">
-            Tell Sage where you want to go, who is coming, and what kind of day
-            you want. You will get a simple starter plan with outdoor flow, food
-            timing, safety notes, and parent-friendly destination matches. Yes,
-            the bar really is “does this help before the kids revolt?”
+            Plan a family trip to Sedona, Flagstaff, Payson or another Arizona destination.
+            Choose your kids’ ages, season, available time, shade and bathroom needs.
+            Sage builds a starter itinerary with activities, food breaks and safety notes
+            that you can save, print or email as a trip pack.
           </p>
         </div>
 

@@ -703,9 +703,9 @@ await writeRoute(spanishHikesWithKidsPath, spanishHikesWithKidsHtml);
 
 const spanishSedonaHtml = addLanguageAlternates(
   applySeo(baseHtml, {
-    title: 'Sedona con niños | Guía familiar de caminatas y shuttle | Sage',
+    title: 'Qué hacer en Sedona con niños: caminatas y planes | Sage',
     description:
-      'Guía en español para visitar Sedona con niños: caminatas familiares, shuttle gratuito, estacionamiento, calor, monzón, pases, seguridad y un plan realista.',
+      'Descubre qué hacer en Sedona con niños: caminatas, vistas de roca roja y un plan familiar con consejos de shuttle, estacionamiento y calor.',
     url: `${siteUrl}/${spanishSedonaPath}`,
     faqs: spanishSedonaFaqs,
   }),
@@ -720,9 +720,9 @@ await writeRoute(spanishSedonaPath, spanishSedonaHtml);
 
 const spanishFlagstaffHtml = addLanguageAlternates(
   applySeo(baseHtml, {
-    title: 'Flagstaff con niños | Guía familiar de bosque y estrellas | Sage',
+    title: 'Qué hacer en Flagstaff con niños: guía familiar | Sage',
     description:
-      'Guía en español para visitar Flagstaff con niños: bosque, Buffalo Park, Lowell Observatory, clima, monzón, nieve, seguridad y planes familiares realistas.',
+      'Descubre qué hacer en Flagstaff con niños: Buffalo Park, Lowell Observatory, paseos por el bosque y un plan familiar con consejos de clima y descanso.',
     url: `${siteUrl}/${spanishFlagstaffPath}`,
     faqs: spanishFlagstaffFaqs,
   }),

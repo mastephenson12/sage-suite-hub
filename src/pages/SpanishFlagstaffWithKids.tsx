@@ -172,8 +172,8 @@ export default function SpanishFlagstaffWithKids() {
   return (
     <main className="min-h-screen bg-white text-zinc-950">
       <SEOJsonLd
-        title="Flagstaff con niños | Guía familiar de bosque y estrellas | Sage"
-        description="Guía en español para visitar Flagstaff con niños: bosque, Buffalo Park, Lowell Observatory, clima, monzón, nieve, seguridad y planes familiares realistas."
+        title="Qué hacer en Flagstaff con niños: guía familiar | Sage"
+        description="Descubre qué hacer en Flagstaff con niños: Buffalo Park, Lowell Observatory, paseos por el bosque y un plan familiar con consejos de clima y descanso."
         url={spanishUrl}
         faqs={spanishFaqs}
         breadcrumbs={[
@@ -207,7 +207,7 @@ export default function SpanishFlagstaffWithKids() {
             Bosque, clima fresco y cielo oscuro
           </p>
           <h1 className="max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">
-            Flagstaff con niños
+            Qué hacer en Flagstaff con niños
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100 md:text-xl">
             Un plan familiar realista para disfrutar pinos, senderos y estrellas sin olvidar
