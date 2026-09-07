@@ -137,6 +137,30 @@ function extractObjects(source, requiredKeys) {
 
 const publicPages = [
   {
+    "routePath": "arizona/first-trip",
+    "language": "en",
+    "title": "First Arizona Trip Guide for Families and Friends | Sage",
+    "description": "Plan a first Arizona trip with kids, friends, or visitors. Compare Phoenix, Sedona, Flagstaff, Grand Canyon, Tucson, Payson, Prescott, and cooler summer routes by season and drive time."
+  },
+  {
+    "routePath": "de/arizona/sedona-mit-kindern",
+    "language": "de",
+    "title": "Sedona mit Kindern | Familienguide für Wanderungen und Shuttle | Sage",
+    "description": "Deutschsprachiger Sedona-Guide für Familien: Wanderungen, Shuttle, Parken, Hitze, Monsun, Sicherheit, Essen und ein realistischer Tagesplan."
+  },
+  {
+    "routePath": "de/arizona/grand-canyon-mit-kindern",
+    "language": "de",
+    "title": "Grand Canyon mit Kindern | Familienplan für den South Rim | Sage",
+    "description": "Deutschsprachiger Familienplan für den Grand Canyon South Rim: Aussichtspunkte, Rim Trail, Shuttle, Essen, Unterkunft und Sicherheit."
+  },
+  {
+    "routePath": "es/arizona/caminatas-faciles-con-ninos",
+    "language": "es",
+    "title": "Caminatas fáciles en Arizona con niños | Sage",
+    "description": "Encuentra caminatas fáciles en Arizona para familias con niños por distancia, temporada, calor, sombra, baños, superficie y facilidad para regresar."
+  },
+  {
     routePath: 'trip-builder',
     title: 'Arizona Family Trip Planner: Build Your Itinerary | Sage',
     description: 'Build an Arizona family itinerary around your destination, kids’ ages, season, shade and bathrooms. Save, print or email your trip pack with Sage.',
