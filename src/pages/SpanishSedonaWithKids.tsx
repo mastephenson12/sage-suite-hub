@@ -176,8 +176,8 @@ export default function SpanishSedonaWithKids() {
   return (
     <main className="min-h-screen bg-white text-zinc-950">
       <SEOJsonLd
-        title="Sedona con niños | Guía familiar de caminatas y shuttle | Sage"
-        description="Guía en español para visitar Sedona con niños: caminatas familiares, shuttle gratuito, estacionamiento, calor, monzón, pases, seguridad y un plan realista."
+        title="Qué hacer en Sedona con niños: caminatas y planes | Sage"
+        description="Descubre qué hacer en Sedona con niños: caminatas, vistas de roca roja y un plan familiar con consejos de shuttle, estacionamiento y calor."
         url={spanishUrl}
         faqs={spanishFaqs}
         breadcrumbs={[
@@ -213,7 +213,7 @@ export default function SpanishSedonaWithKids() {
             Guía familiar de roca roja
           </p>
           <h1 className="max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">
-            Sedona con niños
+            Qué hacer en Sedona con niños
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100 md:text-xl">
             Caminatas, shuttle, estacionamiento y seguridad explicados para que la familia

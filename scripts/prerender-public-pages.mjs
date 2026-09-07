@@ -138,8 +138,8 @@ function extractObjects(source, requiredKeys) {
 const publicPages = [
   {
     routePath: 'trip-builder',
-    title: 'Arizona Family Trip Builder | Sage Health and Travels',
-    description: 'Build a practical Arizona family trip by season, drive time, kid ages, shade, bathrooms, activity level, food stops, and group needs.',
+    title: 'Arizona Family Trip Planner: Build Your Itinerary | Sage',
+    description: 'Build an Arizona family itinerary around your destination, kids’ ages, season, shade and bathrooms. Save, print or email your trip pack with Sage.',
     breadcrumbs: [
       { name: 'Home', url: `${siteUrl}/` },
       { name: 'Trip Builder', url: `${siteUrl}/trip-builder` },
