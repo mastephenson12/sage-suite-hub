@@ -256,21 +256,6 @@ const TripBuilder: React.FC = () => {
     setAiPlanStatus('loading');
     setSearchParams(shareParams, { replace: true });
 
-    // The share/save controls render after the URL switches to plan=ready.
-    // Use an immediate jump because smooth scrolling across this long page is
-    // unreliable and appears stuck in Android Chrome.
-    const jumpToEmailTripPack = () => {
-      document.getElementById('email-trip-pack')?.scrollIntoView({
-        behavior: 'auto',
-        block: 'start',
-      });
-    };
-
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(jumpToEmailTripPack);
-    });
-    window.setTimeout(jumpToEmailTripPack, 500);
-
     try {
       const personalizedPlan = await generateSageTripPlan({
         destination: location.trim() || 'Arizona',
@@ -528,10 +513,17 @@ const TripBuilder: React.FC = () => {
 
               <button
                 type="submit"
+                aria-describedby={submitted ? 'trip-builder-status' : undefined}
                 className="inline-flex w-full items-center justify-center rounded-2xl bg-black px-8 py-4 text-lg font-semibold text-white transition hover:opacity-90"
               >
-                Build My Trip
+                {submitted ? 'Rebuild My Trip' : 'Build My Trip'}
               </button>
+
+              {submitted && (
+                <p id="trip-builder-status" className="text-center text-sm font-bold text-emerald-800" role="status">
+                  Your trip is ready below. Sage is adding live details while you review it.
+                </p>
+              )}
             </div>
           </form>
 
