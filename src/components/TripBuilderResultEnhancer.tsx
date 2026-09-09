@@ -8,6 +8,7 @@ import {
   Clock3,
   Copy,
   Droplets,
+  Mail,
   MapPin,
   MessageCircle,
   ShieldCheck,
@@ -175,10 +176,12 @@ const guidedSteps = [
 
 const TripBuilderResultEnhancer: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const resultSectionRef = React.useRef<HTMLElement>(null);
   const [copied, setCopied] = React.useState(false);
   const [checkedPackingItems, setCheckedPackingItems] = React.useState<string[]>([]);
   const [includeToddlers, setIncludeToddlers] = React.useState(false);
   const isReady = searchParams.get('plan') === 'ready';
+  const searchParamsKey = searchParams.toString();
 
   const location = prettify(searchParams.get('location'), 'Arizona');
   const season = prettify(searchParams.get('season'), 'Your Season');
@@ -236,6 +239,23 @@ const TripBuilderResultEnhancer: React.FC = () => {
 
     window.sessionStorage.setItem(eventKey, '1');
   }, [groupLabel, isReady, location, searchParams, tripLength]);
+
+  React.useEffect(() => {
+    if (!isReady) return;
+
+    // Wait until this conditionally rendered section exists before moving the
+    // viewport. Running the scroll from the form is unreliable in Android
+    // Chrome because the URL state updates before this panel mounts.
+    const timeoutId = window.setTimeout(() => {
+      const resultSection = resultSectionRef.current;
+      if (!resultSection) return;
+
+      resultSection.focus({ preventScroll: true });
+      resultSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }, 50);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isReady, searchParamsKey]);
 
   if (!isReady) return null;
 
@@ -308,7 +328,13 @@ const TripBuilderResultEnhancer: React.FC = () => {
   };
 
   return (
-    <section className="bg-white px-6 pb-20">
+    <section
+      ref={resultSectionRef}
+      id="trip-results"
+      tabIndex={-1}
+      aria-live="polite"
+      className="scroll-mt-24 bg-white px-6 pb-20 outline-none"
+    >
       <div className="mx-auto max-w-6xl rounded-[2rem] border border-zinc-200 bg-zinc-950 p-6 text-white shadow-xl md:p-8">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
@@ -365,6 +391,21 @@ const TripBuilderResultEnhancer: React.FC = () => {
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#email-trip-pack"
+                onClick={() =>
+                  trackEvent('save_trip_plan_click', {
+                    label: 'Email My Trip Pack',
+                    destination: location,
+                    location: 'trip_result_enhancer',
+                  })
+                }
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-zinc-950 transition hover:bg-emerald-400"
+              >
+                <Mail className="h-4 w-4" />
+                Email My Trip Pack
+              </a>
+
               <Link
                 to={buildChatLink(
                   location,

@@ -12,6 +12,23 @@ import {
 import { trackEvent } from '../utils/analytics';
 import { SavedTripPackingItem, SavedTripSection, saveTrip } from '../utils/savedTrips';
 
+async function copyText(text: string) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', 'true');
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
 interface SaveTripPlanCardProps {
   destination: string;
   season: string;
@@ -116,7 +133,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   };
 
   const handleCopyPass = async () => {
-    await navigator.clipboard.writeText(planBody);
+    await copyText(planBody);
     setCopied(true);
     trackEvent('save_trip_plan_click', {
       label: 'Copy Offline Trip Pass',
@@ -146,13 +163,17 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     });
 
     if (navigator.share) {
-      await navigator.share(shareData);
-      setShared(true);
-      window.setTimeout(() => setShared(false), 1800);
-      return;
+      try {
+        await navigator.share(shareData);
+        setShared(true);
+        window.setTimeout(() => setShared(false), 1800);
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+      }
     }
 
-    await navigator.clipboard.writeText(planBody);
+    await copyText(planBody);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   };
@@ -269,20 +290,29 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       <form
         id="email-trip-pack"
         onSubmit={handleSavePlan}
+        aria-busy={emailStatus === 'sending'}
         className="mt-4 grid scroll-mt-28 gap-3 sm:grid-cols-[1fr_auto]"
       >
         <input
           type="email"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            if (emailStatus !== 'idle') setEmailStatus('idle');
+            if (emailError) setEmailError('');
+          }}
           placeholder="Enter your email"
+          autoComplete="email"
+          inputMode="email"
+          aria-label="Email address for your trip pack"
           className="w-full rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
           required
         />
 
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-800"
+          disabled={emailStatus === 'sending'}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-800 disabled:cursor-wait disabled:opacity-70"
         >
           {emailStatus === 'sent' ? <CheckCircle2 className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
           {emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Trip Pack Sent' : 'Email My Trip Pack'}
