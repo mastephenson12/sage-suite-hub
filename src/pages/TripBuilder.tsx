@@ -1,3 +1,4 @@
+import { getFamilyTripFacts, formatFamilyTripFacts } from '../data/familyTripFacts';
 import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
@@ -165,6 +166,7 @@ const TripBuilder: React.FC = () => {
     const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (robots) robots.content = 'index, follow';
   }, []);
+  const destinationFacts = getFamilyTripFacts(location);
   const plan = buildTripPlan(location, hasKids, activity, length, season);
 
   const familyMatches = getFamilyAdventureMatches({
@@ -230,6 +232,7 @@ const TripBuilder: React.FC = () => {
       : '';
 
     return [
+      destinationFacts ? formatFamilyTripFacts(destinationFacts) : '',
       personalizedBrief,
       plan.title,
       plan.intro,
@@ -521,7 +524,7 @@ const TripBuilder: React.FC = () => {
 
               {submitted && (
                 <p id="trip-builder-status" className="text-center text-sm font-bold text-emerald-800" role="status">
-                  Your trip is ready below. Sage is adding live details while you review it.
+                  Your trip is ready below. Sage is personalizing the itinerary while you review it.
                 </p>
               )}
             </div>
@@ -541,6 +544,19 @@ const TripBuilder: React.FC = () => {
                 ? plan.intro
                 : 'Choose a location, trip style, season, and family filters. Sage will create a simple starter plan and recommend the best Arizona matches from its local family-adventure brain.'}
             </p>
+
+            {destinationFacts && (
+              <section className="mt-6 rounded-2xl border border-amber-300 bg-amber-50 p-5" aria-label="Destination at a glance">
+                <h3 className="text-xl font-black">{destinationFacts.name}: At a glance</h3>
+                <p className="mt-3 font-semibold">{destinationFacts.caution}</p>
+                <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {destinationFacts.facts.map(([label, value]) => <div key={label}><dt className="font-bold">{label}</dt><dd className="mt-1 text-sm leading-relaxed">{value}</dd></div>)}
+                </dl>
+                <p className="mt-4 text-sm">{destinationFacts.reviewNote}</p>
+                <a className="mt-3 block font-bold underline" href={destinationFacts.guide}>Read the full Health &amp; Travels guide</a>
+                <ul className="mt-3 space-y-2 text-sm">{destinationFacts.sources.map(source => <li key={source.url}><a className="underline" href={source.url}>{source.label}</a></li>)}</ul>
+              </section>
+            )}
 
             {!submitted && (
               <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm leading-relaxed text-zinc-500">
@@ -563,7 +579,7 @@ const TripBuilder: React.FC = () => {
 
                   {aiPlanStatus === 'loading' && (
                     <div>
-                      <h3 className="text-xl font-black text-emerald-950">Adding current trip context…</h3>
+                      <h3 className="text-xl font-black text-emerald-950">Personalizing your trip…</h3>
                       <p className="mt-2 text-sm leading-relaxed text-emerald-900">
                         Your instant local plan is ready below. Sage is adding a specific outdoor anchor, food stop, facilities check, and backup plan.
                       </p>
@@ -574,7 +590,7 @@ const TripBuilder: React.FC = () => {
                     <div>
                       <h3 className="text-xl font-black text-emerald-950">Your reliable local plan is ready</h3>
                       <p className="mt-2 text-sm leading-relaxed text-emerald-900">
-                        Live personalization is temporarily unavailable, so Sage kept the fast local plan and destination matches below instead of leaving you stuck.
+                        Personalization is temporarily unavailable, so Sage kept the fast local plan and destination matches below instead of leaving you stuck.
                       </p>
                     </div>
                   )}
@@ -878,3 +894,4 @@ const TripBuilder: React.FC = () => {
 };
 
 export default TripBuilder;
+

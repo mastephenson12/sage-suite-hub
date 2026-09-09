@@ -1,3 +1,4 @@
+import { getFamilyTripFacts, formatFamilyTripFacts } from '../data/familyTripFacts';
 import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
@@ -184,6 +185,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
   const searchParamsKey = searchParams.toString();
 
   const location = prettify(searchParams.get('location'), 'Arizona');
+  const destinationFacts = getFamilyTripFacts(location);
   const season = prettify(searchParams.get('season'), 'Your Season');
   const tripLength = prettify(searchParams.get('length'), 'Family Outing');
   const hasKids = searchParams.get('kids') !== 'no';
@@ -306,6 +308,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
   ];
 
   const tripSummary = [
+    ...(destinationFacts ? [formatFamilyTripFacts(destinationFacts)] : []),
     `${location} family adventure plan`,
     `Timing: ${season}`,
     `Trip style: ${tripLength}`,
@@ -541,7 +544,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
               wantsShade={wantsShade}
               needsBathrooms={needsBathrooms}
               tripUrl={currentTripUrl}
-              itinerary={itineraryFlow.map(({ title, description }) => ({ title, description }))}
+              itinerary={[...(destinationFacts ? [{ title: "At a glance â€” reviewed destination details", description: formatFamilyTripFacts(destinationFacts) }] : []), ...itineraryFlow.map(({ title, description }) => ({ title, description }))]}
               packingItems={packingItems.map(({ id, label, helper }) => ({ id, label, helper, packed: checkedPackingItems.includes(id) }))}
             />
 
@@ -678,3 +681,4 @@ const TripBuilderResultEnhancer: React.FC = () => {
 };
 
 export default TripBuilderResultEnhancer;
+
