@@ -41,6 +41,7 @@ import TrailPage from './pages/TrailPage';
 import Arizona from './pages/Arizona';
 import ArizonaDestinationPage from './pages/ArizonaDestinationPage';
 import ArizonaAdventureFinder from './pages/ArizonaAdventureFinder';
+import ArizonaFoodStopFinder from './pages/ArizonaFoodStopFinder';
 import ArizonaFirstTripGuide from './pages/ArizonaFirstTripGuide';
 import ArizonaPlanBySituation from './pages/ArizonaPlanBySituation';
 import ArizonaDayTripsFromPhoenix from './pages/ArizonaDayTripsFromPhoenix';
@@ -241,6 +242,7 @@ function AppContent() {
           <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
           <Route path="/arizona" element={<Arizona />} />
           <Route path="/arizona/adventure-finder" element={<ArizonaAdventureFinder />} />
+          <Route path="/arizona/food-stop-finder" element={<ArizonaFoodStopFinder />} />
           <Route path="/arizona/first-trip" element={<ArizonaFirstTripGuide />} />
           <Route path="/arizona/plan-by-situation" element={<ArizonaPlanBySituation />} />
           <Route path="/arizona/day-trips-from-phoenix" element={<ArizonaDayTripsFromPhoenix />} />
@@ -284,6 +286,7 @@ function AppContent() {
                 <Link to="/arizona/first-trip" className="transition-colors hover:text-black">First Trip</Link>
                 <Link to="/arizona/plan-by-situation" className="transition-colors hover:text-black">Plan by Situation</Link>
                 <Link to="/arizona/adventure-finder" className="transition-colors hover:text-black">Adventure Finder</Link>
+                <Link to="/arizona/food-stop-finder" className="transition-colors hover:text-black">Food Stop Finder</Link>
                 <Link to="/es/arizona" className="transition-colors hover:text-black">Espanol</Link>
                 <Link to="/ru" className="transition-colors hover:text-black">Русский</Link>
                 <Link to="/de/arizona/sedona-mit-kindern" className="transition-colors hover:text-black">Deutsch</Link>

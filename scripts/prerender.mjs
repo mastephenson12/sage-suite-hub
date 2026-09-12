@@ -6,6 +6,7 @@ const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
 const startHerePath = 'start-here';
 const plannerPath = 'plan';
+const foodStopFinderPath = 'arizona/food-stop-finder';
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
@@ -91,6 +92,19 @@ const plannerFaqs = [
     question: 'Should I verify conditions before leaving?',
     answer:
       'Yes. Weather, traffic, closures, wildfire restrictions, road access, fees, and facilities can change, so always verify current conditions with the managing agency.',
+  },
+];
+
+const foodStopFinderFaqs = [
+  {
+    question: 'Does a dietary label guarantee a restaurant is allergy-safe?',
+    answer:
+      'No. Menus and search labels can be incomplete. Contact the restaurant directly about ingredients, preparation, shared equipment, and cross-contact.',
+  },
+  {
+    question: 'What should families ask before choosing a food stop?',
+    answer:
+      'Ask about current ingredients, substitutions, shared fryers or grills, separate preparation space, and whether staff can reliably accommodate the specific need.',
   },
 ];
 
@@ -622,6 +636,15 @@ const plannerHtml = applySeo(baseHtml, {
   faqs: plannerFaqs,
 });
 await writeRoute(plannerPath, plannerHtml);
+
+const foodStopFinderHtml = applySeo(baseHtml, {
+  title: 'Arizona Family Food Stop Finder | Sage',
+  description:
+    "Find useful Arizona restaurant and grocery searches for your family's dietary needs, plus questions to ask before you eat.",
+  url: `${siteUrl}/${foodStopFinderPath}`,
+  faqs: foodStopFinderFaqs,
+});
+await writeRoute(foodStopFinderPath, foodStopFinderHtml);
 
 const exploreHtml = applySeo(baseHtml, {
   title: 'Explore Arizona Family Travel Guides | Sage Directory',
