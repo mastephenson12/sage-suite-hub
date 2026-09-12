@@ -7,6 +7,11 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const hubLinks = [
   {
+    title: 'Arizona Family Food Stop Finder',
+    description: 'Build restaurant and grocery searches around your family’s dietary needs, then use a call-ahead safety checklist.',
+    to: '/arizona/food-stop-finder',
+  },
+  {
     title: 'Arizona Trail Etiquette Checklist',
     description: 'Run a 60-second family briefing for trash, dogs, music, passing, graffiti, wildlife, and leaving the trail ready for the next group.',
     to: '/arizona/trail-etiquette-checklist',

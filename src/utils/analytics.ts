@@ -25,6 +25,8 @@ export type AnalyticsEventName =
   | 'trip_pack_generated'
   | 'trip_pack_emailed'
   | 'trip_pack_email_failed'
+  | 'food_stop_finder_submit'
+  | 'food_stop_maps_click'
   | 'unknown_tracked_click';
 
 type AnalyticsPayload = Record<string, string | number | boolean | null | undefined>;

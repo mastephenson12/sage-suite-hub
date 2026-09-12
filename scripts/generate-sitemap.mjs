@@ -12,6 +12,7 @@ const staticRoutes = [
   { path: '/arizona', changefreq: 'weekly', priority: '0.9' },
   { path: '/arizona/first-trip', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/adventure-finder', changefreq: 'weekly', priority: '0.95' },
+  { path: '/arizona/food-stop-finder', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/primer-viaje-a-arizona-con-ninos', changefreq: 'weekly', priority: '0.95' },
