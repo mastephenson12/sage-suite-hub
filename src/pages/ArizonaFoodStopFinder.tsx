@@ -16,6 +16,10 @@ export default function ArizonaFoodStopFinder() {
   const [meal, setMeal] = useState(params.get('meal') || meals[0]);
   const [showResults, setShowResults] = useState(Boolean(params.get('location')));
   const [copied, setCopied] = useState('');
+  React.useEffect(() => {
+    const links = [['en', 'https://sage.healthandtravels.com/arizona/food-stop-finder'], ['es', 'https://sage.healthandtravels.com/es/arizona/buscador-comida-necesidades-dieteticas'], ['x-default', 'https://sage.healthandtravels.com/arizona/food-stop-finder']];
+    links.forEach(([hreflang, href]) => { let link = document.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${hreflang}"]`); if (!link) { link = document.createElement('link'); link.rel = 'alternate'; link.hreflang = hreflang; document.head.appendChild(link); } link.href = href; });
+  }, []);
 
   const needText = selectedNeeds.length ? selectedNeeds.join(' and ') : 'family-friendly';
   const restaurantQuery = `${needText} ${meal.toLowerCase()} in ${location || 'Arizona'}`;
@@ -55,6 +59,7 @@ export default function ArizonaFoodStopFinder() {
       />
       <div className="bg-amber-50/60">
         <header className="mx-auto max-w-5xl px-6 pb-10 pt-14 text-center md:pt-20">
+          <div className="mb-5 flex justify-center gap-2 text-xs font-black uppercase"><span className="rounded-full bg-emerald-700 px-4 py-2 text-white">English</span><a href="/es/arizona/buscador-comida-necesidades-dieteticas" className="rounded-full border border-zinc-300 bg-white px-4 py-2">Español</a></div>
           <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-700">Arizona family travel tool</p>
           <h1 className="mt-4 text-4xl font-black tracking-tight text-zinc-950 md:text-6xl">Find a food stop that fits your family.</h1>
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-zinc-600">Build focused live searches, then use a simple call-ahead script to verify what matters before everyone gets hungry.</p>
