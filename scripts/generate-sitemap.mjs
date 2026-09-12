@@ -15,6 +15,7 @@ const staticRoutes = [
   { path: '/arizona/food-stop-finder', changefreq: 'weekly', priority: '0.95' },
   { path: '/arizona/plan-by-situation', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona', changefreq: 'weekly', priority: '0.9' },
+  { path: '/es/arizona/buscador-comida-necesidades-dieteticas', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/primer-viaje-a-arizona-con-ninos', changefreq: 'weekly', priority: '0.95' },
   { path: '/es/arizona/planificar-por-situacion', changefreq: 'weekly', priority: '0.9' },
   { path: '/es/arizona/sedona-con-ninos', changefreq: 'weekly', priority: '0.95' },

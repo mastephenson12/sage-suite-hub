@@ -7,6 +7,11 @@ import SEOJsonLd from '../components/SEOJsonLd';
 
 const hubLinks = [
   {
+    title: 'Buscador de comida familiar en Arizona',
+    description: 'Busca restaurantes y supermercados según las necesidades dietéticas de tu familia y prepara las preguntas importantes.',
+    to: '/es/arizona/buscador-comida-necesidades-dieteticas',
+  },
+  {
     title: 'Arizona Family Food Stop Finder',
     description: 'Build restaurant and grocery searches around your family’s dietary needs, then use a call-ahead safety checklist.',
     to: '/arizona/food-stop-finder',

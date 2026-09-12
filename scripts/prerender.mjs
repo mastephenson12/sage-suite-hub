@@ -7,6 +7,7 @@ const indexPath = path.join(distDir, 'index.html');
 const startHerePath = 'start-here';
 const plannerPath = 'plan';
 const foodStopFinderPath = 'arizona/food-stop-finder';
+const spanishFoodStopFinderPath = 'es/arizona/buscador-comida-necesidades-dieteticas';
 const spanishArizonaPath = 'es/arizona';
 const spanishPlanBySituationPath = 'es/arizona/planificar-por-situacion';
 const spanishHikesWithKidsPath = 'es/arizona/caminatas-con-ninos';
@@ -106,6 +107,11 @@ const foodStopFinderFaqs = [
     answer:
       'Ask about current ingredients, substitutions, shared fryers or grills, separate preparation space, and whether staff can reliably accommodate the specific need.',
   },
+];
+
+const spanishFoodStopFinderFaqs = [
+  { question: '¿Una etiqueta dietética garantiza que un restaurante sea seguro para alergias?', answer: 'No. Confirma directamente los ingredientes, la preparación, el equipo compartido y el contacto cruzado.' },
+  { question: '¿Qué debe preguntar una familia antes de elegir dónde comer?', answer: 'Pregunta por ingredientes actuales, sustituciones, freidoras o parrillas compartidas, espacio de preparación y la capacidad real de atender la necesidad específica.' },
 ];
 
 const exploreFaqs = [
@@ -645,6 +651,22 @@ const foodStopFinderHtml = applySeo(baseHtml, {
   faqs: foodStopFinderFaqs,
 });
 await writeRoute(foodStopFinderPath, foodStopFinderHtml);
+
+const spanishFoodStopFinderHtml = addLanguageAlternates(
+  applySeo(baseHtml, {
+    title: 'Buscador de comida familiar en Arizona | Sage',
+    description: 'Busca restaurantes y supermercados en Arizona según las necesidades dietéticas de tu familia y prepara las preguntas que debes hacer antes de comer.',
+    url: `${siteUrl}/${spanishFoodStopFinderPath}`,
+    faqs: spanishFoodStopFinderFaqs,
+  }),
+  'es',
+  [
+    { hreflang: 'es', href: `${siteUrl}/${spanishFoodStopFinderPath}` },
+    { hreflang: 'en', href: `${siteUrl}/${foodStopFinderPath}` },
+    { hreflang: 'x-default', href: `${siteUrl}/${foodStopFinderPath}` },
+  ]
+);
+await writeRoute(spanishFoodStopFinderPath, spanishFoodStopFinderHtml);
 
 const exploreHtml = applySeo(baseHtml, {
   title: 'Explore Arizona Family Travel Guides | Sage Directory',

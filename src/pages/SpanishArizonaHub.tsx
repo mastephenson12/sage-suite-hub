@@ -59,6 +59,14 @@ function setAlternateLink(hreflang: string, href: string) {
 
 const featuredSpanishGuides = [
   {
+    title: 'Buscador de comida familiar en Arizona',
+    description:
+      'Busca restaurantes y supermercados por destino y necesidad dietética, con preguntas para confirmar antes de comer.',
+    to: '/es/arizona/buscador-comida-necesidades-dieteticas',
+    label: 'Comida',
+    icon: MapPin,
+  },
+  {
     title: 'Papago Park con niños',
     description:
       'Hole-in-the-Rock, calor, estacionamiento, baños, Phoenix Zoo y tres formas de armar una mañana familiar sencilla.',
