@@ -193,6 +193,11 @@ const TripBuilderResultEnhancer: React.FC = () => {
   const groupLabel = hasKids ? ageGroup : 'Adults only';
   const wantsShade = searchParams.get('shade') !== 'false';
   const needsBathrooms = searchParams.get('bathrooms') !== 'false';
+  const dietaryNeeds = prettify(searchParams.get('needs'), 'No special request');
+  const foodFinderParams = new URLSearchParams({ location });
+  if (searchParams.get('needs')) foodFinderParams.set('needs', searchParams.get('needs') || '');
+  foodFinderParams.set('meal', 'Sit-down meal');
+  const foodFinderUrl = `/arizona/food-stop-finder?${foodFinderParams.toString()}`;
   const currentTripUrl =
     typeof window !== 'undefined'
       ? window.location.href
@@ -292,8 +297,10 @@ const TripBuilderResultEnhancer: React.FC = () => {
     },
     {
       label: 'Find Food Nearby',
-      description: 'Ask for nearby food stops that fit the plan.',
-      prompt: `Find family-friendly food options near this ${location} adventure plan, including easy kid-friendly choices and good timing for lunch or snacks.`,
+      description: searchParams.get('needs')
+        ? `Find nearby food stops for ${dietaryNeeds}.`
+        : 'Ask for nearby food stops that fit the plan.',
+      prompt: `Find family-friendly food options near this ${location} adventure plan${searchParams.get('needs') ? ` for ${dietaryNeeds}` : ''}, including easy kid-friendly choices and good timing for lunch or snacks. Remind me to confirm current ingredients, substitutions, shared equipment, and cross-contact directly with the restaurant.`,
     },
     {
       label: 'Add Backup Ideas',
@@ -316,6 +323,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
     `Confidence score: ${safeConfidenceScore}%`,
     wantsShade ? 'Shade: prioritized' : 'Shade: flexible',
     needsBathrooms ? 'Bathrooms: prioritized' : 'Bathrooms: optional',
+    `Food needs: ${dietaryNeeds}`,
     `Open plan: ${currentTripUrl}`,
   ].join('\n');
 
@@ -525,6 +533,21 @@ const TripBuilderResultEnhancer: React.FC = () => {
                 ))}
               </div>
 
+              <Link
+                to={foodFinderUrl}
+                onClick={() =>
+                  trackEvent('food_stop_finder_submit', {
+                    location,
+                    dietary_needs: searchParams.get('needs') || 'none',
+                    source: 'trip_result',
+                  })
+                }
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-5 py-3 text-sm font-black uppercase tracking-[0.1em] text-emerald-950 transition hover:bg-emerald-100"
+              >
+                <Utensils className="h-4 w-4" />
+                {searchParams.get('needs') ? `Find ${dietaryNeeds} Food Nearby` : 'Choose Food Needs Nearby'}
+              </Link>
+
               <button
                 type="button"
                 onClick={handleCopySummary}
@@ -543,6 +566,7 @@ const TripBuilderResultEnhancer: React.FC = () => {
               confidenceScore={safeConfidenceScore}
               wantsShade={wantsShade}
               needsBathrooms={needsBathrooms}
+              dietaryNeeds={dietaryNeeds}
               tripUrl={currentTripUrl}
               itinerary={[...(destinationFacts ? [{ title: "At a glance â€” reviewed destination details", description: formatFamilyTripFacts(destinationFacts) }] : []), ...itineraryFlow.map(({ title, description }) => ({ title, description }))]}
               packingItems={packingItems.map(({ id, label, helper }) => ({ id, label, helper, packed: checkedPackingItems.includes(id) }))}
