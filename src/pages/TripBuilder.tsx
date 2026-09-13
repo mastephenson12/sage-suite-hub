@@ -206,6 +206,10 @@ const TripBuilder: React.FC = () => {
   shareParams.set('bathrooms', String(needsBathrooms));
   shareParams.set('stroller', String(needsStrollerAccess));
   shareParams.set('drive', String(maxDriveMinutes));
+  ['source', 'needs', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach((key) => {
+    const value = searchParams.get(key);
+    if (value) shareParams.set(key, value);
+  });
 
   const sharePath = `/trip-builder?${shareParams.toString()}`;
 
