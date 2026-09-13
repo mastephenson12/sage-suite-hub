@@ -37,6 +37,7 @@ interface SaveTripPlanCardProps {
   confidenceScore: number;
   wantsShade: boolean;
   needsBathrooms: boolean;
+  dietaryNeeds?: string;
   tripUrl: string;
   itinerary?: SavedTripSection[];
   packingItems?: SavedTripPackingItem[];
@@ -50,6 +51,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   confidenceScore,
   wantsShade,
   needsBathrooms,
+  dietaryNeeds = 'No special request',
   tripUrl,
   itinerary = [],
   packingItems = [],
@@ -77,6 +79,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     `Sage confidence: ${confidenceScore}%`,
     wantsShade ? 'Shade: prioritized' : 'Shade: flexible',
     needsBathrooms ? 'Bathrooms: prioritized' : 'Bathrooms: optional',
+    `Food needs: ${dietaryNeeds}`,
     ...itineraryBody,
     ...packingBody,
     '',
@@ -85,6 +88,9 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     '- Confirm parking, closures, weather, and road conditions before leaving.',
     '- Bring more water and snacks than the minimum.',
     '- Screenshot or save this plan before cell service gets questionable.',
+    dietaryNeeds !== 'No special request'
+      ? `- For ${dietaryNeeds} food, confirm current ingredients, substitutions, shared equipment, and cross-contact directly with the restaurant.`
+      : '- Confirm current menu details directly with the restaurant before leaving.',
     '',
     'PLAN B:',
     '- If heat, storms, parking, or kid energy changes the day, shorten the outdoor anchor and use an easier scenic, shaded, or indoor stop nearby.',
