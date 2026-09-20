@@ -161,6 +161,30 @@ const TripBuilder: React.FC = () => {
   const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
   const isGeneratedPlan = searchParams.get('plan') === 'ready';
 
+  React.useEffect(() => {
+    if (searchParams.get('source') !== 'health-travels-matcher') return;
+
+    const funnelPayload = {
+      funnel_name: 'adventure_to_email',
+      destination: initialLocation || 'Arizona',
+      referral_source: 'healthandtravels',
+    };
+    trackEvent('adventure_funnel_step', {
+      ...funnelPayload,
+      funnel_step: 2,
+      funnel_step_name: 'sage_opened',
+    });
+    if (searchParams.get('plan') === 'ready') {
+      trackEvent('adventure_funnel_step', {
+        ...funnelPayload,
+        funnel_step: 3,
+        funnel_step_name: 'plan_generated',
+      });
+    }
+    // The handoff parameters are intentionally captured only on the initial landing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   React.useEffect(() => () => {
     // Do not leave a saved plan's noindex directive on the next route.
     const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
@@ -257,6 +281,13 @@ const TripBuilder: React.FC = () => {
       activity,
       trip_length: length,
       season,
+    });
+    trackEvent('adventure_funnel_step', {
+      funnel_name: 'adventure_to_email',
+      funnel_step: 3,
+      funnel_step_name: 'plan_generated',
+      destination: location.trim() || 'Arizona',
+      referral_source: searchParams.get('source') || 'direct',
     });
     setSubmitted(true);
     setAiPlan(null);
