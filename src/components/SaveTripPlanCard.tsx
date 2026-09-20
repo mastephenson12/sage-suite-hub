@@ -131,6 +131,12 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
         location: 'save_trip_plan_card',
         offer: 'complete_adventure_plan',
       });
+      trackEvent('adventure_funnel_step', {
+        funnel_name: 'adventure_to_email',
+        funnel_step: 4,
+        funnel_step_name: 'email_submitted',
+        destination,
+      });
     } catch (error) {
       setEmailStatus('error');
       setEmailError(error instanceof Error ? error.message : 'We could not email the trip pack.');
