@@ -2,6 +2,7 @@ export type AnalyticsEventName =
   | 'homepage_plan_trip_click'
   | 'homepage_quick_plan_submit'
   | 'trip_builder_submit'
+  | 'adventure_funnel_step'
   | 'sage_ai_refine_click'
   | 'health_travels_ideas_click'
   | 'cross_site_health_click'
