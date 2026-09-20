@@ -77,6 +77,10 @@
 
         window.gtag('js', new Date());
         window.gtag('config', measurementId, { send_page_view: false });
+        // Also send network conversion events to the shared Health & Travels GA4 property.
+        if (measurementId !== 'G-DKH3PF8GEJ') {
+          window.gtag('config', 'G-DKH3PF8GEJ', { send_page_view: false });
+        }
       })();
     </script>
 
