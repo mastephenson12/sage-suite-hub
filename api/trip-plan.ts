@@ -1,4 +1,4 @@
-import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTripFacts';
+import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTripFacts.js';
 import { GoogleGenAI } from '@google/genai';
 
 const WINDOW_MS = 60_000;
