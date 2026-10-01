@@ -1,3 +1,4 @@
+import { estimatedDrive, origins, Origin } from '../plannerOrigins';
 import { ActivityType, TripSeason } from './heatSafety';
 import { TripLength } from './familyTripRules';
 import { arizonaFamilyDestinations } from '../../data/sage/arizonaFamilyDestinations';
@@ -5,6 +6,7 @@ import { arizonaFamilyDestinations } from '../../data/sage/arizonaFamilyDestinat
 export type KidAgeGroup = 'toddlers' | 'elementary' | 'mixed' | 'teens';
 
 export type FamilyAdventureInput = {
+  origin?: Origin;
   location: string;
   hasKids: boolean;
   activity: ActivityType;
@@ -122,8 +124,8 @@ function getMatchReasons(input: FamilyAdventureInput, destination: SageDestinati
     reasons.push('Lower summer heat risk than exposed desert hikes.');
   }
 
-  if (destination.driveMinutesFromPhoenix <= input.maxDriveMinutes) {
-    reasons.push(`Within your ${input.maxDriveMinutes}-minute drive target from Phoenix.`);
+  if (estimatedDrive(input.origin ?? 'phoenix', destination) <= input.maxDriveMinutes) {
+    reasons.push(`Within your ${input.maxDriveMinutes}-minute drive target from ${origins.find(item => item.value === (input.origin ?? 'phoenix'))?.label}.`);
   }
 
   return reasons.slice(0, 4);
@@ -149,8 +151,8 @@ export function scoreFamilyAdventure(
   if (input.needsBathrooms) score += destination.bathroomScore;
   if (input.needsStrollerAccess) score += destination.strollerScore * 2;
 
-  if (destination.driveMinutesFromPhoenix > input.maxDriveMinutes) {
-    score -= Math.min(18, Math.ceil((destination.driveMinutesFromPhoenix - input.maxDriveMinutes) / 15));
+  if (estimatedDrive(input.origin ?? 'phoenix', destination) > input.maxDriveMinutes) {
+    score -= Math.min(18, Math.ceil((estimatedDrive(input.origin ?? 'phoenix', destination) - input.maxDriveMinutes) / 15));
   }
 
   if (input.season === 'summer') {
@@ -173,6 +175,7 @@ export function scoreFamilyAdventure(
 
 export function getFamilyAdventureMatches(input: FamilyAdventureInput): SageDestinationMatch[] {
   return arizonaFamilyDestinations
+    .filter(destination => !input.origin || estimatedDrive(input.origin, destination) <= input.maxDriveMinutes)
     .map((destination) => scoreFamilyAdventure(input, destination))
     .sort((a, b) => {
       const locationDifference =

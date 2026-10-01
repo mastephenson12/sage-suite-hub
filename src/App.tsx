@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
+import { JourneyHeader, JourneyFooter } from './components/JourneyChrome';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
 import FamilyConfidencePanel from './components/FamilyConfidencePanel';
@@ -88,6 +89,7 @@ import GermanSedonaWithKids from './pages/GermanSedonaWithKids';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import TripBuilder from './pages/TripBuilder';
+import JourneyPlan from './pages/JourneyPlan';
 import MyTrips from './pages/MyTrips';
 import NotFound from './pages/NotFound';
 
@@ -144,6 +146,8 @@ function HomePage() {
 }
 
 function TripBuilderPage() {
+  const location = useLocation();
+  if (new URLSearchParams(location.search).get('source') === 'unified-adventure') return <JourneyPlan key={location.search} />;
   return (
     <>
       <TripBuilder />
@@ -187,12 +191,13 @@ function AppContent() {
     }
   }, [location.pathname, location.search]);
 
+  const journeyChrome = ['/plan', '/trip-builder', '/my-trips'].some(path => location.pathname === path || location.pathname.startsWith(path + '/'));
   const hideSiteChrome =
     location.pathname === '/chat' || location.pathname.startsWith('/suite');
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      {hideSiteChrome ? <BrandNetworkBar /> : <Navbar />}
+    <div className={journeyChrome ? "journey min-h-screen" : "flex min-h-screen flex-col bg-white"}>
+      {journeyChrome ? <JourneyHeader /> : hideSiteChrome ? <BrandNetworkBar /> : <Navbar />}
       <main className="flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -267,7 +272,7 @@ function AppContent() {
         </Routes>
       </main>
 
-      {!hideSiteChrome && (
+      {!hideSiteChrome && !journeyChrome && (
         <footer className="mt-auto border-t border-zinc-100 bg-white py-16">
           <div className="mx-auto max-w-6xl px-6 text-center md:text-left">
             <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
@@ -312,7 +317,8 @@ function AppContent() {
           </div>
         </footer>
       )}
-      {!hideSiteChrome && <ChatWidget />}
+      {journeyChrome && <JourneyFooter />}
+      {!hideSiteChrome && !journeyChrome && <ChatWidget />}
     </div>
   );
 }
