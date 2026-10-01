@@ -141,26 +141,176 @@ function buildPackingItems({
   return items;
 }
 
-const itineraryFlow = [
-  {
-    icon: Clock3,
-    title: 'Morning: start outside first',
-    description:
-      'Use the cooler part of the day for the main outdoor activity, especially in desert areas or warmer months.',
-  },
-  {
-    icon: CalendarCheck,
-    title: 'Midday: food and reset',
-    description:
-      'Build in a real food stop, bathroom break, and shade or indoor pause before everyone starts negotiating with chaos.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Afternoon: keep it flexible',
-    description:
-      'Choose an easier scenic stop, visitor center, short walk, or backup plan based on heat, energy, and kid patience.',
-  },
-];
+type ItineraryItem = {
+  icon: React.ComponentType<{ className?: string }>;
+  time: string;
+  title: string;
+  description: string;
+};
+
+function buildHourlyItinerary({
+  location,
+  season,
+  tripLength,
+  hasKids,
+  wantsShade,
+  needsBathrooms,
+}: {
+  location: string;
+  season: string;
+  tripLength: string;
+  hasKids: boolean;
+  wantsShade: boolean;
+  needsBathrooms: boolean;
+}): ItineraryItem[] {
+  const isSummer = /summer|june|july|august|hot|warm/i.test(season);
+  const isHalfDay = /half day/i.test(tripLength);
+  const isWeekend = /weekend/i.test(tripLength);
+
+  if (isWeekend) {
+    return [
+      {
+        icon: Clock3,
+        time: 'Day 1 • 8:00 AM',
+        title: `Start the ${location} adventure`,
+        description:
+          'Begin with the main outdoor activity while energy is high. Confirm current access, parking, and trail conditions before starting.',
+      },
+      {
+        icon: CalendarCheck,
+        time: 'Day 1 • 10:00 AM',
+        title: 'Water, snack, and bathroom reset',
+        description: needsBathrooms
+          ? 'Take a real break, use the restroom while you have one available, and reassess kid energy before adding more.'
+          : 'Take a real break for water and snacks, then reassess energy before adding more.',
+      },
+      {
+        icon: Utensils,
+        time: 'Day 1 • 11:30 AM',
+        title: 'Lunch and cool-down',
+        description:
+          'Use lunch as the hard reset of the day. Pick shade or indoor seating when possible and avoid stacking another demanding activity immediately afterward.',
+      },
+      {
+        icon: Sparkles,
+        time: 'Day 1 • 1:00 PM',
+        title: 'Flexible afternoon stop',
+        description: wantsShade
+          ? 'Choose a shaded scenic stop, visitor center, easy walk, or other low-stress option based on weather and family energy.'
+          : 'Choose an easy scenic stop, visitor center, short walk, or backup option based on weather and family energy.',
+      },
+      {
+        icon: Backpack,
+        time: 'Day 1 • 4:00 PM',
+        title: 'Check in and slow down',
+        description:
+          'Refill water, settle in, confirm tomorrow’s weather, and keep dinner simple instead of turning vacation into an endurance event.',
+      },
+      {
+        icon: Clock3,
+        time: 'Day 2 • 8:00 AM',
+        title: 'Second outdoor stop',
+        description:
+          'Choose a shorter trail, lake visit, scenic walk, or family-friendly attraction that complements day one instead of repeating it.',
+      },
+      {
+        icon: Utensils,
+        time: 'Day 2 • 11:30 AM',
+        title: 'Lunch before heading home',
+        description:
+          'Finish with an easy food stop and leave margin for traffic, weather, bathroom stops, and the ancient family tradition of suddenly needing one more thing.',
+      },
+    ];
+  }
+
+  if (isHalfDay) {
+    return [
+      {
+        icon: Clock3,
+        time: isSummer ? '6:30 AM' : '8:00 AM',
+        title: `Arrive in ${location} and get settled`,
+        description:
+          'Park, confirm current access, fill water bottles, apply sunscreen, and get everyone organized before starting.',
+      },
+      {
+        icon: Sparkles,
+        time: isSummer ? '7:00 AM' : '8:30 AM',
+        title: 'Main outdoor adventure',
+        description:
+          'Use the best weather window for the main activity. Keep the first stop rewarding and easy to shorten if conditions or kid energy change.',
+      },
+      {
+        icon: Droplets,
+        time: isSummer ? '8:30 AM' : '10:00 AM',
+        title: 'Water and snack break',
+        description: hasKids
+          ? 'Pause before anyone reaches the dramatic courtroom-attorney phase of hunger. Water, snacks, bathrooms, then decide whether to continue.'
+          : 'Pause for water and a quick reset before continuing.',
+      },
+      {
+        icon: CalendarCheck,
+        time: isSummer ? '9:00 AM' : '10:30 AM',
+        title: 'Short bonus stop or easy finish',
+        description:
+          'Add only a low-effort scenic stop, short walk, or visitor-center-style option. This is the bonus, not another expedition.',
+      },
+      {
+        icon: Utensils,
+        time: isSummer ? '10:30 AM' : '12:00 PM',
+        title: 'Food and head out',
+        description:
+          'Finish with a relaxed meal or snack stop and leave before heat, traffic, or tired-kid negotiations become the main attraction.',
+      },
+    ];
+  }
+
+  return [
+    {
+      icon: Clock3,
+      time: isSummer ? '6:30 AM' : '8:00 AM',
+      title: `Arrive in ${location} and get ready`,
+      description:
+        'Park, confirm current access, fill water bottles, apply sunscreen, and get everyone ready before the main activity.',
+    },
+    {
+      icon: Sparkles,
+      time: isSummer ? '7:00 AM' : '8:30 AM',
+      title: 'Main outdoor adventure',
+      description:
+        'Use the cooler, higher-energy part of the day for the main activity. Keep an easy exit option if weather, heat, or family energy shifts.',
+    },
+    {
+      icon: Droplets,
+      time: isSummer ? '9:00 AM' : '10:30 AM',
+      title: 'Snack, water, and bathroom reset',
+      description: hasKids
+        ? 'Take a real break before anyone gets tired, hungry, or mysteriously opposed to walking another twelve feet.'
+        : 'Take a real water and snack break before continuing.',
+    },
+    {
+      icon: Utensils,
+      time: isSummer ? '10:00 AM' : '11:30 AM',
+      title: 'Lunch and cool-down',
+      description:
+        'Build in a real meal, bathroom stop, and a shaded or indoor pause. Do not treat lunch like a pit stop in a Formula 1 race.',
+    },
+    {
+      icon: CalendarCheck,
+      time: isSummer ? '11:30 AM' : '1:00 PM',
+      title: 'Flexible afternoon stop',
+      description: wantsShade
+        ? 'Choose a shaded scenic stop, visitor center, short walk, or backup activity based on heat, energy, and kid patience.'
+        : 'Choose an easier scenic stop, visitor center, short walk, or backup activity based on weather and energy.',
+    },
+    {
+      icon: Backpack,
+      time: isSummer ? '1:00 PM' : '2:30 PM',
+      title: 'Wrap up the adventure',
+      description:
+        'Start heading back while everyone still has some energy. Keep the backup option available if weather, parking, or family energy changes.',
+    },
+  ];
+}
 
 const confidenceItems = [
   'Kid-fit checked against your selected age group',
@@ -226,6 +376,19 @@ const TripBuilderResultEnhancer: React.FC = () => {
     packingItems.some((item) => item.id === itemId)
   ).length;
   const packingProgress = Math.round((checkedCount / packingItems.length) * 100);
+
+  const hourlyItinerary = React.useMemo(
+    () =>
+      buildHourlyItinerary({
+        location,
+        season,
+        tripLength,
+        hasKids,
+        wantsShade,
+        needsBathrooms,
+      }),
+    [location, season, tripLength, hasKids, wantsShade, needsBathrooms]
+  );
 
   React.useEffect(() => {
     if (!isReady) return;
@@ -568,31 +731,48 @@ const TripBuilderResultEnhancer: React.FC = () => {
               needsBathrooms={needsBathrooms}
               dietaryNeeds={dietaryNeeds}
               tripUrl={currentTripUrl}
-              itinerary={[...(destinationFacts ? [{ title: "At a glance â€” reviewed destination details", description: formatFamilyTripFacts(destinationFacts) }] : []), ...itineraryFlow.map(({ title, description }) => ({ title, description }))]}
+              itinerary={[...(destinationFacts ? [{ title: "At a glance — reviewed destination details", description: formatFamilyTripFacts(destinationFacts) }] : []), ...hourlyItinerary.map(({ time, title, description }) => ({ title: `${time} — ${title}`, description }))]}
               packingItems={packingItems.map(({ id, label, helper }) => ({ id, label, helper, packed: checkedPackingItems.includes(id) }))}
             />
 
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
               <div className="mb-4 flex items-center gap-3">
-                <CalendarCheck className="h-5 w-5 text-orange-500" />
-                <h3 className="text-xl font-black">Simple day flow</h3>
+                <Clock3 className="h-5 w-5 text-orange-500" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-orange-600">
+                    Your day, hour by hour
+                  </p>
+                  <h3 className="text-xl font-black">A realistic family schedule</h3>
+                </div>
               </div>
 
               <div className="space-y-3">
-                {itineraryFlow.map((item) => {
+                {hourlyItinerary.map((item) => {
                   const Icon = item.icon;
 
                   return (
-                    <div key={item.title} className="rounded-2xl border border-zinc-200 p-4">
-                      <div className="mb-2 flex items-center gap-3">
-                        <Icon className="h-4 w-4 text-orange-500" />
-                        <h4 className="font-black">{item.title}</h4>
+                    <div
+                      key={`${item.time}-${item.title}`}
+                      className="grid gap-3 rounded-2xl border border-zinc-200 p-4 sm:grid-cols-[110px_1fr]"
+                    >
+                      <div className="font-black text-orange-600">{item.time}</div>
+
+                      <div>
+                        <div className="mb-2 flex items-center gap-3">
+                          <Icon className="h-4 w-4 text-orange-500" />
+                          <h4 className="font-black">{item.title}</h4>
+                        </div>
+                        <p className="text-sm leading-relaxed text-zinc-600">{item.description}</p>
                       </div>
-                      <p className="text-sm leading-relaxed text-zinc-600">{item.description}</p>
                     </div>
                   );
                 })}
               </div>
+
+              <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+                Times are planning estimates, not reservations or live travel times.
+                Confirm current access, weather, operating hours, and driving conditions before leaving.
+              </p>
             </article>
 
             <article className="rounded-3xl border border-white/10 bg-white p-5 text-zinc-950">
@@ -705,4 +885,3 @@ const TripBuilderResultEnhancer: React.FC = () => {
 };
 
 export default TripBuilderResultEnhancer;
-
