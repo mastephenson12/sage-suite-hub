@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Car,
   CheckCircle2,
+  Clock,
   Copy,
   MapPin,
   Mountain,
@@ -192,6 +193,120 @@ const TripBuilder: React.FC = () => {
   }, []);
   const destinationFacts = getFamilyTripFacts(location);
   const plan = buildTripPlan(location, hasKids, activity, length, season);
+
+  const hourlyItinerary = (() => {
+    const summer = season === 'summer';
+
+    if (length === 'half-day') {
+      return [
+        {
+          time: summer ? '6:30 AM' : '8:00 AM',
+          title: 'Arrive and get settled',
+          description:
+            'Park, confirm bathrooms and trail access, apply sunscreen, and get everyone ready before starting.',
+        },
+        {
+          time: summer ? '7:00 AM' : '8:30 AM',
+          title: 'Main outdoor adventure',
+          description: plan.morning,
+        },
+        {
+          time: summer ? '8:30 AM' : '10:00 AM',
+          title: 'Water and snack break',
+          description:
+            hasKids === 'yes'
+              ? 'Pause for water, snacks, bathrooms, and a quick kid-energy check before deciding whether to continue.'
+              : 'Pause for water and a quick reset before continuing.',
+        },
+        {
+          time: summer ? '9:00 AM' : '10:30 AM',
+          title: 'Short bonus stop or easy finish',
+          description: plan.afternoon,
+        },
+        {
+          time: summer ? '10:30 AM' : '12:00 PM',
+          title: 'Food and head out',
+          description: plan.midday,
+        },
+      ];
+    }
+
+    if (length === 'weekend') {
+      return [
+        {
+          time: 'Day 1 • 8:00 AM',
+          title: 'Start with the main adventure',
+          description: plan.morning,
+        },
+        {
+          time: 'Day 1 • 11:30 AM',
+          title: 'Lunch and reset',
+          description: plan.midday,
+        },
+        {
+          time: 'Day 1 • 1:00 PM',
+          title: 'Easy afternoon option',
+          description: plan.afternoon,
+        },
+        {
+          time: 'Day 1 • 4:00 PM',
+          title: 'Check in and slow down',
+          description:
+            'Give everyone downtime, refill water, check tomorrow’s weather, and keep dinner simple.',
+        },
+        {
+          time: 'Day 2 • 8:00 AM',
+          title: 'Second outdoor stop',
+          description:
+            'Choose a shorter trail, scenic stop, lake visit, or family-friendly attraction that complements day one.',
+        },
+        {
+          time: 'Day 2 • 11:30 AM',
+          title: 'Lunch before heading home',
+          description:
+            'Finish with an easy food stop and leave some margin in the schedule for traffic, weather, or tired kids.',
+        },
+      ];
+    }
+
+    return [
+      {
+        time: summer ? '6:30 AM' : '8:00 AM',
+        title: 'Arrive and get ready',
+        description:
+          'Park, confirm bathrooms and current access, fill water bottles, apply sunscreen, and get everyone ready.',
+      },
+      {
+        time: summer ? '7:00 AM' : '8:30 AM',
+        title: 'Main outdoor adventure',
+        description: plan.morning,
+      },
+      {
+        time: summer ? '9:00 AM' : '10:30 AM',
+        title: 'Snack, water, and bathroom reset',
+        description:
+          hasKids === 'yes'
+            ? 'Take a real break before anyone gets tired, hungry, or mysteriously opposed to walking another twelve feet.'
+            : 'Take a water and snack break before continuing.',
+      },
+      {
+        time: summer ? '10:00 AM' : '11:30 AM',
+        title: 'Lunch and cool-down',
+        description: plan.midday,
+      },
+      {
+        time: summer ? '11:30 AM' : '1:00 PM',
+        title: 'Flexible afternoon stop',
+        description: plan.afternoon,
+      },
+      {
+        time: summer ? '1:00 PM' : '2:30 PM',
+        title: 'Wrap up the adventure',
+        description:
+          'Start heading back while everyone still has some energy. Keep your backup option available if weather or family energy changes.',
+      },
+    ];
+  })();
 
   const familyMatches = getFamilyAdventureMatches({
     location,
@@ -836,28 +951,47 @@ const TripBuilder: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-zinc-50 p-5">
-                  <h3 className="mb-2 text-sm font-black uppercase tracking-[0.15em] text-zinc-500">
-                    Morning outdoor flow
-                  </h3>
-                  <p className="leading-relaxed text-zinc-700">{plan.morning}</p>
-                </div>
+                <section className="rounded-3xl border border-zinc-200 bg-white p-5 md:p-6">
+                  <div className="mb-5 flex items-center gap-3">
+                    <Clock className="h-5 w-5 text-orange-500" />
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">
+                        Your day, hour by hour
+                      </p>
+                      <h3 className="text-xl font-black tracking-tight">
+                        A realistic family schedule
+                      </h3>
+                    </div>
+                  </div>
 
-                <div className="rounded-2xl bg-zinc-50 p-5">
-                  <h3 className="mb-2 text-sm font-black uppercase tracking-[0.15em] text-zinc-500">
-                    Midday food and reset
-                  </h3>
-                  <p className="leading-relaxed text-zinc-700">{plan.midday}</p>
-                </div>
+                  <div className="space-y-4">
+                    {hourlyItinerary.map((item) => (
+                      <div
+                        key={`${item.time}-${item.title}`}
+                        className="grid gap-2 rounded-2xl bg-zinc-50 p-4 sm:grid-cols-[110px_1fr]"
+                      >
+                        <div className="font-black text-orange-600">
+                          {item.time}
+                        </div>
 
-                <div className="rounded-2xl bg-zinc-50 p-5">
-                  <h3 className="mb-2 text-sm font-black uppercase tracking-[0.15em] text-zinc-500">
-                    Afternoon option
-                  </h3>
-                  <p className="leading-relaxed text-zinc-700">
-                    {plan.afternoon}
+                        <div>
+                          <h4 className="font-black text-zinc-900">
+                            {item.title}
+                          </h4>
+                          <p className="mt-1 text-sm leading-relaxed text-zinc-600">
+                            {item.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+                    Times are planning estimates, not reservations or live travel times.
+                    Check current access, weather, operating hours, and driving conditions
+                    before leaving.
                   </p>
-                </div>
+                </section>
 
                 <div className="rounded-2xl border border-orange-200 bg-orange-50 p-5">
                   <h3 className="mb-3 text-sm font-black uppercase tracking-[0.15em] text-orange-700">
@@ -929,4 +1063,3 @@ const TripBuilder: React.FC = () => {
 };
 
 export default TripBuilder;
-
