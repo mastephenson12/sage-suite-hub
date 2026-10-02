@@ -58,7 +58,7 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-50 px-5 py-10 text-zinc-950">
+    <main id="main" className="min-h-screen bg-zinc-50 px-5 py-10 text-zinc-950">
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <Link to="/my-trips" className="inline-flex items-center gap-2 text-sm font-black text-emerald-800">
@@ -73,8 +73,8 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
         <section className="rounded-[2rem] bg-zinc-950 p-6 text-white md:p-9">
           <p className="text-[11px] font-black uppercase tracking-[.2em] text-emerald-300">Saved on this device</p>
           <h1 className="mt-3 text-4xl font-black md:text-6xl">{current.destination}</h1>
-          <p className="mt-4 text-zinc-300">{current.tripLength} Â· {current.season} Â· {current.groupLabel}</p>
-          <p className="mt-2 text-xs text-zinc-400">Saved {formatDate(current.savedAt)} Â· Updated {formatDate(current.updatedAt)}</p>
+          <p className="mt-4 text-zinc-300">{current.tripLength} · {current.season} · {current.groupLabel}</p>
+          <p className="mt-2 text-xs text-zinc-400">Saved {formatDate(current.savedAt)} · Updated {formatDate(current.updatedAt)}</p>
         </section>
 
         {!online && (
@@ -135,23 +135,23 @@ export default function MyTrips() {
   if (tripId) {
     const trip = findSavedTrip(tripId);
     if (trip) return <MyTripDetail trip={trip} />;
-    return <main className="mx-auto max-w-2xl px-6 py-20 text-center"><h1 className="text-4xl font-black">Trip not found on this device</h1><p className="mt-4 text-zinc-600">Saved trips stay in the browser and device where they were created.</p><Link to="/my-trips" className="mt-6 inline-block font-black text-emerald-800">Return to My Trips</Link></main>;
+    return <main id="main" className="mx-auto max-w-2xl px-6 py-20 text-center"><h1 className="text-4xl font-black">Trip not found on this device</h1><p className="mt-4 text-zinc-600">Saved trips stay in the browser and device where they were created.</p><Link to="/my-trips" className="mt-6 inline-block font-black text-emerald-800">Return to My Trips</Link></main>;
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 px-5 py-12 text-zinc-950">
+    <main id="main" className="min-h-screen bg-zinc-50 px-5 py-12 text-zinc-950">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-start justify-between gap-5">
-          <div><p className="text-[11px] font-black uppercase tracking-[.22em] text-emerald-700">Private Â· Stored on this device</p><h1 className="mt-3 text-5xl font-black md:text-7xl">My Arizona Trips</h1><p className="mt-4 max-w-2xl text-lg text-zinc-600">Open your saved plans, packing lists and trip notes even when cell service disappears.</p></div>
+          <div><p className="text-[11px] font-black uppercase tracking-[.22em] text-emerald-700">Private · Stored on this device</p><h1 className="mt-3 text-5xl font-black md:text-7xl">My Arizona Trips</h1><p className="mt-4 max-w-2xl text-lg text-zinc-600">Your saved plans, packing lists and trip notes, together. Download a copy before leaving cell coverage.</p></div>
           <span className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-black ${online ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}`}>{online ? <Wifi className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}{online ? 'Online' : 'Offline mode'}</span>
         </div>
 
         {trips.length === 0 ? (
-          <section className="mt-10 rounded-[2rem] border border-dashed border-zinc-300 bg-white p-8 text-center md:p-12"><PackageCheck className="mx-auto h-10 w-10 text-emerald-700" /><h2 className="mt-4 text-2xl font-black">No offline trips saved yet</h2><p className="mx-auto mt-3 max-w-xl text-zinc-600">Build a Sage trip, then select â€œSave Offline on This Phone.â€ No account is required.</p><Link to="/trip-builder" className="mt-6 inline-flex rounded-2xl bg-zinc-950 px-6 py-4 font-black text-white">Build a trip</Link></section>
+          <section className="mt-10 rounded-[2rem] border border-dashed border-zinc-300 bg-white p-8 text-center md:p-12"><PackageCheck className="mx-auto h-10 w-10 text-emerald-700" /><h2 className="mt-4 text-2xl font-black">No saved trips yet</h2><p className="mx-auto mt-3 max-w-xl text-zinc-600">Find an adventure, build your day, then choose Save my plan. No account is required.</p><Link to="/plan" className="mt-6 inline-flex rounded-2xl bg-zinc-950 px-6 py-4 font-black text-white">Build a trip</Link></section>
         ) : (
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {trips.map((trip) => (
-              <article key={trip.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm"><p className="text-[10px] font-black uppercase tracking-[.18em] text-emerald-700">Offline trip pass</p><h2 className="mt-2 text-3xl font-black">{trip.destination}</h2><p className="mt-2 text-sm text-zinc-600">{trip.tripLength} Â· {trip.season} Â· {trip.groupLabel}</p><p className="mt-5 text-xs text-zinc-400">Updated {formatDate(trip.updatedAt)}</p><Link to={`/my-trips/${trip.id}`} className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[#1047a2] px-5 py-3 font-black text-white">Open offline trip</Link></article>
+              <article key={trip.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm"><p className="text-[10px] font-black uppercase tracking-[.18em] text-emerald-700">Saved day plan</p><h2 className="mt-2 text-3xl font-black">{trip.destination}</h2><p className="mt-2 text-sm text-zinc-600">{trip.tripLength} · {trip.season} · {trip.groupLabel}</p><p className="mt-5 text-xs text-zinc-400">Updated {formatDate(trip.updatedAt)}</p><Link to={`/my-trips/${trip.id}`} className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[#1047a2] px-5 py-3 font-black text-white">Open saved plan</Link></article>
             ))}
           </div>
         )}
