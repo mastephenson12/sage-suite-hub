@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createRequire } from 'node:module';
 
+assert(!(await readFile('index.html','utf8')).includes('scripts.stay22.com/letmeallez.js'),'Automatic affiliate redirects must not intercept planning actions');
+
 const output = join(tmpdir(), `ht-journey-${process.pid}-${Date.now()}.cjs`);
 const result = await build({stdin:{contents:`export * from './src/utils/adventurePlanner'; export * from './src/utils/savedTrips'; export { arizonaFamilyDestinations } from './src/data/sage/arizonaFamilyDestinations';`,resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'node',format:'cjs',write:false});
 await writeFile(output,result.outputFiles[0].contents);

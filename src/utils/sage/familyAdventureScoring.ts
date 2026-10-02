@@ -117,7 +117,7 @@ function getMatchReasons(input: FamilyAdventureInput, destination: SageDestinati
   }
 
   if (destination.backupPlanScore >= 7) {
-    reasons.push('Has backup-plan potential if weather, naps, or tiny dictators change the schedule.');
+    reasons.push('Has backup-plan potential if weather, rest breaks, or changing energy levels change the schedule.');
   }
 
   if (input.season === 'summer' && destination.heatRiskScore <= 5) {

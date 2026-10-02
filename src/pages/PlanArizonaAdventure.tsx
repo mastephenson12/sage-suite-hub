@@ -21,7 +21,7 @@ function MatchCard({ match, answers, index }: {match:PlannerMatch; answers:Plann
     <strong>Why it made your shortlist</strong><ul className="journey-reasons">{match.reasons.slice(0,3).map(reason => <li key={reason}>{reason}</li>)}</ul>
     <div className="journey-caution"><strong>Before choosing</strong><p>{facts?.caution ?? match.caution}</p></div>
     {facts && <p className="journey-note">Guide facts reviewed {facts.reviewed}. Check the latest official notices before leaving.</p>}
-    <div className="journey-actions"><Link className="journey-button" to={builderHref(match,answers)} onClick={() => trackEvent('adventure_planner_build_trip_click',{destination:match.slug,rank:index+1})}>Build this day <span aria-hidden="true">→</span></Link><a className="text-link" href={guideFor(match)}>Read the full guide</a></div>
+    <div className="journey-actions"><Link className="journey-button" to={builderHref(match,answers)} onClick={() => trackEvent('adventure_planner_build_trip_click',{destination:match.slug,rank:index+1})}>Build this day <span aria-hidden="true">→</span></Link><a className="text-link" href={guideFor(match)}>{guideFor(match).endsWith('/arizona') ? 'Browse Arizona guides' : 'Read the full guide'}</a></div>
   </div></article>;
 }
 
@@ -68,7 +68,7 @@ export default function PlanArizonaAdventure() {
     </div>
     {submitted && <section className="journey-results" aria-label="Your adventure matches" aria-live="polite">
       <p className="journey-note">{matches.length} {matches.length === 1 ? 'option' : 'options'} within your drive and outing limits. Drive times are estimates from {originLabel}; check your exact route. Seasonal fit is not a live conditions check.</p>
-      {matches.length ? <div className="journey-grid">{matches.map((match,index)=><MatchCard key={match.slug} match={match} answers={confirmed} index={index}/>)}</div> : <div className="journey-empty"><h2>No close matches this time.</h2><p>Our current collection has no matches within these limits. Try a longer outing, a larger drive limit, or a different activity.</p><button className="journey-button secondary" onClick={()=>setEditing(true)}>Adjust my choices</button></div>}
+      {matches.length ? <div className={`journey-grid journey-matches-${matches.length}`}>{matches.map((match,index)=><MatchCard key={match.slug} match={match} answers={confirmed} index={index}/>)}</div> : <div className="journey-empty"><h2>No close matches this time.</h2><p>Our current collection has no matches within these limits. Try a longer outing, a larger drive limit, or a different activity.</p><button className="journey-button secondary" onClick={()=>setEditing(true)}>Adjust my choices</button></div>}
     </section>}
     <div className="journey-trust"><div><h2>One place. A realistic day.</h2><p>Your next step keeps these choices and opens a starter plan you can adjust and save on this device.</p></div><div><h3>Know before you go.</h3><p>Check current weather, access and facilities with official sources. <a href="https://healthandtravels.com/arizona-family-hiking-safety-guide">Read our family hiking safety guide →</a></p></div></div>
   </main>;
