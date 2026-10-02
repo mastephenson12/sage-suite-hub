@@ -10,9 +10,11 @@ Drive limits are conservative product defaults (60 minutes for a half day, 120 f
 
 1. Review the companion `healthandtravels-home` branch named `redesign/unified-adventure-journey`.
 2. Verify both previews together before production release. Publish Sage first, then the homepage, so the new form has a compatible receiver.
-3. Check desktop/mobile layout, keyboard flow, edit/back navigation, empty results, save/reopen, blocked storage, share cancellation and print. Browser interaction/visual QA has not been performed in this change.
+3. Check desktop/mobile layout, keyboard flow, edit/back navigation, empty results, save/reopen, blocked storage, share cancellation and print. Hosted preview QA on October 2 verified homepage-to-Sage handoff (Tucson, mixed ages, half day), direct match-to-plan navigation, save/reload/reopen with a checked packing item, editing and a 30-minute-drive empty state. Desktop homepage and 390px phone plan/empty-state layouts were visually checked. Full keyboard, native share cancellation and print-dialog checks remain before release.
 4. Confirm production analytics configuration. The local build does not have `VITE_GOOGLE_ANALYTICS_ID` configured.
 
 Validation: `npm run build` and `node scripts/test-adventure-journey.mjs`. To check the cross-site form contract too, pass the path to the companion `index.html` as the script's first argument. The checks cover 10,800 matching scenarios, handoff, input validation, empty results, origin-specific estimates and saved-plan persistence.
 
 This is the primary-journey release. Legacy matcher entry pages, editorial layouts, destination-fact expansion, a consolidated saved-places system and a full weekend itinerary remain later work. Existing article URLs, memberships and newsletter services are preserved.
+
+The global Stay22 automatic-link/redirect loader was removed after a preview click on Build this day opened Expedia. Explicit partner links remain. Rechecking the deployed preview confirmed direct planner navigation and plain destination names. Saved packing selections are restored when reopening the same plan URL. Directory fallbacks are labeled Browse Arizona guides.
