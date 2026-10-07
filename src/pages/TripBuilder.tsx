@@ -192,9 +192,31 @@ const TripBuilder: React.FC = () => {
     if (robots) robots.content = 'index, follow';
   }, []);
   const destinationFacts = getFamilyTripFacts(location);
-  const plan = buildTripPlan(location, hasKids, activity, length, season);
+  const basePlan = buildTripPlan(location, hasKids, activity, length, season);
+  const plan = destinationFacts?.id === 'estrella-mountain' ? {
+    ...basePlan,
+    title: 'Estrella Mountain: a short family morning',
+    intro: 'A practical cool-weather Gila Trail visit, with current closure constraints and an early finish. Confirm access before leaving; the schedule below is a researched starting point.',
+    morning: season === 'summer' ? 'Choose an indoor outing instead of this exposed desert trail in summer.' : 'Walk the county-listed easy 0.5-mile Gila loop only after confirming current access. Allow 30–45 minutes with breaks.',
+    midday: 'Bring a packed lunch to eat at home or your accommodation after leaving the park.',
+    afternoon: 'Keep the afternoon indoors. The playground, concrete path and Nature Center are closed in the reviewed alert.',
+    extras: ['Water, snacks and packed lunch', 'Hats, sunscreen and closed-toe shoes', 'Hand sanitizer, charged phone and downloaded park map', 'Confirm parking, portable toilets and route access with staff'],
+  } : basePlan;
+
+  const isEstrella = destinationFacts?.id === 'estrella-mountain';
+  const estrellaSchedule = [
+    { time: 'Before leaving', title: 'Check access before committing', description: 'Read the county closure notice and check the forecast. Call 602-506-2930 ext. 6 to confirm Gila trail access, parking and portable restroom locations. Choose another outing if your family needs reliable shade, regular toilets or confirmed stroller access.' },
+    { time: '8:00 AM', title: 'Arrive at Estrella Mountain Regional Park', description: 'Enter at 14805 W. Vineyard Ave., Goodyear. Ask staff for the current route to Gila trailhead; do not navigate through closed roads or assume Loop Drive parking has reopened. Budget $10 per vehicle and confirm current fees.' },
+    { time: '8:30 AM', title: 'Gila Trail: a short desert loop', description: 'The county lists Gila as an easy 0.5-mile loop. Allow 30–45 minutes with observation and water breaks; this is a planning estimate. Stay on the signed route and turn back if the surface or heat does not suit your group. Its usual barrier-free rating does not confirm current stroller conditions.' },
+    { time: '9:15 AM', title: 'Water, snacks and an energy check', description: 'Bring your own drinking water and snacks. Regular restrooms are unavailable in the reviewed alert; portable toilets are provided, but confirm their location and accessibility. Do not count on trail shade, a playground visit or the Nature Center.' },
+    { time: '9:45 AM', title: 'Shorter finish or head home', description: 'For tired kids, skip the full loop and use a brief out-and-back on the confirmed open portion of Gila, returning the same way. Do not add a midday desert hike. If access or heat is unsuitable, skip the trail entirely.' },
+    { time: 'Lunch', title: 'Packed lunch after leaving the park', description: 'Pack sandwiches, fruit and extra water for a simple lunch at home or your accommodation after the morning visit. This avoids depending on unconfirmed ramadas or restaurant hours. Keep the rest of a full day indoors; this park visit is a morning outing, not a full-day or weekend itinerary.' },
+  ];
 
   const hourlyItinerary = (() => {
+    if (isEstrella) return season === 'summer'
+      ? [{ time: 'Before leaving', title: 'Choose an indoor summer alternative', description: 'This exposed desert route is not the family summer itinerary. Keep lunch and activities at home or your accommodation; plan the Gila visit for cooler weather after checking closures.' }]
+      : estrellaSchedule;
     const summer = season === 'summer';
 
     if (length === 'half-day') {
@@ -376,7 +398,8 @@ const TripBuilder: React.FC = () => {
 
     return [
       destinationFacts ? formatFamilyTripFacts(destinationFacts) : '',
-      personalizedBrief,
+      isEstrella ? '' : personalizedBrief,
+      isEstrella ? hourlyItinerary.map(item => `${item.time}: ${item.title} — ${item.description}`).join('\n') : '',
       plan.title,
       plan.intro,
       `Safety: ${plan.safety.title} — ${plan.safety.suggestion}`,
@@ -408,6 +431,11 @@ const TripBuilder: React.FC = () => {
     setAiPlan(null);
     setAiPlanStatus('loading');
     setSearchParams(shareParams, { replace: true });
+
+    if (isEstrella) {
+      setAiPlanStatus('idle');
+      return;
+    }
 
     try {
       const personalizedPlan = await generateSageTripPlan({
@@ -745,7 +773,7 @@ const TripBuilder: React.FC = () => {
                     </div>
                   )}
 
-                  {aiPlanStatus === 'ready' && aiPlan && (
+                  {aiPlanStatus === 'ready' && aiPlan && !isEstrella && (
                     <div className="mt-3 space-y-4 text-emerald-950">
                       <div>
                         <h3 className="text-2xl font-black tracking-tight">{aiPlan.title}</h3>
@@ -964,6 +992,15 @@ const TripBuilder: React.FC = () => {
                     </div>
                   </div>
 
+                  {isEstrella && <div className="mb-5 space-y-3 text-sm">
+                    <p className="font-semibold">Cool-weather morning plan · researched October 7, 2026 · check conditions again before travel.</p>
+                    <p>Pack water for everyone, snacks or lunch, hats, sunscreen, closed-toe shoes, hand sanitizer, a charged phone and a downloaded park map.</p>
+                    <div className="flex flex-wrap gap-4">
+                      <a className="font-bold underline" href="https://www.google.com/maps/search/?api=1&query=14805+W+Vineyard+Ave+Goodyear+AZ">Park entrance directions</a>
+                      <a className="font-bold underline" href="https://www.maricopacountyparks.net/assets/1/6/estrella-8x11.pdf">Official trail map</a>
+                      <a className="font-bold underline" href="https://www.maricopacountyparks.net/estrella---storm-damage-update-and-temporary-closures/">Check current closures</a>
+                    </div>
+                  </div>}
                   <div className="space-y-4">
                     {hourlyItinerary.map((item) => (
                       <div
