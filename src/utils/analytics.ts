@@ -1,4 +1,5 @@
 export type AnalyticsEventName =
+  | 'adventure_plan_saved'
   | 'homepage_plan_trip_click'
   | 'homepage_quick_plan_submit'
   | 'trip_builder_submit'

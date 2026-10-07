@@ -635,9 +635,9 @@ const startHereHtml = applySeo(baseHtml, {
 await writeRoute(startHerePath, startHereHtml);
 
 const plannerHtml = applySeo(baseHtml, {
-  title: 'Plan My Arizona Adventure | Sage',
+  title: 'Plan Your Arizona Adventure | Health & Travels',
   description:
-    'Answer five quick questions and get three Arizona adventure recommendations matched to your starting point, group, available time, interests, and practical needs.',
+    'Find up to three Arizona adventures matched to your starting point, group, available time, interests and practical needs.',
   url: `${siteUrl}/${plannerPath}`,
   faqs: plannerFaqs,
 });
