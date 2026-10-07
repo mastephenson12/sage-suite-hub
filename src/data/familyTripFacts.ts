@@ -128,12 +128,12 @@ export const familyTripFacts: FamilyTripFacts[] = [
     ],
     "name": "Estrella Mountain Regional Park",
     "guide": "https://healthandtravels.com/estrella-mountain-regional-park-family-guide",
-    "reviewed": "2026-09-09",
-    "reviewNote": "County fees and storm-damage notice checked September 9, 2026. This is an online check, not a new field visit. Recheck the alert before travel.",
+    "reviewed": "2026-10-07",
+    "reviewNote": "County fees and storm-damage notice checked October 7, 2026. This is an online check, not a new field visit. Recheck the alert before travel.",
     "facts": [
       [
         "Distance",
-        "Route dependent; choose an open mapped trail and set a turnaround. No single family route is verified here."
+        "County lists Gila as an easy 0.5-mile loop. Confirm the whole route is usable after storm damage."
       ],
       [
         "Terrain",
@@ -145,7 +145,7 @@ export const familyTripFacts: FamilyTripFacts[] = [
       ],
       [
         "Shade",
-        "Exposed trails. Loop Drive ramadas are listed closed through September 18, 2026; verify reopening."
+        "Exposed trails. Loop Drive ramadas are listed closed through October 2, 2026; verify reopening."
       ],
       [
         "Stroller / mobility",
@@ -157,11 +157,11 @@ export const familyTripFacts: FamilyTripFacts[] = [
       ],
       [
         "Parking",
-        "Loop Drive parking listed closed through September 18, 2026. Gila and Quail trailheads are listed open; recheck access."
+        "Loop Drive parking listed closed through October 2, 2026. Gila and Quail trailheads are listed open; recheck access."
       ],
       [
         "Time",
-        "Plan only after confirming an open route or facility that fits your group."
+        "Allow 30–45 minutes for the short Gila walk with breaks (planning estimate), plus arrival and snacks."
       ],
       [
         "Choose another outing if",
@@ -169,6 +169,8 @@ export const familyTripFacts: FamilyTripFacts[] = [
       ]
     ],
     "sources": [
+      { "label": "County Gila trail distance and rating", "url": "https://www.maricopa.gov/6685/Bark-Ranger" },
+      { "label": "Official park trail map", "url": "https://www.maricopacountyparks.net/assets/1/6/estrella-8x11.pdf" },
       {
         "label": "County storm-damage and closure notice",
         "url": "https://www.maricopacountyparks.net/estrella---storm-damage-update-and-temporary-closures/"
@@ -178,7 +180,7 @@ export const familyTripFacts: FamilyTripFacts[] = [
         "url": "https://www.maricopacountyparks.net/park-locator/estrella-mountain-regional-park/fees/"
       }
     ],
-    "caution": "Storm-damage notice checked September 9: playground, concrete path and Nature Center closed; Loop Drive ramadas and parking closed through September 18. Do not assume reopening without checking."
+    "caution": "Storm-damage notice checked October 7: playground, concrete path and Nature Center closed; Loop Drive ramadas and parking closed through October 2. Do not assume reopening without checking."
   }
 ];
 export function getFamilyTripFacts(destination: string): FamilyTripFacts | undefined {
