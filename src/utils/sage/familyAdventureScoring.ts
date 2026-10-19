@@ -173,6 +173,7 @@ export function scoreFamilyAdventure(
 
 export function getFamilyAdventureMatches(input: FamilyAdventureInput): SageDestinationMatch[] {
   return arizonaFamilyDestinations
+    .filter((destination) => destination.driveMinutesFromPhoenix <= input.maxDriveMinutes)
     .map((destination) => scoreFamilyAdventure(input, destination))
     .sort((a, b) => {
       const locationDifference =
