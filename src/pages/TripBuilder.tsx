@@ -153,6 +153,11 @@ const TripBuilder: React.FC = () => {
   const [aiPlan, setAiPlan] = useState<SageAiTripPlan | null>(null);
   const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
   const isGeneratedPlan = searchParams.get('plan') === 'ready';
+  const activePlanRequest = React.useRef<AbortController | null>(null);
+  React.useEffect(() => () => {
+    activePlanRequest.current?.abort();
+    activePlanRequest.current = null;
+  }, [location, origin, hasKids, activity, length, season, kidAgeGroup, wantsShade, needsBathrooms, needsStrollerAccess, maxDriveMinutes]);
 
   React.useEffect(() => {
     if (searchParams.get('source') !== 'health-travels-matcher') return;
@@ -367,6 +372,8 @@ const TripBuilder: React.FC = () => {
 
   const handleBuildTrip = async (e: React.FormEvent) => {
     e.preventDefault();
+    activePlanRequest.current?.abort();
+    activePlanRequest.current = null;
     trackEvent('trip_builder_submit', {
       destination: location.trim() || 'Arizona',
       has_kids: hasKids === 'yes',
@@ -391,6 +398,8 @@ const TripBuilder: React.FC = () => {
       return;
     }
 
+    const controller = new AbortController();
+    activePlanRequest.current = controller;
     try {
       const personalizedPlan = await generateSageTripPlan({
         destination: location.trim() || 'Arizona',
@@ -404,10 +413,12 @@ const TripBuilder: React.FC = () => {
         needsBathrooms,
         needsStrollerAccess,
         maxDriveMinutes,
-      });
+      }, controller.signal);
+      if (controller.signal.aborted || activePlanRequest.current !== controller) return;
       setAiPlan(personalizedPlan);
       setAiPlanStatus('ready');
     } catch (error) {
+      if (controller.signal.aborted || activePlanRequest.current !== controller) return;
       console.warn('Personalized Sage plan unavailable; showing local plan.', error);
       setAiPlanStatus('fallback');
     }
