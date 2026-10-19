@@ -53,7 +53,7 @@ const kidAgeGroupLabels: Record<KidAgeGroup, string> = {
   teens: 'Tweens / teens',
 };
 
-const driveTimeOptions = [30, 60, 90, 120, 180, 240];
+const driveTimeOptions = [30, 60, 90, 120, 165, 180, 240, 300];
 
 const activityOptions: ActivityType[] = ['hike', 'explore', 'relax'];
 const tripLengthOptions: TripLength[] = ['half-day', 'full-day', 'weekend'];
@@ -646,7 +646,7 @@ const TripBuilder: React.FC = () => {
                   >
                     {driveTimeOptions.map((minutes) => (
                       <option key={minutes} value={minutes}>
-                        {minutes >= 240 ? '4 hours or more' : `${minutes} minutes`}
+                        {`${minutes} minutes`}
                       </option>
                     ))}
                   </select>
@@ -874,6 +874,7 @@ const TripBuilder: React.FC = () => {
                   </div>
 
                   <div className="space-y-4">
+                    {familyMatches.length === 0 && <p>No destinations in our catalog fit this drive limit from Phoenix. Increase the limit or choose a closer outing. A manually entered destination is not guaranteed to fit.</p>}
                     {familyMatches.map((match, index) => (
                       <article
                         key={match.slug}
