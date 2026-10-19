@@ -1,3 +1,5 @@
+import type { Origin } from '../utils/sage/tripOrigins';
+
 export type SageAiTripPlan = {
   title: string;
   summary: string;
@@ -6,7 +8,7 @@ export type SageAiTripPlan = {
     description: string;
     coordinates: { latitude: number; longitude: number } | null;
   };
-  driveFromPhoenix: string;
+  driveFromOrigin: string;
   foodStop: { name: string; description: string };
   facilities: { restrooms: string; shade: string };
   backupPlan: string;
@@ -15,6 +17,7 @@ export type SageAiTripPlan = {
 };
 
 export type SageTripPlanRequest = {
+  origin: Origin;
   destination: string;
   group: string;
   activity: string;

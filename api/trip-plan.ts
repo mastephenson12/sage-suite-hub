@@ -1,3 +1,4 @@
+import { readOrigin, originLabel, origins, type Origin } from '../src/utils/sage/tripOrigins.js';
 import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTripFacts.js';
 import { GoogleGenAI } from '@google/genai';
 
@@ -6,6 +7,7 @@ const MAX_REQUESTS_PER_WINDOW = 8;
 const requestBuckets = new Map<string, { count: number; resetAt: number }>();
 
 type TripPlanRequest = {
+  origin: Origin;
   destination: string;
   group: string;
   activity: string;
@@ -66,6 +68,7 @@ function parseRequest(value: unknown): TripPlanRequest | null {
   const season = cleanString(body.season, 30);
   const kidAgeGroup = cleanString(body.kidAgeGroup, 40);
   const maxDriveMinutes = Number(body.maxDriveMinutes);
+  if (body.origin !== undefined && !origins.some(option => option.value === body.origin)) return null;
 
   if (
     !destination ||
@@ -83,6 +86,7 @@ function parseRequest(value: unknown): TripPlanRequest | null {
 
   return {
     destination,
+    origin: readOrigin(body.origin),
     group,
     activity,
     length,
@@ -124,7 +128,7 @@ function parsePlan(value: unknown) {
           ? { latitude, longitude }
           : null,
     },
-    driveFromPhoenix: stringValue(plan.driveFromPhoenix, 240),
+    driveFromOrigin: stringValue(plan.driveFromOrigin, 240),
     foodStop: {
       name: stringValue(food?.name, 160),
       description: stringValue(food?.description),
@@ -140,7 +144,7 @@ function parsePlan(value: unknown) {
 
   if (
     !result.title || !result.summary || !result.outdoorAnchor.name ||
-    !result.outdoorAnchor.description || !result.driveFromPhoenix ||
+    !result.outdoorAnchor.description || !result.driveFromOrigin ||
     !result.foodStop.name || !result.foodStop.description ||
     !result.facilities.restrooms || !result.facilities.shade ||
     !result.backupPlan || !result.verificationNote
@@ -184,9 +188,9 @@ export async function POST(req: Request) {
       model: 'gemini-2.5-flash',
       config: {
         responseMimeType: 'application/json',
-        systemInstruction: `You are Sage, a careful Arizona family trip planner. Return only JSON matching the requested shape. Recommend one real, well-known outdoor anchor appropriate to the request. Never invent operating hours, fees, restroom availability, shade, drive times, restaurant details, or coordinates. Qualify anything that may change and tell the traveler to verify current conditions. Drive time is an estimate from central Phoenix, not live navigation. Food recommendations should be practical and kid-friendly, but avoid claiming current opening status. Arizona plans must address heat, hydration, weather, seasonal access, and a realistic backup. Use the supplied reviewed destination snapshot for factual constraints. Preserve its uncertainty and review date. Do not recommend facilities listed closed, assume a reopening, or replace unknown facts with guesses. If the group needs a facility or access the snapshot cannot support, recommend an alternative plan. The snapshot is not a live conditions feed.`,
+        systemInstruction: `You are Sage, a careful Arizona family trip planner. Return only JSON matching the requested shape. Recommend one real, well-known outdoor anchor appropriate to the request. Never invent operating hours, fees, restroom availability, shade, drive times, restaurant details, or coordinates. Qualify anything that may change and tell the traveler to verify current conditions. Drive time is an estimate from ${originLabel(request.origin)}, the requested starting area, not live navigation. Never substitute Phoenix for another requested starting area. Food recommendations should be practical and kid-friendly, but avoid claiming current opening status. Arizona plans must address heat, hydration, weather, seasonal access, and a realistic backup. Use the supplied reviewed destination snapshot for factual constraints. Preserve its uncertainty and review date. Do not recommend facilities listed closed, assume a reopening, or replace unknown facts with guesses. If the group needs a facility or access the snapshot cannot support, recommend an alternative plan. The snapshot is not a live conditions feed.`,
       },
-      contents: `Create a practical trip plan for this request:\n${JSON.stringify(request)}\n\nReviewed destination snapshot:\n${factContext}\n\nReturn this exact JSON shape with no markdown:\n{"title":"","summary":"","outdoorAnchor":{"name":"","description":"","coordinates":{"latitude":0,"longitude":0}},"driveFromPhoenix":"","foodStop":{"name":"","description":""},"facilities":{"restrooms":"","shade":""},"backupPlan":"","cautions":[""],"verificationNote":""}`,
+      contents: `Create a practical trip plan for this request:\n${JSON.stringify(request)}\n\nReviewed destination snapshot:\n${factContext}\n\nReturn this exact JSON shape with no markdown:\n{"title":"","summary":"","outdoorAnchor":{"name":"","description":"","coordinates":{"latitude":0,"longitude":0}},"driveFromOrigin":"","foodStop":{"name":"","description":""},"facilities":{"restrooms":"","shade":""},"backupPlan":"","cautions":[""],"verificationNote":""}`,
     });
 
     const parsed = JSON.parse(response.text || '{}');

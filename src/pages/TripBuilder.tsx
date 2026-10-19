@@ -1,3 +1,4 @@
+import { Origin, origins, readOrigin, originLabel } from '../utils/sage/tripOrigins';
 import { getFamilyTripFacts } from '../data/familyTripFacts';
 import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -118,6 +119,7 @@ const TripBuilder: React.FC = () => {
   const initialLocation = fromSlug(searchParams.get('location'));
 
   const [location, setLocation] = useState(initialLocation);
+  const [origin, setOrigin] = useState<Origin>(readOrigin(searchParams.get('origin')));
   const [hasKids, setHasKids] = useState(
     readChoice(searchParams.get('kids'), ['yes', 'no'], 'yes')
   );
@@ -332,6 +334,7 @@ const TripBuilder: React.FC = () => {
 
   const familyMatches = getFamilyAdventureMatches({
     location,
+    origin,
     hasKids: hasKids === 'yes',
     activity,
     length,
@@ -356,6 +359,7 @@ const TripBuilder: React.FC = () => {
   shareParams.set('bathrooms', String(needsBathrooms));
   shareParams.set('stroller', String(needsStrollerAccess));
   shareParams.set('drive', String(maxDriveMinutes));
+  shareParams.set('origin', origin);
   ['source', 'needs', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach((key) => {
     const value = searchParams.get(key);
     if (value) shareParams.set(key, value);
@@ -390,6 +394,7 @@ const TripBuilder: React.FC = () => {
     try {
       const personalizedPlan = await generateSageTripPlan({
         destination: location.trim() || 'Arizona',
+        origin,
         group: hasKids === 'yes' ? 'Family with kids' : 'Adults only',
         activity,
         length,
@@ -416,7 +421,7 @@ const TripBuilder: React.FC = () => {
         url="https://sage.healthandtravels.com/trip-builder"
         robots={isGeneratedPlan ? 'noindex, follow' : 'index, follow'}
       />
-      <PlanningJourney step={submitted ? 3 : 2} title={submitted ? `Your ${location || 'Arizona'} plan` : location ? `Make ${location} your kind of day` : 'Personalize your Arizona day'} description={submitted ? 'Review your day, check the practical details, and keep your plan before you go.' : 'Your choices are filled in below. Confirm the details that matter, then build your plan.'} context={[hasKids === 'yes' ? kidAgeGroupLabels[kidAgeGroup] : 'Adults only', tripLengthLabels[length], seasonLabels[season], `Up to ${maxDriveMinutes} min from Phoenix`, ...(wantsShade ? ['Shade matters'] : []), ...(needsBathrooms ? ['Bathrooms matter'] : [])]} />
+      <PlanningJourney step={submitted ? 3 : 2} title={submitted ? `Your ${location || 'Arizona'} plan` : location ? `Make ${location} your kind of day` : 'Personalize your Arizona day'} description={submitted ? 'Review your day, check the practical details, and keep your plan before you go.' : 'Your choices are filled in below. Confirm the details that matter, then build your plan.'} context={[hasKids === 'yes' ? kidAgeGroupLabels[kidAgeGroup] : 'Adults only', tripLengthLabels[length], seasonLabels[season], `Up to ${maxDriveMinutes} min from ${originLabel(origin)}`, ...(wantsShade ? ['Shade matters'] : []), ...(needsBathrooms ? ['Bathrooms matter'] : [])]} />
       <section className="mx-auto max-w-6xl px-6 py-8 md:py-10">
         <div className="space-y-8">
           <details id="trip-preferences" className="journey-disclosure" open={!submitted}>
@@ -554,9 +559,20 @@ const TripBuilder: React.FC = () => {
                 </div>
 
                 <div>
+                  <label htmlFor="trip-origin" className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                    <MapPin className="h-4 w-4 text-orange-500" />
+                    Where are you starting from?
+                  </label>
+                  <select id="trip-origin" value={origin}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setOrigin(readOrigin(e.target.value)); }}
+                    className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400">
+                    {origins.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                  </select>
+                </div>
+                <div>
                   <label htmlFor="trip-drive" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <Car className="h-4 w-4 text-orange-500" />
-                    Max drive from Phoenix
+                    Max drive from {originLabel(origin)}
                   </label>
                   <select
                     id="trip-drive"
@@ -709,8 +725,8 @@ const TripBuilder: React.FC = () => {
                           <p className="mt-1 text-sm leading-relaxed">{aiPlan.outdoorAnchor.description}</p>
                         </div>
                         <div className="rounded-2xl bg-white p-4">
-                          <p className="font-black">Estimated drive from Phoenix</p>
-                          <p className="mt-1 text-sm leading-relaxed">{aiPlan.driveFromPhoenix}</p>
+                          <p className="font-black">Estimated drive from {originLabel(origin)}</p>
+                          <p className="mt-1 text-sm leading-relaxed">{aiPlan.driveFromOrigin}</p>
                         </div>
                         <div className="rounded-2xl bg-white p-4">
                           <p className="font-black">Kid-friendly food</p>
@@ -747,7 +763,7 @@ const TripBuilder: React.FC = () => {
 
                 <details className="journey-disclosure"><summary>Other adventures within your drive limit</summary>
                   <div className="space-y-4">
-                    {familyMatches.length === 0 && <p>No destinations in our catalog fit this drive limit from Phoenix. Increase the limit or choose a closer outing. A manually entered destination is not guaranteed to fit.</p>}
+                    {familyMatches.length === 0 && <p>No destinations in our catalog fit this drive limit from {originLabel(origin)}. Increase the limit or choose a closer outing. A manually entered destination is not guaranteed to fit.</p>}
                     {familyMatches.map((match, index) => (
                       <article
                         key={match.slug}
@@ -779,7 +795,7 @@ const TripBuilder: React.FC = () => {
                             Stroller {match.strollerScore}/10
                           </span>
                           <span className="rounded-full bg-zinc-100 px-3 py-2">
-                            Drive {match.driveMinutesFromPhoenix} min
+                            Drive {match.estimatedDriveMinutes} min from {originLabel(origin)}
                           </span>
                         </div>
 
@@ -907,10 +923,11 @@ const TripBuilder: React.FC = () => {
                 <details className="journey-disclosure"><summary>More preparation tips</summary><ul className="space-y-2">{plan.extras.map(item => <li key={item}>{item}</li>)}</ul></details>
                 <TripBuilderResultEnhancer itinerary={hourlyItinerary} personalizing={aiPlanStatus === 'loading'} sections={[
                   {title: 'Trip overview', description: plan.intro},
+                  {title: 'Starting area', description: `${originLabel(origin)}. Drive limit: ${maxDriveMinutes} minutes one way. Times are planning estimates; check your route before leaving.`},
                   {title: 'Safety and conditions', description: `${plan.safety.title}: ${plan.safety.message} ${plan.safety.suggestion}`},
                   ...(!isEstrella && aiPlan ? [
                     {title: aiPlan.outdoorAnchor.name, description: aiPlan.outdoorAnchor.description},
-                    {title: 'Estimated drive from Phoenix', description: aiPlan.driveFromPhoenix},
+                    {title: `Estimated drive from ${originLabel(origin)}`, description: aiPlan.driveFromOrigin},
                     {title: aiPlan.foodStop.name, description: aiPlan.foodStop.description},
                     {title: 'Bathrooms and shade', description: `${aiPlan.facilities.restrooms} ${aiPlan.facilities.shade}`},
                     {title: 'Backup plan', description: aiPlan.backupPlan},
