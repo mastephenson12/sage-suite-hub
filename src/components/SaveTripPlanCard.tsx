@@ -34,7 +34,8 @@ interface SaveTripPlanCardProps {
   season: string;
   tripLength: string;
   groupLabel: string;
-  confidenceScore: number;
+  confidenceScore?: number;
+  personalizing?: boolean;
   wantsShade: boolean;
   needsBathrooms: boolean;
   dietaryNeeds?: string;
@@ -48,7 +49,8 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   season,
   tripLength,
   groupLabel,
-  confidenceScore,
+  confidenceScore = 0,
+  personalizing = false,
   wantsShade,
   needsBathrooms,
   dietaryNeeds = 'No special request',
@@ -76,7 +78,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     `Timing: ${season}`,
     `Trip style: ${tripLength}`,
     `Group: ${groupLabel}`,
-    `Sage confidence: ${confidenceScore}%`,
+    ...(confidenceScore > 0 ? [`Sage confidence: ${confidenceScore}%`] : []),
     wantsShade ? 'Shade: prioritized' : 'Shade: flexible',
     needsBathrooms ? 'Bathrooms: prioritized' : 'Bathrooms: optional',
     `Food needs: ${dietaryNeeds}`,
@@ -183,94 +185,37 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   const smsHref = `sms:?&body=${encodeURIComponent(planBody)}`;
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(planBody)}`;
 
-  const includedItems = [
-    'Simple day flow',
-    'Kid-fit + family reality check',
-    'Parking, bathroom + shade priorities',
-    'Packing checklist',
-    "Don't Ruin the Day safety notes",
-    'Plan B when weather, parking, or kid energy changes',
-  ];
-
   return (
-    <article className="overflow-hidden rounded-3xl border-2 border-emerald-300 bg-emerald-50 text-zinc-950 shadow-lg">
-      <div className="bg-emerald-950 p-6 text-white md:p-7">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">Your plan is worth keeping</p>
-        <h3 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">Your {destination} day is basically planned.</h3>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-emerald-50/85 md:text-base">
-          Send the complete adventure plan to your inbox so it is there when everyone is in the car asking, “Where are we going again?”
-        </p>
-      </div>
-
-      <div className="p-5 md:p-6">
-        <div className="grid gap-2 sm:grid-cols-2">
-          {includedItems.map((item) => (
-            <div key={item} className="flex items-start gap-2 rounded-2xl bg-white p-3 text-sm font-bold text-zinc-800">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
-              <span>{item}</span>
-            </div>
-          ))}
+    <article id="keep-trip-plan" className="scroll-mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-7">
+      <p className="journey-eyebrow !mt-0">Keep your plan</p>
+      <h3 className="mt-2">Take your {destination} plan with you</h3>
+      <p className="mt-2 text-slate-600">Save it here before you leave. No account needed.</p>
+      <button type="button" onClick={handleSaveOffline} className="journey-primary mt-5 gap-2">
+        {savedOffline ? <CheckCircle2 className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
+        {savedOffline ? 'Saved in My Trips' : 'Save My Plan on This Device'}
+      </button>
+      <p className="mt-2 text-xs text-slate-500">Stored in this browser. Clearing site data removes saved trips.</p>
+      {personalizing && <p role="status" className="mt-3 text-sm text-slate-600">Sage is still adding details. Save again once personalization finishes to include them.</p>}
+      <form id="email-trip-pack" onSubmit={handleSavePlan} aria-busy={emailStatus === 'sending'} className="mt-6 border-t border-slate-200 pt-5">
+        <label htmlFor="trip-pack-email" className="block font-bold">Or email this plan to yourself</label>
+        <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
+          <input id="trip-pack-email" type="email" value={email} onChange={event => {setEmail(event.target.value);if(emailStatus !== 'idle')setEmailStatus('idle');setEmailError('');}} placeholder="you@example.com" autoComplete="email" inputMode="email" aria-label="Email address for your complete adventure plan" required className="min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base" />
+          <button type="submit" disabled={emailStatus === 'sending'} className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-900 disabled:opacity-60">{emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Plan Sent' : 'Email My Plan'}</button>
         </div>
-
-        <form id="email-trip-pack" onSubmit={handleSavePlan} aria-busy={emailStatus === 'sending'} className="mt-5 rounded-3xl border border-emerald-200 bg-white p-4 shadow-sm md:p-5">
-          <label htmlFor="trip-pack-email" className="block text-sm font-black text-zinc-950">Email my complete adventure plan</label>
-          <p className="mt-1 text-xs leading-relaxed text-zinc-600">One email address. No account required. We send the useful version, not another planning chore.</p>
-          <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
-            <input
-              id="trip-pack-email"
-              type="email"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                if (emailStatus !== 'idle') setEmailStatus('idle');
-                if (emailError) setEmailError('');
-              }}
-              placeholder="you@example.com"
-              autoComplete="email"
-              inputMode="email"
-              aria-label="Email address for your complete adventure plan"
-              className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base font-semibold text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-              required
-            />
-            <button type="submit" disabled={emailStatus === 'sending'} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 px-5 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-orange-600 disabled:cursor-wait disabled:opacity-70">
-              {emailStatus === 'sent' ? <CheckCircle2 className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
-              {emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Plan Sent' : 'Send My Adventure Plan'}
-            </button>
-          </div>
-
-          {emailStatus === 'sent' && (
-            <p className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm font-bold text-emerald-800" role="status">Your adventure plan is on its way. Keep the email for trip morning.</p>
-          )}
-          {emailStatus === 'error' && (
-            <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm font-bold text-red-800" role="alert">{emailError} You can still save or copy the plan below.</p>
-          )}
-          <p className="mt-3 text-[11px] leading-relaxed text-zinc-500">We use this address to deliver this trip plan. Newsletter signup stays separate.</p>
-        </form>
-
-        <div className="mt-5 border-t border-emerald-200 pt-5">
-          <div className="mb-3 flex items-center gap-2">
-            <Phone className="h-4 w-4 text-emerald-800" />
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-900">Also keep it on your phone</p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <button type="button" onClick={handleSaveOffline} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-800 px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-white transition hover:bg-emerald-900 sm:col-span-2">
-              {savedOffline ? <CheckCircle2 className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
-              {savedOffline ? 'Saved in My Trips' : 'Save Offline on This Phone'}
-            </button>
-            <button type="button" onClick={handleShareToPhone} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-emerald-950">
-              {shared ? <CheckCircle2 className="h-4 w-4" /> : <Phone className="h-4 w-4" />}{shared ? 'Shared' : 'Share'}
-            </button>
-            <button type="button" onClick={handleCopyPass} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-emerald-950">
-              {copied ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}{copied ? 'Copied' : 'Copy Plan'}
-            </button>
-            <a href={smsHref} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-emerald-950"><MessageCircle className="h-4 w-4" />Text It</a>
-            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-emerald-950"><Send className="h-4 w-4" />WhatsApp</a>
-            <button type="button" onClick={() => window.print()} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-emerald-950 sm:col-span-2"><Printer className="h-4 w-4" />Print or Save PDF</button>
-          </div>
+        {emailStatus === 'sent' && <p role="status" className="mt-3 text-sm font-bold text-emerald-800">Your adventure plan is on its way.</p>}
+        {emailStatus === 'error' && <p role="alert" className="mt-3 text-sm font-bold text-red-800">{emailError} You can still save or copy the plan.</p>}
+        <p className="mt-3 text-xs text-slate-500">Used only to deliver this plan. Newsletter signup stays separate.</p>
+      </form>
+      <details className="mt-5 border-t border-slate-200 pt-4"><summary className="cursor-pointer py-2 font-bold text-blue-900">More ways to keep or share</summary>
+        <div className="mt-3 flex flex-wrap gap-3 text-sm font-bold text-blue-900">
+          <button type="button" onClick={handleShareToPhone} className="rounded-xl border bg-white px-4 py-3">{shared ? 'Shared' : 'Share'}</button>
+          <button type="button" onClick={handleCopyPass} className="rounded-xl border bg-white px-4 py-3">{copied ? 'Copied' : 'Copy Plan'}</button>
+          <a href={smsHref} className="rounded-xl border bg-white px-4 py-3">Text It</a>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="rounded-xl border bg-white px-4 py-3">WhatsApp</a>
+          <button type="button" onClick={() => window.print()} className="rounded-xl border bg-white px-4 py-3">Print or Save PDF</button>
         </div>
-      </div>
+      </details>
     </article>
   );
 };
-
 export default SaveTripPlanCard;
