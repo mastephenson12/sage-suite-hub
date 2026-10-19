@@ -1,3 +1,4 @@
+import { Origin, originLabel, driveMinutesFromOrigin } from './tripOrigins';
 import { ActivityType, TripSeason } from './heatSafety';
 import { TripLength } from './familyTripRules';
 import { arizonaFamilyDestinations } from '../../data/sage/arizonaFamilyDestinations';
@@ -6,6 +7,7 @@ export type KidAgeGroup = 'toddlers' | 'elementary' | 'mixed' | 'teens';
 
 export type FamilyAdventureInput = {
   location: string;
+  origin?: Origin;
   hasKids: boolean;
   activity: ActivityType;
   length: TripLength;
@@ -41,6 +43,7 @@ export type SageDestination = {
 };
 
 export type SageDestinationMatch = SageDestination & {
+  estimatedDriveMinutes: number | null;
   score: number;
   fitLabel: string;
   reasons: string[];
@@ -122,8 +125,10 @@ function getMatchReasons(input: FamilyAdventureInput, destination: SageDestinati
     reasons.push('Lower summer heat risk than exposed desert hikes.');
   }
 
-  if (destination.driveMinutesFromPhoenix <= input.maxDriveMinutes) {
-    reasons.push(`Within your ${input.maxDriveMinutes}-minute drive target from Phoenix.`);
+  const origin = input.origin ?? 'phoenix';
+  const driveMinutes = driveMinutesFromOrigin(origin, destination);
+  if (driveMinutes !== null && driveMinutes <= input.maxDriveMinutes) {
+    reasons.push(`Within your ${input.maxDriveMinutes}-minute drive target from ${originLabel(origin)}.`);
   }
 
   return reasons.slice(0, 4);
@@ -149,8 +154,9 @@ export function scoreFamilyAdventure(
   if (input.needsBathrooms) score += destination.bathroomScore;
   if (input.needsStrollerAccess) score += destination.strollerScore * 2;
 
-  if (destination.driveMinutesFromPhoenix > input.maxDriveMinutes) {
-    score -= Math.min(18, Math.ceil((destination.driveMinutesFromPhoenix - input.maxDriveMinutes) / 15));
+  const estimatedDriveMinutes = driveMinutesFromOrigin(input.origin ?? 'phoenix', destination);
+  if (estimatedDriveMinutes !== null && estimatedDriveMinutes > input.maxDriveMinutes) {
+    score -= Math.min(18, Math.ceil((estimatedDriveMinutes - input.maxDriveMinutes) / 15));
   }
 
   if (input.season === 'summer') {
@@ -165,6 +171,7 @@ export function scoreFamilyAdventure(
 
   return {
     ...destination,
+    estimatedDriveMinutes,
     score: finalScore,
     fitLabel: getFitLabel(finalScore),
     reasons: getMatchReasons(input, destination),
@@ -173,7 +180,10 @@ export function scoreFamilyAdventure(
 
 export function getFamilyAdventureMatches(input: FamilyAdventureInput): SageDestinationMatch[] {
   return arizonaFamilyDestinations
-    .filter((destination) => destination.driveMinutesFromPhoenix <= input.maxDriveMinutes)
+    .filter((destination) => {
+      const minutes = driveMinutesFromOrigin(input.origin ?? 'phoenix', destination);
+      return minutes !== null && minutes <= input.maxDriveMinutes;
+    })
     .map((destination) => scoreFamilyAdventure(input, destination))
     .sort((a, b) => {
       const locationDifference =
