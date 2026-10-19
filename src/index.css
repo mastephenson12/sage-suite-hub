@@ -85,3 +85,5 @@ a {
 @media(max-width:850px){.journey-header-inner{align-items:flex-start;flex-direction:column;gap:12px}.journey-navigation{gap:6px 18px;width:100%}.journey-navigation .journey-primary{margin-left:auto}}
 @media(max-width:560px){.journey-container,.journey-header-inner,.journey-network-inner{padding-left:18px;padding-right:18px}.journey-network-inner>span{display:none}.journey-network nav{gap:6px 14px;font-size:.62rem}.journey-hero{padding:20px 0 28px}.journey-steps ol{gap:12px}.journey-steps li{gap:5px;font-size:.72rem}.journey-step-number{width:24px;height:24px}.journey-brand img{width:44px;height:44px}.journey-navigation{font-size:.7rem}.journey-plan-actions .journey-primary{width:100%}.journey-context li{max-width:100%;overflow-wrap:anywhere}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*{scroll-behavior:auto!important}}
+
+.planning-page #email-trip-pack button[type=submit]{background:#fff;color:#0d47a1}.planning-page #email-trip-pack button[type=submit]:hover{background:#eff6ff}

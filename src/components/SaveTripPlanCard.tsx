@@ -103,6 +103,10 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     'More Arizona family adventures: https://healthandtravels.com/',
   ].join('\n');
 
+  React.useEffect(() => {
+    setSavedOffline(false);
+  }, [planBody, packingItems.map(item => `${item.id}:${item.packed}`).join('|')]);
+
   const handleSavePlan = async (event: React.FormEvent) => {
     event.preventDefault();
     const cleanEmail = email.trim();

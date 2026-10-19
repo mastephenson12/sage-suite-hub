@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 type Props = { step: 1 | 2 | 3; title: string; description: string; context?: string[] };
 export default function PlanningJourney({ step, title, description, context = [] }: Props) {
-  return <header className="journey-hero">
+  return <header id="planning-progress" className="journey-hero">
     <div className="journey-container">
       <nav className="journey-steps" aria-label="Adventure planning progress">
         <ol>{['Choose', 'Personalize', 'Your Plan'].map((label, index) => <li key={label} aria-current={step === index + 1 ? 'step' : undefined} className={index + 1 <= step ? 'is-active' : ''}>

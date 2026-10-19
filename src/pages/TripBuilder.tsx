@@ -187,7 +187,7 @@ const TripBuilder: React.FC = () => {
     const timer = window.setTimeout(() => {
       const result = document.getElementById('trip-results');
       result?.focus({ preventScroll: true });
-      result?.scrollIntoView({ behavior: 'auto', block: 'start' });
+      document.getElementById('planning-progress')?.scrollIntoView({ behavior: 'auto', block: 'start' });
     }, 50);
     return () => window.clearTimeout(timer);
   }, [submitted, resultKey]);
