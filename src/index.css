@@ -87,3 +87,6 @@ a {
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*{scroll-behavior:auto!important}}
 
 .planning-page #email-trip-pack button[type=submit]{background:#fff;color:#0d47a1}.planning-page #email-trip-pack button[type=submit]:hover{background:#eff6ff}
+
+/* Bebas Neue has one weight; avoid synthesized heavy headings. */
+.planning-page :is(h1,h2,h3,h4,h5,h6){font-weight:400}
