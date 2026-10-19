@@ -234,6 +234,7 @@ function buildMatches(answers: PlannerAnswers): PlannerMatch[] {
   const maxDriveMinutes = driveLimit(answers.length);
 
   return arizonaFamilyDestinations
+    .filter((destination) => estimatedDrive(answers.origin, destination) <= maxDriveMinutes)
     .map((destination) => {
       const base = scoreFamilyAdventure(
         {
@@ -246,7 +247,7 @@ function buildMatches(answers: PlannerAnswers): PlannerMatch[] {
           wantsShade: answers.priority === 'shade',
           needsBathrooms: answers.priority === 'bathrooms',
           needsStrollerAccess: answers.priority === 'easy' && answers.group === 'young-family',
-          maxDriveMinutes: 300,
+          maxDriveMinutes,
         },
         destination
       );
@@ -262,6 +263,7 @@ function buildMatches(answers: PlannerAnswers): PlannerMatch[] {
 
       return {
         ...base,
+        reasons: base.reasons.filter((reason) => !reason.startsWith('Within your ')).concat(`Within your ${maxDriveMinutes}-minute drive target from ${origins.find((origin) => origin.value === answers.origin)?.label}.`),
         score: adjustedScore,
         estimatedDriveMinutes: travelMinutes,
       };
@@ -394,6 +396,8 @@ const PlanArizonaAdventure: React.FC = () => {
           <p className="mt-5 border-t border-zinc-200 pt-5 text-xs leading-5 text-zinc-500">Drive times are planning estimates. Always verify current weather, roads, closures, fees, wildfire restrictions, and facilities before leaving.</p>
         </aside>
       </section>
+
+      {submitted && !topMatch && <p role="status" className="mx-auto max-w-6xl px-6 py-8">No adventures in our catalog fit this starting area and time limit. Try allowing more time or a different starting area.</p>}
 
       {submitted && topMatch && (
         <section id="recommendations" className="scroll-mt-24 border-y border-emerald-100 bg-emerald-50 px-6 py-14" aria-live="polite">
