@@ -25,7 +25,7 @@ import {
 import { trackEvent } from '../utils/analytics';
 
 type Origin = 'phoenix' | 'tucson' | 'flagstaff' | 'sedona' | 'prescott';
-type Group = 'couple' | 'young-family' | 'older-family' | 'friends' | 'adults';
+type Group = 'couple' | 'young-family' | 'elementary-family' | 'mixed-family' | 'older-family' | 'friends' | 'adults';
 type Interest = 'hike' | 'water' | 'wildlife' | 'scenic' | 'town' | 'surprise';
 type Priority = 'shade' | 'bathrooms' | 'easy' | 'cooler' | 'short-drive';
 
@@ -50,8 +50,10 @@ const origins: Array<{ value: Origin; label: string }> = [
 ];
 
 const groups: Array<{ value: Group; label: string }> = [
-  { value: 'young-family', label: 'Family with young kids' },
-  { value: 'older-family', label: 'Family with older kids' },
+  { value: 'young-family', label: 'Family with toddlers / preschoolers' },
+  { value: 'elementary-family', label: 'Family with elementary-age kids' },
+  { value: 'mixed-family', label: 'Family with mixed-age kids' },
+  { value: 'older-family', label: 'Family with tweens / teens' },
   { value: 'couple', label: 'Couple' },
   { value: 'friends', label: 'Friends / small group' },
   { value: 'adults', label: 'Adults or grandparents' },
@@ -184,6 +186,8 @@ function currentSeason(): TripSeason {
 
 function groupSettings(group: Group): { hasKids: boolean; kidAgeGroup: KidAgeGroup } {
   if (group === 'young-family') return { hasKids: true, kidAgeGroup: 'toddlers' };
+  if (group === 'elementary-family') return { hasKids: true, kidAgeGroup: 'elementary' };
+  if (group === 'mixed-family') return { hasKids: true, kidAgeGroup: 'mixed' };
   if (group === 'older-family') return { hasKids: true, kidAgeGroup: 'teens' };
   return { hasKids: false, kidAgeGroup: 'mixed' };
 }
@@ -302,7 +306,7 @@ function formatDrive(minutes: number): string {
 const PlanArizonaAdventure: React.FC = () => {
   const [answers, setAnswers] = useState<PlannerAnswers>({
     origin: 'phoenix',
-    group: 'young-family',
+    group: 'mixed-family',
     length: 'full-day',
     interest: 'scenic',
     priority: 'bathrooms',
