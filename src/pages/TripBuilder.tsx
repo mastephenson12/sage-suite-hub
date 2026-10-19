@@ -1,13 +1,11 @@
-import { getFamilyTripFacts, formatFamilyTripFacts } from '../data/familyTripFacts';
+import { getFamilyTripFacts } from '../data/familyTripFacts';
 import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   Baby,
   CalendarDays,
   Car,
-  CheckCircle2,
   Clock,
-  Copy,
   MapPin,
   Mountain,
   ShieldCheck,
@@ -15,13 +13,14 @@ import {
   Trees,
   Users,
 } from 'lucide-react';
+import PlanningJourney from '../components/PlanningJourney';
+import TripBuilderResultEnhancer from '../components/TripBuilderResultEnhancer';
 import PopularArizonaGuides from '../components/PopularArizonaGuides';
 import SEOJsonLd from '../components/SEOJsonLd';
 import {
   generateSageTripPlan,
   SageAiTripPlan,
 } from '../services/tripPlanService';
-import CloudinaryImage from '../components/CloudinaryImage';
 import { trackEvent } from '../utils/analytics';
 import {
   ActivityType,
@@ -64,14 +63,6 @@ const kidAgeGroupOptions: KidAgeGroup[] = [
   'mixed',
   'teens',
 ];
-
-const tripBuilderPhotos = {
-  sedona: { src: '/images/sedona-canyon.avif', alt: 'Red rock canyon scenery in Sedona, Arizona' },
-  flagstaff: { src: '/images/flagstaff-family-adventure.avif', alt: 'Family exploring the pine forests near Flagstaff, Arizona' },
-  payson: { src: '/images/payson-lake-through-pines.avif', alt: 'Woods Canyon Lake framed by pine trees near Payson, Arizona' },
-  phoenix: { src: '/images/phoenix-sunset-hike.avif', alt: 'Sunset over a desert hiking trail near Phoenix, Arizona' },
-  default: { src: '/images/grand-canyon.avif', alt: 'Wide view across the Grand Canyon in Arizona' },
-};
 
 const destinationPresets = [
   {
@@ -157,7 +148,6 @@ const TripBuilder: React.FC = () => {
   const [submitted, setSubmitted] = useState(
     searchParams.get('plan') === 'ready'
   );
-  const [copied, setCopied] = useState(false);
   const [aiPlan, setAiPlan] = useState<SageAiTripPlan | null>(null);
   const [aiPlanStatus, setAiPlanStatus] = useState<'idle' | 'loading' | 'ready' | 'fallback'>('idle');
   const isGeneratedPlan = searchParams.get('plan') === 'ready';
@@ -191,6 +181,16 @@ const TripBuilder: React.FC = () => {
     const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (robots) robots.content = 'index, follow';
   }, []);
+  const resultKey = searchParams.toString();
+  React.useEffect(() => {
+    if (!submitted) return;
+    const timer = window.setTimeout(() => {
+      const result = document.getElementById('trip-results');
+      result?.focus({ preventScroll: true });
+      document.getElementById('planning-progress')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }, 50);
+    return () => window.clearTimeout(timer);
+  }, [submitted, resultKey]);
   const destinationFacts = getFamilyTripFacts(location);
   const basePlan = buildTripPlan(location, hasKids, activity, length, season);
   const plan = destinationFacts?.id === 'estrella-mountain' ? {
@@ -344,17 +344,6 @@ const TripBuilder: React.FC = () => {
   });
 
   const tripSlug = toTripSlug(location);
-  const normalizedLocation = location.trim().toLowerCase();
-  const tripPhoto = normalizedLocation.includes('sedona')
-    ? tripBuilderPhotos.sedona
-    : normalizedLocation.includes('flagstaff')
-      ? tripBuilderPhotos.flagstaff
-      : normalizedLocation.includes('payson') || normalizedLocation.includes('rim')
-        ? tripBuilderPhotos.payson
-        : normalizedLocation.includes('phoenix') || normalizedLocation.includes('scottsdale')
-          ? tripBuilderPhotos.phoenix
-          : tripBuilderPhotos.default;
-
   const shareParams = new URLSearchParams();
   shareParams.set('plan', 'ready');
   if (tripSlug) shareParams.set('location', tripSlug);
@@ -371,45 +360,6 @@ const TripBuilder: React.FC = () => {
     const value = searchParams.get(key);
     if (value) shareParams.set(key, value);
   });
-
-  const sharePath = `/trip-builder?${shareParams.toString()}`;
-
-  const tripBrief = (() => {
-    const topMatches = familyMatches
-      .map(
-        (match, index) =>
-          `${index + 1}. ${match.name} (${match.score}%): ${match.parentTip}`
-      )
-      .join('\n');
-
-    const personalizedBrief = aiPlan
-      ? [
-          `Sage personalized plan: ${aiPlan.title}`,
-          aiPlan.summary,
-          `Outdoor anchor: ${aiPlan.outdoorAnchor.name} — ${aiPlan.outdoorAnchor.description}`,
-          `Drive from Phoenix: ${aiPlan.driveFromPhoenix}`,
-          `Food: ${aiPlan.foodStop.name} — ${aiPlan.foodStop.description}`,
-          `Restrooms: ${aiPlan.facilities.restrooms}`,
-          `Shade: ${aiPlan.facilities.shade}`,
-          `Backup: ${aiPlan.backupPlan}`,
-          `Verify before leaving: ${aiPlan.verificationNote}`,
-        ].join('\n')
-      : '';
-
-    return [
-      destinationFacts ? formatFamilyTripFacts(destinationFacts) : '',
-      isEstrella ? '' : personalizedBrief,
-      isEstrella ? hourlyItinerary.map(item => `${item.time}: ${item.title} — ${item.description}`).join('\n') : '',
-      plan.title,
-      plan.intro,
-      `Safety: ${plan.safety.title} — ${plan.safety.suggestion}`,
-      `Morning: ${plan.morning}`,
-      `Midday: ${plan.midday}`,
-      `Afternoon: ${plan.afternoon}`,
-      `Top Sage matches:\n${topMatches}`,
-      `Helpful extras: ${plan.extras.join(' | ')}`,
-    ].filter(Boolean).join('\n\n');
-  })();
 
   const handleBuildTrip = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -458,73 +408,34 @@ const TripBuilder: React.FC = () => {
     }
   };
 
-  const handleCopyTripBrief = async () => {
-    const url = `${window.location.origin}${sharePath}`;
-
-    await navigator.clipboard.writeText(
-      `${tripBrief}\n\nOpen this Sage plan: ${url}`
-    );
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
-    <main className="min-h-screen bg-white text-zinc-900">
+    <main className="planning-page min-h-screen bg-white text-zinc-900">
       <SEOJsonLd
         title="Arizona Family Trip Planner: Build Your Itinerary | Sage"
         description="Build an Arizona family itinerary around your destination, kids’ ages, season, shade and bathrooms. Save, print or email your trip pack with Sage."
         url="https://sage.healthandtravels.com/trip-builder"
         robots={isGeneratedPlan ? 'noindex, follow' : 'index, follow'}
       />
-      <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
-        <div className="mb-10 max-w-3xl">
-          <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
-            Sage Trip Builder
-          </p>
-
-          <h1 className="mb-4 text-4xl font-black tracking-tight md:text-6xl">
-            Build your Arizona family trip itinerary
-          </h1>
-
-          <p className="text-lg leading-relaxed text-zinc-600 md:text-xl">
-            Plan a family trip to Sedona, Flagstaff, Payson or another Arizona destination.
-            Choose your kids’ ages, season, available time, shade and bathroom needs.
-            Sage builds a starter itinerary with activities, food breaks and safety notes
-            that you can save, print or email as a trip pack.
-          </p>
-        </div>
-
-        <figure className="mb-10 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 shadow-sm">
-          <CloudinaryImage
-            src={tripPhoto.src}
-            alt={tripPhoto.alt}
-            className="h-56 w-full object-cover md:h-80"
-            sizes="(min-width: 1024px) 1152px, 100vw"
-            widthHint={1600}
-            crop="fill"
-            loading="eager"
-            fetchPriority="high"
-          />
-          <figcaption className="px-5 py-3 text-sm text-zinc-500">
-            Your destination changes the plan. Sage uses the place, season and family filters together—not the photo alone.
-          </figcaption>
-        </figure>
-
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+      <PlanningJourney step={submitted ? 3 : 2} title={submitted ? `Your ${location || 'Arizona'} plan` : location ? `Make ${location} your kind of day` : 'Personalize your Arizona day'} description={submitted ? 'Review your day, check the practical details, and keep your plan before you go.' : 'Your choices are filled in below. Confirm the details that matter, then build your plan.'} context={[hasKids === 'yes' ? kidAgeGroupLabels[kidAgeGroup] : 'Adults only', tripLengthLabels[length], seasonLabels[season], `Up to ${maxDriveMinutes} min from Phoenix`, ...(wantsShade ? ['Shade matters'] : []), ...(needsBathrooms ? ['Bathrooms matter'] : [])]} />
+      <section className="mx-auto max-w-6xl px-6 py-8 md:py-10">
+        <div className="space-y-8">
+          <details id="trip-preferences" className="journey-disclosure" open={!submitted}>
+            <summary>{submitted ? 'Edit your trip preferences' : 'Your trip preferences'}</summary>
           <form
             onSubmit={handleBuildTrip}
-            className="min-w-0 rounded-3xl border border-zinc-200 bg-zinc-50 p-6 md:p-8"
+            className="min-w-0"
           >
-            <div className="space-y-6">
-              <div>
-                <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label htmlFor="trip-location" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                   <MapPin className="h-4 w-4 text-orange-500" />
                   Where do you want to go?
                 </label>
                 <input
+                    id="trip-location"
                   type="text"
                   value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setLocation(e.target.value); }}
                   placeholder="Sedona, Flagstaff, Phoenix, Payson..."
                   className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                 />
@@ -535,6 +446,9 @@ const TripBuilder: React.FC = () => {
                       key={preset.label}
                       type="button"
                       onClick={() => {
+                        setSubmitted(false);
+                        setAiPlan(null);
+                        setAiPlanStatus('idle');
                         setLocation(preset.location);
                         setActivity(preset.activity);
                         setSeason(preset.season);
@@ -549,13 +463,14 @@ const TripBuilder: React.FC = () => {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label htmlFor="trip-group" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <Users className="h-4 w-4 text-orange-500" />
                     Who is coming?
                   </label>
                   <select
+                    id="trip-group"
                     value={hasKids}
-                    onChange={(e) => setHasKids(e.target.value as 'yes' | 'no')}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setHasKids(e.target.value as 'yes' | 'no'); }}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                   >
                     <option value="yes">Family with kids</option>
@@ -564,13 +479,14 @@ const TripBuilder: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label htmlFor="trip-ages" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <Baby className="h-4 w-4 text-orange-500" />
                     Kids' ages
                   </label>
                   <select
+                    id="trip-ages"
                     value={kidAgeGroup}
-                    onChange={(e) => setKidAgeGroup(e.target.value as KidAgeGroup)}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setKidAgeGroup(e.target.value as KidAgeGroup); }}
                     disabled={hasKids !== 'yes'}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400 disabled:bg-zinc-100 disabled:text-zinc-400"
                   >
@@ -584,13 +500,14 @@ const TripBuilder: React.FC = () => {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label htmlFor="trip-activity" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <Mountain className="h-4 w-4 text-orange-500" />
                     What kind of day do you want?
                   </label>
                   <select
+                    id="trip-activity"
                     value={activity}
-                    onChange={(e) => setActivity(e.target.value as ActivityType)}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setActivity(e.target.value as ActivityType); }}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                   >
                     <option value="hike">{activityLabels.hike}</option>
@@ -600,13 +517,14 @@ const TripBuilder: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label htmlFor="trip-length" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <Sparkles className="h-4 w-4 text-orange-500" />
                     How long should this trip be?
                   </label>
                   <select
+                    id="trip-length"
                     value={length}
-                    onChange={(e) => setLength(e.target.value as TripLength)}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setLength(e.target.value as TripLength); }}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                   >
                     <option value="half-day">{tripLengthLabels['half-day']}</option>
@@ -618,13 +536,14 @@ const TripBuilder: React.FC = () => {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label htmlFor="trip-season" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <CalendarDays className="h-4 w-4 text-orange-500" />
                     When are you going?
                   </label>
                   <select
+                    id="trip-season"
                     value={season}
-                    onChange={(e) => setSeason(e.target.value as TripSeason)}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setSeason(e.target.value as TripSeason); }}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                   >
                     <option value="spring">{seasonLabels.spring}</option>
@@ -635,13 +554,14 @@ const TripBuilder: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label htmlFor="trip-drive" className="mb-2 flex items-center gap-2 text-sm font-semibold">
                     <Car className="h-4 w-4 text-orange-500" />
                     Max drive from Phoenix
                   </label>
                   <select
+                    id="trip-drive"
                     value={maxDriveMinutes}
-                    onChange={(e) => setMaxDriveMinutes(Number(e.target.value))}
+                    onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setMaxDriveMinutes(Number(e.target.value)); }}
                     className="w-full rounded-2xl border border-zinc-300 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-zinc-400"
                   >
                     {driveTimeOptions.map((minutes) => (
@@ -664,7 +584,7 @@ const TripBuilder: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={wantsShade}
-                      onChange={(e) => setWantsShade(e.target.checked)}
+                      onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setWantsShade(e.target.checked); }}
                       className="mt-1"
                     />
                     <span>Shade matters</span>
@@ -674,7 +594,7 @@ const TripBuilder: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={needsBathrooms}
-                      onChange={(e) => setNeedsBathrooms(e.target.checked)}
+                      onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setNeedsBathrooms(e.target.checked); }}
                       className="mt-1"
                     />
                     <span>Need bathrooms</span>
@@ -684,7 +604,7 @@ const TripBuilder: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={needsStrollerAccess}
-                      onChange={(e) => setNeedsStrollerAccess(e.target.checked)}
+                      onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setNeedsStrollerAccess(e.target.checked); }}
                       className="mt-1"
                     />
                     <span>Stroller access</span>
@@ -695,32 +615,34 @@ const TripBuilder: React.FC = () => {
               <button
                 type="submit"
                 aria-describedby={submitted ? 'trip-builder-status' : undefined}
-                className="inline-flex w-full items-center justify-center rounded-2xl bg-black px-8 py-4 text-lg font-semibold text-white transition hover:opacity-90"
+                className="md:col-span-2 inline-flex w-full items-center justify-center rounded-2xl bg-black px-8 py-4 text-lg font-semibold text-white transition hover:opacity-90"
               >
-                {submitted ? 'Rebuild My Trip' : 'Build My Trip'}
+                {submitted ? 'Update My Plan' : 'Build My Plan'}
               </button>
 
               {submitted && (
                 <p id="trip-builder-status" className="text-center text-sm font-bold text-emerald-800" role="status">
-                  Your trip is ready below. Sage is personalizing the itinerary while you review it.
+                  Your plan is ready below. Review the details and save it before leaving.
                 </p>
               )}
             </div>
           </form>
+          </details>
 
-          <div className="min-w-0 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm md:p-8">
+          <div id={submitted ? 'trip-results' : undefined} tabIndex={submitted ? -1 : undefined} className="min-w-0 scroll-mt-6 outline-none">
+            {submitted && <div className="journey-plan-actions"><a className="journey-primary" href="#keep-trip-plan">Keep My Plan</a><a href="#trip-preferences" onClick={() => { const details = document.getElementById('trip-preferences') as HTMLDetailsElement | null; if(details) details.open = true; }}>Edit preferences</a></div>}
             <p className="mb-3 text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
-              Preview
+              {submitted ? 'Your adventure' : 'What to expect'}
             </p>
 
             <h2 className="mb-3 text-2xl font-black tracking-tight md:text-3xl">
-              {submitted ? plan.title : 'Your trip plan will show up here'}
+              {submitted ? plan.title : 'A practical plan for your group'}
             </h2>
 
             <p className="text-base leading-relaxed text-zinc-600 md:text-lg">
               {submitted
                 ? plan.intro
-                : 'Choose a location, trip style, season, and family filters. Sage will create a simple starter plan and recommend the best Arizona matches from its local family-adventure brain.'}
+                : 'Your plan will bring together your main outdoor stop, realistic timing, food, bathrooms, shade and a backup option.'}
             </p>
 
             {destinationFacts && (
@@ -766,9 +688,9 @@ const TripBuilder: React.FC = () => {
 
                   {aiPlanStatus === 'fallback' && (
                     <div>
-                      <h3 className="text-xl font-black text-emerald-950">Your reliable local plan is ready</h3>
+                      <h3 className="text-xl font-black text-emerald-950">Your starter plan is ready</h3>
                       <p className="mt-2 text-sm leading-relaxed text-emerald-900">
-                        Personalization is temporarily unavailable, so Sage kept the fast local plan and destination matches below instead of leaving you stuck.
+                        Personalization is temporarily unavailable. Use the starter schedule below and confirm local details before leaving.
                       </p>
                     </div>
                   )}
@@ -823,56 +745,7 @@ const TripBuilder: React.FC = () => {
                   )}
                 </section>
 
-                <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5">
-                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
-                        Shareable plan
-                      </p>
-                      <p className="text-sm font-semibold text-zinc-600">
-                        Save the link or copy the trip brief for your group chat.
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={handleCopyTripBrief}
-                      className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-white transition hover:bg-zinc-700"
-                    >
-                      {copied ? (
-                        <>
-                          <CheckCircle2 className="h-4 w-4" />
-                          Copied
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="h-4 w-4" />
-                          Copy brief
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <div className="break-all rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-3 text-sm font-semibold text-zinc-600">
-                    {sharePath}
-                  </div>
-                </div>
-
-                <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5">
-                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">
-                        Sage's best matches
-                      </p>
-                      <h3 className="text-xl font-black tracking-tight">
-                        Top family adventure options
-                      </h3>
-                    </div>
-                    <span className="rounded-full bg-black px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-white">
-                      {familyMatches[0]?.score ?? 0}% match
-                    </span>
-                  </div>
-
+                <details className="journey-disclosure"><summary>Other adventures within your drive limit</summary>
                   <div className="space-y-4">
                     {familyMatches.length === 0 && <p>No destinations in our catalog fit this drive limit from Phoenix. Increase the limit or choose a closer outing. A manually entered destination is not guaranteed to fit.</p>}
                     {familyMatches.map((match, index) => (
@@ -943,7 +816,7 @@ const TripBuilder: React.FC = () => {
                       </article>
                     ))}
                   </div>
-                </div>
+                </details>
 
                 <div
                   className={`rounded-2xl border p-5 ${getSafetyCardClasses(
@@ -1031,62 +904,19 @@ const TripBuilder: React.FC = () => {
                   </p>
                 </section>
 
-                <div className="rounded-2xl border border-orange-200 bg-orange-50 p-5">
-                  <h3 className="mb-3 text-sm font-black uppercase tracking-[0.15em] text-orange-700">
-                    Helpful extras
-                  </h3>
-
-                  <ul className="space-y-2 text-zinc-700">
-                    {plan.extras.map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="mt-[2px] text-orange-500">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-                  <h3 className="mb-2 text-xl font-black">
-                    Make this trip easier to finish
-                  </h3>
-                  <p className="mb-4 leading-relaxed text-zinc-700">
-                    Use Sage AI to refine the plan, get more Health & Travels trip
-                    ideas by email, or join the Arizona Hikers Association if you
-                    want monthly ideas, community, and more reasons to get outside.
-                  </p>
-
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <Link
-                      to={
-                        tripSlug
-                          ? `/chat?mode=arizona&trip=${tripSlug}`
-                          : '/chat?mode=arizona'
-                      }
-                      className="inline-flex items-center justify-center rounded-2xl border border-zinc-900 px-5 py-3 text-center text-sm font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
-                    >
-                      Refine With Sage AI
-                    </Link>
-
-                    <a
-                      href="https://healthandtravels.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
-                    >
-                      Get Trip Ideas by Email
-                    </a>
-
-                    <a
-                      href="https://join.arizonahikersassociation.org/join"
-                target="_blank"
-                rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
-                    >
-                Join Arizona Hikers
-              </a>
-                  </div>
-                </div>
+                <details className="journey-disclosure"><summary>More preparation tips</summary><ul className="space-y-2">{plan.extras.map(item => <li key={item}>{item}</li>)}</ul></details>
+                <TripBuilderResultEnhancer itinerary={hourlyItinerary} personalizing={aiPlanStatus === 'loading'} sections={[
+                  {title: 'Trip overview', description: plan.intro},
+                  {title: 'Safety and conditions', description: `${plan.safety.title}: ${plan.safety.message} ${plan.safety.suggestion}`},
+                  ...(!isEstrella && aiPlan ? [
+                    {title: aiPlan.outdoorAnchor.name, description: aiPlan.outdoorAnchor.description},
+                    {title: 'Estimated drive from Phoenix', description: aiPlan.driveFromPhoenix},
+                    {title: aiPlan.foodStop.name, description: aiPlan.foodStop.description},
+                    {title: 'Bathrooms and shade', description: `${aiPlan.facilities.restrooms} ${aiPlan.facilities.shade}`},
+                    {title: 'Backup plan', description: aiPlan.backupPlan},
+                    {title: 'Before you go', description: [...aiPlan.cautions, aiPlan.verificationNote].join(' ')},
+                  ] : []),
+                ]} />
               </div>
             )}
           </div>

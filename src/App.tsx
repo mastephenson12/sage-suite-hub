@@ -11,7 +11,6 @@ import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { Hero } from './components/Hero';
 import FamilyConfidencePanel from './components/FamilyConfidencePanel';
-import TripBuilderResultEnhancer from './components/TripBuilderResultEnhancer';
 import NewsletterConversionPanel from './components/NewsletterConversionPanel';
 import HowItWorks from './components/HowItWorks';
 import StartHere from './components/StartHere';
@@ -147,8 +146,6 @@ function TripBuilderPage() {
   return (
     <>
       <TripBuilder />
-      <TripBuilderResultEnhancer />
-      <NewsletterConversionPanel />
     </>
   );
 }
@@ -187,6 +184,7 @@ function AppContent() {
     }
   }, [location.pathname, location.search]);
 
+  const isPlanning = ['/plan', '/trip-builder'].includes(location.pathname);
   const hideSiteChrome =
     location.pathname === '/chat' || location.pathname.startsWith('/suite');
 
@@ -267,7 +265,8 @@ function AppContent() {
         </Routes>
       </main>
 
-      {!hideSiteChrome && (
+      {!hideSiteChrome && isPlanning && <footer className="border-t border-slate-200 bg-[#fbfaf7] px-6 py-8 text-sm text-slate-600"><div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-4"><p>© {new Date().getFullYear()} Health &amp; Travels · Planning with Sage</p><nav className="flex flex-wrap gap-5" aria-label="Footer"><Link to="/about">About</Link><Link to="/my-trips">My Trips</Link><Link to="/privacy-policy">Privacy</Link><Link to="/terms-of-service">Terms</Link><Link to="/affiliate-disclosure">Affiliate Disclosure</Link></nav></div></footer>}
+      {!hideSiteChrome && !isPlanning && (
         <footer className="mt-auto border-t border-zinc-100 bg-white py-16">
           <div className="mx-auto max-w-6xl px-6 text-center md:text-left">
             <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
@@ -312,7 +311,7 @@ function AppContent() {
           </div>
         </footer>
       )}
-      {!hideSiteChrome && <ChatWidget />}
+      {!hideSiteChrome && !isPlanning && <ChatWidget />}
     </div>
   );
 }

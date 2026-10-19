@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=Lato:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@600;700;800;900&family=Lato:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --sage-heading-font: 'Helvetica Neue Condensed Black', 'HelveticaNeue-CondensedBlack', 'Helvetica Neue Condensed', 'Arial Narrow', 'Roboto Condensed', Impact, sans-serif;
+  --sage-heading-font: 'Bebas Neue', 'Helvetica Neue Condensed Black', 'HelveticaNeue-CondensedBlack', 'Helvetica Neue Condensed', 'Arial Narrow', 'Roboto Condensed', Impact, sans-serif;
   --sage-body-font: 'Lato', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --sage-button-font: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -28,11 +28,11 @@ h2,
 h3,
 h4,
 h5,
-h6,
-.font-black {
+h6 {
   font-family: var(--sage-heading-font);
   font-stretch: condensed;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.015em;
+  font-weight: 400;
 }
 
 p,
@@ -57,3 +57,33 @@ a {
 * {
   box-sizing: border-box;
 }
+
+/* Shared Health & Travels planning language. */
+.journey-container,.journey-header-inner,.journey-network-inner{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.journey-header{background:#fff;border-bottom:1px solid #e5e7eb;color:#111827}
+.journey-network{background:#0f172a;color:#fff;font:800 .74rem/1.4 var(--sage-button-font);letter-spacing:.08em;text-transform:uppercase}
+.journey-network-inner{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}
+.journey-network nav{display:flex;gap:18px;flex-wrap:wrap}.journey-network a{padding:4px 0}
+.journey-header-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:14px;padding-bottom:14px}
+.journey-brand{display:flex;align-items:center;gap:12px;flex-shrink:0}.journey-brand img{width:48px;height:48px;border-radius:12px}
+.journey-brand-name{display:block;font:400 1.45rem/1 var(--sage-heading-font);letter-spacing:.02em;text-transform:uppercase}
+.journey-brand-subtitle{display:block;margin-top:5px;color:#0f766e;font:900 .62rem/1.1 var(--sage-button-font);letter-spacing:.16em;text-transform:uppercase}
+.journey-navigation{display:flex;align-items:center;gap:20px;flex-wrap:wrap;font:800 .78rem/1.4 var(--sage-button-font)}.journey-navigation a{padding:12px 0}
+.journey-primary,.journey-navigation .journey-primary{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 19px;border-radius:10px;background:#0d47a1;color:#fff;font:800 .8rem/1.4 var(--sage-button-font);cursor:pointer}.journey-primary:hover{background:#083575}
+.journey-hero{background:linear-gradient(135deg,#edf7f3,#eef4fc);border-bottom:1px solid #e5e7eb;padding:24px 0 36px}
+.journey-hero h1{margin:14px 0 0;max-width:850px;font:400 clamp(2.8rem,6vw,4.8rem)/1 var(--sage-heading-font);letter-spacing:.015em}
+.journey-eyebrow{margin-top:28px;color:#2f6f68;font:800 .73rem/1.5 var(--sage-button-font);letter-spacing:.12em;text-transform:uppercase}
+.journey-description{max-width:740px;margin:16px 0 0;font-size:1.1rem;line-height:1.65;color:#4b5563}
+.journey-steps ol{display:flex;gap:24px;list-style:none;margin:0;padding:0;flex-wrap:wrap}.journey-steps li{display:flex;align-items:center;gap:8px;color:#64748b;font:700 .85rem var(--sage-button-font)}.journey-steps li.is-active{color:#0d47a1}.journey-steps li[aria-current=step]{font-weight:900}
+.journey-step-number{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border:1px solid #cbd5e1;border-radius:50%;background:#fff}.is-active .journey-step-number{background:#0d47a1;border-color:#0d47a1;color:#fff}
+.journey-context{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}.journey-context li{border:1px solid #b8d9d2;background:#fff;border-radius:999px;padding:6px 12px;color:#36544f;font-size:.85rem}
+.planning-page{color:#111827;background:#fff}.planning-page h2{font-size:2rem;line-height:1.1}.planning-page h3{font-size:1.5rem;line-height:1.15}.planning-page h4{font-size:1.25rem;line-height:1.2}
+.planning-page button[type=submit],.planning-page .journey-primary{background:#0d47a1;color:#fff;border-radius:10px}.planning-page button[type=submit]:hover{background:#083575}
+.planning-page .journey-disclosure{border:1px solid #e5e7eb;border-radius:16px;background:#fff;padding:20px}.journey-disclosure>summary{cursor:pointer;min-height:44px;align-content:center;color:#0d47a1;font:800 .9rem/1.5 var(--sage-button-font)}.journey-disclosure[open]>summary{margin-bottom:18px}
+.journey-plan-actions{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin:24px 0}.journey-plan-actions a:not(.journey-primary){color:#0d47a1;text-decoration:underline;font-weight:700}
+.planning-page :is(a,button,input,select,summary):focus-visible,.journey-header a:focus-visible{outline:3px solid #0d47a1;outline-offset:4px}
+@media(max-width:850px){.journey-header-inner{align-items:flex-start;flex-direction:column;gap:12px}.journey-navigation{gap:6px 18px;width:100%}.journey-navigation .journey-primary{margin-left:auto}}
+@media(max-width:560px){.journey-container,.journey-header-inner,.journey-network-inner{padding-left:18px;padding-right:18px}.journey-network-inner>span{display:none}.journey-network nav{gap:6px 14px;font-size:.62rem}.journey-hero{padding:20px 0 28px}.journey-steps ol{gap:12px}.journey-steps li{gap:5px;font-size:.72rem}.journey-step-number{width:24px;height:24px}.journey-brand img{width:44px;height:44px}.journey-navigation{font-size:.7rem}.journey-plan-actions .journey-primary{width:100%}.journey-context li{max-width:100%;overflow-wrap:anywhere}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*{scroll-behavior:auto!important}}
+
+.planning-page #email-trip-pack button[type=submit]{background:#fff;color:#0d47a1}.planning-page #email-trip-pack button[type=submit]:hover{background:#eff6ff}

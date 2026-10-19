@@ -11,6 +11,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react';
+import PlanningJourney from '../components/PlanningJourney';
 import SEOJsonLd from '../components/SEOJsonLd';
 import { arizonaFamilyDestinations } from '../data/sage/arizonaFamilyDestinations';
 import {
@@ -336,7 +337,7 @@ const PlanArizonaAdventure: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-white text-zinc-950">
+    <main className="planning-page min-h-screen bg-white text-zinc-950">
       <SEOJsonLd
         title="Plan My Arizona Adventure | Sage"
         description="Answer five quick questions and get three Arizona adventure recommendations matched to your starting point, group, available time, interests, and practical needs."
@@ -348,17 +349,7 @@ const PlanArizonaAdventure: React.FC = () => {
         ]}
       />
 
-      <section className="relative overflow-hidden bg-zinc-950 px-6 py-14 text-white md:py-20">
-        <div className="absolute inset-0 opacity-25">
-          <img src="/images/payson-rim-overlook.avif" alt="" className="h-full w-full object-cover" aria-hidden="true" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/90 to-zinc-950/50" />
-        <div className="relative mx-auto max-w-6xl">
-          <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-emerald-300">Five quick questions · no account needed</p>
-          <h1 className="max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">Plan your Arizona adventure</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-200 md:text-xl">Tell Sage who is going, where you are starting, and what matters today. You will get three realistic matches—not 47 tabs and a fresh family argument.</p>
-        </div>
-      </section>
+      <PlanningJourney step={1} title="Find your Arizona adventure" description="Five quick choices. Choose an outing that fits your group, then personalize your day with Sage. No account needed." context={[origins.find((option) => option.value === answers.origin)?.label || 'Phoenix metro', groups.find((option) => option.value === answers.group)?.label || 'Family', lengths.find((option) => option.value === answers.length)?.label || 'Day trip']} />
 
       <section className="mx-auto grid max-w-6xl gap-8 px-6 py-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:py-16">
         <form onSubmit={submit} className="space-y-8" aria-label="Arizona adventure questions">
@@ -382,7 +373,7 @@ const PlanArizonaAdventure: React.FC = () => {
             {priorities.map((option) => <ChoiceButton key={option.value} selected={answers.priority === option.value} onClick={() => update('priority', option.value)}>{option.label}</ChoiceButton>)}
           </ChoiceGroup>
 
-          <button type="submit" className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-emerald-600 px-7 py-4 text-base font-black uppercase tracking-wider text-white shadow-lg transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+          <button type="submit" className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-[#0D47A1] px-7 py-4 text-base font-black uppercase tracking-wider text-white shadow-lg transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200">
             Show My Three Adventures <ArrowRight className="h-5 w-5" aria-hidden="true" />
           </button>
         </form>
@@ -404,7 +395,7 @@ const PlanArizonaAdventure: React.FC = () => {
           <div className="mx-auto max-w-6xl">
             <p className="text-[11px] font-black uppercase tracking-[0.25em] text-emerald-700">Your Arizona matches</p>
             <h2 className="mt-2 text-3xl font-black tracking-tight md:text-5xl">Start with {topMatch.name}</h2>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">These three options best match your group, time, starting point, interests, and practical priority. Pick one to turn it into a fuller day plan.</p>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">These options best match your group, time, starting point, interests, and practical priority. Pick one to turn it into a fuller day plan.</p>
 
             <div className="mt-9 grid gap-6 lg:grid-cols-3">
               {matches.map((match, index) => (
@@ -435,7 +426,7 @@ const PlanArizonaAdventure: React.FC = () => {
                   </div>
 
                   <div className="mt-auto space-y-3 pt-6">
-                    <Link to={builderHref(match, answers)} onClick={() => trackEvent('adventure_planner_build_trip_click', { destination: match.slug, rank: index + 1 })} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-950 px-5 py-3 text-sm font-black uppercase tracking-wider text-white transition hover:bg-zinc-700">Build This Trip <ArrowRight className="h-4 w-4" /></Link>
+                    <Link to={builderHref(match, answers)} onClick={() => trackEvent('adventure_planner_build_trip_click', { destination: match.slug, rank: index + 1 })} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0D47A1] px-5 py-3 text-sm font-black uppercase tracking-wider text-white transition hover:bg-zinc-700">Personalize This Trip <ArrowRight className="h-4 w-4" /></Link>
                     <a href={guideFor(match)} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-center rounded-xl border border-zinc-200 px-5 py-3 text-sm font-black text-zinc-700 transition hover:border-emerald-400 hover:text-emerald-800">Read the Health &amp; Travels guide</a>
                   </div>
                 </article>
@@ -447,7 +438,7 @@ const PlanArizonaAdventure: React.FC = () => {
 
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="rounded-3xl bg-zinc-950 p-7 text-white md:p-10">
-          <div className="flex items-start gap-4"><Sparkles className="mt-1 h-7 w-7 shrink-0 text-emerald-300" /><div><h2 className="text-2xl font-black tracking-tight md:text-3xl">Useful first. Account later.</h2><p className="mt-3 max-w-3xl leading-7 text-zinc-300">This first version gives you real recommendations without asking for an email or login. Saving adventures across devices can come after we see how people use the planner.</p></div></div>
+          <div className="flex items-start gap-4"><Sparkles className="mt-1 h-7 w-7 shrink-0 text-emerald-300" /><div><h2 className="text-2xl font-black tracking-tight md:text-3xl">Useful first. Account later.</h2><p className="mt-3 max-w-3xl leading-7 text-zinc-300">Get a useful plan first. You can save it on this device or email it to yourself when you are ready.</p></div></div>
         </div>
       </section>
     </main>
