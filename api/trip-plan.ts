@@ -198,7 +198,7 @@ export async function POST(req: Request) {
     if (!plan) throw new Error('Gemini returned an invalid trip plan');
 
     return Response.json(
-      { plan },
+      { plan: { ...plan, ...(request.origin === 'phoenix' ? { driveFromPhoenix: plan.driveFromOrigin } : {}) } },
       { headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }
     );
   } catch (error) {
