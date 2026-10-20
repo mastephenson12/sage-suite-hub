@@ -1,10 +1,9 @@
+import { readJsonRequest, requestErrorResponse, createLimiter } from './_lib/request-security.mjs';
 import { readOrigin, originLabel, origins, type Origin } from '../src/utils/sage/tripOrigins.js';
 import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTripFacts.js';
 import { GoogleGenAI } from '@google/genai';
 
-const WINDOW_MS = 60_000;
-const MAX_REQUESTS_PER_WINDOW = 8;
-const requestBuckets = new Map<string, { count: number; resetAt: number }>();
+const limited = createLimiter(8, 60_000);
 
 type TripPlanRequest = {
   origin: Origin;
@@ -19,38 +18,6 @@ type TripPlanRequest = {
   needsStrollerAccess: boolean;
   maxDriveMinutes: number;
 };
-
-function isAllowedOrigin(req: Request): boolean {
-  const origin = req.headers.get('origin');
-  if (!origin) return true;
-
-  try {
-    const hostname = new URL(origin).hostname;
-    return (
-      hostname === 'healthandtravels.com' ||
-      hostname === 'www.healthandtravels.com' ||
-      hostname === 'sage.healthandtravels.com' ||
-      hostname.endsWith('.vercel.app') ||
-      hostname === 'localhost'
-    );
-  } catch {
-    return false;
-  }
-}
-
-function isRateLimited(req: Request): boolean {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  const now = Date.now();
-  const bucket = requestBuckets.get(ip);
-
-  if (!bucket || bucket.resetAt <= now) {
-    requestBuckets.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return false;
-  }
-
-  bucket.count += 1;
-  return bucket.count > MAX_REQUESTS_PER_WINDOW;
-}
 
 function cleanString(value: unknown, maxLength = 120): string | null {
   if (typeof value !== 'string') return null;
@@ -158,19 +125,13 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  if (!isAllowedOrigin(req)) {
-    return Response.json({ error: 'Origin not allowed' }, { status: 403 });
-  }
-  if (isRateLimited(req)) {
-    return Response.json({ error: 'Too many requests. Please try again shortly.' }, { status: 429 });
-  }
+  let body;
+  try { body = await readJsonRequest(req, 10000); }
+  catch (error) { return requestErrorResponse(error); }
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  if (limited(ip)) return Response.json({error: 'Too many requests. Please try again shortly.'}, {status: 429, headers: {'Retry-After':'60','Cache-Control':'no-store'}});
 
-  const contentLength = Number(req.headers.get('content-length') || 0);
-  if (contentLength > 10_000) {
-    return Response.json({ error: 'Request is too large' }, { status: 413 });
-  }
-
-  const request = parseRequest(await req.json().catch(() => null));
+  const request = parseRequest(body);
   if (!request) {
     return Response.json({ error: 'Please provide a valid Arizona trip request.' }, { status: 400 });
   }
@@ -183,10 +144,12 @@ export async function POST(req: Request) {
   try {
     const destinationFacts = getFamilyTripFacts(request.destination);
     const factContext = destinationFacts ? formatFamilyTripFacts(destinationFacts) : 'No reviewed destination snapshot is available.';
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey, httpOptions: { timeout: 25_000 } });
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       config: {
+        maxOutputTokens: 4096,
+        thinkingConfig: { thinkingBudget: 0 },
         responseMimeType: 'application/json',
         systemInstruction: `You are Sage, a careful Arizona family trip planner. Return only JSON matching the requested shape. Recommend one real, well-known outdoor anchor appropriate to the request. Never invent operating hours, fees, restroom availability, shade, drive times, restaurant details, or coordinates. Qualify anything that may change and tell the traveler to verify current conditions. Drive time is an estimate from ${originLabel(request.origin)}, the requested starting area, not live navigation. Never substitute Phoenix for another requested starting area. Food recommendations should be practical and kid-friendly, but avoid claiming current opening status. Arizona plans must address heat, hydration, weather, seasonal access, and a realistic backup. Use the supplied reviewed destination snapshot for factual constraints. Preserve its uncertainty and review date. Do not recommend facilities listed closed, assume a reopening, or replace unknown facts with guesses. If the group needs a facility or access the snapshot cannot support, recommend an alternative plan. The snapshot is not a live conditions feed.`,
       },
@@ -202,12 +165,11 @@ export async function POST(req: Request) {
       { headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }
     );
   } catch (error) {
-    console.error('Structured trip planning failed', error);
+    console.error('Structured trip planning provider request failed');
     return Response.json(
       { error: 'Sage could not personalize this plan right now. Your local starter plan is still available.' },
       { status: 502 }
     );
   }
 }
-
 
