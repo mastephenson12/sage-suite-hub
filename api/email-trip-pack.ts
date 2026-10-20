@@ -1,6 +1,6 @@
-const WINDOW_MS = 60_000;
-const MAX_REQUESTS_PER_WINDOW = 5;
-const requestBuckets = new Map<string, { count: number; resetAt: number }>();
+import { readJsonRequest, requestErrorResponse, createLimiter, isTrustedTripUrl } from './_lib/request-security.mjs';
+const limited = createLimiter(5, 60_000);
+const recipientLimited = createLimiter(2, 600_000);
 
 type TripPackRequest = {
   email: string;
@@ -10,51 +10,20 @@ type TripPackRequest = {
   tripUrl: string;
 };
 
-function isAllowedOrigin(req: Request): boolean {
-  const origin = req.headers.get('origin');
-  if (!origin) return true;
-
-  try {
-    const hostname = new URL(origin).hostname;
-    return hostname === 'sage.healthandtravels.com' || hostname.endsWith('.vercel.app') || hostname === 'localhost';
-  } catch {
-    return false;
-  }
-}
-
-function isRateLimited(req: Request): boolean {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  const now = Date.now();
-  const bucket = requestBuckets.get(ip);
-
-  if (!bucket || bucket.resetAt <= now) {
-    requestBuckets.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return false;
-  }
-
-  bucket.count += 1;
-  return bucket.count > MAX_REQUESTS_PER_WINDOW;
-}
-
 function parseRequest(value: unknown): TripPackRequest | null {
   if (!value || typeof value !== 'object') return null;
   const body = value as Record<string, unknown>;
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
   const destination = typeof body.destination === 'string' ? body.destination.trim() : '';
-  const subject = typeof body.subject === 'string' ? body.subject.trim() : '';
+  const subject = `Your ${destination} family adventure plan`;
   const planText = typeof body.planText === 'string' ? body.planText.trim() : '';
   const tripUrl = typeof body.tripUrl === 'string' ? body.tripUrl.trim() : '';
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) return null;
-  if (!destination || destination.length > 120 || !subject || subject.length > 160) return null;
+  if (!destination || /[\r\n]/.test(destination) || destination.length > 120 || !subject || subject.length > 160) return null;
   if (!planText || planText.length > 12_000) return null;
 
-  try {
-    const url = new URL(tripUrl);
-    if (url.hostname !== 'sage.healthandtravels.com' && !url.hostname.endsWith('.vercel.app') && url.hostname !== 'localhost') return null;
-  } catch {
-    return null;
-  }
+  if (!isTrustedTripUrl(tripUrl)) return null;
 
   return { email, destination, subject, planText, tripUrl };
 }
@@ -70,13 +39,13 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  if (!isAllowedOrigin(req)) return Response.json({ error: 'Origin not allowed' }, { status: 403 });
-  if (isRateLimited(req)) return Response.json({ error: 'Too many requests. Please try again shortly.' }, { status: 429 });
+  let body;
+  try { body = await readJsonRequest(req, 18000); }
+  catch (error) { return requestErrorResponse(error); }
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  if (limited(ip)) return Response.json({error: 'Too many requests. Please try again shortly.'}, {status: 429, headers: {'Retry-After':'60','Cache-Control':'no-store'}});
 
-  const contentLength = Number(req.headers.get('content-length') || 0);
-  if (contentLength > 15_000) return Response.json({ error: 'Request is too large' }, { status: 413 });
-
-  const tripPack = parseRequest(await req.json().catch(() => null));
+  const tripPack = parseRequest(body);
   if (!tripPack) return Response.json({ error: 'Please enter a valid email and trip plan.' }, { status: 400 });
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -85,7 +54,10 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Trip-pack email delivery is not configured yet.' }, { status: 503 });
   }
 
-  const response = await fetch('https://api.resend.com/emails', {
+  if (recipientLimited(tripPack.email)) return Response.json({error: 'Please wait before emailing this address again.'}, {status: 429, headers: {'Retry-After':'600'}});
+  let response;
+  try { response = await fetch('https://api.resend.com/emails', {
+    signal: AbortSignal.timeout(10_000),
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -97,8 +69,10 @@ export async function POST(req: Request) {
     }),
   });
 
+  } catch { return Response.json({error: 'We could not send the trip pack right now.'}, {status: 502}); }
+
   if (!response.ok) {
-    console.error('Trip-pack delivery failed', response.status, await response.text());
+    console.error('Trip-pack delivery failed', response.status);
     return Response.json({ error: 'We could not send the trip pack right now.' }, { status: 502 });
   }
 

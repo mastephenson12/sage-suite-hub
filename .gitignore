@@ -42,3 +42,10 @@ photo-inbox/
 *.njsproj
 *.sln
 *.sw?
+
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
