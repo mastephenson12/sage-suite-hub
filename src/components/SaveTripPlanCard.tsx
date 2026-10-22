@@ -114,6 +114,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
 
     setEmailStatus('sending');
     setEmailError('');
+    trackEvent('itinerary_email_requested', { location: 'save_trip_plan_card' });
 
     try {
       const response = await fetch('/api/email-trip-pack', {
@@ -128,11 +129,12 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
         }),
       });
 
-      const result = (await response.json().catch(() => ({}))) as { error?: string };
+      const result = (await response.json().catch(() => ({}))) as { error?: string; accepted?: boolean };
       if (!response.ok) throw new Error(result.error || 'We could not email the trip pack.');
+      if (!result.accepted) throw new Error('We could not confirm the email request. Check your inbox before trying again.');
 
       setEmailStatus('sent');
-      trackEvent('trip_pack_emailed', {
+      trackEvent('itinerary_email_accepted', {
         destination,
         location: 'save_trip_plan_card',
         offer: 'complete_adventure_plan',
@@ -140,7 +142,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       trackEvent('adventure_funnel_step', {
         funnel_name: 'adventure_to_email',
         funnel_step: 4,
-        funnel_step_name: 'email_submitted',
+        funnel_step_name: 'email_accepted',
         destination,
       });
     } catch (error) {
@@ -163,6 +165,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   const handleSaveOffline = () => {
     const savedTrip = saveTrip({ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, tripUrl, offlineText: planBody, itinerary, packingItems });
     setSavedOffline(true);
+    trackEvent('itinerary_save', { method: 'browser', location: 'save_trip_plan_card' });
     trackEvent('save_trip_plan_click', { label: 'Save Offline on This Phone', destination, location: 'save_trip_plan_card', saved_trip_id: savedTrip.id });
   };
 
@@ -204,7 +207,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
         <label htmlFor="trip-pack-email" className="block font-bold">Or email this plan to yourself</label>
         <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
           <input id="trip-pack-email" type="email" value={email} onChange={event => {setEmail(event.target.value);if(emailStatus !== 'idle')setEmailStatus('idle');setEmailError('');}} placeholder="you@example.com" autoComplete="email" inputMode="email" aria-label="Email address for your complete adventure plan" required className="min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base" />
-          <button type="submit" disabled={emailStatus === 'sending'} className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-900 disabled:opacity-60">{emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Plan Sent' : 'Email My Plan'}</button>
+          <button type="submit" disabled={emailStatus === 'sending'} className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-900 disabled:opacity-60">{emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Email Requested' : 'Email My Plan'}</button>
         </div>
         {emailStatus === 'sent' && <p role="status" className="mt-3 text-sm font-bold text-emerald-800">Your adventure plan is on its way.</p>}
         {emailStatus === 'error' && <p role="alert" className="mt-3 text-sm font-bold text-red-800">{emailError} You can still save or copy the plan.</p>}

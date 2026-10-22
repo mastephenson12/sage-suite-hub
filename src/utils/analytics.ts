@@ -1,4 +1,7 @@
 export type AnalyticsEventName =
+  | 'itinerary_save'
+  | 'itinerary_email_requested'
+  | 'itinerary_email_accepted'
   | 'homepage_plan_trip_click'
   | 'homepage_quick_plan_submit'
   | 'trip_builder_submit'
