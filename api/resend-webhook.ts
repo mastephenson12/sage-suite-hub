@@ -64,15 +64,20 @@ export async function POST(req: Request) {
   // A failed receiver must cause a non-2xx response so Resend retries the event.
   const sink = process.env.ITINERARY_EVENT_SINK_URL;
   const token = process.env.ITINERARY_EVENT_SINK_TOKEN;
+  const authMode = process.env.ITINERARY_EVENT_SINK_AUTH_MODE || 'bearer';
   let sinkUrl: URL;
   try {
     sinkUrl = new URL(sink || '');
-    if (sinkUrl.protocol !== 'https:' || sinkUrl.username || sinkUrl.password || !token || token.length < 32) throw new Error();
+    if (sinkUrl.protocol !== 'https:' || sinkUrl.username || sinkUrl.password || !token || token.length < 32 ||
+        !['bearer', 'make-api-key'].includes(authMode)) throw new Error();
   } catch { return reply(503, 'Delivery event storage is not configured.'); }
   try {
     const result = await fetch(sinkUrl, {
       method: 'POST', redirect: 'error', signal: AbortSignal.timeout(10_000),
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, 'Idempotency-Key': eventId },
+      headers: {
+        'Content-Type': 'application/json', 'Idempotency-Key': eventId,
+        ...(authMode === 'make-api-key' ? { 'x-make-apikey': token } : { Authorization: `Bearer ${token}` }),
+      },
       body: JSON.stringify({
         schemaVersion: 1, source: 'sage_resend', eventId,
         event: status === 'delivered' ? 'itinerary_email_delivered' : `itinerary_email_${status}`,
@@ -83,6 +88,9 @@ export async function POST(req: Request) {
       }),
     });
     if (!result.ok) return reply(502, 'Delivery event could not be stored.');
+    // Make's default 200 "Accepted" only means queued, not committed to the event ledger.
+    const receipt = await result.json();
+    if (receipt?.recorded !== true || receipt.eventId !== eventId) return reply(502, 'Delivery event storage was not confirmed.');
   } catch { return reply(502, 'Delivery event could not be stored.'); }
   return Response.json({ recorded: true }, { headers });
 }

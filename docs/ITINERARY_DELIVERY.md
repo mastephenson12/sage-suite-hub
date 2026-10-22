@@ -38,6 +38,25 @@ Workflow 02 is explicit Starter Pack signup, with immediate Beehiiv delivery and
 
 ## Activation checks
 
+### Make receiver
+
+Use Make as the durable event ledger and integration coordinator, downstream of Sage's signature verification. Configure `ITINERARY_EVENT_SINK_AUTH_MODE=make-api-key`; the token goes in `x-make-apikey`, matching Make's custom webhook API-key authentication. Default bearer mode remains available for other receivers.
+
+The receiver must return JSON `{ "recorded": true, "eventId": "<exact incoming eventId>" }` only after storing the event or confirming it already exists. A default 200 `Accepted`, empty response, wrong event ID or non-JSON response is not a receipt and causes a retryable 502. Do not connect production until this response contract passes.
+
+Recommended Make scenarios:
+
+1. **H&T | Sage Delivery — Receive and Store.** Custom webhook with API-key authentication and explicit JSON data structure → validate schema/purpose/source → Data Store check for eventId → if absent, create immutable ledger record with state=pending → Webhook Response with the exact receipt above. For duplicates, read the existing record and return the same receipt without resetting its processing state. Enable sequential processing to prevent check/insert races within this receiver. Place response last. Keep this path short enough for Sage's 10-second timeout; it must not wait for GHL calls.
+2. **H&T | Sage Delivery — Process Pending.** Scheduled worker reads pending ledger records → upserts message state by messageId → updates the correctly scoped CRM record → marks event processed only after success. Retry pending/failed records; duplicate ingestion must not discard them. Keep event history and compare provider times/state so late accepted/delayed events do not overwrite terminal states. A delivered event never overrides suppression from a complaint.
+
+First activate receiver storage only. Enable the GHL worker after existing contact fields, consent ownership and email-attempt mapping are verified. Do not create newsletter subscriptions, membership sales opportunities or follow-up emails from delivery events. The plan-version fingerprint is not the stable Sage Trip ID; keep email attempts separate until an explicit trip association exists.
+
+Data Store name: `ht_sage_delivery_events`. Unique record key: eventId. Data fields: schemaVersion (number), source, eventId, event, occurredAt, messageId, planVersionId, recipient, status, purpose, processingState, attemptCount (number), lastAttemptAt, processedAt, lastErrorCode. Incoming event fields remain immutable. Do not store tokens or itinerary text. Keep secrets out of exported scenario blueprints and logs.
+
+Test missing/wrong key rejection, valid storage receipt, duplicate replay, downstream failure/retry, out-of-order status events and two distinct message IDs for one contact. Use synthetic fixture data until production recipient processing is explicitly enabled. Confirm Make plan/storage/credit capacity before activation; no paid upgrade is part of this setup.
+
+Official references: https://apps.make.com/gateway ; https://help.make.com/webhooks ; https://help.make.com/data-stores
+
 1. Merge reviewed code and verify preview/production checks.
 2. Provision and test durable receiver, correct location mapping and deduplication; set its HTTPS URL and server-only token (at least 32 characters).
 3. Create the Resend webhook at `https://sage.healthandtravels.com/api/resend-webhook`; set its signing secret in RESEND_WEBHOOK_SECRET. Configure sender domain and webhook within the correct Resend account.

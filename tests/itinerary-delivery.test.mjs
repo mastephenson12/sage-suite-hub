@@ -29,7 +29,7 @@ test('verified events forward minimally; retries retain a stable deduplication k
   process.env.ITINERARY_EVENT_SINK_TOKEN = 'x'.repeat(32);
   const original = global.fetch;
   const calls = [];
-  global.fetch = async (url, options) => { calls.push({ url, options }); return new Response(null, { status: 204 }); };
+  global.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({recorded:true,eventId:options.headers['Idempotency-Key']}); };
   try {
     const payload = event();
     assert.equal((await webhook(signed(payload))).status, 200);
@@ -41,6 +41,7 @@ test('verified events forward minimally; retries retain a stable deduplication k
     assert.equal(sent.planVersionId, planVersionId);
     assert.equal(calls[0].options.headers['Idempotency-Key'], calls[1].options.headers['Idempotency-Key']);
     assert.equal(calls[0].options.redirect, 'error');
+    assert.equal(calls[0].options.headers.Authorization, `Bearer ${'x'.repeat(32)}`);
     assert(!calls[0].options.body.includes('private'));
     assert(!('marketingConsent' in sent));
     for (const type of ['email.sent','email.delivery_delayed','email.failed','email.bounced','email.complained','email.suppressed']) {
@@ -55,6 +56,17 @@ test('verified events forward minimally; retries retain a stable deduplication k
     const malformed = event(); malformed.data.to = [];
     assert.equal((await webhook(signed(malformed))).status, 400);
     assert.equal(calls.length, count);
+    process.env.ITINERARY_EVENT_SINK_AUTH_MODE = 'make-api-key';
+    assert.equal((await webhook(signed(event()))).status, 200);
+    assert.equal(calls.at(-1).options.headers['x-make-apikey'], 'x'.repeat(32));
+    assert.equal(calls.at(-1).options.headers.Authorization, undefined);
+    global.fetch = async () => new Response('Accepted', { status: 200 });
+    assert.equal((await webhook(signed(event()))).status, 502);
+    global.fetch = async () => Response.json({recorded:true,eventId:'different-event'});
+    assert.equal((await webhook(signed(event()))).status, 502);
+    process.env.ITINERARY_EVENT_SINK_AUTH_MODE = 'invalid';
+    assert.equal((await webhook(signed(event()))).status, 503);
+    delete process.env.ITINERARY_EVENT_SINK_AUTH_MODE;
     const oversized = signed({ ...event(), padding: 'x'.repeat(65_000) });
     assert.equal((await webhook(oversized)).status, 413);
     delete process.env.ITINERARY_EVENT_SINK_URL;
@@ -68,7 +80,7 @@ test('verified events forward minimally; retries retain a stable deduplication k
     assert.equal((await webhook(signed(event()))).status, 503);
   } finally {
     global.fetch = original;
-    for (const key of ['RESEND_WEBHOOK_SECRET', 'ITINERARY_EVENT_SINK_URL', 'ITINERARY_EVENT_SINK_TOKEN']) delete process.env[key];
+    for (const key of ['RESEND_WEBHOOK_SECRET', 'ITINERARY_EVENT_SINK_URL', 'ITINERARY_EVENT_SINK_TOKEN', 'ITINERARY_EVENT_SINK_AUTH_MODE']) delete process.env[key];
   }
 });
 
