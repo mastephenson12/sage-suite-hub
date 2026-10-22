@@ -2,6 +2,10 @@
 
 Status: implementation foundation, not a live CRM integration. October 22, 2026.
 
+## Verified GoHighLevel foundation
+
+Created in the existing Health and Travels location `xQnqBM7HbkzFjroV8KYI` on October 22, 2026: custom object `custom_objects.sage_trips` (object ID `6ada23193c2384b3c2d9e1d3`), unique primary field `sage_trip_id`, text field `destination`, and native date fields `trip_start_date` and `trip_end_date`. The `Trip planner` association permits one contact per trip and many trips per contact. No contact records were created, no trips imported, and no workflows published. The AHA account remains separate; do not assume membership records are in this location or copy contacts without the established referral permission.
+
 ## System ownership
 
 Sage renders the canonical plan. Resend delivers the requested snapshot. Beehiiv owns Starter Pack and newsletter signup/welcome. GoHighLevel owns permitted trip follow-ups, AHA interest, and membership onboarding. Emailing a trip never grants marketing consent.
