@@ -78,7 +78,9 @@ export async function POST(req: Request) {
     if (!Array.isArray(result.records) || result.total > 100) throw new Error('Incomplete CRM search');
     const matches = result.records.filter((r: any) => r.properties?.message_id === event.messageId);
     if (matches.length > 1) throw new Error('Ambiguous message');
-    return matches[0];
+    if (!matches[0]) return undefined;
+    // Search is only an ID lookup: its indexed properties may lag behind a prior write.
+    return (await api(`/objects/${objectKey}/records/${encodeURIComponent(matches[0].id)}?locationId=${encodeURIComponent(locationId)}`)).record;
   }
   try {
     let previous = await findAttempt();

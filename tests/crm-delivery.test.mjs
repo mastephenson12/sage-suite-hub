@@ -7,14 +7,14 @@ const location='location_test';
 const base={schemaVersion:1,source:'sage_resend',purpose:'transactional_itinerary',eventId:'evt_delivered',event:'itinerary_email_delivered',occurredAt:'2026-10-23T12:00:00.000Z',messageId:'email_one',planVersionId:'a'.repeat(64),recipient:'test@example.com',status:'delivered'};
 function request(event=base,token=workerToken){return new Request('https://sage.example/api/process-itinerary-event',{method:'POST',headers:{Authorization:`Bearer ${token}`},body:JSON.stringify(event)});}
 function configure(){process.env.ITINERARY_WORKER_TOKEN=workerToken;process.env.GHL_DELIVERY_TOKEN='fake-test-token';process.env.GHL_DELIVERY_LOCATION_ID=location;}
-function fixture({contact=false,searchLag=false}={}){
+function fixture({contact=false,searchLag=false,staleProperties=false}={}){
  const records=new Map();const writes=[];let fail=false;let dnd=false;
  const fetch=async(url,options)=>{
   const u=new URL(url);const body=options.body?JSON.parse(options.body):null;
   assert.equal(u.origin,'https://services.leadconnectorhq.com');
   assert.equal(options.redirect,'error');
   if(fail)return Response.json({error:'unavailable'},{status:503});
-  if(u.pathname.endsWith('/records/search'))return Response.json({records:searchLag?[]:[...records.values()].filter(r=>r.properties.message_id===body.query),total:searchLag?0:[...records.values()].filter(r=>r.properties.message_id===body.query).length});
+  if(u.pathname.endsWith('/records/search'))return Response.json({records:searchLag?[]:[...records.values()].filter(r=>r.properties.message_id===body.query).map(r=>staleProperties?{...r,properties:{...r.properties,delivery_status:'accepted',status_occurred_at:'2026-10-23T09:00:00.000Z'}}:r),total:searchLag?0:[...records.values()].filter(r=>r.properties.message_id===body.query).length});
   if(u.pathname==='/contacts/')return Response.json({contacts:contact?[{id:'contact_one',locationId:location,email:'test@example.com',dndSettings:{Email:{status:dnd?'active':'inactive'},SMS:{status:'active'}}}]:[],count:contact?1:0});
   if(u.pathname==='/contacts/contact_one'&&options.method==='PUT'){writes.push(body);assert.equal(body.dndSettings.SMS.status,'active');assert.equal(body.dndSettings.Email.status,'active');dnd=true;return Response.json({success:true});}
   if(u.pathname==='/contacts/contact_one')return Response.json({contact:{id:'contact_one',locationId:location,dndSettings:{Email:{status:dnd?'active':'inactive'}}}});
@@ -70,5 +70,15 @@ test('a stale CRM search index cannot create duplicates or regress delivered sta
   assert.equal(f.records.size,1);
   const late={...base,status:'accepted',event:'itinerary_email_accepted',eventId:'evt_old',occurredAt:'2026-10-23T10:00:00.000Z'};
   assert.equal((await (await POST(request(late))).json()).status,'delivered');
+ }finally{global.fetch=original;}
+});
+
+test('indexed stale properties cannot overwrite the current CRM record',async()=>{
+ configure();const original=global.fetch;const f=fixture({staleProperties:true});global.fetch=f.fetch;
+ try{
+  assert.equal((await POST(request())).status,200);
+  const late={...base,status:'accepted',event:'itinerary_email_accepted',eventId:'evt_old',occurredAt:'2026-10-23T10:00:00.000Z'};
+  assert.equal((await (await POST(request(late))).json()).status,'delivered');
+  assert.equal([...f.records.values()][0].properties.delivery_status,'delivered');
  }finally{global.fetch=original;}
 });
