@@ -1,6 +1,16 @@
 # Itinerary email delivery and GoHighLevel handoff
 
-Status: implementation foundation, not a live CRM integration. October 22, 2026.
+Status: delivery integration implementation and activation checklist. October 23, 2026.
+
+## Delivery processor
+
+`POST /api/process-itinerary-event` is a server-only worker endpoint authenticated with `ITINERARY_WORKER_TOKEN`. Configure `GHL_DELIVERY_TOKEN` and `GHL_DELIVERY_LOCATION_ID` for the Health & Travels location. Never expose these values in browser code or exported blueprints.
+
+The worker projects each message into `custom_objects.sage_email_attempts`. The unique `message_identity` field equals the provider message ID; a duplicate-create conflict is resolved by directly reading the conflicting record, because CRM search indexing can lag. A different recipient or plan fingerprint for the same message is rejected. Existing adult contacts are matched exactly by email and location; absent contacts are not created. Delivery events never grant consent, enroll workflows, or send messages.
+
+State precedence is accepted → delayed → delivered → failed → bounced → suppressed → complained; equal states use the newer provider timestamp. Complaints and suppression activate email DND on an existing matching contact while preserving other channels. Failure states set `support_required=yes` on the attempt record; this is a review flag, not an automatic support notification. A successful response follows a CRM write and read-back verification.
+
+Make worker scenario `6754882` reads up to 25 pending events every four hours. It must run sequentially; no other writer may project these message states concurrently. Only a response with `processed=true` and matching event/message IDs permits marking a ledger event processed. HTTP errors update attempt metadata, leave the event pending and skip that bundle so other events can run. Keep the ledger's original event fields mapped to their existing values in update modules. Confidential execution logging is enabled. The four-hour cadence reduces idle credit use on the free plan; monitor the remaining credit and 1 MB ledger capacity and archive reviewed event history before either is exhausted.
 
 ## Verified GoHighLevel foundation
 
@@ -46,7 +56,7 @@ The receiver must return JSON `{ "recorded": true, "eventId": "<exact incoming e
 
 Recommended Make scenarios:
 
-1. **H&T | Sage Delivery — Receive and Store.** Custom webhook with API-key authentication and explicit JSON data structure → validate schema/purpose/source → Data Store check for eventId → if absent, create immutable ledger record with state=pending → Webhook Response with the exact receipt above. For duplicates, read the existing record and return the same receipt without resetting its processing state. Enable sequential processing to prevent check/insert races within this receiver. Place response last. Keep this path short enough for Sage's 10-second timeout; it must not wait for GHL calls.
+1. **H&T | Sage Delivery — Receive and Store.** Custom webhook with API-key authentication and explicit JSON data structure → Data Store check for eventId → if absent, create ledger record with state=pending and overwrite disabled → Webhook Response with the exact receipt above. For duplicates, return the same receipt without resetting processing state. Make's webhook response module requires the receiver's sequential processing setting to remain off; the unique datastore key and overwrite-disabled insert protect records, and a failed concurrent insert must return non-2xx for provider retry. Place response last. Keep this path short enough for Sage's 10-second timeout; it must not wait for GHL calls. Sage validates event source/purpose before forwarding, and the worker validates all delivery fields before CRM access.
 2. **H&T | Sage Delivery — Process Pending.** Scheduled worker reads pending ledger records → upserts message state by messageId → updates the correctly scoped CRM record → marks event processed only after success. Retry pending/failed records; duplicate ingestion must not discard them. Keep event history and compare provider times/state so late accepted/delayed events do not overwrite terminal states. A delivered event never overrides suppression from a complaint.
 
 First activate receiver storage only. Enable the GHL worker after existing contact fields, consent ownership and email-attempt mapping are verified. Do not create newsletter subscriptions, membership sales opportunities or follow-up emails from delivery events. The plan-version fingerprint is not the stable Sage Trip ID; keep email attempts separate until an explicit trip association exists.
@@ -63,6 +73,6 @@ Official references: https://apps.make.com/gateway ; https://help.make.com/webho
 4. Test one requested itinerary to an authorized test inbox: inspect exact rendered plan, accepted message ID, signed delivered event, CRM record and suppression behavior. Do not claim inbox reading from delivered status.
 5. Replay an event twice, reorder events, simulate a failed sink, and verify trip A / trip B separation. Test no consent, opt-out, cancellation and existing-member branches before publishing any nurture.
 
-Do not announce automated follow-ups until these checks pass. Actual account fields, webhook and workflow publication are pending; no production configuration or customer messaging was changed by this implementation.
+Do not announce automated follow-ups from this integration: delivery tracking is the only activated workflow. Trip-date follow-ups, newsletter enrollment, membership and nurture still require their own consent and verification work.
 
 References: https://resend.com/docs/webhooks/verify-webhooks-requests ; https://resend.com/docs/webhooks/event-types ; https://resend.com/docs/api-reference/emails/send-email
