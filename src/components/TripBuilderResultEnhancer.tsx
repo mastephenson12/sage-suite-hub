@@ -111,16 +111,16 @@ type Props = { itinerary: Array<{time: string; title: string; description: strin
 export default function TripBuilderResultEnhancer({ itinerary, sections = [], personalizing = false }: Props) {
   const [params] = useSearchParams();
   const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
-  const [includeToddlers, setIncludeToddlers] = React.useState(false);
+  const [includeToddlers, setIncludeToddlers] = React.useState(params.get('kids') !== 'no' && params.get('ages') === 'toddlers');
   const pretty = (value: string | null, fallback: string) => value ? value.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : fallback;
   const location = pretty(params.get('location'), 'Arizona');
   const season = pretty(params.get('season'), 'Your season');
-  const tripLength = pretty(params.get('length'), 'Day trip');
+  const facts = getFamilyTripFacts(location);
+  const tripLength = facts?.id === 'estrella-mountain' ? (params.get('season') === 'summer' ? 'Summer alternative' : 'Short park visit') : pretty(params.get('length'), 'Day trip');
   const hasKids = params.get('kids') !== 'no';
   const groupLabel = hasKids ? pretty(params.get('ages'), 'Mixed ages') : 'Adults only';
   const wantsShade = params.get('shade') !== 'false';
   const needsBathrooms = params.get('bathrooms') !== 'false';
-  const facts = getFamilyTripFacts(location);
   const packingItems = buildPackingItems({ hasKids, wantsShade, needsBathrooms, season, includeToddlers });
   const checkedCount = packingItems.filter(item => checkedItems.includes(item.id)).length;
   const key = params.toString();
