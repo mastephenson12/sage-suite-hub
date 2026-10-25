@@ -2,6 +2,7 @@ import { readJsonRequest, requestErrorResponse, createLimiter } from './_lib/req
 import { readOrigin, originLabel, origins, type Origin } from '../src/utils/sage/tripOrigins.js';
 import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTripFacts.js';
 import { GoogleGenAI } from '@google/genai';
+import { tripPlanFailureDetails } from './_lib/trip-plan-diagnostics.mjs';
 
 const limited = createLimiter(8, 60_000);
 
@@ -138,9 +139,12 @@ export async function POST(req: Request) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
+    console.error('Structured trip planning failed', tripPlanFailureDetails('configuration'));
     return Response.json({ error: 'Trip planning is not configured.' }, { status: 500 });
   }
 
+  let stage = 'provider';
+  let providerResponse;
   try {
     const destinationFacts = getFamilyTripFacts(request.destination);
     const factContext = destinationFacts ? formatFamilyTripFacts(destinationFacts) : 'No reviewed destination snapshot is available.';
@@ -156,7 +160,13 @@ export async function POST(req: Request) {
       contents: `Create a practical trip plan for this request:\n${JSON.stringify(request)}\n\nReviewed destination snapshot:\n${factContext}\n\nReturn this exact JSON shape with no markdown:\n{"title":"","summary":"","outdoorAnchor":{"name":"","description":"","coordinates":{"latitude":0,"longitude":0}},"driveFromOrigin":"","foodStop":{"name":"","description":""},"facilities":{"restrooms":"","shade":""},"backupPlan":"","cautions":[""],"verificationNote":""}`,
     });
 
-    const parsed = JSON.parse(response.text || '{}');
+    providerResponse = response;
+    stage = 'empty_response';
+    const text = response.text;
+    if (!text?.trim()) throw new Error('Empty trip plan');
+    stage = 'json';
+    const parsed = JSON.parse(text);
+    stage = 'validation';
     const plan = parsePlan(parsed);
     if (!plan) throw new Error('Gemini returned an invalid trip plan');
 
@@ -165,7 +175,7 @@ export async function POST(req: Request) {
       { headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }
     );
   } catch (error) {
-    console.error('Structured trip planning provider request failed');
+    console.error('Structured trip planning failed', tripPlanFailureDetails(stage, error, providerResponse));
     return Response.json(
       { error: 'Sage could not personalize this plan right now. Your local starter plan is still available.' },
       { status: 502 }
