@@ -6,7 +6,10 @@ import QuickPlanBox from '../components/QuickPlanBox';
 import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
 import CloudinaryImage from '../components/CloudinaryImage';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
-import familyGuideDetails from '../data/familyGuideDetails.json';
+import existingFamilyGuides from '../data/familyGuideDetails.json';
+import jeromeFamilyGuide from '../data/jeromeFamilyGuide.json';
+
+const familyGuideDetails = { ...existingFamilyGuides, jerome: jeromeFamilyGuide };
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -142,7 +145,8 @@ export default function ArizonaDestinationPage() {
   const pageTitle = guide?.title ?? `${destination.name} Family Adventure Guide | Sage Health and Travels`;
   const pageDescription = guide?.description ?? `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
   const pageUrl = `https://sage.healthandtravels.com/arizona/${destination.slug}`;
-  const plannerUrl = `/trip-builder?location=${destination.slug}${guide ? '&length=weekend' : ''}`;
+  const plannerLength = destination.slug === 'jerome' ? 'half-day' : 'weekend';
+  const plannerUrl = `/trip-builder?location=${destination.slug}${guide ? `&length=${plannerLength}` : ''}`;
   const quickPlan = getQuickPlan(destination);
 
   return (
@@ -228,7 +232,7 @@ export default function ArizonaDestinationPage() {
         firstMove={quickPlan.firstMove}
         heatNote={quickPlan.heatNote}
         bathroomShadeFood={quickPlan.bathroomShadeFood}
-        tripBuilderTo={`/trip-builder?location=${destination.slug}`}
+        tripBuilderTo={plannerUrl}
         secondaryTo="/arizona/adventure-finder"
         secondaryLabel="Compare trips"
       />

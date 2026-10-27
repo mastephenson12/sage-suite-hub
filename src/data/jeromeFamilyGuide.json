@@ -1,0 +1,55 @@
+{
+  "title": "Jerome, AZ with Kids: Family Things to Do & Half-Day Plan | Sage",
+  "description": "Plan a family half day in Jerome, Arizona: Douglas Mansion, mining history, a short town walk, parking and stroller considerations, food and weather backups.",
+  "heading": "Jerome with kids: family things to do in a relaxed half day",
+  "intro": "Start a family visit to Jerome with one history stop, then choose a short town walk and a meal. Douglas Mansion at Jerome State Historic Park offers mining exhibits and views; the Historical Society's Mine Museum is a separate attraction. Pick one rather than rushing between both, especially with younger children.",
+  "sections": [
+    {
+      "heading": "Choose one history stop first",
+      "items": [
+        "Douglas Mansion at Jerome State Historic Park: the Arizona State Library's park description lists mining photographs, artifacts, minerals, a video and a model of the town and underground mines. Use this as the main stop when your children want to understand the town's mining story.",
+        "Jerome Historical Society Mine Museum: this is a separate museum, so check its own hours, admission and location. Do not assume one attraction's ticket includes the other.",
+        "A short town walk: choose a small area near your parking rather than a stair-heavy loop. Let views, historic buildings and a snack be enough if the group has little energy for another museum."
+      ]
+    },
+    {
+      "heading": "A simple half-day Jerome itinerary",
+      "items": [
+        "Before leaving: choose your museum, check its hours and admission, and identify parking and a restroom stop. Leave room in the drive for anyone who needs a break.",
+        "First stop: visit your chosen museum at your children's pace. The Douglas Mansion grounds also have outdoor displays and a picnic area, according to the state library's park listing; use them only when weather and access allow.",
+        "Next: eat, then take one short town walk if the group still wants it. Set a turnaround point before downhill walking makes the return feel longer.",
+        "Finish: head back to your lodging or onward to Cottonwood. Treat a second destination as optional rather than promising a full Jerome, Sedona and Cottonwood itinerary in one day. These are planning suggestions, not timed reservations."
+      ]
+    },
+    {
+      "heading": "Parking, strollers and family logistics",
+      "items": [
+        "Jerome's hills, steps and road crossings make route choice important. For a stroller or wheelchair, ask the attraction about the exact entrance, parking, restroom access and step-free route; do not assume the whole town is accessible because one building is.",
+        "With toddlers: keep the visit short and leave room to stop. Older children may prefer the mining model, photographs or a small history-focused walk over browsing several shops.",
+        "Use marked parking and verify any restrictions on arrival. Choose a meal and bathroom stop before walking away from the car; current facility opening and restaurant hours are not guaranteed by this guide.",
+        "Compare current museum admission and any tour costs before setting a budget. This guide does not quote live prices, and a ghost tour is optional rather than necessary for a family visit. Check age suitability directly with any tour operator."
+      ]
+    },
+    {
+      "heading": "Weather and an easier alternative",
+      "items": [
+        "Check the forecast and driving conditions before committing to outdoor walking. A scenic overlook is not a substitute for shelter during dangerous weather.",
+        "For unsuitable outdoor conditions, postpone the walk or use a confirmed-open indoor attraction once travel is safe. If mobility needs or tired children make the hillside visit a poor fit, shorten it or choose another day instead of forcing the route."
+      ]
+    }
+  ],
+  "faqs": [
+    { "question": "What are family-friendly things to do in Jerome, AZ?", "answer": "Choose Douglas Mansion at Jerome State Historic Park or the Jerome Historical Society Mine Museum, then add a short town walk and a meal if energy allows. The museums are separate attractions; check each one's hours and admission." },
+    { "question": "How much time should a family spend in Jerome?", "answer": "A relaxed half day is a useful starting point for one museum, food and a short walk. Allow more or less time for your drive, children's interest, access needs and weather rather than trying to fit in every attraction." },
+    { "question": "Is Jerome easy to visit with a stroller?", "answer": "Plan carefully around hills, steps and crossings. Ask your chosen attraction about parking, entrances, restrooms and a step-free route before visiting. Keep the town walk short and do not assume all streets or buildings have the same access." }
+  ],
+  "sources": [
+    { "label": "Arizona State Parks: Jerome visit information", "url": "https://azstateparks.com/jerome/" },
+    { "label": "Arizona State Library: Jerome State Historic Park", "url": "https://azmemory.azlibrary.gov/nodes/view/171729" },
+    { "label": "Jerome Historical Society: museums and buildings", "url": "https://www.jeromehistoricalsociety.com/museums-buildings/" }
+  ],
+  "related": [
+    { "label": "Cottonwood family guide", "path": "/arizona/cottonwood" },
+    { "label": "Sedona family guide", "path": "/arizona/sedona" }
+  ]
+}
