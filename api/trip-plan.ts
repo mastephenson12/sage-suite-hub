@@ -4,6 +4,7 @@ import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTri
 import { GoogleGenAI } from '@google/genai';
 import { parsePlan, tripPlanSchema } from './_lib/trip-plan-output.mjs';
 import { tripPlanFailureDetails } from './_lib/trip-plan-diagnostics.mjs';
+import { applyWeatherBackup } from '../src/utils/sage/weatherBackup.js';
 
 const limited = createLimiter(8, 60_000);
 
@@ -119,7 +120,7 @@ export async function POST(req: Request) {
     if (!plan) throw new Error('Gemini returned an invalid trip plan');
 
     return Response.json(
-      { plan: { ...plan, ...(request.origin === 'phoenix' ? { driveFromPhoenix: plan.driveFromOrigin } : {}) } },
+      { plan: { ...applyWeatherBackup(plan), ...(request.origin === 'phoenix' ? { driveFromPhoenix: plan.driveFromOrigin } : {}) } },
       { headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }
     );
   } catch (error) {

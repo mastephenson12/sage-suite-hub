@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
 import { SavedTripPackingItem, SavedTripSection, saveTrip } from '../utils/savedTrips';
+import { WEATHER_BACKUP } from '../utils/sage/weatherBackup';
 
 async function copyText(text: string) {
   if (navigator.clipboard?.writeText) {
@@ -98,7 +99,8 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       : '- Confirm current menu details directly with the restaurant before leaving.',
     '',
     'PLAN B:',
-    '- If heat, storms, parking, or kid energy changes the day, shorten the outdoor anchor and use an easier scenic, shaded, or indoor stop nearby.',
+    `- ${WEATHER_BACKUP}`,
+    '- If only parking or group energy changes in otherwise suitable conditions, choose a shorter outing or finish early.',
     '- Do not force the original plan just because everyone already got in the car.',
     '',
     `Open your live plan again: ${tripUrl}`,
