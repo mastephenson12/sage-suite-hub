@@ -33,3 +33,5 @@ API reference checked: [CompressionStream](https://developer.mozilla.org/en-US/d
 - Print button and print stylesheet are implemented; no PDF was exported during this test.
 
 No production merge/deployment or customer messaging is part of this implementation batch. Vercel preview routing must be checked before publication because local Vite preview does not apply Vercel rewrites.
+
+Review fix before publication: reopening a previously saved shared link now offers the saved copy immediately. Shared-copy saves never replace an existing record, preserving recipient packing progress and timestamps. A regression test covers repeat saves and separate new snapshots; the suite now has 35 passing tests.
