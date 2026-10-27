@@ -15,37 +15,12 @@ import {
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
 import SharePlanPanel from '../components/SharePlanPanel';
+import flagstaffDetails from '../data/spanishFlagstaffDetails.json';
 
 const spanishUrl = 'https://sage.healthandtravels.com/es/arizona/flagstaff-con-ninos';
 const englishUrl = 'https://sage.healthandtravels.com/arizona/flagstaff-with-kids';
 
-const spanishFaqs = [
-  {
-    question: '¿Flagstaff es un buen destino para viajar con niños?',
-    answer:
-      'Sí. Flagstaff combina bosque de pinos, clima más fresco que Phoenix, parques, caminatas, astronomía y opciones bajo techo. Una familia suele disfrutar más el viaje al escoger una aventura principal y dejar tiempo para comida y descanso.',
-  },
-  {
-    question: '¿Cuál es la mejor época para visitar Flagstaff con niños?',
-    answer:
-      'El verano funciona bien para escapar del calor del desierto; el otoño trae clima fresco; y el invierno puede incluir nieve, hielo y cierres. En temporada de monzón revisen tormentas y rayos, y en invierno revisen carreteras antes de salir.',
-  },
-  {
-    question: '¿Qué se puede hacer en Flagstaff con niños?',
-    answer:
-      'Las opciones familiares incluyen Buffalo Park, paseos cortos en el bosque, el centro histórico, Lowell Observatory y actividades interiores. Confirmen horarios, entradas, clima y condiciones del bosque antes del viaje.',
-  },
-  {
-    question: '¿Se puede visitar Flagstaff en un solo día desde Phoenix?',
-    answer:
-      'Sí, pero es un día largo. Para una excursión, escojan una sola actividad principal y salgan temprano. Dormir una noche permite visitar el bosque durante el día y Lowell Observatory por la tarde o noche sin manejar cansados.',
-  },
-  {
-    question: '¿Qué riesgos deben considerar las familias en Flagstaff?',
-    answer:
-      'La altura, el sol, la deshidratación, los rayos del monzón, el humo, las restricciones de fuego, la nieve y el hielo pueden cambiar el plan. Revisen el pronóstico, las alertas del bosque y las carreteras antes de salir.',
-  },
-];
+const spanishFaqs = flagstaffDetails.faqs;
 
 function setAlternateLink(hreflang: string, href: string) {
   let link = document.querySelector<HTMLLinkElement>(
@@ -117,7 +92,7 @@ const outingIdeas = [
     icon: Compass,
     label: 'Plan tranquilo',
     text:
-      'Funciona bien para comer, caminar un poco y bajar el ritmo. Úsenlo como plan principal con niños cansados o como plan B cuando el clima cierre la montaña.',
+      'Funciona bien para comer, caminar un poco y bajar el ritmo cuando las condiciones permiten estar afuera. Con tormentas, humo o hielo, elijan un lugar bajo techo confirmado o pospongan la salida.',
   },
 ];
 
@@ -172,8 +147,8 @@ export default function SpanishFlagstaffWithKids() {
   return (
     <main className="min-h-screen bg-white text-zinc-950">
       <SEOJsonLd
-        title="Qué hacer en Flagstaff con niños: guía familiar | Sage"
-        description="Descubre qué hacer en Flagstaff con niños: Buffalo Park, Lowell Observatory, paseos por el bosque y un plan familiar con consejos de clima y descanso."
+        title={flagstaffDetails.title}
+        description={flagstaffDetails.description}
         url={spanishUrl}
         faqs={spanishFaqs}
         breadcrumbs={[
@@ -187,7 +162,7 @@ export default function SpanishFlagstaffWithKids() {
         <div className="absolute inset-0 opacity-45">
           <img
             src="/images/payson-rim-overlook.avif"
-            alt="Familia explorando un bosque de pinos ponderosa cerca de Flagstaff, Arizona"
+            alt=""
             className="h-full w-full object-cover"
             fetchPriority="high"
           />
@@ -210,12 +185,11 @@ export default function SpanishFlagstaffWithKids() {
             Qué hacer en Flagstaff con niños
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100 md:text-xl">
-            Un plan familiar realista para disfrutar pinos, senderos y estrellas sin olvidar
-            la altura, el clima cambiante ni el viaje de regreso.
+            {flagstaffDetails.intro}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              to="/trip-builder?plan=ready&location=flagstaff&kids=yes&group=family&activity=explore&length=weekend&shade=true&language=es"
+              to="/trip-builder?location=flagstaff&kids=yes&activity=explore&length=weekend"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-blue-800"
             >
               <Compass className="h-4 w-4" aria-hidden="true" />
@@ -231,6 +205,7 @@ export default function SpanishFlagstaffWithKids() {
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
+          <p className="mt-4 text-sm text-slate-200">El planificador abre en inglés con Flagstaff y fin de semana seleccionados; pueden ajustar sus preferencias antes de crear el plan.</p>
         </div>
       </section>
 
@@ -282,6 +257,23 @@ export default function SpanishFlagstaffWithKids() {
             })}
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 py-14" aria-label="Detalles para familias en Flagstaff">
+        <div className="grid gap-6 md:grid-cols-3">
+          {flagstaffDetails.sections.map((section) => (
+            <article key={section.heading} className="rounded-xl border border-zinc-200 p-6">
+              <h2 className="mb-4 text-xl font-black">{section.heading}</h2>
+              <ul className="space-y-4 text-sm leading-7 text-zinc-600">
+                {section.items.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+        <ul className="mt-6 space-y-3">
+          {flagstaffDetails.sources.map((source) => <li key={source.url}><a href={source.url} className="text-sm font-semibold text-teal-800 underline underline-offset-4">{source.label}</a></li>)}
+        </ul>
+        <p className="mt-6 text-sm"><a href="https://healthandtravels.com/flagstaff-with-kids-family-weekend-guide" className="font-semibold underline underline-offset-4">Guía complementaria de Health &amp; Travels (en inglés)</a></p>
       </section>
 
       <section className="bg-slate-950 px-6 py-14 text-white">

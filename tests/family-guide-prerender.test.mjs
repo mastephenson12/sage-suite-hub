@@ -26,3 +26,15 @@ test('prerendered content escapes text and attribute delimiters', () => {
   assert.ok(html.includes('A &amp; B'));
   assert.ok(html.includes('a=&quot;x&quot;&amp;b=2'));
 });
+
+test('Jerome keeps half-day pacing and Spanish Flagstaff retains translated content and planner preferences', async () => {
+  const jerome = JSON.parse(await readFile(new URL('../src/data/jeromeFamilyGuide.json', import.meta.url), 'utf8'));
+  const spanish = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffDetails.json', import.meta.url), 'utf8'));
+  assert.ok(renderFamilyGuide(jerome, 'jerome', { length: 'half-day' }).includes('location=jerome&amp;length=half-day'));
+  const html = renderFamilyGuide(spanish, 'flagstaff', { locale: 'es' });
+  assert.ok(html.includes('Qué hacer en Flagstaff con niños'));
+  assert.ok(html.includes('planificador en inglés'));
+  assert.ok(html.includes('location=flagstaff&amp;length=weekend'));
+  assert.ok(!html.includes('plan=ready'));
+  for (const faq of spanish.faqs) assert.ok(html.includes(faq.question));
+});
