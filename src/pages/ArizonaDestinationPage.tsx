@@ -6,6 +6,7 @@ import QuickPlanBox from '../components/QuickPlanBox';
 import RelatedArizonaGuides from '../components/RelatedArizonaGuides';
 import CloudinaryImage from '../components/CloudinaryImage';
 import { getAllArizonaDestination } from '../data/allArizonaDestinations';
+import familyGuideDetails from '../data/familyGuideDetails.json';
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -137,9 +138,11 @@ export default function ArizonaDestinationPage() {
     );
   }
 
-  const pageTitle = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
-  const pageDescription = `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
+  const guide = familyGuideDetails[destination.slug as keyof typeof familyGuideDetails];
+  const pageTitle = guide?.title ?? `${destination.name} Family Adventure Guide | Sage Health and Travels`;
+  const pageDescription = guide?.description ?? `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
   const pageUrl = `https://sage.healthandtravels.com/arizona/${destination.slug}`;
+  const plannerUrl = `/trip-builder?location=${destination.slug}${guide ? '&length=weekend' : ''}`;
   const quickPlan = getQuickPlan(destination);
 
   return (
@@ -148,7 +151,7 @@ export default function ArizonaDestinationPage() {
         title={pageTitle}
         description={pageDescription}
         url={pageUrl}
-        faqs={destination.faqs}
+        faqs={guide?.faqs ?? destination.faqs}
       />
 
       <section className="bg-gradient-to-b from-orange-50 to-white px-6 py-16 md:py-24">
@@ -158,18 +161,18 @@ export default function ArizonaDestinationPage() {
               Arizona Destination Guide
             </p>
             <h1 className="mb-5 text-4xl font-black tracking-tight text-zinc-950 md:text-6xl">
-              Plan a family adventure in {destination.name}
+              {guide?.heading ?? `Plan a family adventure in ${destination.name}`}
             </h1>
             <p className="mb-6 max-w-3xl text-xl font-serif italic leading-9 text-zinc-600">
               {destination.tagline}
             </p>
             <p className="max-w-3xl text-base leading-8 text-zinc-700 md:text-lg">
-              {destination.intro}
+              {guide?.intro ?? destination.intro}
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to={`/trip-builder?location=${destination.slug}`}
+                to={plannerUrl}
                 className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
               >
                 Build This Trip
@@ -233,8 +236,35 @@ export default function ArizonaDestinationPage() {
       <BeforeYouGoPanel
         title={`Before you go to ${destination.name}`}
         subtitle="Use this as the final family check before you leave: heat, water, bathrooms, parking, food, and the backup plan."
-        plannerTo={`/trip-builder?location=${destination.slug}`}
+        plannerTo={plannerUrl}
       />
+
+      {guide && (
+        <section className="mx-auto max-w-6xl px-6 py-14" aria-label={`${destination.name} family weekend planning`}>
+          <div className="grid gap-8 md:grid-cols-2">
+            {guide.sections.map((section) => (
+              <div key={section.heading} className="rounded-3xl border border-zinc-200 bg-white p-6">
+                <h2 className="mb-5 text-2xl font-black tracking-tight">{section.heading}</h2>
+                <BulletList items={section.items} />
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 rounded-3xl bg-zinc-50 p-6">
+            <h2 className="mb-3 text-xl font-black">Check details before you go</h2>
+            <p className="mb-4 text-sm leading-6 text-zinc-600">These sources support the planning details above. Check current access, prices and conditions for your dates.</p>
+            <ul className="space-y-3">
+              {guide.sources.map((source) => (
+                <li key={source.url}><a href={source.url} className="text-sm font-semibold text-orange-700 underline underline-offset-4">{source.label}</a></li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-4">
+              {guide.related.map((related) => (
+                <Link key={related.path} to={related.path} className="text-sm font-semibold underline underline-offset-4">{related.label}</Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {destination.slug === 'grand-canyon' && (
         <section className="mx-auto max-w-6xl px-6 py-14" aria-labelledby="grand-canyon-photo-title">
@@ -336,7 +366,7 @@ export default function ArizonaDestinationPage() {
           </h2>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {destination.faqs.map((faq) => (
+            {(guide?.faqs ?? destination.faqs).map((faq) => (
               <div key={faq.question} className="rounded-3xl bg-white p-6 shadow-sm">
                 <h3 className="mb-3 text-lg font-black text-zinc-900">
                   {faq.question}
@@ -364,7 +394,7 @@ export default function ArizonaDestinationPage() {
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
-              to={`/trip-builder?location=${destination.slug}`}
+              to={plannerUrl}
               className="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-orange-600"
             >
               Build This Trip
