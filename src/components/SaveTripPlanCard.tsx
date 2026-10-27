@@ -13,6 +13,7 @@ import {
 import { trackEvent } from '../utils/analytics';
 import { SavedTripPackingItem, SavedTripSection, saveTrip } from '../utils/savedTrips';
 import { WEATHER_BACKUP } from '../utils/sage/weatherBackup';
+import ExactTripShare from './ExactTripShare';
 
 async function copyText(text: string) {
   if (navigator.clipboard?.writeText) {
@@ -103,7 +104,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     '- If only parking or group energy changes in otherwise suitable conditions, choose a shorter outing or finish early.',
     '- Do not force the original plan just because everyone already got in the car.',
     '',
-    `Open your live plan again: ${tripUrl}`,
+    `Start a fresh plan with these preferences: ${tripUrl}`,
     '',
     'More Arizona family adventures: https://healthandtravels.com/',
   ].join('\n');
@@ -226,6 +227,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       {saveError && <p role="alert" className="mt-3 text-sm font-bold text-red-800">{saveError}</p>}
       <p className="mt-2 text-xs text-slate-500">Stored in this browser. Clearing site data removes saved trips.</p>
       {personalizing && <p role="status" className="mt-3 text-sm text-slate-600">Sage is adding the final details. Saving becomes available when the plan is ready.</p>}
+      <ExactTripShare disabled={personalizing} trip={{ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, offlineText: planBody, itinerary, packingItems }} />
       <form id="email-trip-pack" onSubmit={handleSavePlan} aria-busy={emailStatus === 'sending'} className="mt-6 border-t border-slate-200 pt-5">
         <label htmlFor="trip-pack-email" className="block font-bold">Or email this plan to yourself</label>
         <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
@@ -238,7 +240,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       </form>
       <details className="mt-5 border-t border-slate-200 pt-4"><summary className="cursor-pointer py-2 font-bold text-blue-900">More ways to keep or share</summary>
         <div className="mt-3 flex flex-wrap gap-3 text-sm font-bold text-blue-900">
-          <button type="button" onClick={handleShareToPhone} className="rounded-xl border bg-white px-4 py-3">{shared ? 'Shared' : 'Share'}</button>
+          <button type="button" disabled={personalizing} onClick={handleShareToPhone} className="rounded-xl border bg-white px-4 py-3">{shared ? 'Shared' : 'Share plan text'}</button>
           <button type="button" onClick={handleCopyPass} className="rounded-xl border bg-white px-4 py-3">{copied ? 'Copied' : 'Copy Plan'}</button>
           <a href={smsHref} className="rounded-xl border bg-white px-4 py-3">Text It</a>
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="rounded-xl border bg-white px-4 py-3">WhatsApp</a>

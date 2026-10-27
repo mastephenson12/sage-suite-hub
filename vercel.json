@@ -10,6 +10,10 @@
   ],
   "rewrites": [
     {
+      "source": "/shared-trip",
+      "destination": "/shared-trip.html"
+    },
+    {
       "source": "/de/arizona/flagstaff-mit-kindern",
       "destination": "/de/arizona/flagstaff-mit-kindern/index.html"
     },
@@ -18,7 +22,7 @@
       "destination": "/de/arizona/prescott-mit-kindern/index.html"
     },
     {
-      "source": "/((?!api/|archive/best-sedona-jeep-tours/?$|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|icon-192\\.png|icon-512\\.png|manifest\\.webmanifest|service-worker\\.js|vite\\.svg|assets/|arizona(?:/.*)?$).*)",
+      "source": "/((?!api/|shared-trip\\.html$|archive/best-sedona-jeep-tours/?$|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|icon-192\\.png|icon-512\\.png|manifest\\.webmanifest|service-worker\\.js|vite\\.svg|assets/|arizona(?:/.*)?$).*)",
       "destination": "/index.html"
     }
   ],
@@ -60,6 +64,32 @@
         {
           "key": "Cache-Control",
           "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/shared-trip",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/shared-trip.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
         }
       ]
     }
