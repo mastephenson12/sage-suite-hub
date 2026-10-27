@@ -29,7 +29,15 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
           return response;
         })
-        .catch(async () => (await caches.match(request)) || (await caches.match('/')))
+        .catch(async () => {
+          const cached = await caches.match(request);
+          if (cached) return cached;
+          // A shared snapshot must never fall through to the analytics-enabled app shell.
+          if (/^\/shared-trip(?:\.html)?\/?$/.test(url.pathname)) {
+            return new Response('<!doctype html><html lang="en"><meta name="robots" content="noindex,nofollow"><title>Reconnect to open your plan</title><h1>Reconnect to open this shared plan</h1><p>Ask the sender for a text copy if you cannot get online.</p><a href="/my-trips">Open a copy already saved on this device</a></html>', { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+          }
+          return caches.match('/');
+        })
     );
     return;
   }

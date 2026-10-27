@@ -2,6 +2,7 @@ import React from 'react';
 import { savedTripLinks } from '../utils/savedTripLinks';
 import { ArrowLeft, Check, Download, MapPin, PackageCheck, Share2, Trash2, Wifi, WifiOff } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import ExactTripShare from '../components/ExactTripShare';
 import {
   SAVED_TRIPS_CHANGED_EVENT,
   SavedTrip,
@@ -111,8 +112,10 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
           </div>
         </section>
 
+        <ExactTripShare trip={current} />
         <section className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button type="button" onClick={handleShare} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1047a2] px-5 py-4 font-black text-white"><Share2 className="h-4 w-4" /> Share trip</button>
+          <button type="button" onClick={handleShare} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1047a2] px-5 py-4 font-black text-white"><Share2 className="h-4 w-4" /> Share trip text</button>
+          <button type="button" onClick={() => window.print()} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-300 bg-white px-5 py-4 font-black">Print or Save PDF</button>
           <button type="button" onClick={() => downloadTextFile(`${slugifyTrip(current.destination)}-sage-trip.txt`, current.offlineText)} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-300 bg-white px-5 py-4 font-black"><Download className="h-4 w-4" /> Download text backup</button>
           {online && <a href={current.tripUrl} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-5 py-4 font-black text-emerald-900"><MapPin className="h-4 w-4" /> Open live plan</a>}
           <button type="button" onClick={() => { if (window.confirm(`Delete the saved ${current.destination} trip from this phone?`)) { deleteSavedTrip(current.id); navigate('/my-trips'); } }} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-red-200 bg-white px-5 py-4 font-black text-red-700"><Trash2 className="h-4 w-4" /> Delete from phone</button>
