@@ -47,14 +47,14 @@ export const extraArizonaDestinations: ArizonaDestination[] = [
       'Use a cabin or rental as the center of the trip instead of chasing too many stops.',
       'Add one scenic drive for variety without wearing everyone out.',
     ],
-    easyTrails: ['Woodland Lake Park paths', 'Big Springs Trail', 'Thompson Trail sections', 'White Mountains scenic pullouts'],
+    easyTrails: ['Woodland Lake Park paved loop; check current surface and access', 'Short park walks with play and picnic breaks', 'Mapped local forest trails only after checking distance and conditions'],
     eatNearby: ['Casual Pinetop restaurants', 'Coffee before forest time', 'Picnic food for lake days', 'Family dinner near the main road'],
     stayIdeas: ['Cabins in Pinetop-Lakeside', 'Family vacation rentals', 'Hotels near town services', 'Campgrounds when weather allows'],
     safetyTips: [
       'Afternoon storms can happen in mountain areas.',
       'Keep kids close near lakes and wet rocks.',
       'Bring layers for cool mornings and evenings.',
-      'Respect forest closures and fire restrictions, because forests are not fond of becoming campfire confetti.',
+      'Check forest closures and fire restrictions before choosing a trail or picnic site.',
     ],
     faqs: [
       {
@@ -113,13 +113,13 @@ export const extraArizonaDestinations: ArizonaDestination[] = [
       'Plan a scenic drive or picnic in the pines.',
       'Keep one flexible evening for food, photos, and rest.',
     ],
-    easyTrails: ['Bill Williams Mountain starter sections', 'Kaibab National Forest pullouts', 'Cataract Lake area', 'Downtown Williams walk'],
+    easyTrails: ['Cataract Lake County Park walking trails', 'Short downtown Route 66 walk with road-crossing supervision', 'A park playground and picnic instead of a longer hike'],
     eatNearby: ['Route 66 restaurants in Williams', 'Coffee before Grand Canyon day', 'Picnic supplies for forest stops', 'Casual dinner after driving'],
     stayIdeas: ['Williams hotels near Route 66', 'Cabins outside town', 'Family-friendly motels', 'Campgrounds when weather allows'],
     safetyTips: [
       'Grand Canyon day trips can run long, so start early.',
       'Winter roads can be icy or snowy.',
-      'Bring layers because elevation changes make weather weird on purpose.',
+      'Bring layers and check the forecast for both Williams and the South Rim.',
       'Avoid overpacking the day if kids need downtime after the canyon.',
     ],
     faqs: [

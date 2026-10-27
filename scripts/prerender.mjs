@@ -1,5 +1,8 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { renderFamilyGuide } from './render-family-guide.mjs';
+
+const familyGuideDetails = JSON.parse(await readFile(new URL('../src/data/familyGuideDetails.json', import.meta.url), 'utf8'));
 
 const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
@@ -1016,15 +1019,21 @@ await writeRoute(spanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 await writeRoute(legacySpanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 
 for (const destination of destinations) {
-  const title = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
-  const description = `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
+  const guide = familyGuideDetails[destination.slug];
+  const title = guide?.title ?? `${destination.name} Family Adventure Guide | Sage Health and Travels`;
+  const description = guide?.description ?? `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
   const url = `${siteUrl}/arizona/${destination.slug}`;
-  const html = applySeo(baseHtml, {
+  let html = applySeo(baseHtml, {
     title,
     description,
     url,
-    faqs: destination.faqs,
+    faqs: guide?.faqs ?? destination.faqs,
   });
+
+  if (guide) {
+    if (!html.includes('<div id="root"></div>')) throw new Error('Missing prerender root for family guide');
+    html = html.replace('<div id="root"></div>', `<div id="root">${renderFamilyGuide(guide, destination.slug)}</div>`);
+  }
 
   await writeRoute(`arizona/${destination.slug}`, html);
 }
