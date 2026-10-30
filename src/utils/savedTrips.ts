@@ -77,6 +77,15 @@ export function saveTrip(input: Omit<SavedTrip, 'version' | 'id' | 'savedAt' | '
   return savedTrip;
 }
 
+export function findSavedTripByUrl(tripUrl: string): SavedTrip | undefined {
+  return readSavedTrips().find(trip => trip.tripUrl === tripUrl);
+}
+
+// Shared snapshots are immutable. Reopening one must not overwrite a recipient's local progress.
+export function saveSharedTripCopy(input: Omit<SavedTrip, 'version' | 'id' | 'savedAt' | 'updatedAt'>): SavedTrip {
+  return findSavedTripByUrl(input.tripUrl) ?? saveTrip(input);
+}
+
 export function updateSavedTrip(trip: SavedTrip): void {
   const trips = readSavedTrips();
   writeSavedTrips(

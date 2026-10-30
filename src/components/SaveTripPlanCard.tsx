@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   CheckCircle2,
   Copy,
@@ -11,6 +12,8 @@ import {
 } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
 import { SavedTripPackingItem, SavedTripSection, saveTrip } from '../utils/savedTrips';
+import { WEATHER_BACKUP } from '../utils/sage/weatherBackup';
+import ExactTripShare from './ExactTripShare';
 
 async function copyText(text: string) {
   if (navigator.clipboard?.writeText) {
@@ -62,6 +65,8 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
   const [copied, setCopied] = React.useState(false);
   const [shared, setShared] = React.useState(false);
   const [savedOffline, setSavedOffline] = React.useState(false);
+  const [savedTripId, setSavedTripId] = React.useState<string | null>(null);
+  const [saveError, setSaveError] = React.useState('');
   const [emailStatus, setEmailStatus] = React.useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [emailError, setEmailError] = React.useState('');
 
@@ -95,14 +100,16 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       : '- Confirm current menu details directly with the restaurant before leaving.',
     '',
     'PLAN B:',
-    '- If heat, storms, parking, or kid energy changes the day, shorten the outdoor anchor and use an easier scenic, shaded, or indoor stop nearby.',
+    `- ${WEATHER_BACKUP}`,
+    '- If only parking or group energy changes in otherwise suitable conditions, choose a shorter outing or finish early.',
     '- Do not force the original plan just because everyone already got in the car.',
     '',
-    `Open your live plan again: ${tripUrl}`,
+    `Start a fresh plan with these preferences: ${tripUrl}`,
     '',
     'More Arizona family adventures: https://healthandtravels.com/',
   ].join('\n');
 
+  const savedCopyVersion = JSON.stringify([planBody, packingItems]);
   React.useEffect(() => {
     setSavedOffline(false);
   }, [planBody, packingItems.map(item => `${item.id}:${item.packed}`).join('|')]);
@@ -114,6 +121,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
 
     setEmailStatus('sending');
     setEmailError('');
+    trackEvent('itinerary_email_requested', { location: 'save_trip_plan_card' });
 
     try {
       const response = await fetch('/api/email-trip-pack', {
@@ -128,11 +136,12 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
         }),
       });
 
-      const result = (await response.json().catch(() => ({}))) as { error?: string };
+      const result = (await response.json().catch(() => ({}))) as { error?: string; accepted?: boolean };
       if (!response.ok) throw new Error(result.error || 'We could not email the trip pack.');
+      if (!result.accepted) throw new Error('We could not confirm the email request. Check your inbox before trying again.');
 
       setEmailStatus('sent');
-      trackEvent('trip_pack_emailed', {
+      trackEvent('itinerary_email_accepted', {
         destination,
         location: 'save_trip_plan_card',
         offer: 'complete_adventure_plan',
@@ -140,7 +149,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       trackEvent('adventure_funnel_step', {
         funnel_name: 'adventure_to_email',
         funnel_step: 4,
-        funnel_step_name: 'email_submitted',
+        funnel_step_name: 'email_accepted',
         destination,
       });
     } catch (error) {
@@ -160,10 +169,26 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
     window.setTimeout(() => setCopied(false), 1800);
   };
 
+  React.useEffect(() => {
+    setSavedOffline(false);
+    setSavedTripId(null);
+    setSaveError('');
+  }, [savedCopyVersion]);
+
   const handleSaveOffline = () => {
-    const savedTrip = saveTrip({ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, tripUrl, offlineText: planBody, itinerary, packingItems });
-    setSavedOffline(true);
-    trackEvent('save_trip_plan_click', { label: 'Save Offline on This Phone', destination, location: 'save_trip_plan_card', saved_trip_id: savedTrip.id });
+    if(personalizing) return;
+    try {
+      const savedTrip = saveTrip({ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, tripUrl, offlineText: planBody, itinerary, packingItems });
+      setSavedOffline(true);
+      setSavedTripId(savedTrip.id);
+      setSaveError('');
+      trackEvent('itinerary_save', { method: 'browser', location: 'save_trip_plan_card' });
+      trackEvent('save_trip_plan_click', { label: 'Save on This Device', destination, location: 'save_trip_plan_card', saved_trip_id: savedTrip.id });
+    } catch {
+      setSavedOffline(false);
+      setSavedTripId(null);
+      setSaveError('This browser could not save your plan. Try another browser, copy the plan, or use Print or Save PDF below.');
+    }
   };
 
   const handleShareToPhone = async () => {
@@ -194,17 +219,20 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       <p className="journey-eyebrow !mt-0">Keep your plan</p>
       <h3 className="mt-2">Take your {destination} plan with you</h3>
       <p className="mt-2 text-slate-600">Save it here before you leave. No account needed.</p>
-      <button type="button" onClick={handleSaveOffline} className="journey-primary mt-5 gap-2">
+      <button type="button" onClick={handleSaveOffline} disabled={personalizing} className="journey-primary mt-5 gap-2 disabled:opacity-60">
         {savedOffline ? <CheckCircle2 className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
-        {savedOffline ? 'Saved in My Trips' : 'Save My Plan on This Device'}
+        {personalizing ? 'Finishing your plan…' : savedOffline ? 'Saved in My Trips' : 'Save My Plan on This Device'}
       </button>
+      {savedTripId && <p role="status" className="mt-3 text-sm text-emerald-900">Saved. <Link className="inline-flex min-h-11 items-center font-bold underline" to={`/my-trips/${encodeURIComponent(savedTripId)}`}>Open saved plan</Link> to check your copy before leaving.</p>}
+      {saveError && <p role="alert" className="mt-3 text-sm font-bold text-red-800">{saveError}</p>}
       <p className="mt-2 text-xs text-slate-500">Stored in this browser. Clearing site data removes saved trips.</p>
-      {personalizing && <p role="status" className="mt-3 text-sm text-slate-600">Sage is still adding details. Save again once personalization finishes to include them.</p>}
+      {personalizing && <p role="status" className="mt-3 text-sm text-slate-600">Sage is adding the final details. Saving becomes available when the plan is ready.</p>}
+      <ExactTripShare disabled={personalizing} trip={{ destination, season, tripLength, groupLabel, confidenceScore, wantsShade, needsBathrooms, offlineText: planBody, itinerary, packingItems }} />
       <form id="email-trip-pack" onSubmit={handleSavePlan} aria-busy={emailStatus === 'sending'} className="mt-6 border-t border-slate-200 pt-5">
         <label htmlFor="trip-pack-email" className="block font-bold">Or email this plan to yourself</label>
         <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
           <input id="trip-pack-email" type="email" value={email} onChange={event => {setEmail(event.target.value);if(emailStatus !== 'idle')setEmailStatus('idle');setEmailError('');}} placeholder="you@example.com" autoComplete="email" inputMode="email" aria-label="Email address for your complete adventure plan" required className="min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base" />
-          <button type="submit" disabled={emailStatus === 'sending'} className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-900 disabled:opacity-60">{emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Plan Sent' : 'Email My Plan'}</button>
+          <button type="submit" disabled={personalizing || emailStatus === 'sending'} className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-900 disabled:opacity-60">{emailStatus === 'sending' ? 'Sending…' : emailStatus === 'sent' ? 'Email Requested' : 'Email My Plan'}</button>
         </div>
         {emailStatus === 'sent' && <p role="status" className="mt-3 text-sm font-bold text-emerald-800">Your adventure plan is on its way.</p>}
         {emailStatus === 'error' && <p role="alert" className="mt-3 text-sm font-bold text-red-800">{emailError} You can still save or copy the plan.</p>}
@@ -212,7 +240,7 @@ const SaveTripPlanCard: React.FC<SaveTripPlanCardProps> = ({
       </form>
       <details className="mt-5 border-t border-slate-200 pt-4"><summary className="cursor-pointer py-2 font-bold text-blue-900">More ways to keep or share</summary>
         <div className="mt-3 flex flex-wrap gap-3 text-sm font-bold text-blue-900">
-          <button type="button" onClick={handleShareToPhone} className="rounded-xl border bg-white px-4 py-3">{shared ? 'Shared' : 'Share'}</button>
+          <button type="button" disabled={personalizing} onClick={handleShareToPhone} className="rounded-xl border bg-white px-4 py-3">{shared ? 'Shared' : 'Share plan text'}</button>
           <button type="button" onClick={handleCopyPass} className="rounded-xl border bg-white px-4 py-3">{copied ? 'Copied' : 'Copy Plan'}</button>
           <a href={smsHref} className="rounded-xl border bg-white px-4 py-3">Text It</a>
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="rounded-xl border bg-white px-4 py-3">WhatsApp</a>

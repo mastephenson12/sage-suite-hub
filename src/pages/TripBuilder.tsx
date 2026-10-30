@@ -1,4 +1,5 @@
-import { Origin, origins, readOrigin, originLabel } from '../utils/sage/tripOrigins';
+import { buildEstrellaVisit, ESTRELLA_REVIEWED, ESTRELLA_ALERT, ESTRELLA_DIRECTIONS } from '../utils/sage/estrellaVisit';
+import { Origin, origins, readOrigin, originLabel, driveMinutesFromOrigin } from '../utils/sage/tripOrigins';
 import { getFamilyTripFacts } from '../data/familyTripFacts';
 import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -200,30 +201,17 @@ const TripBuilder: React.FC = () => {
   }, [submitted, resultKey]);
   const destinationFacts = getFamilyTripFacts(location);
   const basePlan = buildTripPlan(location, hasKids, activity, length, season);
-  const plan = destinationFacts?.id === 'estrella-mountain' ? {
+  const isEstrella = destinationFacts?.id === 'estrella-mountain';
+  const estrellaVisit = buildEstrellaVisit({activity,season,length,hasKids:hasKids === 'yes',kidAgeGroup,wantsShade,needsBathrooms,needsStrollerAccess,maxDriveMinutes,estimatedDriveMinutes:driveMinutesFromOrigin(origin,{slug:'estrella-mountain-regional-park',driveMinutesFromPhoenix:35})});
+  const plan = isEstrella ? {
     ...basePlan,
-    title: 'Estrella Mountain: a short family morning',
-    intro: 'A practical cool-weather Gila Trail visit, with current closure constraints and an early finish. Confirm access before leaving; the schedule below is a researched starting point.',
-    morning: season === 'summer' ? 'Choose an indoor outing instead of this exposed desert trail in summer.' : 'Walk the county-listed easy 0.5-mile Gila loop only after confirming current access. Allow 30–45 minutes with breaks.',
-    midday: 'Bring a packed lunch to eat at home or your accommodation after leaving the park.',
-    afternoon: 'Keep the afternoon indoors. The playground, concrete path and Nature Center are closed in the reviewed alert.',
-    extras: ['Water, snacks and packed lunch', 'Hats, sunscreen and closed-toe shoes', 'Hand sanitizer, charged phone and downloaded park map', 'Confirm parking, portable toilets and route access with staff'],
+    title: estrellaVisit.title,
+    intro: estrellaVisit.intro,
+    extras: ['Water, snacks and a food backup', 'Hats, sunscreen and suitable shoes', 'Charged phone and downloaded map', 'Confirm parking, open toilets and route access before leaving'],
   } : basePlan;
 
-  const isEstrella = destinationFacts?.id === 'estrella-mountain';
-  const estrellaSchedule = [
-    { time: 'Before leaving', title: 'Check access before committing', description: 'Read the county closure notice and check the forecast. Call 602-506-2930 ext. 6 to confirm Gila trail access, parking and portable restroom locations. Choose another outing if your family needs reliable shade, regular toilets or confirmed stroller access.' },
-    { time: '8:00 AM', title: 'Arrive at Estrella Mountain Regional Park', description: 'Enter at 14805 W. Vineyard Ave., Goodyear. Ask staff for the current route to Gila trailhead; do not navigate through closed roads or assume Loop Drive parking has reopened. Budget $10 per vehicle and confirm current fees.' },
-    { time: '8:30 AM', title: 'Gila Trail: a short desert loop', description: 'The county lists Gila as an easy 0.5-mile loop. Allow 30–45 minutes with observation and water breaks; this is a planning estimate. Stay on the signed route and turn back if the surface or heat does not suit your group. Its usual barrier-free rating does not confirm current stroller conditions.' },
-    { time: '9:15 AM', title: 'Water, snacks and an energy check', description: 'Bring your own drinking water and snacks. Regular restrooms are unavailable in the reviewed alert; portable toilets are provided, but confirm their location and accessibility. Do not count on trail shade, a playground visit or the Nature Center.' },
-    { time: '9:45 AM', title: 'Shorter finish or head home', description: 'For tired kids, skip the full loop and use a brief out-and-back on the confirmed open portion of Gila, returning the same way. Do not add a midday desert hike. If access or heat is unsuitable, skip the trail entirely.' },
-    { time: 'Lunch', title: 'Packed lunch after leaving the park', description: 'Pack sandwiches, fruit and extra water for a simple lunch at home or your accommodation after the morning visit. This avoids depending on unconfirmed ramadas or restaurant hours. Keep the rest of a full day indoors; this park visit is a morning outing, not a full-day or weekend itinerary.' },
-  ];
-
   const hourlyItinerary = (() => {
-    if (isEstrella) return season === 'summer'
-      ? [{ time: 'Before leaving', title: 'Choose an indoor summer alternative', description: 'This exposed desert route is not the family summer itinerary. Keep lunch and activities at home or your accommodation; plan the Gila visit for cooler weather after checking closures.' }]
-      : estrellaSchedule;
+    if (isEstrella) return estrellaVisit.schedule;
     const summer = season === 'summer';
 
     if (length === 'half-day') {
@@ -673,7 +661,7 @@ const TripBuilder: React.FC = () => {
             </p>
 
             {destinationFacts && (
-              <section className="mt-6 rounded-2xl border border-amber-300 bg-amber-50 p-5" aria-label="Destination at a glance">
+              <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5" aria-label="Destination at a glance">
                 <h3 className="text-xl font-black">{destinationFacts.name}: At a glance</h3>
                 <p className="mt-3 font-semibold">{destinationFacts.caution}</p>
                 <dl className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -684,6 +672,12 @@ const TripBuilder: React.FC = () => {
                 <ul className="mt-3 space-y-2 text-sm">{destinationFacts.sources.map(source => <li key={source.url}><a className="underline" href={source.url}>{source.label}</a></li>)}</ul>
               </section>
             )}
+
+            {isEstrella && estrellaVisit.notes.length > 0 && <section className="mt-5 rounded-2xl border border-amber-300 bg-amber-50 p-5" aria-label="How this outing fits your choices">
+              <h3 className="font-bold">Check the fit before you go</h3>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm">{estrellaVisit.notes.map(note => <li key={note}>{note}</li>)}</ul>
+              {submitted && <a className="mt-3 inline-flex min-h-11 items-center font-bold text-blue-900 underline" href="#alternative-outings" onClick={() => { const alternatives = document.getElementById('alternative-outings') as HTMLDetailsElement | null; if(alternatives) alternatives.open = true; }}>Compare other outings with your choices</a>}
+            </section>}
 
             {!submitted && (
               <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm leading-relaxed text-zinc-500">
@@ -701,7 +695,7 @@ const TripBuilder: React.FC = () => {
                   aria-busy={aiPlanStatus === 'loading'}
                 >
                   <p className="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
-                    Personalized by Sage
+                    {isEstrella ? 'Reviewed park plan' : aiPlanStatus === 'ready' ? 'Personalized by Sage' : 'Starter plan'}
                   </p>
 
                   {aiPlanStatus === 'loading' && (
@@ -772,7 +766,7 @@ const TripBuilder: React.FC = () => {
                   )}
                 </section>
 
-                <details className="journey-disclosure"><summary>Other adventures within your drive limit</summary>
+                <details id="alternative-outings" className="journey-disclosure scroll-mt-6"><summary>Other adventures within your drive limit</summary>
                   <div className="space-y-4">
                     {familyMatches.length === 0 && <p>No destinations in our catalog fit this drive limit from {originLabel(origin)}. Increase the limit or choose a closer outing. A manually entered destination is not guaranteed to fit.</p>}
                     {familyMatches.map((match, index) => (
@@ -845,7 +839,7 @@ const TripBuilder: React.FC = () => {
                   </div>
                 </details>
 
-                <div
+                {!isEstrella && <div
                   className={`rounded-2xl border p-5 ${getSafetyCardClasses(
                     plan.safety.level
                   )}`}
@@ -878,7 +872,7 @@ const TripBuilder: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div>}
 
                 <section className="rounded-3xl border border-zinc-200 bg-white p-5 md:p-6">
                   <div className="mb-5 flex items-center gap-3">
@@ -894,12 +888,12 @@ const TripBuilder: React.FC = () => {
                   </div>
 
                   {isEstrella && <div className="mb-5 space-y-3 text-sm">
-                    <p className="font-semibold">Cool-weather morning plan · researched October 7, 2026 · check conditions again before travel.</p>
+                    <p className="font-semibold">Park information checked {ESTRELLA_REVIEWED} · check conditions again before travel.</p>
                     <p>Pack water for everyone, snacks or lunch, hats, sunscreen, closed-toe shoes, hand sanitizer, a charged phone and a downloaded park map.</p>
                     <div className="flex flex-wrap gap-4">
-                      <a className="font-bold underline" href="https://www.google.com/maps/search/?api=1&query=14805+W+Vineyard+Ave+Goodyear+AZ">Park entrance directions</a>
+                      <a className="font-bold underline" href={ESTRELLA_DIRECTIONS}>Park entrance directions</a>
                       <a className="font-bold underline" href="https://www.maricopacountyparks.net/assets/1/6/estrella-8x11.pdf">Official trail map</a>
-                      <a className="font-bold underline" href="https://www.maricopacountyparks.net/estrella---storm-damage-update-and-temporary-closures/">Check current closures</a>
+                      <a className="font-bold underline" href={ESTRELLA_ALERT}>Check current closures</a>
                     </div>
                   </div>}
                   <div className="space-y-4">
@@ -934,8 +928,9 @@ const TripBuilder: React.FC = () => {
                 <details className="journey-disclosure"><summary>More preparation tips</summary><ul className="space-y-2">{plan.extras.map(item => <li key={item}>{item}</li>)}</ul></details>
                 <TripBuilderResultEnhancer itinerary={hourlyItinerary} personalizing={aiPlanStatus === 'loading'} sections={[
                   {title: 'Trip overview', description: plan.intro},
+                  ...(isEstrella ? [{title:'Fit and tradeoffs',description:estrellaVisit.notes.length ? estrellaVisit.notes.join(' ') : 'A short visit; recheck the current park alert before departure.'},{title:'Directions and current conditions',description:`Park entrance: ${ESTRELLA_DIRECTIONS} Current alert: ${ESTRELLA_ALERT}`}]:[]),
                   {title: 'Starting area', description: `${originLabel(origin)}. Drive limit: ${maxDriveMinutes} minutes one way. Times are planning estimates; check your route before leaving.`},
-                  {title: 'Safety and conditions', description: `${plan.safety.title}: ${plan.safety.message} ${plan.safety.suggestion}`},
+                  {title: 'Safety and conditions', description: isEstrella ? 'Confirm current weather, park access and the facilities your group needs before leaving. Shorten or skip the visit if conditions do not fit.' : `${plan.safety.title}: ${plan.safety.message} ${plan.safety.suggestion}`},
                   ...(!isEstrella && aiPlan ? [
                     {title: aiPlan.outdoorAnchor.name, description: aiPlan.outdoorAnchor.description},
                     {title: `Estimated drive from ${originLabel(origin)}`, description: aiPlan.driveFromOrigin},

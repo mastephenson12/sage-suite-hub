@@ -1,6 +1,8 @@
 import React from 'react';
+import { savedTripLinks } from '../utils/savedTripLinks';
 import { ArrowLeft, Check, Download, MapPin, PackageCheck, Share2, Trash2, Wifi, WifiOff } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import ExactTripShare from '../components/ExactTripShare';
 import {
   SAVED_TRIPS_CHANGED_EVENT,
   SavedTrip,
@@ -30,6 +32,10 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(
     new Date(value)
   );
+}
+
+function SavedDescription({text}: {text: string}) {
+  return <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-zinc-600 [overflow-wrap:anywhere]">{savedTripLinks(text).map((part,index)=>part.href?<a key={index} className="font-semibold text-blue-900 underline" href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>:<React.Fragment key={index}>{part.text}</React.Fragment>)}</p>;
 }
 
 function MyTripDetail({ trip }: { trip: SavedTrip }) {
@@ -73,8 +79,8 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
         <section className="rounded-[2rem] bg-zinc-950 p-6 text-white md:p-9">
           <p className="text-[11px] font-black uppercase tracking-[.2em] text-emerald-300">Saved on this device</p>
           <h1 className="mt-3 text-4xl font-black md:text-6xl">{current.destination}</h1>
-          <p className="mt-4 text-zinc-300">{current.tripLength} Â· {current.season} Â· {current.groupLabel}</p>
-          <p className="mt-2 text-xs text-zinc-400">Saved {formatDate(current.savedAt)} Â· Updated {formatDate(current.updatedAt)}</p>
+          <p className="mt-4 text-zinc-300">{current.tripLength} · {current.season} · {current.groupLabel}</p>
+          <p className="mt-2 text-xs text-zinc-400">Saved {formatDate(current.savedAt)} · Updated {formatDate(current.updatedAt)}</p>
         </section>
 
         {!online && (
@@ -86,8 +92,7 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
         <section className="mt-6 grid gap-4 sm:grid-cols-2">
           {current.itinerary.map((item) => (
             <article key={item.title} className="rounded-3xl border border-zinc-200 bg-white p-5">
-              <h2 className="font-black">{item.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600">{item.description}</p>
+              {item.title === 'Destination details' ? <details><summary className="cursor-pointer py-2 font-black">Reviewed destination details and sources</summary><SavedDescription text={item.description} /></details> : <><h2 className="font-black">{item.title}</h2><SavedDescription text={item.description} /></>}
             </article>
           ))}
         </section>
@@ -107,8 +112,10 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
           </div>
         </section>
 
+        <ExactTripShare trip={current} />
         <section className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button type="button" onClick={handleShare} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1047a2] px-5 py-4 font-black text-white"><Share2 className="h-4 w-4" /> Share trip</button>
+          <button type="button" onClick={handleShare} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1047a2] px-5 py-4 font-black text-white"><Share2 className="h-4 w-4" /> Share trip text</button>
+          <button type="button" onClick={() => window.print()} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-300 bg-white px-5 py-4 font-black">Print or Save PDF</button>
           <button type="button" onClick={() => downloadTextFile(`${slugifyTrip(current.destination)}-sage-trip.txt`, current.offlineText)} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-300 bg-white px-5 py-4 font-black"><Download className="h-4 w-4" /> Download text backup</button>
           {online && <a href={current.tripUrl} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-5 py-4 font-black text-emerald-900"><MapPin className="h-4 w-4" /> Open live plan</a>}
           <button type="button" onClick={() => { if (window.confirm(`Delete the saved ${current.destination} trip from this phone?`)) { deleteSavedTrip(current.id); navigate('/my-trips'); } }} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-red-200 bg-white px-5 py-4 font-black text-red-700"><Trash2 className="h-4 w-4" /> Delete from phone</button>
@@ -142,7 +149,7 @@ export default function MyTrips() {
     <main className="min-h-screen bg-zinc-50 px-5 py-12 text-zinc-950">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-start justify-between gap-5">
-          <div><p className="text-[11px] font-black uppercase tracking-[.22em] text-emerald-700">Private Â· Stored on this device</p><h1 className="mt-3 text-5xl font-black md:text-7xl">My Arizona Trips</h1><p className="mt-4 max-w-2xl text-lg text-zinc-600">Open your saved plans, packing lists and trip notes even when cell service disappears.</p></div>
+          <div><p className="text-[11px] font-black uppercase tracking-[.22em] text-emerald-700">Private · Stored on this device</p><h1 className="mt-3 text-5xl font-black md:text-7xl">My Arizona Trips</h1><p className="mt-4 max-w-2xl text-lg text-zinc-600">Open your saved plans, packing lists and trip notes in this browser. Download a text copy before leaving if you need reliable access without a connection.</p></div>
           <span className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-black ${online ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}`}>{online ? <Wifi className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}{online ? 'Online' : 'Offline mode'}</span>
         </div>
 
@@ -151,7 +158,7 @@ export default function MyTrips() {
         ) : (
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {trips.map((trip) => (
-              <article key={trip.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm"><p className="text-[10px] font-black uppercase tracking-[.18em] text-emerald-700">Offline trip pass</p><h2 className="mt-2 text-3xl font-black">{trip.destination}</h2><p className="mt-2 text-sm text-zinc-600">{trip.tripLength} Â· {trip.season} Â· {trip.groupLabel}</p><p className="mt-5 text-xs text-zinc-400">Updated {formatDate(trip.updatedAt)}</p><Link to={`/my-trips/${trip.id}`} className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[#1047a2] px-5 py-3 font-black text-white">Open offline trip</Link></article>
+              <article key={trip.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm"><p className="text-[10px] font-black uppercase tracking-[.18em] text-emerald-700">Offline trip pass</p><h2 className="mt-2 text-3xl font-black">{trip.destination}</h2><p className="mt-2 text-sm text-zinc-600">{trip.tripLength} · {trip.season} · {trip.groupLabel}</p><p className="mt-5 text-xs text-zinc-400">Updated {formatDate(trip.updatedAt)}</p><Link to={`/my-trips/${trip.id}`} className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[#1047a2] px-5 py-3 font-black text-white">Open offline trip</Link></article>
             ))}
           </div>
         )}

@@ -1,4 +1,5 @@
 import { readJsonRequest, requestErrorResponse, createLimiter, isTrustedTripUrl } from './_lib/request-security.mjs';
+import { createHash } from 'node:crypto';
 const limited = createLimiter(5, 60_000);
 const recipientLimited = createLimiter(2, 600_000);
 
@@ -55,6 +56,8 @@ export async function POST(req: Request) {
   }
 
   if (recipientLimited(tripPack.email)) return Response.json({error: 'Please wait before emailing this address again.'}, {status: 429, headers: {'Retry-After':'600'}});
+  // Identifies this exact plan snapshot without putting trip details in provider tags.
+  const planVersionId = createHash('sha256').update(JSON.stringify([tripPack.destination, tripPack.planText, tripPack.tripUrl])).digest('hex');
   let response;
   try { response = await fetch('https://api.resend.com/emails', {
     signal: AbortSignal.timeout(10_000),
@@ -64,6 +67,7 @@ export async function POST(req: Request) {
       from,
       to: [tripPack.email],
       subject: tripPack.subject,
+      tags: [{ name: 'category', value: 'sage_itinerary' }, { name: 'plan_version_id', value: planVersionId }],
       text: tripPack.planText,
       html: `<div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;color:#18181b"><h1>${escapeHtml(tripPack.destination)} family trip pack</h1><p style="white-space:pre-line;line-height:1.6">${escapeHtml(tripPack.planText)}</p><p><a href="${escapeHtml(tripPack.tripUrl)}">Open your live Sage plan</a></p><hr><p style="font-size:13px;color:#52525b">Sent by Sage, the Arizona family trip planner from Health & Travels.</p></div>`,
     }),
@@ -76,5 +80,10 @@ export async function POST(req: Request) {
     return Response.json({ error: 'We could not send the trip pack right now.' }, { status: 502 });
   }
 
-  return Response.json({ sent: true }, { headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
+  let accepted;
+  try { accepted = await response.json(); } catch { /* Provider acceptance is not delivery confirmation. */ }
+  if (!accepted || typeof accepted.id !== 'string' || !/^[a-zA-Z0-9_-]{1,128}$/.test(accepted.id)) {
+    return Response.json({ error: 'We could not confirm the email request. Check your inbox before trying again.' }, { status: 502 });
+  }
+  return Response.json({ accepted: true, messageId: accepted.id, planVersionId }, { headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
 }

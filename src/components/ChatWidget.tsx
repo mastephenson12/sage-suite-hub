@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const QUICK_PROMPTS = [
   'Sedona family trip',
@@ -25,6 +25,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ className = '' }) => {
       navigate('/chat');
     }
   };
+
+  const spanishFlagstaff = useLocation().pathname === "/es/arizona/flagstaff-con-ninos";
+  if (spanishFlagstaff) return <a href="#plan-familiar" className="fixed bottom-4 right-4 z-50 rounded-full bg-brand-primary px-5 py-3 font-bold text-white shadow-lg">Crear mi plan</a>;
 
   return (
     <div className={`fixed bottom-4 right-4 z-50 ${className}`}>
