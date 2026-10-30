@@ -4,6 +4,7 @@ import { renderFamilyGuide } from './render-family-guide.mjs';
 
 const familyGuideDetails = JSON.parse(await readFile(new URL('../src/data/familyGuideDetails.json', import.meta.url), 'utf8'));
 familyGuideDetails.jerome = JSON.parse(await readFile(new URL('../src/data/jeromeFamilyGuide.json', import.meta.url), 'utf8'));
+const spanishFlagstaffPlans = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffPlans.json', import.meta.url), 'utf8'));
 const spanishFlagstaffDetails = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffDetails.json', import.meta.url), 'utf8'));
 
 const siteUrl = 'https://sage.healthandtravels.com';
@@ -766,7 +767,7 @@ let spanishFlagstaffHtml = addLanguageAlternates(
     { hreflang: 'x-default', href: `${siteUrl}/arizona/flagstaff-with-kids` },
   ]
 );
-spanishFlagstaffHtml = spanishFlagstaffHtml.replace('<div id="root"></div>', `<div id="root">${renderFamilyGuide(spanishFlagstaffDetails, 'flagstaff', { locale: 'es' })}</div>`);
+spanishFlagstaffHtml = spanishFlagstaffHtml.replace('<div id="root"></div>', `<div id="root">${renderFamilyGuide(spanishFlagstaffDetails, 'flagstaff', { locale: 'es', plans: spanishFlagstaffPlans })}</div>`);
 await writeRoute(spanishFlagstaffPath, spanishFlagstaffHtml);
 
 const spanishPapagoHtml = addLanguageAlternates(
