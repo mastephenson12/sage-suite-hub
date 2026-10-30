@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Un día tranquilo",
+    "steps": [
+      "Antes de salir: revisen clima, carreteras y alertas del bosque.",
+      "Por la mañana: paseo corto en Buffalo Park; elijan un punto de regreso según la energía del grupo.",
+      "Al mediodía: comida y descanso cerca del centro.",
+      "Por la tarde: paseo breve por el centro si las condiciones lo permiten, o regreso sin añadir otra actividad."
+    ]
+  },
+  {
+    "title": "Bosque y estrellas · una noche",
+    "steps": [
+      "Antes de salir: confirmen alojamiento, horario y entradas de Lowell Observatory, clima y carreteras.",
+      "Primer día: paseo corto en Buffalo Park, comida y descanso.",
+      "Por la tarde o noche: Lowell Observatory según su calendario. La observación depende del clima.",
+      "Segundo día: desayuno y regreso con calma; eviten conducir cansados después de la visita nocturna."
+    ]
+  },
+  {
+    "title": "Fin de semana flexible",
+    "steps": [
+      "Antes de salir: confirmen alojamiento, clima, carreteras y las actividades que requieren entradas.",
+      "Primer día: una caminata corta o picnic en un lugar con acceso confirmado, comida y descanso.",
+      "Segundo día: Lowell Observatory según su horario o una visita breve al centro si el clima permite estar afuera.",
+      "Plan B: confirmen una actividad bajo techo; pospongan la salida si las condiciones no son adecuadas."
+    ]
+  }
+]

@@ -93,7 +93,9 @@ export function buildTripPlan(
           ? `Use midday for lunch, shade, indoor stops, visitor centers, local shops, or a water-based option.`
           : `Plan a relaxed lunch break after the hike. Look for a casual local food stop, shady picnic area, or place where everyone can reset.`,
       afternoon:
-        length === 'weekend'
+        length === 'half-day'
+          ? `Before your food stop, choose one brief optional stop if everyone has energy, or finish early. Skip extra outdoor time if conditions are unsuitable.`
+          : length === 'weekend'
           ? `Keep the afternoon lighter and save one bigger stop for tomorrow.`
           : `After lunch, choose one light extra stop like a scenic overlook, visitor center, small downtown walk, or easy nature area.`,
       extras: [

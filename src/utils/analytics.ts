@@ -1,4 +1,9 @@
 export type AnalyticsEventName =
+  | 'trip_share_link_created'
+  | 'trip_share_link_copied'
+  | 'itinerary_save'
+  | 'itinerary_email_requested'
+  | 'itinerary_email_accepted'
   | 'homepage_plan_trip_click'
   | 'homepage_quick_plan_submit'
   | 'trip_builder_submit'

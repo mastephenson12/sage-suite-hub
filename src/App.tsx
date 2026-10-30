@@ -154,10 +154,13 @@ function AppContent() {
   const location = useLocation();
 
   React.useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    const timeoutId = window.setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }, 0);
+    const scroll = () => {
+      const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+      if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      else window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    };
+    scroll();
+    const timeoutId = window.setTimeout(scroll, 0);
     return () => window.clearTimeout(timeoutId);
   }, [location.pathname, location.hash]);
 
@@ -184,6 +187,7 @@ function AppContent() {
     }
   }, [location.pathname, location.search]);
 
+  const isSpanishFlagstaff = location.pathname === '/es/arizona/flagstaff-con-ninos';
   const isPlanning = ['/plan', '/trip-builder'].includes(location.pathname);
   const hideSiteChrome =
     location.pathname === '/chat' || location.pathname.startsWith('/suite');
@@ -266,7 +270,8 @@ function AppContent() {
       </main>
 
       {!hideSiteChrome && isPlanning && <footer className="border-t border-slate-200 bg-[#fbfaf7] px-6 py-8 text-sm text-slate-600"><div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-4"><p>© {new Date().getFullYear()} Health &amp; Travels · Planning with Sage</p><nav className="flex flex-wrap gap-5" aria-label="Footer"><Link to="/about">About</Link><Link to="/my-trips">My Trips</Link><Link to="/privacy-policy">Privacy</Link><Link to="/terms-of-service">Terms</Link><Link to="/affiliate-disclosure">Affiliate Disclosure</Link></nav></div></footer>}
-      {!hideSiteChrome && !isPlanning && (
+      {isSpanishFlagstaff && <footer className="border-t border-zinc-200 px-6 py-10 text-sm text-zinc-700"><div className="mx-auto max-w-6xl"><p>© {new Date().getFullYear()} Health &amp; Travels · Planifica con Sage</p><nav aria-label="Pie de página" className="mt-4 flex flex-wrap gap-5"><Link to="/es/arizona">Guías en español</Link><a href="#plan-familiar">Mi plan para Flagstaff</a><Link to="/privacy-policy">Privacidad (inglés)</Link><Link to="/terms-of-service">Términos (inglés)</Link><Link to="/affiliate-disclosure">Enlaces de afiliados (inglés)</Link></nav></div></footer>}
+      {!hideSiteChrome && !isPlanning && !isSpanishFlagstaff && (
         <footer className="mt-auto border-t border-zinc-100 bg-white py-16">
           <div className="mx-auto max-w-6xl px-6 text-center md:text-left">
             <div className="flex flex-col items-center justify-between gap-8 md:flex-row">

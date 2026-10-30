@@ -1,0 +1,48 @@
+{
+  "title": "Flagstaff con niños: qué hacer y cómo organizar el día | Sage",
+  "description": "Organiza Flagstaff con niños: Buffalo Park, Lowell Observatory, baños, comidas, presupuesto y alternativas bajo techo para un día o fin de semana familiar.",
+  "heading": "Qué hacer en Flagstaff con niños",
+  "intro": "Para una primera visita con niños, elijan Buffalo Park para una caminata corta o Lowell Observatory para ciencia y exhibiciones. Añadan comida y descanso antes de decidir si cabe otra actividad. Si quieren observar el cielo de noche, consideren dormir en Flagstaff para no depender de un regreso cansado a Phoenix.",
+  "sections": [
+    {
+      "heading": "Buffalo Park: distancia, baños y ritmo familiar",
+      "items": [
+        "La ciudad de Flagstaff enumera un circuito de 2.2 millas, aproximadamente 3.5 km, una ramada de picnic y un baño permanente en Buffalo Park. No hace falta completar el circuito: elijan un punto de regreso que deje energía para volver.",
+        "Confirmen el estado del recorrido y de los servicios antes de salir. No supongan que todo el sendero tiene sombra o que las condiciones son adecuadas para cualquier carriola o necesidad de movilidad.",
+        "Con niños pequeños, prueben primero un paseo breve y una pausa. Si buscan juegos infantiles en vez de caminar, la ciudad también enumera áreas de juego en Thorpe Park; revisen el lugar exacto antes de cambiar el plan."
+      ]
+    },
+    {
+      "heading": "Lowell Observatory: ciencia sin prometer cielo despejado",
+      "items": [
+        "La información oficial de Lowell incluye exhibiciones, edificios históricos y actividades de astronomía. Comparen el programa y las entradas de su fecha antes de comprar; la observación por telescopio depende del clima.",
+        "Para lluvia, consulten las exhibiciones interiores del Astronomy Discovery Center y confirmen qué actividades estarán disponibles. Lleguen solo cuando el traslado sea seguro; el centro histórico al aire libre no sustituye un plan bajo techo durante tormentas.",
+        "Si eligen una visita de tarde o noche, reserven tiempo para comer y descansar antes. No añadan una caminata larga solo porque todavía quedan horas en el día."
+      ]
+    },
+    {
+      "heading": "Comidas, presupuesto y un plan que sí funciona",
+      "items": [
+        "Excursión de un día: una actividad principal por la mañana, comida y un regreso con margen. Una visita nocturna al observatorio puede ser mejor con una noche de alojamiento que con un viaje de vuelta apresurado.",
+        "Fin de semana: primer día de parque y descanso; segundo día de ciencia o una salida corta que permita el pronóstico. Si las condiciones no son adecuadas, reduzcan el plan o pospongan la parte exterior.",
+        "Antes de salir, escojan el lugar para comer y el baño que usarán, lleven agua y snacks, y comprueben horarios. La existencia de un servicio en un directorio no garantiza que esté abierto ese día.",
+        "Para el presupuesto, sumen alojamiento, transporte, comidas y entradas vigentes. Esta guía no muestra precios en tiempo real. Consulten también clima, alertas forestales y carreteras antes de decidir la ruta."
+      ]
+    }
+  ],
+  "faqs": [
+    { "question": "¿Qué hacer en Flagstaff con niños en una primera visita?", "answer": "Elijan una caminata corta en Buffalo Park o una visita a Lowell Observatory, con comida y descanso. Eviten reunir bosque, museo y observación nocturna en un solo día si el grupo necesita pausas." },
+    { "question": "¿Hay baños en Buffalo Park?", "answer": "La ciudad de Flagstaff enumera un baño permanente y una ramada de picnic. Confirmen la disponibilidad actual antes de la visita; la guía no garantiza que todos los servicios estén abiertos." },
+    { "question": "¿Qué hacer en Flagstaff con niños si llueve?", "answer": "Consulten las exhibiciones interiores de Lowell Observatory y su programa para la fecha, o pospongan la salida. La observación por telescopio depende del clima. Cambiar a otro sendero o caminar por el centro no es una alternativa segura durante una tormenta." },
+    { "question": "¿Conviene ir a Flagstaff por un día o un fin de semana?", "answer": "Una excursión permite una actividad principal y comida con margen para volver. Una noche facilita descansar antes de una actividad nocturna y evita depender de un regreso cansado a Phoenix." }
+  ],
+  "sources": [
+    { "label": "Ciudad de Flagstaff: parques y servicios", "url": "https://flagstaff.az.gov/1923/Parks" },
+    { "label": "Lowell Observatory: planear la visita", "url": "https://lowell.edu/visit/" },
+    { "label": "Lowell: Astronomy Discovery Center", "url": "https://lowell.edu/campus/astronomy-discovery-center/" }
+  ],
+  "related": [
+    { "label": "Arizona en español", "path": "/es/arizona" },
+    { "label": "Sedona con niños", "path": "/es/arizona/sedona-con-ninos" }
+  ]
+}
