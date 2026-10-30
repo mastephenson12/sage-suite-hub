@@ -50,7 +50,7 @@ test('email uses a fixed subject, escaped HTML, recipient cooldown, and provider
   process.env.RESEND_API_KEY='test';process.env.TRIP_PACK_FROM_EMAIL='test@example.com';
   const body={email:'cooldown@example.com',destination:'Sedona',subject:'ATTACK SUBJECT',planText:'<img src=x onerror=alert(1)>',tripUrl:'https://sage.healthandtravels.com/trip-builder'};
   const sent=[];
-  global.fetch=async(url,options)=>{sent.push(JSON.parse(options.body));assert(options.signal);return {ok:true};};
+  global.fetch=async(url,options)=>{sent.push(JSON.parse(options.body));assert(options.signal);return Response.json({id:'test-message-id'});};
   try {
     assert.equal((await emailTrip(request(body))).status,200);
     assert.equal((await emailTrip(request(body))).status,200);

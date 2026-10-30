@@ -1,5 +1,11 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { renderFamilyGuide } from './render-family-guide.mjs';
+
+const familyGuideDetails = JSON.parse(await readFile(new URL('../src/data/familyGuideDetails.json', import.meta.url), 'utf8'));
+familyGuideDetails.jerome = JSON.parse(await readFile(new URL('../src/data/jeromeFamilyGuide.json', import.meta.url), 'utf8'));
+const spanishFlagstaffPlans = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffPlans.json', import.meta.url), 'utf8'));
+const spanishFlagstaffDetails = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffDetails.json', import.meta.url), 'utf8'));
 
 const siteUrl = 'https://sage.healthandtravels.com';
 const distDir = path.resolve('dist');
@@ -217,23 +223,7 @@ const spanishHikesWithKidsFaqs = [
   },
 ];
 
-const spanishFlagstaffFaqs = [
-  {
-    question: '¿Flagstaff es un buen destino para viajar con niños?',
-    answer:
-      'Sí. Flagstaff combina bosque de pinos, clima más fresco que Phoenix, parques, caminatas, astronomía y opciones bajo techo. Una aventura principal y tiempo para comida y descanso suelen producir el mejor día familiar.',
-  },
-  {
-    question: '¿Cuál es la mejor época para visitar Flagstaff con niños?',
-    answer:
-      'El verano funciona bien para escapar del calor del desierto; el otoño trae clima fresco; y el invierno puede incluir nieve, hielo y cierres. Revisen tormentas durante el monzón y carreteras durante el invierno.',
-  },
-  {
-    question: '¿Se puede visitar Flagstaff en un solo día desde Phoenix?',
-    answer:
-      'Sí, pero es un día largo. Escojan una sola actividad principal y salgan temprano. Dormir una noche permite combinar bosque y Lowell Observatory sin manejar cansados.',
-  },
-];
+const spanishFlagstaffFaqs = spanishFlagstaffDetails.faqs;
 
 const spanishPapagoFaqs = [
   {
@@ -763,21 +753,21 @@ const spanishSedonaHtml = addLanguageAlternates(
 );
 await writeRoute(spanishSedonaPath, spanishSedonaHtml);
 
-const spanishFlagstaffHtml = addLanguageAlternates(
+let spanishFlagstaffHtml = addLanguageAlternates(
   applySeo(baseHtml, {
-    title: 'Qué hacer en Flagstaff con niños: guía familiar | Sage',
-    description:
-      'Descubre qué hacer en Flagstaff con niños: Buffalo Park, Lowell Observatory, paseos por el bosque y un plan familiar con consejos de clima y descanso.',
+    title: spanishFlagstaffDetails.title,
+    description: spanishFlagstaffDetails.description,
     url: `${siteUrl}/${spanishFlagstaffPath}`,
     faqs: spanishFlagstaffFaqs,
   }),
   'es',
   [
     { hreflang: 'es', href: `${siteUrl}/${spanishFlagstaffPath}` },
-    { hreflang: 'en', href: `${siteUrl}/arizona/flagstaff` },
-    { hreflang: 'x-default', href: `${siteUrl}/arizona/flagstaff` },
+    { hreflang: 'en', href: `${siteUrl}/arizona/flagstaff-with-kids` },
+    { hreflang: 'x-default', href: `${siteUrl}/arizona/flagstaff-with-kids` },
   ]
 );
+spanishFlagstaffHtml = spanishFlagstaffHtml.replace('<div id="root"></div>', `<div id="root">${renderFamilyGuide(spanishFlagstaffDetails, 'flagstaff', { locale: 'es', plans: spanishFlagstaffPlans })}</div>`);
 await writeRoute(spanishFlagstaffPath, spanishFlagstaffHtml);
 
 const spanishPapagoHtml = addLanguageAlternates(
@@ -1016,15 +1006,21 @@ await writeRoute(spanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 await writeRoute(legacySpanishPhoenixHeatPath, spanishPhoenixHeatHtml);
 
 for (const destination of destinations) {
-  const title = `${destination.name} Family Adventure Guide | Sage Health and Travels`;
-  const description = `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
+  const guide = familyGuideDetails[destination.slug];
+  const title = guide?.title ?? `${destination.name} Family Adventure Guide | Sage Health and Travels`;
+  const description = guide?.description ?? `Plan a family-friendly ${destination.name}, Arizona adventure with outdoor activities, easy trails, food ideas, places to stay, safety tips, and Sage trip planning help.`;
   const url = `${siteUrl}/arizona/${destination.slug}`;
-  const html = applySeo(baseHtml, {
+  let html = applySeo(baseHtml, {
     title,
     description,
     url,
-    faqs: destination.faqs,
+    faqs: guide?.faqs ?? destination.faqs,
   });
+
+  if (guide) {
+    if (!html.includes('<div id="root"></div>')) throw new Error('Missing prerender root for family guide');
+    html = html.replace('<div id="root"></div>', `<div id="root">${renderFamilyGuide(guide, destination.slug, { length: destination.slug === 'jerome' ? 'half-day' : 'weekend' })}</div>`);
+  }
 
   await writeRoute(`arizona/${destination.slug}`, html);
 }

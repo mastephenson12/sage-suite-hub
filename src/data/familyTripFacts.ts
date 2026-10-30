@@ -128,28 +128,28 @@ export const familyTripFacts: FamilyTripFacts[] = [
     ],
     "name": "Estrella Mountain Regional Park",
     "guide": "https://healthandtravels.com/estrella-mountain-regional-park-family-guide",
-    "reviewed": "2026-10-07",
-    "reviewNote": "County fees and storm-damage notice checked October 7, 2026. This is an online check, not a new field visit. Recheck the alert before travel.",
+    "reviewed": "2026-10-24",
+    "reviewNote": "County alert, trail listing and fees checked October 24, 2026 online. This is not a field inspection; confirm current conditions before travel.",
     "facts": [
       [
         "Distance",
-        "County lists Gila as an easy 0.5-mile loop. Confirm the whole route is usable after storm damage."
+        "Gila is listed as an easy 0.5-mile loop. The reopened one-mile pathway offers another option; choose a shorter out-and-back if needed."
       ],
       [
         "Terrain",
-        "Desert multi-use trails; surface and difficulty vary. Ask staff about the specific route."
+        "Desert trails and a developed pathway. Confirm the current surface and access for your chosen route."
       ],
       [
         "Bathrooms",
-        "County notice: regular restrooms unavailable; portable restrooms provided."
+        "Current toilet availability and accessibility are not confirmed in the latest alert. Ask staff for the nearest open restroom before starting."
       ],
       [
         "Shade",
-        "Exposed trails. Loop Drive ramadas are listed closed through October 2, 2026; verify reopening."
+        "Desert routes are exposed. Some ramadas have reopened, but ramadas 7, 10 and 11 remain closed; do not rely on trail shade."
       ],
       [
         "Stroller / mobility",
-        "The one-mile concrete path is closed in the checked notice. An alternative step-free route has not been confirmed."
+        "The one-mile pathway has reopened. Confirm its current surface and the route from parking with staff before relying on step-free access."
       ],
       [
         "Cost",
@@ -157,7 +157,7 @@ export const familyTripFacts: FamilyTripFacts[] = [
       ],
       [
         "Parking",
-        "Loop Drive parking listed closed through October 2, 2026. Gila and Quail trailheads are listed open; recheck access."
+        "Loop drive is listed as reopened. Confirm the parking area serving your chosen route; do not enter signed closures."
       ],
       [
         "Time",
@@ -165,22 +165,28 @@ export const familyTripFacts: FamilyTripFacts[] = [
       ],
       [
         "Choose another outing if",
-        "Your visit depends on the playground, Nature Center, concrete path, regular toilets or Loop Drive facilities."
+        "Your visit requires a playground, continuous shade or facilities you cannot confirm. For summer, choose a cooler or indoor alternative."
       ]
     ],
     "sources": [
-      { "label": "County Gila trail distance and rating", "url": "https://www.maricopa.gov/6685/Bark-Ranger" },
-      { "label": "Official park trail map", "url": "https://www.maricopacountyparks.net/assets/1/6/estrella-8x11.pdf" },
       {
-        "label": "County storm-damage and closure notice",
-        "url": "https://www.maricopacountyparks.net/estrella---storm-damage-update-and-temporary-closures/"
+        "label": "County Gila trail distance and rating",
+        "url": "https://www.maricopa.gov/6685/Bark-Ranger"
+      },
+      {
+        "label": "Official park trail map",
+        "url": "https://www.maricopacountyparks.net/assets/1/6/estrella-8x11.pdf"
+      },
+      {
+        "label": "County current park alert",
+        "url": "https://www.maricopacountyparks.net/estrella---temporary-playground-and-ramada-closures/"
       },
       {
         "label": "County current fees",
         "url": "https://www.maricopacountyparks.net/park-locator/estrella-mountain-regional-park/fees/"
       }
     ],
-    "caution": "Storm-damage notice checked October 7: playground, concrete path and Nature Center closed; Loop Drive ramadas and parking closed through October 2. Do not assume reopening without checking."
+    "caution": "Playground and ramadas 7, 10 and 11 remain closed. Turf area, one-mile pathway and loop drive have reopened. Nature Center is closed Sunday–Tuesday through November 1, 2026."
   }
 ];
 export function getFamilyTripFacts(destination: string): FamilyTripFacts | undefined {

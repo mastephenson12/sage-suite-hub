@@ -213,6 +213,11 @@ const publicPages = [
     routePath: 'arizona/flagstaff-with-kids',
     title: 'Flagstaff With Kids | Flexible Family Day and Weekend Planner | Sage',
     description: 'Plan Flagstaff with kids using realistic day-trip, overnight, and weekend options with weather checks, family pacing, food, bathrooms, and backup ideas.',
+    alternates: [
+      { hreflang: 'en', href: `${siteUrl}/arizona/flagstaff-with-kids` },
+      { hreflang: 'es', href: `${siteUrl}/es/arizona/flagstaff-con-ninos` },
+      { hreflang: 'x-default', href: `${siteUrl}/arizona/flagstaff-with-kids` },
+    ],
     breadcrumbs: [
       { name: 'Home', url: `${siteUrl}/` },
       { name: 'Arizona', url: `${siteUrl}/arizona` },
