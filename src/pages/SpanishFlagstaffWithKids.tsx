@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import SEOJsonLd from '../components/SEOJsonLd';
 import SharePlanPanel from '../components/SharePlanPanel';
+import SpanishFlagstaffPlanner from '../components/SpanishFlagstaffPlanner';
 import flagstaffDetails from '../data/spanishFlagstaffDetails.json';
 
 const spanishUrl = 'https://sage.healthandtravels.com/es/arizona/flagstaff-con-ninos';
@@ -181,20 +182,20 @@ export default function SpanishFlagstaffWithKids() {
           <p className="mb-4 text-[11px] font-black uppercase tracking-[0.3em] text-teal-200">
             Bosque, clima fresco y cielo oscuro
           </p>
-          <h1 className="max-w-4xl text-4xl font-black uppercase tracking-tight md:text-6xl">
+          <h1 className="max-w-4xl text-3xl leading-tight font-black uppercase tracking-tight [overflow-wrap:normal] sm:text-4xl md:text-6xl">
             Qué hacer en Flagstaff con niños
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100 md:text-xl">
             {flagstaffDetails.intro}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              to="/trip-builder?location=flagstaff&kids=yes&activity=explore&length=weekend"
+            <a
+              href="#plan-familiar"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-blue-800"
             >
               <Compass className="h-4 w-4" aria-hidden="true" />
               Crear mi plan
-            </Link>
+            </a>
             <a
               href="https://www.flagstaffarizona.org/things-to-do/family-fun/"
               target="_blank"
@@ -205,9 +206,11 @@ export default function SpanishFlagstaffWithKids() {
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
-          <p className="mt-4 text-sm text-slate-200">El planificador abre en inglés con Flagstaff y fin de semana seleccionados; pueden ajustar sus preferencias antes de crear el plan.</p>
+          <p className="mt-4 text-sm text-slate-200">Elige un día o fin de semana y descarga tu plan familiar en español, sin crear una cuenta.</p>
         </div>
       </section>
+
+      <SpanishFlagstaffPlanner />
 
       <section className="border-b border-teal-100 bg-teal-50/60 px-6 py-10">
         <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-4">
@@ -276,7 +279,7 @@ export default function SpanishFlagstaffWithKids() {
         <p className="mt-6 text-sm"><a href="https://healthandtravels.com/flagstaff-with-kids-family-weekend-guide" className="font-semibold underline underline-offset-4">Guía complementaria de Health &amp; Travels (en inglés)</a></p>
       </section>
 
-      <section className="bg-slate-950 px-6 py-14 text-white">
+      <section id="seguridad" className="bg-slate-950 px-6 py-14 text-white">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <ShieldCheck className="mb-4 h-7 w-7 text-teal-200" aria-hidden="true" />

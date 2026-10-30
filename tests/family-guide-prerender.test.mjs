@@ -31,10 +31,17 @@ test('Jerome keeps half-day pacing and Spanish Flagstaff retains translated cont
   const jerome = JSON.parse(await readFile(new URL('../src/data/jeromeFamilyGuide.json', import.meta.url), 'utf8'));
   const spanish = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffDetails.json', import.meta.url), 'utf8'));
   assert.ok(renderFamilyGuide(jerome, 'jerome', { length: 'half-day' }).includes('location=jerome&amp;length=half-day'));
-  const html = renderFamilyGuide(spanish, 'flagstaff', { locale: 'es' });
+  const plans = JSON.parse(await readFile(new URL('../src/data/spanishFlagstaffPlans.json', import.meta.url), 'utf8'));
+  const html = renderFamilyGuide(spanish, 'flagstaff', { locale: 'es', plans });
   assert.ok(html.includes('Qué hacer en Flagstaff con niños'));
-  assert.ok(html.includes('planificador en inglés'));
-  assert.ok(html.includes('location=flagstaff&amp;length=weekend'));
+  assert.ok(html.includes('Crear mi plan en español'));
+  assert.ok(html.includes('id="plan-familiar"'));
+  for (const plan of plans) {
+    assert.ok(html.includes(plan.title));
+    for (const step of plan.steps) assert.ok(html.includes(step));
+  }
+  assert.ok(!html.includes('planificador en inglés'));
+  assert.ok(html.includes('href="#plan-familiar"'));
   assert.ok(!html.includes('plan=ready'));
   for (const faq of spanish.faqs) assert.ok(html.includes(faq.question));
 });
