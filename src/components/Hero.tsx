@@ -127,7 +127,7 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative overflow-hidden border-b border-zinc-100 bg-white">
+    <section className="relative overflow-hidden border-b border-brand-sage bg-brand-ivory">
       <div className="absolute inset-0 -z-10">
         <CloudinaryImage
           src="https://res.cloudinary.com/o7p0njjh/image/upload/f_auto,q_auto,w_1920,c_fill,g_auto/health-and-travels/woods-canyon-lake-area/mogollon-rim-vista-pine-framed-overlook"
@@ -155,7 +155,7 @@ export const Hero: React.FC = () => {
 
         <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
-            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
+            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-[#A84F2E]">
               Sage Arizona Trip Planner
             </p>
 
@@ -216,7 +216,7 @@ export const Hero: React.FC = () => {
             onSubmit={handleQuickPlan}
             className="rounded-[2rem] border border-zinc-200 bg-white/95 p-6 shadow-sm backdrop-blur md:p-8"
           >
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#A84F2E]">
               Start here
             </p>
 
@@ -242,7 +242,7 @@ export const Hero: React.FC = () => {
                     );
                     if (nextDestination) setDestination(nextDestination);
                   }}
-                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-brand-primary"
                 >
                   {destinationOptions.map((option) => (
                     <option key={option.label} value={option.value}>
@@ -264,7 +264,7 @@ export const Hero: React.FC = () => {
                     );
                     if (nextGroup) setGroup(nextGroup);
                   }}
-                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-brand-primary"
                 >
                   {groupOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -286,7 +286,7 @@ export const Hero: React.FC = () => {
                     );
                     if (nextPriority) setPriority(nextPriority);
                   }}
-                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-orange-200"
+                  className="w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-brand-primary"
                 >
                   {priorityOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -298,7 +298,7 @@ export const Hero: React.FC = () => {
 
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center rounded-2xl bg-black px-8 py-4 text-base font-black uppercase tracking-[0.12em] text-white transition hover:bg-zinc-800 active:scale-[0.99]"
+                className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-primary px-8 py-4 text-base font-black uppercase tracking-[0.12em] text-white transition hover:bg-brand-dark active:scale-[0.99]"
               >
                 Build My Starter Plan
               </button>
