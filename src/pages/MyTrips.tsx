@@ -114,7 +114,7 @@ function MyTripDetail({ trip }: { trip: SavedTrip }) {
 
         <ExactTripShare trip={current} />
         <section className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button type="button" onClick={handleShare} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1047a2] px-5 py-4 font-black text-white"><Share2 className="h-4 w-4" /> Share trip text</button>
+          <button type="button" onClick={handleShare} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#00695C] px-5 py-4 font-black text-white"><Share2 className="h-4 w-4" /> Share trip text</button>
           <button type="button" onClick={() => window.print()} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-300 bg-white px-5 py-4 font-black">Print or Save PDF</button>
           <button type="button" onClick={() => downloadTextFile(`${slugifyTrip(current.destination)}-sage-trip.txt`, current.offlineText)} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-300 bg-white px-5 py-4 font-black"><Download className="h-4 w-4" /> Download text backup</button>
           {online && <a href={current.tripUrl} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-5 py-4 font-black text-emerald-900"><MapPin className="h-4 w-4" /> Open live plan</a>}
@@ -158,7 +158,7 @@ export default function MyTrips() {
         ) : (
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {trips.map((trip) => (
-              <article key={trip.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm"><p className="text-[10px] font-black uppercase tracking-[.18em] text-emerald-700">Offline trip pass</p><h2 className="mt-2 text-3xl font-black">{trip.destination}</h2><p className="mt-2 text-sm text-zinc-600">{trip.tripLength} · {trip.season} · {trip.groupLabel}</p><p className="mt-5 text-xs text-zinc-400">Updated {formatDate(trip.updatedAt)}</p><Link to={`/my-trips/${trip.id}`} className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[#1047a2] px-5 py-3 font-black text-white">Open offline trip</Link></article>
+              <article key={trip.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm"><p className="text-[10px] font-black uppercase tracking-[.18em] text-emerald-700">Offline trip pass</p><h2 className="mt-2 text-3xl font-black">{trip.destination}</h2><p className="mt-2 text-sm text-zinc-600">{trip.tripLength} · {trip.season} · {trip.groupLabel}</p><p className="mt-5 text-xs text-zinc-400">Updated {formatDate(trip.updatedAt)}</p><Link to={`/my-trips/${trip.id}`} className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-[#00695C] px-5 py-3 font-black text-white">Open offline trip</Link></article>
             ))}
           </div>
         )}

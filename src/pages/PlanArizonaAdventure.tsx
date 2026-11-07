@@ -297,7 +297,7 @@ const PlanArizonaAdventure: React.FC = () => {
             {priorities.map((option) => <ChoiceButton key={option.value} selected={answers.priority === option.value} onClick={() => update('priority', option.value)}>{option.label}</ChoiceButton>)}
           </ChoiceGroup>
 
-          <button type="submit" className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-[#0D47A1] px-7 py-4 text-base font-black uppercase tracking-wider text-white shadow-lg transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+          <button type="submit" className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-[#00695C] px-7 py-4 text-base font-black uppercase tracking-wider text-white shadow-lg transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200">
             Show My Three Adventures <ArrowRight className="h-5 w-5" aria-hidden="true" />
           </button>
         </form>
@@ -350,7 +350,7 @@ const PlanArizonaAdventure: React.FC = () => {
                   </div>
 
                   <div className="mt-auto space-y-3 pt-6">
-                    <Link to={builderHref(match, answers)} onClick={() => trackEvent('adventure_planner_build_trip_click', { destination: match.slug, rank: index + 1 })} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0D47A1] px-5 py-3 text-sm font-black uppercase tracking-wider text-white transition hover:bg-zinc-700">Personalize This Trip <ArrowRight className="h-4 w-4" /></Link>
+                    <Link to={builderHref(match, answers)} onClick={() => trackEvent('adventure_planner_build_trip_click', { destination: match.slug, rank: index + 1 })} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#00695C] px-5 py-3 text-sm font-black uppercase tracking-wider text-white transition hover:bg-zinc-700">Personalize This Trip <ArrowRight className="h-4 w-4" /></Link>
                     <a href={guideFor(match)} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-center rounded-xl border border-zinc-200 px-5 py-3 text-sm font-black text-zinc-700 transition hover:border-emerald-400 hover:text-emerald-800">Read the Health &amp; Travels guide</a>
                   </div>
                 </article>
