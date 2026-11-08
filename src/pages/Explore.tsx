@@ -235,6 +235,17 @@ const Explore: React.FC = () => {
         title="Destination Guides"
         intro="Browse Arizona places by family fit, easy trails, food stops, lodging ideas, and safety notes."
       >
+        <a
+          href="/arizona/woods-canyon-lake-family-adventure"
+          className="group rounded-lg border border-zinc-100 bg-white p-4 transition hover:border-brand-primary/30 hover:bg-zinc-50"
+        >
+          <h3 className="text-sm font-black uppercase tracking-tight text-zinc-950 transition group-hover:text-brand-primary md:text-base">
+            Woods Canyon Lake Family Planning Guide
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-zinc-500">
+            Compare a day trip, camping weekend or Payson base, with practical weather, bathroom and packing considerations.
+          </p>
+        </a>
         {arizonaDestinations.map((destination) => (
           <InternalDirectoryLink
             key={destination.slug}
