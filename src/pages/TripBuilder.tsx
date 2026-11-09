@@ -926,7 +926,7 @@ const TripBuilder: React.FC = () => {
                 </section>
 
                 <details className="journey-disclosure"><summary>More preparation tips</summary><ul className="space-y-2">{plan.extras.map(item => <li key={item}>{item}</li>)}</ul></details>
-                <TripBuilderResultEnhancer itinerary={hourlyItinerary} personalizing={aiPlanStatus === 'loading'} sections={[
+                <TripBuilderResultEnhancer tripPreferences={shareParams.toString()} itinerary={hourlyItinerary} personalizing={aiPlanStatus === 'loading'} sections={[
                   {title: 'Trip overview', description: plan.intro},
                   ...(isEstrella ? [{title:'Fit and tradeoffs',description:estrellaVisit.notes.length ? estrellaVisit.notes.join(' ') : 'A short visit; recheck the current park alert before departure.'},{title:'Directions and current conditions',description:`Park entrance: ${ESTRELLA_DIRECTIONS} Current alert: ${ESTRELLA_ALERT}`}]:[]),
                   {title: 'Starting area', description: `${originLabel(origin)}. Drive limit: ${maxDriveMinutes} minutes one way. Times are planning estimates; check your route before leaving.`},
