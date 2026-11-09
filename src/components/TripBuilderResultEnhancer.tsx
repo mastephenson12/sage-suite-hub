@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SaveTripPlanCard from './SaveTripPlanCard';
 import ParentRealityCheckCard from './ParentRealityCheckCard';
 import { getFamilyTripFacts, formatFamilyTripFacts } from '../data/familyTripFacts';
@@ -107,9 +107,9 @@ function buildPackingItems({
   return items;
 }
 
-type Props = { itinerary: Array<{time: string; title: string; description: string}>; sections?: SavedTripSection[]; personalizing?: boolean };
-export default function TripBuilderResultEnhancer({ itinerary, sections = [], personalizing = false }: Props) {
-  const [params] = useSearchParams();
+type Props = { tripPreferences: string; itinerary: Array<{time: string; title: string; description: string}>; sections?: SavedTripSection[]; personalizing?: boolean };
+export default function TripBuilderResultEnhancer({ tripPreferences, itinerary, sections = [], personalizing = false }: Props) {
+  const params = React.useMemo(() => new URLSearchParams(tripPreferences), [tripPreferences]);
   const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
   const [includeToddlers, setIncludeToddlers] = React.useState(params.get('kids') !== 'no' && params.get('ages') === 'toddlers');
   const pretty = (value: string | null, fallback: string) => value ? value.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : fallback;
