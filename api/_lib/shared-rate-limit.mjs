@@ -14,7 +14,10 @@ export async function sharedRateLimited(scope, identifier, limit, windowMs, loca
   if (localLimiter(identifier)) return true;
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return false;
+  if (!url || !token) {
+    console.warn('Sage rate limiter: shared Redis not configured', { scope });
+    return false;
+  }
   if (!/^https:\/\/[a-z0-9.-]+\.upstash\.io\/?$/i.test(url)) throw new Error('Invalid rate limit configuration');
   const digest = createHash('sha256').update(identifier).digest('hex');
   const key = `sage:rate:${scope}:${digest}`;
@@ -28,5 +31,7 @@ export async function sharedRateLimited(scope, identifier, limit, windowMs, loca
   if (!response.ok) throw new Error('Rate limit service unavailable');
   const data = await response.json();
   if (typeof data.result !== 'number' || !Number.isFinite(data.result)) throw new Error('Invalid rate limit response');
+  // Log only the scope and outcome. Never log tokens, IPs, emails, or Redis keys.
+  console.info('Sage rate limiter: shared Redis request succeeded', { scope, limited: data.result > limit });
   return data.result > limit;
 }
