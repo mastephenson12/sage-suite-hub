@@ -1,3 +1,4 @@
+import { sharedRateLimited } from './_lib/shared-rate-limit.mjs';
 import { readJsonRequest, requestErrorResponse, createLimiter, isTrustedTripUrl } from './_lib/request-security.mjs';
 import { createHash } from 'node:crypto';
 const limited = createLimiter(5, 60_000);
@@ -44,7 +45,11 @@ export async function POST(req: Request) {
   try { body = await readJsonRequest(req, 18000); }
   catch (error) { return requestErrorResponse(error); }
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  if (limited(ip)) return Response.json({error: 'Too many requests. Please try again shortly.'}, {status: 429, headers: {'Retry-After':'60','Cache-Control':'no-store'}});
+  try {
+    if (await sharedRateLimited('email-trip-pack', ip, 5, 60_000, limited)) return Response.json({error: 'Too many requests. Please try again shortly.'}, {status: 429, headers: {'Retry-After':'60','Cache-Control':'no-store'}});
+  } catch {
+    return Response.json({error: 'Service temporarily unavailable. Please try again shortly.'}, {status: 503, headers: {'Retry-After':'30','Cache-Control':'no-store'}});
+  }
 
   const tripPack = parseRequest(body);
   if (!tripPack) return Response.json({ error: 'Please enter a valid email and trip plan.' }, { status: 400 });
@@ -55,7 +60,11 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Trip-pack email delivery is not configured yet.' }, { status: 503 });
   }
 
-  if (recipientLimited(tripPack.email)) return Response.json({error: 'Please wait before emailing this address again.'}, {status: 429, headers: {'Retry-After':'600'}});
+  try {
+    if (await sharedRateLimited('email-recipient', tripPack.email, 2, 600_000, recipientLimited)) return Response.json({error: 'Please wait before emailing this address again.'}, {status: 429, headers: {'Retry-After':'600'}});
+  } catch {
+    return Response.json({error: 'Email service temporarily unavailable.'}, {status: 503, headers: {'Retry-After':'30'}});
+  }
   // Identifies this exact plan snapshot without putting trip details in provider tags.
   const planVersionId = createHash('sha256').update(JSON.stringify([tripPack.destination, tripPack.planText, tripPack.tripUrl])).digest('hex');
   let response;

@@ -1,3 +1,4 @@
+import { sharedRateLimited } from './_lib/shared-rate-limit.mjs';
 import { readJsonRequest, requestErrorResponse, createLimiter } from './_lib/request-security.mjs';
 import { readOrigin, originLabel, origins, type Origin } from '../src/utils/sage/tripOrigins.js';
 import { getFamilyTripFacts, formatFamilyTripFacts } from '../src/data/familyTripFacts.js';
@@ -78,7 +79,11 @@ export async function POST(req: Request) {
   try { body = await readJsonRequest(req, 10000); }
   catch (error) { return requestErrorResponse(error); }
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  if (limited(ip)) return Response.json({error: 'Too many requests. Please try again shortly.'}, {status: 429, headers: {'Retry-After':'60','Cache-Control':'no-store'}});
+  try {
+    if (await sharedRateLimited('trip-plan', ip, 8, 60_000, limited)) return Response.json({error: 'Too many requests. Please try again shortly.'}, {status: 429, headers: {'Retry-After':'60','Cache-Control':'no-store'}});
+  } catch {
+    return Response.json({error: 'Service temporarily unavailable. Please try again shortly.'}, {status: 503, headers: {'Retry-After':'30','Cache-Control':'no-store'}});
+  }
 
   const request = parseRequest(body);
   if (!request) {
