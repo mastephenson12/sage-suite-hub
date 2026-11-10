@@ -14,23 +14,31 @@ export async function sharedRateLimited(scope, identifier, limit, windowMs, loca
   if (localLimiter(identifier)) return true;
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) {
+  if (url === undefined && token === undefined) {
     console.warn('Sage rate limiter: shared Redis not configured', { scope });
     return false;
   }
-  if (!/^https:\/\/[a-z0-9.-]+\.upstash\.io\/?$/i.test(url)) throw new Error('Invalid rate limit configuration');
+  function fail(reason) {
+    console.error('Sage shared limiter failure', { scope, reason });
+    throw new Error('Shared limiter unavailable');
+  }
+  const endpoint = url?.trim();
+  const credential = token?.trim();
+  if (!endpoint || !credential) fail('incomplete_configuration');
+  if (!/^https:\/\/[a-z0-9.-]+\.upstash\.io\/?$/i.test(endpoint)) fail('invalid_endpoint');
   const digest = createHash('sha256').update(identifier).digest('hex');
   const key = `sage:rate:${scope}:${digest}`;
-  const response = await fetch(url.replace(/\/$/, ''), {
+  const response = await fetch(endpoint.replace(/\/$/, ''), {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${credential}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(['EVAL', script, '1', key, String(windowMs)]),
     signal: AbortSignal.timeout(2500),
     cache: 'no-store',
-  });
-  if (!response.ok) throw new Error('Rate limit service unavailable');
-  const data = await response.json();
-  if (typeof data.result !== 'number' || !Number.isFinite(data.result)) throw new Error('Invalid rate limit response');
+    redirect: 'error',
+  }).catch(error => fail(error?.name === 'TimeoutError' ? 'timeout' : 'transport'));
+  if (!response.ok) fail('http_' + response.status);
+  const data = await response.json().catch(() => fail('invalid_json'));
+  if (!Number.isSafeInteger(data?.result) || data.result < 1) fail(data?.error ? 'redis_command' : 'invalid_count');
   // Log only the scope and outcome. Never log tokens, IPs, emails, or Redis keys.
   console.info('Sage rate limiter: shared Redis request succeeded', { scope, limited: data.result > limit });
   return data.result > limit;
