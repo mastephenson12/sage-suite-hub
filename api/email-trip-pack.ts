@@ -77,7 +77,7 @@ export async function POST(req: Request) {
       to: [tripPack.email],
       subject: tripPack.subject,
       tags: [{ name: 'category', value: 'sage_itinerary' }, { name: 'plan_version_id', value: planVersionId }],
-      text: tripPack.planText,
+      text: `${tripPack.planText}\n\nOpen your live Sage plan: ${tripPack.tripUrl}`,
       html: `<div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;color:#18181b"><h1>${escapeHtml(tripPack.destination)} family trip pack</h1><p style="white-space:pre-line;line-height:1.6">${escapeHtml(tripPack.planText)}</p><p><a href="${escapeHtml(tripPack.tripUrl)}">Open your live Sage plan</a></p><hr><p style="font-size:13px;color:#52525b">Sent by Sage, the Arizona family trip planner from Health & Travels.</p></div>`,
     }),
   });
