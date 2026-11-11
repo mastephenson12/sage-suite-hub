@@ -61,6 +61,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const hasAutoSentPrompt = useRef(false);
 
   useEffect(() => {
@@ -89,6 +90,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const applyPrompt = (prompt: string) => {
     setInput(prompt);
+    messageInputRef.current?.focus();
   };
 
   const sendMessage = async (messageText: string) => {
@@ -278,6 +280,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
           <div className="mt-3 flex flex-1 flex-col gap-3">
             <textarea
+              ref={messageInputRef}
+              aria-label="Your message to Scout"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
