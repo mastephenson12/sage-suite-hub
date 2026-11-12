@@ -91,14 +91,14 @@ test('send acceptance returns correlation IDs, never claims delivery, and preser
   global.fetch = async (url, options) => { sent = JSON.parse(options.body); return Response.json({ id: 'message_123' }); };
   const req = email => new Request('https://sage.healthandtravels.com/api/email-trip-pack', {
     method: 'POST', headers: { origin: 'https://sage.healthandtravels.com', 'content-type': 'application/json' },
-    body: JSON.stringify({ email, destination: 'Sedona', planText: 'Exact canonical plan', tripUrl: 'https://sage.healthandtravels.com/trip-builder' }),
+    body: JSON.stringify({ email, destination: 'Sedona', planText: 'Exact canonical plan', tripUrl: 'https://sage.healthandtravels.com/trip-builder?destination=Sedona&season=winter' }),
   });
   try {
     const response = await send(req('accept@example.com'));
     const body = await response.json();
     assert.equal(response.status, 200); assert.equal(body.accepted, true);
     assert.equal(body.messageId, 'message_123'); assert.equal(body.delivered, undefined);
-    assert.equal(sent.text, 'Exact canonical plan');
+    assert.equal(sent.text, 'Exact canonical plan\n\nOpen your live Sage plan: https://sage.healthandtravels.com/trip-builder?destination=Sedona&season=winter');
     assert.equal(sent.tags[0].value, 'sage_itinerary');
     assert.equal(sent.tags[1].value, body.planVersionId);
     assert.match(body.planVersionId, /^[a-f0-9]{64}$/);
