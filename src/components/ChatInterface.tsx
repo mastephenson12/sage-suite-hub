@@ -16,6 +16,14 @@ const DEFAULT_INITIAL_MESSAGE = `Hi, I’m Scout. I help families and groups pla
 
 Tell me where you want to go, your dates, how many adults and kids are traveling, and your budget.`;
 
+const WELLNESS_CHOICES = [
+  { id: 'shade', label: 'Prefer shade', guidance: 'Prioritize shade; identify exposed stretches and do not assume shade is available.' },
+  { id: 'restrooms', label: 'Restrooms nearby', guidance: 'Prioritize documented restroom access; label unknown availability clearly.' },
+  { id: 'easy_walking', label: 'Easy walking', guidance: 'Prefer shorter, gently graded routes and describe surface and elevation when known.' },
+] as const;
+
+type WellnessChoice = typeof WELLNESS_CHOICES[number]['id'];
+
 const QUICK_PROMPTS = [
   'Sedona family trip',
   'Grand Canyon weekend',
@@ -58,6 +66,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   ]);
   const [input, setInput] = useState(initialPrompt);
   const [email, setEmail] = useState('');
+  const [wellnessPreferences, setWellnessPreferences] = useState<WellnessChoice[]>(['shade', 'restrooms', 'easy_walking']);
   const [isLoading, setIsLoading] = useState(false);
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -97,9 +106,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     const trimmed = messageText.trim();
     if (!trimmed) return;
 
+    const wellnessGuidance = WELLNESS_CHOICES.filter(choice => wellnessPreferences.includes(choice.id)).map(choice => choice.guidance).join(' ');
     const userMessage: Message = {
       role: 'user',
-      content: trimmed,
+      content: wellnessGuidance ? `${trimmed}\n\nAdventure comfort preferences: ${wellnessGuidance} Do not claim current trail conditions or facilities are verified without a reliable source.` : trimmed,
     };
 
     const nextMessages = [...messages, userMessage];
@@ -191,6 +201,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
+      <fieldset className="mx-3 mb-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+        <legend className="px-2 text-sm font-bold text-zinc-900">Adventure comfort preferences (optional)</legend>
+        <p className="mb-3 text-xs text-zinc-600">Used for trip suggestions in this chat. Not saved to your device.</p>
+        <div className="flex flex-wrap gap-4">
+          {WELLNESS_CHOICES.map(choice => (
+            <label key={choice.id} className="flex cursor-pointer items-center gap-2 text-sm text-zinc-800">
+              <input type="checkbox" checked={wellnessPreferences.includes(choice.id)}
+                onChange={event => setWellnessPreferences(current => event.target.checked
+                  ? [...current, choice.id]
+                  : current.filter(id => id !== choice.id))}
+                className="h-4 w-4 accent-zinc-900" />
+              {choice.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <ArizonaQuickFinder
         disabled={isLoading}
         onPlan={(prompt) => void sendMessage(prompt)}
