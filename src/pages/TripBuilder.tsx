@@ -1,3 +1,4 @@
+import ReadyToGoCard from '../components/ReadyToGoCard';
 import { buildEstrellaVisit, ESTRELLA_REVIEWED, ESTRELLA_ALERT, ESTRELLA_DIRECTIONS } from '../utils/sage/estrellaVisit';
 import { Origin, origins, readOrigin, originLabel, driveMinutesFromOrigin } from '../utils/sage/tripOrigins';
 import { getFamilyTripFacts } from '../data/familyTripFacts';
@@ -660,7 +661,9 @@ const TripBuilder: React.FC = () => {
                 : 'Your plan will bring together your main outdoor stop, realistic timing, food, bathrooms, shade and a backup option.'}
             </p>
 
-            {destinationFacts && (
+            {submitted && destinationFacts?.id === 'papago-park' && <ReadyToGoCard wantsShade={wantsShade} needsStrollerAccess={needsStrollerAccess} />}
+
+            {destinationFacts && (!submitted || destinationFacts.id !== 'papago-park') && (
               <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5" aria-label="Destination at a glance">
                 <h3 className="text-xl font-black">{destinationFacts.name}: At a glance</h3>
                 <p className="mt-3 font-semibold">{destinationFacts.caution}</p>
