@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import BeforeYouGoPanel from '../components/BeforeYouGoPanel';
 import OfflineTrailPack from '../components/OfflineTrailPack';
+import ReadyToGoCard from '../components/ReadyToGoCard';
 import { trails } from '../data/trails';
 import {
   getSafetyBadgeClasses,
@@ -277,12 +278,12 @@ const TrailPage: React.FC = () => {
         plannerTo={tripSlug ? `/trip-builder?location=${tripSlug}` : '/trip-builder'}
       />
 
-      <OfflineTrailPack
+      {id === 'papago-park' ? <div className="px-6"><ReadyToGoCard /></div> : <OfflineTrailPack
         trail={trail}
         safetyTitle={safety?.title}
         safetyMessage={safety?.message}
         safetySuggestion={safety?.suggestion}
-      />
+      />}
 
       <div className="mx-auto max-w-6xl px-6 pt-20">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
