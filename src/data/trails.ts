@@ -20,9 +20,9 @@ export const trails: Trail[] = [
     name: 'Hole-in-the-Rock at Papago Park',
     location: 'Phoenix, AZ',
     difficulty: 'Easy',
-    distance: 'About 0.3 miles round trip',
-    elevationGain: 'About 30 ft',
-    time: '30-60 minutes',
+    distance: '0.2 miles (city-listed; add return)',
+    elevationGain: 'City lists 200 ft',
+    time: 'Allow 45–90 minutes',
     rating: 4.7,
     image: '/images/papago-hole-in-the-rock-family-trail.avif',
     description: 'A short, exposed desert walk with a memorable rock opening and broad Phoenix views. The mileage is small, but heat, uneven rock, drop-offs, and family energy still decide whether it is a good choice.',
@@ -81,7 +81,7 @@ Phoenix Zoo is nearby and can become the main family anchor, but it is still a l
 
 ## Verify before leaving
 
-- [City of Phoenix Papago Park trails](https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park/papago-trails.html)
+- [City of Phoenix Papago Park trails](https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park.html)
 - [Phoenix Zoo visitor information](https://www.phoenixzoo.org/visit/)
     `
   },
