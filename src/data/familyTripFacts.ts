@@ -10,8 +10,8 @@ export const familyTripFacts: FamilyTripFacts[] = [
     ],
     "name": "Papago Park: Hole-in-the-Rock",
     "guide": "https://healthandtravels.com/papago-park-with-kids",
-    "reviewed": "2026-09-09",
-    "reviewNote": "City trail details checked September 9, 2026. Timing and suitability are planning judgments; current fees were not confirmed.",
+    "reviewed": "2026-11-15",
+    "reviewNote": "City trail details checked November 15, 2026. Timing and suitability are planning judgments; current fees were not confirmed.",
     "facts": [
       [
         "Distance",
@@ -53,7 +53,7 @@ export const familyTripFacts: FamilyTripFacts[] = [
     "sources": [
       {
         "label": "City trail descriptions and access",
-        "url": "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park/papago-trails.html"
+        "url": "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park.html"
       }
     ],
     "caution": "A short trail can still be unsuitable in heat or for visitors who need step-free access."
