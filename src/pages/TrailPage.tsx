@@ -86,7 +86,11 @@ const TrailPage: React.FC = () => {
   }, [trail]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (window.location.hash === '#ready-to-go' && id === 'papago-park') {
+      document.getElementById('ready-to-go')?.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -144,7 +148,7 @@ const TrailPage: React.FC = () => {
     );
   }
 
-  const tripSlug = toTripSlug(trail.location || trail.name);
+  const tripSlug = id === 'papago-park' ? 'papago-park' : toTripSlug(trail.location || trail.name);
 
   return (
     <div className="min-h-screen bg-white pb-24">
