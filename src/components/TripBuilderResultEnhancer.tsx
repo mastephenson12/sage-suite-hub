@@ -133,7 +133,7 @@ export default function TripBuilderResultEnhancer({ tripPreferences, itinerary, 
   }, [key, location, tripLength, groupLabel, params]);
   const foodParams = new URLSearchParams({location, meal: 'Sit-down meal'});
   if (params.get('needs')) foodParams.set('needs', params.get('needs')!);
-  const chatParams = new URLSearchParams({ mode: 'arizona', trip: params.get('location') || 'arizona', prompt: `Help me refine this ${location} plan for ${groupLabel}, ${tripLength}, ${season}. Preserve my shade and bathroom preferences and help me check current conditions.` });
+  const chatParams = new URLSearchParams({ mode: 'arizona', trip: params.get('location') || 'arizona', prompt: `Help me refine this ${location} plan for ${groupLabel}, ${tripLength}, ${season}. Preserve my shade and bathroom preferences${params.get('easyWalking') === 'true' ? ', keep walking short and gentle,' : ''} and help me check current conditions.` });
   const savedItinerary = [
     ...(facts ? [{ title: 'Destination details', description: formatFamilyTripFacts(facts) }] : []),
     ...sections,

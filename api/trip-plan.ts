@@ -20,6 +20,7 @@ type TripPlanRequest = {
   wantsShade: boolean;
   needsBathrooms: boolean;
   needsStrollerAccess: boolean;
+  prefersEasyWalking: boolean;
   maxDriveMinutes: number;
 };
 
@@ -66,6 +67,7 @@ function parseRequest(value: unknown): TripPlanRequest | null {
     wantsShade: body.wantsShade === true,
     needsBathrooms: body.needsBathrooms === true,
     needsStrollerAccess: body.needsStrollerAccess === true,
+    prefersEasyWalking: body.prefersEasyWalking === true,
     maxDriveMinutes,
   };
 }
@@ -109,7 +111,7 @@ export async function POST(req: Request) {
         thinkingConfig: { thinkingBudget: 0 },
         responseMimeType: 'application/json',
         responseSchema: tripPlanSchema,
-        systemInstruction: `You are Sage, a careful Arizona family trip planner. Return only JSON matching the requested shape. Keep titles and place names short; use one or two concise sentences per descriptive field. Retain essential safety and uncertainty notes. Recommend one real, well-known outdoor anchor appropriate to the request. Never invent operating hours, fees, restroom availability, shade, drive times, restaurant details, or coordinates. Qualify anything that may change and tell the traveler to verify current conditions. Drive time is an estimate from ${originLabel(request.origin)}, the requested starting area, not live navigation. Never substitute Phoenix for another requested starting area. Food recommendations should be practical and kid-friendly, but avoid claiming current opening status. Arizona plans must address heat, hydration, weather, seasonal access, and a realistic backup. Use the supplied reviewed destination snapshot for factual constraints. Preserve its uncertainty and review date. Do not recommend facilities listed closed, assume a reopening, or replace unknown facts with guesses. If the group needs a facility or access the snapshot cannot support, recommend an alternative plan. The snapshot is not a live conditions feed.`,
+        systemInstruction: `You are Sage, a careful Arizona family trip planner. Return only JSON matching the requested shape. Keep titles and place names short; use one or two concise sentences per descriptive field. Retain essential safety and uncertainty notes. Recommend one real, well-known outdoor anchor appropriate to the request. When prefersEasyWalking is true, favor a short, gentle walk and an early turnaround. Flag any unverified grade, distance, or surface. Never invent operating hours, fees, restroom availability, shade, drive times, restaurant details, or coordinates. Qualify anything that may change and tell the traveler to verify current conditions. Drive time is an estimate from ${originLabel(request.origin)}, the requested starting area, not live navigation. Never substitute Phoenix for another requested starting area. Food recommendations should be practical and kid-friendly, but avoid claiming current opening status. Arizona plans must address heat, hydration, weather, seasonal access, and a realistic backup. Use the supplied reviewed destination snapshot for factual constraints. Preserve its uncertainty and review date. Do not recommend facilities listed closed, assume a reopening, or replace unknown facts with guesses. If the group needs a facility or access the snapshot cannot support, recommend an alternative plan. The snapshot is not a live conditions feed.`,
       },
       contents: `Create a practical trip plan for this request:\n${JSON.stringify(request)}\n\nReviewed destination snapshot:\n${factContext}\n\nReturn this exact JSON shape with no markdown:\n{"title":"","summary":"","outdoorAnchor":{"name":"","description":"","coordinates":{"latitude":0,"longitude":0}},"driveFromOrigin":"","foodStop":{"name":"","description":""},"facilities":{"restrooms":"","shade":""},"backupPlan":"","cautions":[""],"verificationNote":""}`,
     });

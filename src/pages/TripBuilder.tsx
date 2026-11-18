@@ -143,6 +143,9 @@ const TripBuilder: React.FC = () => {
   const [needsBathrooms, setNeedsBathrooms] = useState(
     readBoolean(searchParams.get('bathrooms'), true)
   );
+  const [prefersEasyWalking, setPrefersEasyWalking] = useState(
+    readBoolean(searchParams.get('easyWalking'), false)
+  );
   const [needsStrollerAccess, setNeedsStrollerAccess] = useState(
     readBoolean(searchParams.get('stroller'), false)
   );
@@ -159,7 +162,7 @@ const TripBuilder: React.FC = () => {
   React.useEffect(() => () => {
     activePlanRequest.current?.abort();
     activePlanRequest.current = null;
-  }, [location, origin, hasKids, activity, length, season, kidAgeGroup, wantsShade, needsBathrooms, needsStrollerAccess, maxDriveMinutes]);
+  }, [location, origin, hasKids, activity, length, season, kidAgeGroup, wantsShade, needsBathrooms, prefersEasyWalking, needsStrollerAccess, maxDriveMinutes]);
 
   React.useEffect(() => {
     if (searchParams.get('source') !== 'health-travels-matcher') return;
@@ -203,13 +206,17 @@ const TripBuilder: React.FC = () => {
   const destinationFacts = getFamilyTripFacts(location);
   const basePlan = buildTripPlan(location, hasKids, activity, length, season);
   const isEstrella = destinationFacts?.id === 'estrella-mountain';
-  const estrellaVisit = buildEstrellaVisit({activity,season,length,hasKids:hasKids === 'yes',kidAgeGroup,wantsShade,needsBathrooms,needsStrollerAccess,maxDriveMinutes,estimatedDriveMinutes:driveMinutesFromOrigin(origin,{slug:'estrella-mountain-regional-park',driveMinutesFromPhoenix:35})});
+  const estrellaVisit = buildEstrellaVisit({activity,season,length,hasKids:hasKids === 'yes',kidAgeGroup,wantsShade,needsBathrooms,needsStrollerAccess,prefersEasyWalking,maxDriveMinutes,estimatedDriveMinutes:driveMinutesFromOrigin(origin,{slug:'estrella-mountain-regional-park',driveMinutesFromPhoenix:35})});
   const plan = isEstrella ? {
     ...basePlan,
     title: estrellaVisit.title,
     intro: estrellaVisit.intro,
     extras: ['Water, snacks and a food backup', 'Hats, sunscreen and suitable shoes', 'Charged phone and downloaded map', 'Confirm parking, open toilets and route access before leaving'],
   } : basePlan;
+
+  const morningDescription = prefersEasyWalking
+    ? 'Choose a short route with gentle grades and firm footing. Check the surface and distance before setting out, and start with an easy turnaround point.'
+    : plan.morning;
 
   const hourlyItinerary = (() => {
     if (isEstrella) return estrellaVisit.schedule;
@@ -226,7 +233,7 @@ const TripBuilder: React.FC = () => {
         {
           time: summer ? '7:00 AM' : '8:30 AM',
           title: 'Main outdoor adventure',
-          description: plan.morning,
+          description: morningDescription,
         },
         {
           time: summer ? '8:30 AM' : '10:00 AM',
@@ -254,7 +261,7 @@ const TripBuilder: React.FC = () => {
         {
           time: 'Day 1 • 8:00 AM',
           title: 'Start with the main adventure',
-          description: plan.morning,
+          description: morningDescription,
         },
         {
           time: 'Day 1 • 11:30 AM',
@@ -297,7 +304,7 @@ const TripBuilder: React.FC = () => {
       {
         time: summer ? '7:00 AM' : '8:30 AM',
         title: 'Main outdoor adventure',
-        description: plan.morning,
+        description: morningDescription,
       },
       {
         time: summer ? '9:00 AM' : '10:30 AM',
@@ -351,6 +358,7 @@ const TripBuilder: React.FC = () => {
   shareParams.set('ages', kidAgeGroup);
   shareParams.set('shade', String(wantsShade));
   shareParams.set('bathrooms', String(needsBathrooms));
+  if (prefersEasyWalking) shareParams.set('easyWalking', 'true');
   shareParams.set('stroller', String(needsStrollerAccess));
   shareParams.set('drive', String(maxDriveMinutes));
   shareParams.set('origin', origin);
@@ -401,6 +409,7 @@ const TripBuilder: React.FC = () => {
         wantsShade,
         needsBathrooms,
         needsStrollerAccess,
+        prefersEasyWalking,
         maxDriveMinutes,
       }, controller.signal);
       if (controller.signal.aborted || activePlanRequest.current !== controller) return;
@@ -421,7 +430,7 @@ const TripBuilder: React.FC = () => {
         url="https://sage.healthandtravels.com/trip-builder"
         robots={isGeneratedPlan ? 'noindex, follow' : 'index, follow'}
       />
-      <PlanningJourney step={submitted ? 3 : 2} title={submitted ? `Your ${location || 'Arizona'} plan` : location ? `Make ${location} your kind of day` : 'Personalize your Arizona day'} description={submitted ? 'Review your day, check the practical details, and keep your plan before you go.' : 'Your choices are filled in below. Confirm the details that matter, then build your plan.'} context={[hasKids === 'yes' ? kidAgeGroupLabels[kidAgeGroup] : 'Adults only', tripLengthLabels[length], seasonLabels[season], `Up to ${maxDriveMinutes} min from ${originLabel(origin)}`, ...(wantsShade ? ['Shade matters'] : []), ...(needsBathrooms ? ['Bathrooms matter'] : [])]} />
+      <PlanningJourney step={submitted ? 3 : 2} title={submitted ? `Your ${location || 'Arizona'} plan` : location ? `Make ${location} your kind of day` : 'Personalize your Arizona day'} description={submitted ? 'Review your day, check the practical details, and keep your plan before you go.' : 'Your choices are filled in below. Confirm the details that matter, then build your plan.'} context={[hasKids === 'yes' ? kidAgeGroupLabels[kidAgeGroup] : 'Adults only', tripLengthLabels[length], seasonLabels[season], `Up to ${maxDriveMinutes} min from ${originLabel(origin)}`, ...(wantsShade ? ['Shade matters'] : []), ...(needsBathrooms ? ['Bathrooms matter'] : []), ...(prefersEasyWalking ? ['Prefer easy walking'] : [])]} />
       <section className="mx-auto max-w-6xl px-6 py-8 md:py-10">
         <div className="space-y-8">
           <details id="trip-preferences" className="journey-disclosure" open={!submitted}>
@@ -595,7 +604,7 @@ const TripBuilder: React.FC = () => {
                   Parent filters
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2">
                   <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-zinc-200 p-3 text-sm font-semibold transition hover:border-zinc-400">
                     <input
                       type="checkbox"
@@ -614,6 +623,16 @@ const TripBuilder: React.FC = () => {
                       className="mt-1"
                     />
                     <span>Need bathrooms</span>
+                  </label>
+
+                  <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-zinc-200 p-3 text-sm font-semibold transition hover:border-zinc-400">
+                    <input
+                      type="checkbox"
+                      checked={prefersEasyWalking}
+                      onChange={(e) => { setSubmitted(false); setAiPlan(null); setAiPlanStatus('idle'); setPrefersEasyWalking(e.target.checked); }}
+                      className="mt-1"
+                    />
+                    <span>Prefer easy walking</span>
                   </label>
 
                   <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-zinc-200 p-3 text-sm font-semibold transition hover:border-zinc-400">

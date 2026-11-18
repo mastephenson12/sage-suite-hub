@@ -27,6 +27,7 @@ export type SageTripPlanRequest = {
   wantsShade: boolean;
   needsBathrooms: boolean;
   needsStrollerAccess: boolean;
+  prefersEasyWalking?: boolean;
   maxDriveMinutes: number;
 };
 
