@@ -11,6 +11,7 @@ type VisitPreferences = {
   wantsShade: boolean;
   needsBathrooms: boolean;
   needsStrollerAccess: boolean;
+  prefersEasyWalking?: boolean;
   estimatedDriveMinutes: number | null;
   maxDriveMinutes: number;
 };
@@ -20,6 +21,7 @@ export function buildEstrellaVisit(prefs: VisitPreferences) {
   if (prefs.length !== 'half-day') notes.push('This is a short park visit, not a full-day or weekend itinerary. Plan the rest of your time separately or choose another outing.');
   if (prefs.wantsShade) notes.push('Shade matters to you. These desert routes are exposed; an open ramada is not a guarantee of shade along your walk. Choose another outing if continuous shade is essential.');
   if (prefs.needsBathrooms) notes.push('Bathrooms matter to you. The current alert does not confirm which toilets are operating or accessible. Check the nearest open restroom with park staff before leaving.');
+  if (prefs.prefersEasyWalking) notes.push('For an easy walk, check the surface and grade when you arrive and pick a short turnaround point.');
   if (prefs.needsStrollerAccess) notes.push('You selected stroller / step-free access. The one-mile pathway has reopened, but its current surface and the parking-to-path route have not been verified. Confirm them with staff before committing.');
   if (prefs.estimatedDriveMinutes === null) notes.push('Drive time from your starting area is not verified. Check the route before treating this as a match.');
   else if (prefs.estimatedDriveMinutes > prefs.maxDriveMinutes) notes.push(`The catalog estimates ${prefs.estimatedDriveMinutes} minutes one way, beyond your ${prefs.maxDriveMinutes}-minute limit. Choose a closer outing or deliberately change your drive limit.`);
