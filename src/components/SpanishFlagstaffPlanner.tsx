@@ -1,5 +1,6 @@
 import React from 'react';
 import SharePlanPanel from './SharePlanPanel';
+import { trackEvent } from '../utils/analytics';
 
 import plans from '../data/spanishFlagstaffPlans.json';
 
@@ -16,6 +17,7 @@ export default function SpanishFlagstaffPlanner() {
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     setSaved(true);
+    trackEvent('itinerary_save', { context: 'spanish_flagstaff_planner', destination: 'flagstaff', locale: 'es', format: 'txt', plan: plan.title });
   };
 
   return <section id="plan-familiar" className="scroll-mt-6 border-y border-teal-100 bg-teal-50 px-5 py-12 sm:px-6" aria-labelledby="flagstaff-plan-title">

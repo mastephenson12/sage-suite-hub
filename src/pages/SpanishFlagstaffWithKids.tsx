@@ -183,7 +183,7 @@ export default function SpanishFlagstaffWithKids() {
             Bosque, clima fresco y cielo oscuro
           </p>
           <h1 className="max-w-4xl text-3xl leading-tight font-black uppercase tracking-tight [overflow-wrap:normal] sm:text-4xl md:text-6xl">
-            Qué hacer en Flagstaff con niños
+            {flagstaffDetails.heading}
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100 md:text-xl">
             {flagstaffDetails.intro}

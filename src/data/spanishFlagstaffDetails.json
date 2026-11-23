@@ -1,9 +1,18 @@
 {
-  "title": "Flagstaff con niños: qué hacer y cómo organizar el día | Sage",
-  "description": "Organiza Flagstaff con niños: Buffalo Park, Lowell Observatory, baños, comidas, presupuesto y alternativas bajo techo para un día o fin de semana familiar.",
+  "title": "Flagstaff con niños: parques, estrellas y plan familiar | Sage",
+  "description": "¿Es Flagstaff adecuado para niños? Compara Buffalo Park y Lowell Observatory, baños, paseos cortos y opciones para lluvia. Guarda tu plan gratis en español.",
   "heading": "Qué hacer en Flagstaff con niños",
-  "intro": "Para una primera visita con niños, elijan Buffalo Park para una caminata corta o Lowell Observatory para ciencia y exhibiciones. Añadan comida y descanso antes de decidir si cabe otra actividad. Si quieren observar el cielo de noche, consideren dormir en Flagstaff para no depender de un regreso cansado a Phoenix.",
+  "intro": "Sí, Flagstaff puede ser adecuado para niños si eligen una actividad que encaje con su energía y el clima: un paseo corto en Buffalo Park, juegos en Thorpe Park o ciencia en Lowell Observatory. No necesitan completar una caminata larga ni esperar hasta la noche para disfrutar la visita. Añadan comida, baños y descanso; abajo pueden elegir y guardar gratis un plan familiar en español.",
   "sections": [
+    {
+      "heading": "¿Es Flagstaff adecuado para niños? Elijan según su familia",
+      "items": [
+        "Con niños pequeños: prioricen una salida breve y un baño confirmado. Thorpe Park tiene áreas de juego según la ciudad; Buffalo Park encaja mejor si buscan caminar. Una pausa para jugar puede ser la actividad principal.",
+        "Con niños que disfrutan caminar: recorran solo una parte de Buffalo Park y regresen antes de agotar al grupo. El circuito completo de 2.2 millas (unos 3.5 km) es una opción, no una meta obligatoria.",
+        "Con curiosidad por el espacio: comparen las exhibiciones y actividades de Lowell Observatory. No hace falta prometer una noche de telescopios: la observación depende del clima y el programa varía.",
+        "Con carriola, silla de ruedas o necesidad de sombra: confirmen la superficie, accesibilidad y servicios del lugar concreto antes de elegir. No consideren todo un parque accesible solo porque tenga baños o una ramada."
+      ]
+    },
     {
       "heading": "Buffalo Park: distancia, baños y ritmo familiar",
       "items": [
@@ -31,18 +40,53 @@
     }
   ],
   "faqs": [
-    { "question": "¿Qué hacer en Flagstaff con niños en una primera visita?", "answer": "Elijan una caminata corta en Buffalo Park o una visita a Lowell Observatory, con comida y descanso. Eviten reunir bosque, museo y observación nocturna en un solo día si el grupo necesita pausas." },
-    { "question": "¿Hay baños en Buffalo Park?", "answer": "La ciudad de Flagstaff enumera un baño permanente y una ramada de picnic. Confirmen la disponibilidad actual antes de la visita; la guía no garantiza que todos los servicios estén abiertos." },
-    { "question": "¿Qué hacer en Flagstaff con niños si llueve?", "answer": "Consulten las exhibiciones interiores de Lowell Observatory y su programa para la fecha, o pospongan la salida. La observación por telescopio depende del clima. Cambiar a otro sendero o caminar por el centro no es una alternativa segura durante una tormenta." },
-    { "question": "¿Conviene ir a Flagstaff por un día o un fin de semana?", "answer": "Una excursión permite una actividad principal y comida con margen para volver. Una noche facilita descansar antes de una actividad nocturna y evita depender de un regreso cansado a Phoenix." }
+    {
+      "question": "¿Es Flagstaff adecuado para niños?",
+      "answer": "Sí, puede funcionar bien con un plan sencillo: un paseo corto en Buffalo Park, juegos en Thorpe Park o una visita a Lowell Observatory. Elijan según la edad, energía y clima, con comida, baños y descanso. La nieve, las tormentas o los cierres pueden obligar a cambiar la salida."
+    },
+    {
+      "question": "¿Qué hacer en Flagstaff con niños en una primera visita?",
+      "answer": "Elijan una caminata corta en Buffalo Park o una visita a Lowell Observatory, con comida y descanso. Eviten reunir bosque, museo y observación nocturna en un solo día si el grupo necesita pausas."
+    },
+    {
+      "question": "¿Hay baños en Buffalo Park?",
+      "answer": "La ciudad de Flagstaff enumera un baño permanente y una ramada de picnic. Confirmen la disponibilidad actual antes de la visita; la guía no garantiza que todos los servicios estén abiertos."
+    },
+    {
+      "question": "¿Qué hacer en Flagstaff con niños si llueve?",
+      "answer": "Consulten las exhibiciones interiores de Lowell Observatory y su programa para la fecha, o pospongan la salida. La observación por telescopio depende del clima. Cambiar a otro sendero o caminar por el centro no es una alternativa segura durante una tormenta."
+    },
+    {
+      "question": "¿Conviene ir a Flagstaff por un día o un fin de semana?",
+      "answer": "Una excursión permite una actividad principal y comida con margen para volver. Una noche facilita descansar antes de una actividad nocturna y evita depender de un regreso cansado a Phoenix."
+    }
   ],
   "sources": [
-    { "label": "Ciudad de Flagstaff: parques y servicios", "url": "https://flagstaff.az.gov/1923/Parks" },
-    { "label": "Lowell Observatory: planear la visita", "url": "https://lowell.edu/visit/" },
-    { "label": "Lowell: Astronomy Discovery Center", "url": "https://lowell.edu/campus/astronomy-discovery-center/" }
+    {
+      "label": "Ciudad de Flagstaff: parques y servicios",
+      "url": "https://flagstaff.az.gov/1923/Parks"
+    },
+    {
+      "label": "Lowell Observatory: planear la visita",
+      "url": "https://lowell.edu/visit/"
+    },
+    {
+      "label": "Lowell: Astronomy Discovery Center",
+      "url": "https://lowell.edu/campus/astronomy-discovery-center/"
+    }
   ],
   "related": [
-    { "label": "Arizona en español", "path": "/es/arizona" },
-    { "label": "Sedona con niños", "path": "/es/arizona/sedona-con-ninos" }
+    {
+      "label": "Arizona en español",
+      "path": "/es/arizona"
+    },
+    {
+      "label": "Sedona con niños",
+      "path": "/es/arizona/sedona-con-ninos"
+    },
+    {
+      "label": "Guía de fin de semana en Flagstaff de Health & Travels (en inglés)",
+      "path": "https://healthandtravels.com/flagstaff-with-kids-family-weekend-guide"
+    }
   ]
 }
