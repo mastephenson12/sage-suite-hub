@@ -22,11 +22,24 @@
       "destination": "/de/arizona/prescott-mit-kindern/index.html"
     },
     {
-      "source": "/((?!api/|shared-trip\\.html$|archive/best-sedona-jeep-tours/?$|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|icon-192\\.png|icon-512\\.png|manifest\\.webmanifest|service-worker\\.js|vite\\.svg|assets/|arizona(?:/.*)?$).*)",
+      "source": "/((?!api/|adventure-resources\\.json$|shared-trip\\.html$|archive/best-sedona-jeep-tours/?$|robots\\.txt|sitemap\\.xml|favicon\\.ico|apple-touch-icon\\.png|icon-192\\.png|icon-512\\.png|manifest\\.webmanifest|service-worker\\.js|vite\\.svg|assets/|arizona(?:/.*)?$).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/adventure-resources.json",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

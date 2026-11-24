@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "coordinateNote": "Approximate discovery pins, not verified entrances or trailheads. Confirm access, amenities and conditions before departure.",
+  "categories": {
+    "destination": {
+      "label": "Family destinations",
+      "color": "#ea580c"
+    },
+    "hiking": {
+      "label": "Hiking trails",
+      "color": "#24834a"
+    },
+    "water": {
+      "label": "Lakes and rivers",
+      "color": "#2563eb"
+    },
+    "camping": {
+      "label": "Campgrounds",
+      "color": "#9333ea"
+    },
+    "food": {
+      "label": "Food stops",
+      "color": "#ca8a04"
+    },
+    "lodging": {
+      "label": "Lodging",
+      "color": "#795548"
+    },
+    "safety": {
+      "label": "Safety resources",
+      "color": "#dc2626"
+    },
+    "amenities": {
+      "label": "Travel amenities",
+      "color": "#64748b"
+    }
+  },
+  "resources": [
+    {
+      "id": "sedona",
+      "name": "Sedona",
+      "category": "destination",
+      "lat": 34.8697,
+      "lng": -111.761,
+      "guide": "https://sage.healthandtravels.com/arizona/sedona",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "flagstaff",
+      "name": "Flagstaff",
+      "category": "destination",
+      "lat": 35.1983,
+      "lng": -111.6513,
+      "guide": "https://sage.healthandtravels.com/arizona/flagstaff",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "payson",
+      "name": "Payson",
+      "category": "destination",
+      "lat": 34.2309,
+      "lng": -111.3251,
+      "guide": "https://sage.healthandtravels.com/arizona/payson-rim-country-with-kids",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "grand-canyon",
+      "name": "Grand Canyon Village",
+      "category": "destination",
+      "lat": 36.0544,
+      "lng": -112.1401,
+      "guide": "https://sage.healthandtravels.com/arizona/grand-canyon",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "gila-bend",
+      "name": "Gila Bend",
+      "category": "destination",
+      "lat": 32.9478,
+      "lng": -112.7168,
+      "guide": "https://sage.healthandtravels.com/arizona/gila-bend-with-kids",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "woods-canyon-lake",
+      "name": "Woods Canyon Lake",
+      "category": "water",
+      "lat": 34.331,
+      "lng": -110.942,
+      "guide": "https://healthandtravels.com/woods-canyon-lake-with-kids",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "tonto-natural-bridge",
+      "name": "Tonto Natural Bridge State Park",
+      "category": "destination",
+      "lat": 34.323,
+      "lng": -111.448,
+      "guide": "https://sage.healthandtravels.com/arizona/tonto-natural-bridge-with-kids",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    }
+  ]
+}
