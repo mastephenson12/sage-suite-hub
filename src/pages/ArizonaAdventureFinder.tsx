@@ -257,6 +257,7 @@ const ArizonaAdventureFinder: React.FC = () => {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-6 py-8"><div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6"><h2 className="text-2xl font-black">Explore Arizona by location</h2><p className="mt-2 text-zinc-700">Browse our curated destinations and trails, read family guides, and open driving directions in Google Maps.</p><a className="mt-4 inline-flex rounded-xl bg-emerald-800 px-5 py-3 font-bold text-white" href="https://healthandtravels.com/adventure-map">Open Arizona Adventure Map</a></div></section>
       <QuickPlanBox
         eyebrow="Fast Answer"
         title="Use Adventure Finder when the group does not know what kind of Arizona day it wants yet"
