@@ -140,6 +140,81 @@
         "restrooms": null,
         "easyWalking": null
       }
+    },
+    {
+      "id": "papago-park",
+      "name": "Papago Park",
+      "category": "hiking",
+      "lat": 33.46,
+      "lng": -111.95,
+      "guide": "https://healthandtravels.com/papago-park-with-kids",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "estrella-park",
+      "name": "Estrella Mountain Regional Park",
+      "category": "hiking",
+      "lat": 33.37,
+      "lng": -112.32,
+      "guide": "https://healthandtravels.com/estrella-mountain-regional-park-family-guide",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "camelback",
+      "name": "Camelback Mountain",
+      "category": "hiking",
+      "lat": 33.51,
+      "lng": -111.96,
+      "guide": "https://healthandtravels.com/camelback-mountain-cholla-trail-family-guide",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "catalina-park",
+      "name": "Catalina State Park",
+      "category": "hiking",
+      "lat": 32.42,
+      "lng": -110.91,
+      "guide": "https://healthandtravels.com/catalina-state-park-with-kids",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
+    },
+    {
+      "id": "yuma",
+      "name": "Yuma",
+      "category": "destination",
+      "lat": 32.69,
+      "lng": -114.63,
+      "guide": "https://healthandtravels.com/one-perfect-family-day-in-yuma",
+      "source": "Health & Travels editorial guide",
+      "locationPrecision": "approximate",
+      "amenities": {
+        "shade": null,
+        "restrooms": null,
+        "easyWalking": null
+      }
     }
   ]
 }
