@@ -90,6 +90,35 @@ const Arizona: React.FC = () => {
         </div>
       </section>
 
+      <section id="explore-map" aria-labelledby="explore-map-title" className="mx-auto max-w-6xl px-6 py-10">
+        <h2 id="explore-map-title" className="text-3xl font-black tracking-tight md:text-4xl">
+          Explore Arizona on the map
+        </h2>
+        <p className="mt-4 max-w-3xl leading-7 text-zinc-600">
+          Browse Health &amp; Travels places by region, then select a pin for visitor
+          notes. Use the map's layers to choose what to display. Check current
+          conditions, access, and fees with each destination before heading out.
+        </p>
+        <a
+          href="https://www.google.com/maps/d/viewer?mid=1_nvEYJshafOP0xJqq7yotifEZkRDZSc"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="my-5 inline-flex font-bold text-emerald-800 underline underline-offset-4"
+        >
+          Open the full map in a new tab
+        </a>
+        <iframe
+          src="https://www.google.com/maps/d/u/0/embed?mid=1_nvEYJshafOP0xJqq7yotifEZkRDZSc&ehbc=2E312F"
+          title="Health & Travels: Explore Arizona interactive map"
+          width="640"
+          height="480"
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="h-[480px] w-full rounded-2xl border border-zinc-200 md:h-[600px]"
+          allowFullScreen
+        />
+      </section>
+
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="mb-8">
           <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-zinc-400">
